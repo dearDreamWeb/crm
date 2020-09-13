@@ -1,37 +1,42 @@
 # CRM
 
 #### 介绍
-第一个客户关系管理系统
+客户关系管理系统，韬睿tr1807班结业项目
+
+#### 目录结构
+
+- back_end：后端工程
+- data_base：数据库脚本
+- demand：需求、开发文档
+- front_end：前端工程
 
 #### 软件架构
-软件架构说明
+SpringBoot、MySQL、VUE、WebStrom、IDEA
 
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+- 后端直接克隆即可
 
-#### 使用说明
+  ```bash
+  git clone https://gitee.com/baixuanzi/crm.git
+  ```
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+- 前端
 
-#### 参与贡献
+  克隆下来后，前端工程（front_end）一并在文件夹（crm）里；
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+  进入front_end，命令行安装依赖即可
 
+  ```bash
+  cnpm install
+  ```
 
-#### 码云特技
+#### 人员说明
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5.  码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+1.  组长：彭佳
+2.  组员：
+    - 杨纤纤
+    - 刘雷敏
+3.  指导老师：婷姐、度娘
+
