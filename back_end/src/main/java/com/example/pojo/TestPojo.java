@@ -6,5 +6,7 @@ package com.example.pojo;
  * @description:
  */
 public class TestPojo {
-
+	public static void main(String[] args){
+		System.out.println("刘雷敏提交");
+	}
 }
