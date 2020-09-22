@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: back_end
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 0
+      max-file-size: 50MB
+      max-request-size: 50MB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc://mysql://101.201.233.233:3306/gradua_project?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: "!Mysql2020"
+  mvc:
+    static-path-pattern: /static/images/**
+  resources:
+    static-locations: /static/images/
+server:
+  port: 9999
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.model
+qiniu:
+  accessKey: xFxGG0o6rZe129GPodzx77HGwQWz_r4xIm7Gg-ts
+  secretKey: YVsbx4ZeZ4VQINSgN6HFCzN-t7gXodq8-VRQyrsg
+  bucket: pengjia
+  path: www.eblog.icu

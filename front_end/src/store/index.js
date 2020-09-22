@@ -4,11 +4,11 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-  userId:'',
-  accountId:'',
-  nickName:'',
-  token:'',
-  menu:{}
+  userId : '',
+  accountId : '',
+  nickName : '',
+  token : '',
+  menu : {}
 }
 
 const mutations = {
@@ -26,14 +26,11 @@ const mutations = {
   },
   addMenu(state,payload){
     state.menu = payload
-    console.log(payload)
-    console.log(state.menu)
   }
 }
 
 const store = new Vuex.Store({
-  state,
-  mutations
+  state,mutations
 })
 
 export default store
