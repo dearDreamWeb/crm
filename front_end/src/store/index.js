@@ -4,27 +4,27 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-  userId:'',
-  accountId:'',
-  nickName:'',
-  token:'',
-  menu:{}
+  userId: '',
+  accountId: '',
+  nickName: '',
+  token: '',
+  menu: {}
 }
 
 const mutations = {
-  addUser(state,payload){
+  addUser(state, payload) {
     state.userId = payload.userId
     state.accountId = payload.accountId
     state.nickName = payload.nickName
     state.token = payload.token
   },
-  clearAll(state){
+  clearAll(state) {
     state.userId = ''
     state.accountId = ''
     state.nickName = ''
     state.token = ''
   },
-  addMenu(state,payload){
+  addMenu(state, payload) {
     state.menu = payload
     console.log(payload)
     console.log(state.menu)

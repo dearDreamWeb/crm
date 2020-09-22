@@ -10,13 +10,13 @@ import TreeTable from 'vue-table-with-tree-grid'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-Vue.component('tree-table',TreeTable)
+Vue.component('tree-table', TreeTable)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {App},
   template: '<App/>'
 })
