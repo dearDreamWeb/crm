@@ -13,8 +13,9 @@
 #### 软件架构
 SpringBoot、MySQL、VUE、WebStrom、IDEA
 
-
 #### 安装教程
+
+- **IDEA需得配置Lombok**
 
 - 后端直接克隆即可
 
