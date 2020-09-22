@@ -2,13 +2,19 @@
   <div id="app">
     <img src="./assets/logo.png">
     <el-button type="primary">BUTTON</el-button>
+    {{this.sex | sexFormat}}
     <router-view/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data(){
+    return{
+      sex : 1
+    }
+  }
 }
 </script>
 
