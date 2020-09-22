@@ -41,6 +41,19 @@ SpringBoot、MySQL、VUE、WebStrom、IDEA
   cnpm install
   ```
 
+#### 基本操作
+
+```bash
+#拉取
+git pull origin master
+#提交
+git add .
+git commit -m "提交信息"
+git push origin 分支名
+```
+
+
+
 #### 人员说明
 
 1.  组长：彭佳
