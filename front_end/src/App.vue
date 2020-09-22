@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
+    <el-button type="primary">BUTTON</el-button>
     <router-view/>
   </div>
 </template>

@@ -1,8 +1,8 @@
 {
-  "name": "y",
+  "name": "front_end",
   "version": "1.0.0",
-  "description": "y",
-  "author": "y",
+  "description": "A Vue.js project",
+  "author": "baixuanzi <3163059772@qq.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -10,8 +10,12 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.20.0",
+    "element-ui": "^2.13.2",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-table-with-tree-grid": "^0.2.4",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
