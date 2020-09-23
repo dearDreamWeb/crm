@@ -18,7 +18,7 @@ public class WenAppConfig implements WebMvcConfigurer {
     private AuthorityInterceptor authorityInterceptor;
 
     @Autowired
-    private WenAppConfig(AuthorityInterceptor authorityInterceptor){
+    public WenAppConfig(AuthorityInterceptor authorityInterceptor){
         this.authorityInterceptor = authorityInterceptor;
     }
 
