@@ -1,5 +1,7 @@
 package com.example.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -31,5 +33,54 @@ public class DateUtils {
      */
     public static long getTimeStamp(){
         return System.currentTimeMillis();
+    }
+
+    /**
+     * 开始时间拼接时分秒，返回字符串
+     * @param startDate
+     * @return
+     */
+    public static String startDateToStr(String startDate) {
+        return startDate + "00:00:00";
+    }
+
+    /**
+     * 结束时间拼接时分秒，返回字符串
+     * @param endDate
+     * @return
+     */
+    public static String endDateToStr(String endDate) {
+        return endDate + "23:59:59";
+    }
+
+    /**
+     * 将时间格式转换为字符串  yyyy-MM-dd HH:mm:ss
+     * @param date
+     * @return
+     */
+    public static String dateToTimeStr(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(date);
+    }
+
+    /**
+     * 将时间格式转换为字符串  yyyy-MM-dd
+     * @param date
+     * @return
+     */
+    public static String dateToDateStr(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
+
+    /**
+     * 将特定的字符串转为Date
+     * @param dateStr
+     * @return
+     * @throws ParseException
+     */
+    public static Date strToDate(String dateStr) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.parse(dateStr);
     }
 }
