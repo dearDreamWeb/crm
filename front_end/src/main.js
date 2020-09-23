@@ -12,6 +12,9 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.component('tree-table', TreeTable)
 
+/*格式化*/
+import {sexFormat,dateFormat} from "./common/formatUtils";
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -10,11 +10,20 @@
 - demand：需求、开发文档
 - front_end：前端工程
 
+#### 分支说明
+
+- master：主推版本分支、备份、拉取，不在此分支下进行文件的操作
+- dev：开发分支，用于合并代码，适时合并到master，也用于代码拉取
+- pengjia：组长彭佳开发分支，代码提交
+- liuleimin：组员刘雷敏开发分支，代码提交
+- yangqianqian：组员杨纤纤开发分支，代码提交
+
 #### 软件架构
 SpringBoot、MySQL、VUE、WebStrom、IDEA
 
-
 #### 安装教程
+
+- **IDEA需得配置Lombok**
 
 - 后端直接克隆即可
 
@@ -31,6 +40,19 @@ SpringBoot、MySQL、VUE、WebStrom、IDEA
   ```bash
   cnpm install
   ```
+
+#### 基本操作
+
+```bash
+#拉取
+git pull origin master
+#提交
+git add .
+git commit -m "提交信息"
+git push origin 分支名
+```
+
+
 
 #### 人员说明
 
