@@ -14,6 +14,8 @@ Vue.component('tree-table', TreeTable)
 
 /*格式化*/
 import {sexFormat,dateFormat} from "./common/formatUtils";
+Vue.filter('dateFormat',dateFormat)
+Vue.filter('sexFormat',sexFormat)
 
 /* eslint-disable no-new */
 new Vue({

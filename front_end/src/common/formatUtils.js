@@ -1,7 +1,5 @@
 import Vue from 'vue'
 
-Vue.filter('dateFormat',dateFormat)
-Vue.filter('sexFormat',sexFormat)
 /*时间格式话函数，仅针对yyyy-MM-dd hh:mm:ss的格式 */
 
 export function dateFormat(time) {
