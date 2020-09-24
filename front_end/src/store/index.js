@@ -4,19 +4,11 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-<<<<<<< HEAD
   userId: '',
   accountId: '',
   nickName: '',
   token: '',
   menu: {}
-=======
-  userId : '',
-  accountId : '',
-  nickName : '',
-  token : '',
-  menu : {}
->>>>>>> 2fc5703a50f56e73314c210aafd8c785be73ad92
 }
 
 const mutations = {
