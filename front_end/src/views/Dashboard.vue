@@ -88,6 +88,26 @@
               <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
                 <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
               </div>
+              <hr>
+              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
+                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
+              </div>
+              <hr>
+              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
+                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
+              </div>
+              <hr>
+              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
+                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
+              </div>
+              <hr>
+              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
+                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
+              </div>
+              <hr>
+              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
+                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
+              </div>
             </el-card>
           </el-col>
         </el-row>
@@ -102,6 +122,11 @@
   }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+ .el-row{
+   margin-bottom: 20px;
+   /*&:last-child{
+     margin-bottom: 0;
+   }*/
+ }
 </style>
