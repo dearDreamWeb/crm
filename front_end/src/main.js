@@ -24,4 +24,4 @@ new Vue({
   store,
   components: {App},
   template: '<App/>'
-})
+}).$mount('#app')

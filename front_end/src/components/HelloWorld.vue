@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-upload action="http://localhost:9999/qiniu/upload"
+    <el-upload action="http://localhost:9999/aliyun/upload"
                list-type="picture-card"
                :on-preview="handlePictureCardPreview"
                :on-remove="handleRemove"
