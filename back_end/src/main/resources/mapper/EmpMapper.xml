@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.EmpMapper">
+    <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
+        <id property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="sex" column="sex"/>
+        <result property="passWord" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="empStatus" column="emp_status"/>
+        <result property="token" column="token"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <resultMap id="EmpDetailResult" type="com.example.entity.response.EmpResp">
+        <id property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="sex" column="sex"/>
+        <result property="passWord" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="empStatus" column="emp_status"/>
+        <result property="token" column="token"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+        <association property="dept" resultMap="DeptResult"/>
+        <collection property="menus" resultMap="MenuResult"/>
+    </resultMap>
+
+    <resultMap id="DeptResult" type="com.example.entity.response.DeptResp">
+        <id property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="deptKey" column="dept_key"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <resultMap id="MenuResult" type="com.example.entity.response.MenuResp">
+        <id property="menuId" column="menu_id"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="pid" column="pid"/>
+        <result property="pids" column="pids"/>
+        <result property="url" column="url"/>
+        <result property="perms" column="perms"/>
+        <result property="menuType" column="menu_type"/>
+        <result property="isShow" column="is_show"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <insert id="addUser" parameterType="com.example.entity.response.EmpResp">
+        <selectKey keyColumn="emp_id" keyProperty="empId" resultType="Integer" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        INSERT INTO emp(emp_name,nick_name,email,sex,password,phone,emp_status,remark,token)
+        VALUES (#{empName},#{nickName},#{email},#{sex},#{passWord},#{phone},#{empStatus},#{remark},#{token})
+    </insert>
+
+    <update id="editEmp" parameterType="com.example.entity.request.EmpReq">
+        UPDATE emp SET update_time = #{updateTime},version = version + 1
+        <if test="empName != null and empName != ''">
+            ,emp_name = #{empName}
+        </if>
+        <if test="nickName != null and nickName != ''">
+            ,nick_name = #{nickName}
+        </if>
+        <if test="email != null and email != ''">
+            ,email = #{email}
+        </if>
+        <if test="sex != null">
+            ,sex = #{sex}
+        </if>
+        <if test="phone != null">
+            ,phone = #{phone}
+        </if>
+        <if test="empStatus != null">
+            ,emp_status != #{empStatus}
+        </if>
+        <if test="remark != null and remark != ''">
+            ,remark = #{remark}
+        </if>
+        WHERE emp_id = #{empId} AND version = #{version}
+    </update>
+
+    <select id="getEmp" resultMap="UserDetailResult" parameterType="Integer">
+        SELECT e.emp_id,e.emp_name,e.nick_name,e.email,e.phone,e.sex,
+            e.emp_status,e.remark,d.dept_id,d.dept_name,d.dept_key
+        FROM emp e
+        LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id
+        LEFT JOIN dept d ON d.dept_id = ed.dept_id
+        WHERE e.emp_id = #{empId}
+    </select>
+
+    <select id="listEmp" resultMap="EmpResult">
+        SELECT emp_id,emp_name,nick_name,sex,email,phone,emp_status,remark,create_time
+        FROM emp WHERE 1 = 1 AND is_delete &lt;&gt; 1
+        <if test="empName != null and empName != ''">
+            AND emp_name LIKE CONCAT('%',#{empName},'%')
+        </if>
+        <if test="nickName != null and nickName != ''">
+            AND nick_name LIKE CONCAT('%',#{nickName},'%')
+        </if>
+        <if test="sex != null">
+            AND sex = #{sex}
+        </if>
+        <if test="email != null and email != ''">
+            AND email LIKE CONCAT('%',#{email},'%')
+        </if>
+        <if test="phone != null">
+            AND phone LIKE CONCAT('%',#{phone},'%')
+        </if>
+        <if test="empStatus != null">
+            AND emp_status = #{empStatus}
+        </if>
+    </select>
+
+    <select id="findMenuByToken" resultMap="MenuResult">
+        SELECT m.menu_id,m.menu_name,m.pid,m.url,m.perms,m.menu_type,m.is_show
+        FROM emp e
+        LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id
+        LEFT JOIN dept d ON d.dept_id = ed.dept_id
+        LEFT JOIN dept_menu dm ON dm.dept_id = d.dept_id
+        LEFT JOIN menu m ON m.menu_id = dm.menu_id
+        WHERE e.token = #{token}
+    </select>
+
+    <select id="getEmpByToken" resultMap="EmpDetailResult">
+        SELECT e.emp_id,d.dept_id,d.dept_key,m.menu_id,m.menu_name,m.url,m.perms
+        FROM emp e
+        LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id
+        LEFT JOIN dept d ON d.dept_id = ed.dept_id
+        LEFT JOIN dept_menu dm ON d.dept_id = dm.dept_id
+        LEFT JOIN menu m ON m.menu_id = dm.menu_id
+        WHERE e.token = #{token}
+    </select>
+
+    <select id="login" resultMap="EmpResult">
+        SELECT emp_id,emp_name,nick_name,sex,email,phone,emp_status,password
+        FROM emp
+        WHERE emp_name = #{empName}
+    </select>
+
+    <select id="updateToken">
+        UPDATE emp SET token = #{arg1} WHERE emp_name = #{arg0}
+    </select>
+
+    <select id="checkEmp" resultType="int">
+        SELECT count(emp_name) FROM emp WHERE emp_name = #{empName}
+    </select>
+
+    <select id="getMenuByUserId" resultMap="EmpDetailResult">
+        SELECT m.menu_id,m.menu_name,m.pid,m.url,m.perms,d.dept_key,
+            e.emp_id,e.emp_name,e.nick_name,e.email,e.sex,e.phone,e.emp_status
+        FROM emp e
+        LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id
+        LEFT JOIN dept d ON d.dept_id = ed.dept_id
+        LEFT JOIN dept_menu dm ON dm.dept_id = d.dept_id
+        LEFT JOIN menu m ON m.menu_id = dm.menu_id
+    </select>
+
+    <update id="updatePwd" parameterType="com.example.entity.request.EmpReq">
+        UPDATE emp SET password = #{newPassWordMd5} WHERE emp_name = #{empName}
+    </update>
+
+    <update id="delEmp" parameterType="Integer">
+        UPDATE emp SET emp_status = 1 WHERE emp_id = #{empId}
+    </update>
+</mapper>

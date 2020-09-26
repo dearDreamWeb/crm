@@ -1,7 +1,10 @@
 package com.example.util;
 
+import com.example.entity.ResultVo;
 import com.google.gson.Gson;
+import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
+import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
@@ -29,6 +32,7 @@ public class QiNiuUtils {
     private static final Auth auth = Auth.create(ACCESS_KEY,SECRET_KEY);
     private static Configuration configuration = new Configuration(Region.huanan());
     private static UploadManager uploadManager = new UploadManager(configuration);
+    private static BucketManager bucketManager = new BucketManager(auth,configuration);
     //采用默认策略，只需设置存储空间名
     public static String getUpToken() {
         return auth.uploadToken(BUCKETNAME);
@@ -51,6 +55,17 @@ public class QiNiuUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 删除文件
+     * @param fileKey
+     * @return
+     * @throws QiniuException
+     */
+    public static Response delete(String fileKey) throws QiniuException {
+        Response response = bucketManager.delete(BUCKETNAME, fileKey);
+        return response;
     }
 
     private static String getRandomCharacterAndNumber(int length) {
