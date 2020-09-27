@@ -21,6 +21,7 @@ public class CheckPermissionAspect {
     private static final String ADMIN = "admin";
 
 
+
     public Object aroud(ProceedingJoinPoint point, CheckPermissions CheckPermissions) {
         //获取注解上的权限标识
         String requiresPerm = CheckPermissions.value();
