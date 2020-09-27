@@ -97,7 +97,7 @@
         WHERE emp_id = #{empId} AND version = #{version}
     </update>
 
-    <select id="getEmp" resultMap="UserDetailResult" parameterType="Integer">
+    <select id="getEmp" resultMap="EmpDetailResult" parameterType="Integer">
         SELECT e.emp_id,e.emp_name,e.nick_name,e.email,e.phone,e.sex,
             e.emp_status,e.remark,d.dept_id,d.dept_name,d.dept_key
         FROM emp e
@@ -150,14 +150,14 @@
     </select>
 
     <select id="login" resultMap="EmpResult">
-        SELECT emp_id,emp_name,nick_name,sex,email,phone,emp_status,password
+        SELECT emp_id,emp_name,nick_name,sex,email,phone,emp_status,password,token
         FROM emp
         WHERE emp_name = #{empName}
     </select>
 
-    <select id="updateToken">
+    <update id="updateToken">
         UPDATE emp SET token = #{arg1} WHERE emp_name = #{arg0}
-    </select>
+    </update>
 
     <select id="checkEmp" resultType="int">
         SELECT count(emp_name) FROM emp WHERE emp_name = #{empName}

@@ -42,7 +42,8 @@
                 <i class="el-icon-setting"></i>个人设定
               </el-dropdown-item>
               <el-dropdown-item command="SignOut">
-                <i class="el-icon-refresh"></i>安全退出
+                <i class="el-icon-refresh"></i>
+                <el-button type="text" @click="logout">安全退出</el-button>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -64,7 +65,11 @@
       }
     },
     methods:{
-
+      logout(){
+        this.$store.commit('clearAll')
+        window.sessionStorage.clear()
+        this.$router.push('/login')
+      }
     }
   }
 </script>
