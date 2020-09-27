@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.DeptMenuMapper">
+    <insert id="addDeptMenu">
+        INSERT INTO dept_menu(dept_id,menu_id) VALUES (#{arg0},#{arg1})
+    </insert>
+
+    <delete id="delByDeptId">
+        DELETE FROM dept_menu WHERE dept_id = #{deptId}
+    </delete>
+</mapper>

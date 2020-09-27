@@ -27,6 +27,20 @@ public enum ResultEnum {
     USER_NOT_EXIST(80005,"用户不存在"),
     USER_OR_PASSWORD_ERROR(80000,"用户账号或密码错误"),
 
+    DEPT_ADD_FAIL(80006,"部门添加失败"),
+    DEPT_EXIST(80007,"部门已存在"),
+    DEPT_DEL_FAIL(80008,"部门删除失败"),
+    DEPT_UPDATE_FAIL(80009,"部门修改失败"),
+    DEPT_AUTH_FAIL(80010,"部门授权失败"),
+    DEPT_NOT_EXIST(80011,"部门不存在"),
+
+    MENU_ADD_FAIL(80012,"菜单添加失败"),
+    MENU_EXIST(80013,"菜单已存在"),
+    MENU_DEL_FAIL(80014,"菜单删除失败"),
+    MENU_UPDATE_FAIL(80015,"菜单修改失败"),
+    MENU_NOT_EXIST(80016,"菜单不存在"),
+    MENU_PID_NOT_SELF(80017,"父级id不能是自己"),
+
     PLACEHOLDER(null,null);//占位符，方便快速编写代码（无其他业务作用）
 
     private Integer code;

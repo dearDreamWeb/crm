@@ -21,6 +21,7 @@ public class MenuResp {
     private Integer pid;
     private String pids;
     private String url;
+    private String icon;
     private String perms;
     private Integer menuType;
     private Integer isShow;
