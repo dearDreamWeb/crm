@@ -31,13 +31,8 @@ public class CheckPermissionAspect {
     @Autowired
     private EmpMapper empMapper;
 
-<<<<<<< HEAD
-
-    public Object aroud(ProceedingJoinPoint point, CheckPermissions CheckPermissions) {
-=======
     @Around("@annotation(CheckPermissions)")
     public Object aroud(ProceedingJoinPoint point, CheckPermissions CheckPermissions) throws Throwable {
->>>>>>> 1bed44f46ae77bb7bd819bf635c582482bfe246a
         //获取注解上的权限标识
         String requiresPerm = CheckPermissions.value();
         //获取request
