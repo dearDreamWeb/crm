@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * @author: pengjia
+ * @author: pengjia pengjiaLOVE
  * @date: 2020/9/26
  * @description:校验权限的注解的切面
  */
