@@ -8,8 +8,18 @@ import ElementUI from 'element-ui'
 import TreeTable from 'vue-table-with-tree-grid'
 import "@/style/app.scss"
 
+import iconPicker from 'e-icon-picker'
+import 'e-icon-picker/dist/index.css'
+import 'e-icon-picker/dist/main.css'
+
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+Vue.use(iconPicker,{
+  FontAwesome: true,
+  ElementUI: true,
+  eIcon: true,
+  eIconSymbol: true
+})
 Vue.component('tree-table', TreeTable)
 
 /*格式化*/
@@ -23,6 +33,5 @@ new Vue({
   router,
   store,
   components: {App},
-  template: '<App/>',
-  render:h => h(App)
+  template: '<App/>'
 }).$mount('#app')

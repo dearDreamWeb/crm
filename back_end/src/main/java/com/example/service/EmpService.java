@@ -10,10 +10,10 @@ import com.example.entity.request.EmpReq;
  */
 public interface EmpService {
     ResultVo addEmp(EmpReq empReq);
-    ResultVo delEmp(EmpReq empReq);
+    ResultVo delEmp(Integer empId);
     ResultVo editEmp(EmpReq empReq);
     ResultVo getEmp(Integer empId);
-    ResultVo listEmp(EmpReq empReq);
+    ResultVo listEmp(EmpReq empReq,Integer pageNum,Integer pageSize);
     ResultVo login(EmpReq empReq);
     ResultVo getShowMenuByToken(String token);
     ResultVo pwd(EmpReq empReq);

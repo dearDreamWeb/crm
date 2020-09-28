@@ -12,12 +12,13 @@ spring:
     url: jdbc:mysql://101.201.233.233:3306/gradua_project?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: "!Mysql2020"
+    type: com.alibaba.druid.pool.DruidDataSource
   mvc:
     static-path-pattern: /static/images/**
   resources:
     static-locations: /static/images/
 server:
-  port: 9999
+  port: 8099
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.example.model

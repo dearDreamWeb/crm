@@ -55,7 +55,7 @@
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col :span="18">
+      <!--<el-col :span="18">
         <el-card>
           <div slot="header">
             <span>动态</span>
@@ -111,14 +111,22 @@
             </el-card>
           </el-col>
         </el-row>
-      </el-col>
+      </el-col>-->
+      <div style="width: 30%">
+        <e-icon-picker v-model="icon"/>
+      </div>
     </el-row>
   </div>
 </template>
 
 <script>
   export default {
-    name: "Dashboard"
+    name: "Dashboard",
+    data(){
+      return{
+        icon:''
+      }
+    }
   }
 </script>
 

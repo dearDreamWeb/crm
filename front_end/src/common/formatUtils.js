@@ -11,7 +11,7 @@ export function dateFormat(time) {
   let minutes = date.getMinutes()<10?"0"+date.getMinutes():date.getMinutes()
   let seconds = date.getSeconds()<10?"0"+date.getSeconds():date.getSeconds()
   //拼接
-  return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds
+  return year+"-"+month+"-"+day
 }
 
 export function sexFormat(sex) {

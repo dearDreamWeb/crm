@@ -25,8 +25,9 @@ public class EmpController {
     }
 
     @PostMapping("/del")
-    public ResultVo delEmp(EmpReq empReq) {
-        return empService.delEmp(empReq);
+    public ResultVo delEmp(@RequestParam("empId") Integer empId) {
+        System.err.println(empId);
+        return empService.delEmp(empId);
     }
 
     @PostMapping("/edit")
@@ -40,8 +41,9 @@ public class EmpController {
     }
 
     @GetMapping("/list")
-    public ResultVo listEmp(EmpReq empReq) {
-        return empService.listEmp(empReq);
+    public ResultVo listEmp(EmpReq empReq,@RequestParam("pageNum")Integer pageNum,
+                            @RequestParam("pageSize")Integer pageSize) {
+        return empService.listEmp(empReq,pageNum,pageSize);
     }
 
     @PostMapping("/login")

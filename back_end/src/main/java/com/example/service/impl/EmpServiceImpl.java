@@ -14,6 +14,8 @@ import com.example.util.CheckUtils;
 import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
 import com.example.util.TreeUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,8 +71,7 @@ public class EmpServiceImpl implements EmpService {
     }
 
     @Override
-    public ResultVo delEmp(EmpReq empReq) {
-        Integer empId = empReq.getEmpId();
+    public ResultVo delEmp(Integer empId) {
         EmpResp emp = empMapper.getEmp(empId);
         if (emp == null) {
             throw new SysException(ResultEnum.USER_NOT_EXIST.getCode(),
@@ -119,8 +120,17 @@ public class EmpServiceImpl implements EmpService {
     }
 
     @Override
-    public ResultVo listEmp(EmpReq empReq) {
-        return null;
+    public ResultVo listEmp(EmpReq empReq,Integer pageNum,Integer pageSize) {
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 20;
+        }
+        PageHelper.startPage(pageNum,pageSize);
+        List<EmpResp> empResps = empMapper.listEmp(empReq);
+        PageInfo<EmpResp> list = new PageInfo<>(empResps);
+        return ResultUtils.response(list);
     }
 
     @Override
