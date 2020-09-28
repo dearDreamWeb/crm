@@ -58,7 +58,7 @@
         WHERE dept_id = #{deptId}
     </update>
 
-    <select id="getDept" resultMap="DeptDetaulResult">
+    <select id="getDept" resultMap="DeptDetailResult">
         SELECT d.dept_id,d.dept_name,d.dept_key,m.menu_id,m.menu_name,m.pid,m.pids,
             m.url,m.icon,m.perms,m.menu_type,m.is_show
         FROM dept d
