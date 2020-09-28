@@ -1,5 +1,6 @@
 package com.example.controller.system;
 
+import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.MenuReq;
 import com.example.service.MenuService;
@@ -20,16 +21,19 @@ public class MenuController {
     @Autowired
     private MenuService menuService;
 
+    @SysLog("添加菜单")
     @PostMapping("/add")
     public ResultVo addMenu(MenuReq menuReq) {
         return menuService.addMenu(menuReq);
     }
 
+    @SysLog("删除菜单")
     @PostMapping("/del")
     public ResultVo delMenu(MenuReq menuReq) {
         return menuService.delMenu(menuReq);
     }
 
+    @SysLog("编辑菜单")
     @PostMapping("/edit")
     public ResultVo editMenu(MenuReq menuReq) {
         return menuService.editMenu(menuReq);
