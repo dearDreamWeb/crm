@@ -54,6 +54,7 @@
         <result property="pid" column="pid"/>
         <result property="pids" column="pids"/>
         <result property="url" column="url"/>
+        <result property="icon" column="icon"/>
         <result property="perms" column="perms"/>
         <result property="menuType" column="menu_type"/>
         <result property="isShow" column="is_show"/>
@@ -97,7 +98,7 @@
         WHERE emp_id = #{empId} AND version = #{version}
     </update>
 
-    <select id="getEmp" resultMap="UserDetailResult" parameterType="Integer">
+    <select id="getEmp" resultMap="EmpDetailResult" parameterType="Integer">
         SELECT e.emp_id,e.emp_name,e.nick_name,e.email,e.phone,e.sex,
             e.emp_status,e.remark,d.dept_id,d.dept_name,d.dept_key
         FROM emp e
@@ -108,7 +109,7 @@
 
     <select id="listEmp" resultMap="EmpResult">
         SELECT emp_id,emp_name,nick_name,sex,email,phone,emp_status,remark,create_time
-        FROM emp WHERE 1 = 1 AND is_delete &lt;&gt; 1
+        FROM emp WHERE 1 = 1 AND is_delete = 0
         <if test="empName != null and empName != ''">
             AND emp_name LIKE CONCAT('%',#{empName},'%')
         </if>
@@ -130,7 +131,7 @@
     </select>
 
     <select id="findMenuByToken" resultMap="MenuResult">
-        SELECT m.menu_id,m.menu_name,m.pid,m.url,m.perms,m.menu_type,m.is_show
+        SELECT m.menu_id,m.menu_name,m.pid,m.url,m.icon,m.perms,m.menu_type,m.is_show
         FROM emp e
         LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id
         LEFT JOIN dept d ON d.dept_id = ed.dept_id
@@ -140,7 +141,7 @@
     </select>
 
     <select id="getEmpByToken" resultMap="EmpDetailResult">
-        SELECT e.emp_id,d.dept_id,d.dept_key,m.menu_id,m.menu_name,m.url,m.perms
+        SELECT e.emp_id,d.dept_id,d.dept_key,m.menu_id,m.menu_name,m.url,m.icon,m.perms
         FROM emp e
         LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id
         LEFT JOIN dept d ON d.dept_id = ed.dept_id
@@ -150,21 +151,21 @@
     </select>
 
     <select id="login" resultMap="EmpResult">
-        SELECT emp_id,emp_name,nick_name,sex,email,phone,emp_status,password
+        SELECT emp_id,emp_name,nick_name,sex,email,phone,emp_status,password,token
         FROM emp
         WHERE emp_name = #{empName}
     </select>
 
-    <select id="updateToken">
+    <update id="updateToken">
         UPDATE emp SET token = #{arg1} WHERE emp_name = #{arg0}
-    </select>
+    </update>
 
     <select id="checkEmp" resultType="int">
         SELECT count(emp_name) FROM emp WHERE emp_name = #{empName}
     </select>
 
     <select id="getMenuByUserId" resultMap="EmpDetailResult">
-        SELECT m.menu_id,m.menu_name,m.pid,m.url,m.perms,d.dept_key,
+        SELECT m.menu_id,m.menu_name,m.pid,m.url,m.icon,m.perms,d.dept_key,
             e.emp_id,e.emp_name,e.nick_name,e.email,e.sex,e.phone,e.emp_status
         FROM emp e
         LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id

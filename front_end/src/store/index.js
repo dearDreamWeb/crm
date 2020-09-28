@@ -4,23 +4,23 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-  userId: '',
-  accountId: '',
+  empId: '',
+  empName: '',
   nickName: '',
   token: '',
   menu: {}
 }
 
 const mutations = {
-  addUser(state, payload) {
-    state.userId = payload.userId
-    state.accountId = payload.accountId
+  addEmp(state, payload) {
+    state.empId = payload.empId
+    state.empName = payload.empName
     state.nickName = payload.nickName
     state.token = payload.token
   },
   clearAll(state) {
-    state.userId = ''
-    state.accountId = ''
+    state.empId = ''
+    state.empName = ''
     state.nickName = ''
     state.token = ''
   },

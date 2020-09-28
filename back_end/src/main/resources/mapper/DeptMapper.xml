@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.DeptMapper">
+    <resultMap id="DeptResult" type="com.example.entity.response.DeptResp">
+        <id property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="deptKey" column="dept_key"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <resultMap id="DeptDetailResult" type="com.example.entity.response.DeptResp">
+        <id property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="deptKey" column="dept_key"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+        <collection property="menus" resultMap="MenuResult"/>
+    </resultMap>
+
+    <resultMap id="MenuResult" type="com.example.entity.response.MenuResp">
+        <id property="menuId" column="menu_id"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="pid" column="pid"/>
+        <result property="pids" column="pids"/>
+        <result property="url" column="url"/>
+        <result property="icon" column="icon"/>
+        <result property="perms" column="perms"/>
+        <result property="menuType" column="menu_type"/>
+        <result property="isShow" column="is_show"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <insert id="addDept" parameterType="com.example.entity.request.DeptReq">
+        <selectKey keyProperty="deptId" keyColumn="dept_id" resultType="Integer" order="AFTER">
+            SELECT last_insert_id();
+        </selectKey>
+        INSERT INTO dept(dept_name,dept_key) VALUES
+        (#{deptName},#{deptKey})
+    </insert>
+
+    <update id="editDept" parameterType="com.example.entity.request.DeptReq">
+        UPDATE dept SET update_time = #{updateTime},version = version+1
+        <if test="deptName != null and deptName != ''">
+            ,dept_name = #{deptName}
+        </if>
+        <if test="deptKey != null and deptKey != ''">
+            ,dept_key = #{deptKey}
+        </if>
+        WHERE dept_id = #{deptId}
+    </update>
+
+    <select id="getDept" resultMap="DeptDetaulResult">
+        SELECT d.dept_id,d.dept_name,d.dept_key,m.menu_id,m.menu_name,m.pid,m.pids,
+            m.url,m.icon,m.perms,m.menu_type,m.is_show
+        FROM dept d
+        LEFT JOIN dept_menu dm ON d.dept_id = dm.dept_id
+        LEFT JOIN menu m ON m.menu_id = dm.menu_id
+        WHERE d.dept_id = #{deptId}
+    </select>
+
+    <select id="listDept" resultMap="DeptResult">
+        SELECT dept_id,dept_name,dept_key FROM dept WHERE is_delete = 0
+        <if test="deptName != null and deptName != ''">
+            ,dept_name LIKE CONCAT('%',#{deptName},'%')
+        </if>
+        <if test="deptKey != null and deptKey != ''">
+            ,dept_key LIKE CONCAT('%',#{deptKey},'%')
+        </if>
+    </select>
+
+    <select id="checkDept" resultType="int">
+        SELECT COUNT(dept_id) FROM dept WHERE dept_key = #{deptKey}
+    </select>
+
+    <update id="delDept" parameterType="Integer">
+        UPDATE dept SET is_delete = 1 WHERE dept_id = #{deptId}
+    </update>
+</mapper>

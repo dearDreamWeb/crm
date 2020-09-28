@@ -22,7 +22,7 @@ public class EmpResp {
     private String email;
     private Integer sex;
     private String passWord;
-    private Integer phone;
+    private String phone;
     private Integer empStatus;
     private String token;
     private String remark;

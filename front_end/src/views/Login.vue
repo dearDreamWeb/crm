@@ -3,18 +3,18 @@
     <el-row style="margin-top: 200px;z-index: 1;">
       <el-col :offset="9" :span="7">
         <el-card class="login-box">
-          <el-form>
+          <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules">
             <h1 class="title">WELCOME TO YOU</h1>
-            <el-form-item>
+            <el-form-item prop="empName">
               <el-input type="text" auto-complete="off" placeholder="请输入用户名"
-                        suffix-icon="el-icon-bell"></el-input>
+                        suffix-icon="el-icon-bell" v-model="loginForm.empName"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="passWord">
               <el-input type="password" auto-complete="off" placeholder="请输入密码"
-                        suffix-icon="el-icon-edit"></el-input>
+                        suffix-icon="el-icon-edit" v-model="loginForm.passWord"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" class="pull-right" style="width: 100%">登录</el-button>
+              <el-button type="primary" @click="login" class="pull-right" style="width: 100%">登录</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -24,8 +24,52 @@
 </template>
 
 <script>
+  import {userHttp} from "../network/system/user";
+
   export default {
-    name: "Login"
+    name: "Login",
+    data(){
+      return{
+        loginForm:{
+          empName:'',
+          passWord:''
+        },
+        loginFormRules:{
+          empName:[
+            {required:true,message:'请输入登录名称',trigger:'blur'},
+            {min:3,max:10,message:'长度在 3 到 10 个字符',trigger:'blur'}
+          ],
+          passWord:[
+            { required: true, message: '请输入登录密码', trigger: 'blur' },
+            { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+          ]
+        }
+      }
+    },
+    methods:{
+      login(){
+        console.log("in login")
+        this.$refs.loginFormRef.validate(async valid => {
+          if (!valid) return
+          userHttp.login(this.loginForm).then(res => {
+            console.log(res)
+            if (res && res.code==20000) {
+              const emp = {
+                empId:res.data.empId,
+                empName:res.data.empName,
+                nickName:res.data.nickName,
+                token:res.data.token
+              }
+              this.$store.commit('addEmp',emp)
+              window.sessionStorage.setItem('token',emp.token)
+              this.$router.push('/home')
+            } else {
+              this.$message.error(res.message)
+            }
+          })
+        })
+      }
+    }
   }
 </script>
 

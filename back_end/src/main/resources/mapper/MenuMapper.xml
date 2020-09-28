@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.MenuMapper">
+    <resultMap id="MenuResult" type="com.example.entity.response.MenuResp">
+        <id property="menuId" column="menu_id"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="pid" column="pid"/>
+        <result property="pids" column="pids"/>
+        <result property="url" column="url"/>
+        <result property="icon" column="icon"/>
+        <result property="perms" column="perms"/>
+        <result property="menuType" column="menu_type"/>
+        <result property="isShow" column="is_show"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <insert id="addMenu" parameterType="com.example.entity.request.MenuReq">
+        <selectKey keyColumn="menu_id" keyProperty="menuId" resultType="Integer" order="AFTER">
+            SELECT last_insert_id();
+        </selectKey>
+        INSERT INTO menu(menu_name,pid,pids,url,icon,perms,menu_type,is_show) VALUES
+        (#{menuName},#{pid},#{pids},#{url},#{icon},#{perms},#{menuType},#{isShow})
+    </insert>
+
+    <update id="editMenu" parameterType="com.example.entity.request.MenuReq">
+        UPDATE menu SET update_time = #{updateTime},version = version+1
+        <if test="menuName != null and menuName != ''">
+            ,menu_name = #{menuName}
+        </if>
+        <if test="pid != null">
+            ,pid = #{pid}
+        </if>
+        <if test="pids != null and pids != ''">
+            ,pids = #{pids}
+        </if>
+        <if test="perms != null and perms != ''">
+            ,perms = #{perms}
+        </if>
+        <if test="menuType != null">
+            ,menu_type = #{menuType}
+        </if>
+        <if test="isShow != null">
+            ,is_show = #{isShow}
+        </if>
+        WHERE menu_id = #{menuId}
+    </update>
+
+    <select id="getMenu" resultMap="MenuResult">
+        SELECT menu_id,menu_name,pid,pids,url,icon,perms,menu_type,is_show
+        FROM menu WHERE menu_id = #{menuId}
+    </select>
+
+    <select id="listMenu" resultMap="MenuResult">
+        SELECT menu_id,menu_name,pid,pids,url,icon,perms,menu_type,is_show
+        FROM menu WHERE 1 = 1 AND is_delete = 0
+        <if test="menuName != null and menuName != ''">
+            AND menu_name LIKE CONCAT('%',#{menuName},'%')
+        </if>
+        <if test="url != null and url != ''">
+            AND url LIKE CONCAT('%',#{url},'%')
+        </if>
+        <if test="perms != null and perms != ''">
+            AND perms LIKE CONCAT('%',#{perms},'%')
+        </if>
+    </select>
+
+    <select id="checkMenu" resultType="int">
+        SELECT COUNT(menu_id) FROM menu WHERE url = #{url}
+    </select>
+
+    <select id="delMenu" parameterType="Integer">
+        UPDATE menu SET is_delete = 1 WHERE menu_id = #{menuId}
+    </select>
+</mapper>
