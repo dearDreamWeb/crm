@@ -8,7 +8,7 @@
 export default {
   name: 'App',
   created() {
-    if (sessionStorage.getItem('store')) {
+    if (sessionStorage.getItem("store")) {
       this.$store.replaceState(Object.assign({},this.$store.state,JSON.parse(sessionStorage.getItem("store"))))
     }
     window.addEventListener("beforeunload",()=> {

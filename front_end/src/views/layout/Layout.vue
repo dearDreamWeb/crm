@@ -9,7 +9,7 @@
       <el-menu router :default-active="$route.path" :collapse="isCollapse"
                active-text-color="#ffd04b">
         <el-menu-item index="/home">
-          <i class="el-icon-s-help"></i>
+          <i class="el-icon-s-home"></i>
           <span slot="title">首页</span>
         </el-menu-item>
         <el-submenu index="1">
@@ -17,7 +17,7 @@
             <i class="el-icon-tickets"></i>
             <span slot="title">测试</span>
           </template>
-          <el-menu-item index="1-2">
+          <el-menu-item index="/user">
             <i class="el-icon-monitor"></i>
             <span slot="title">页面2</span>
           </el-menu-item>
@@ -29,14 +29,7 @@
         <i @click="isCollapse=!isCollapse" class="el-icon-menu sidebarToggle"></i>
         <div class="float-right">
           <el-dropdown trigger="click" class="header-action">
-            <span>语言<i class="el-icon-arrow-down el-icon--right"></i></span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>中文</el-dropdown-item>
-              <el-dropdown-item>English</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <el-dropdown trigger="click" class="header-action">
-            <span>Admin<i class="el-icon-arrow-down el-icon--right"></i></span>
+            <span>{{$store.state.nickName}}<i class="el-icon-arrow-down el-icon--right"></i></span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="Profile">
                 <i class="el-icon-setting"></i>个人设定
@@ -70,6 +63,8 @@
         window.sessionStorage.clear()
         this.$router.push('/login')
       }
+    },
+    created() {
     }
   }
 </script>

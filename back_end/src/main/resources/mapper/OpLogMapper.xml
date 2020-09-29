@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.LogMapper">
+    <insert id="addOpLog">
+        INSERT INTO op_log(log_title,user_id,method,content,ip,uri)
+        VALUES (#{logTitle},#{userId},#{method},#{content},#{ip},#{uri})
+    </insert>
+</mapper>

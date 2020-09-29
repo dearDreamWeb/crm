@@ -5,7 +5,7 @@ $--font-path:"~element-ui/lib/theme-chalk/fonts";
 $app-bg:#f0f2f5;
 $sidebar-bg:#00152a;
 $sidebar-logo-bg:#002140;
-$sidebar-menu-active-bg:$--color-primary;
+$sidebar-menu-active-bg:#979791;
 
 body,
 html{
@@ -81,6 +81,7 @@ html{
 }
 .float-right{
   float: right;
+  cursor: pointer;
 }
 .breadcrumb{
   padding-bottom: 20px;

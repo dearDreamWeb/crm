@@ -4,7 +4,7 @@ import Qs from 'qs'
 export function request(config) {
   //创建axios实例
   const instance = axios.create({
-    baseURL : 'http://localhost:9999',
+    baseURL : 'http://localhost:8099',
     timeout : 5000
   })
   //请求拦截器

@@ -10,5 +10,33 @@ export const userHttp = {
       }
     }
     return postJson(params)
+  },
+  getEmp:function (empId) {
+    let params = {
+      url:'/',
+      data:{
+        'empId':empId
+      }
+    }
+    return get(params)
+  },
+  listPage:function (pageNum,pageSize) {
+    let params = {
+      url:'/emp/list',
+      data:{
+        'pageNum':pageNum,
+        'pageSize':pageSize
+      }
+    }
+    return get(params)
+  },
+  del:function (empId) {
+    let params = {
+      url:'/emp/del',
+      data:{
+        'empId':empId
+      }
+    }
+    return postJson(params)
   }
 }

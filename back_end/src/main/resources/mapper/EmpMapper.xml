@@ -179,6 +179,7 @@
     </update>
 
     <update id="delEmp" parameterType="Integer">
-        UPDATE emp SET emp_status = 1 WHERE emp_id = #{empId}
+        UPDATE emp SET emp_status = 1,version = version+1
+        WHERE emp_id = #{empId} AND version = #{version}
     </update>
 </mapper>

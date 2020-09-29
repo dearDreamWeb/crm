@@ -11,10 +11,12 @@
             </el-form-item>
             <el-form-item prop="passWord">
               <el-input type="password" auto-complete="off" placeholder="请输入密码"
-                        suffix-icon="el-icon-edit" v-model="loginForm.passWord"></el-input>
+                        suffix-icon="el-icon-edit"  v-on:keyup.enter.native="login()"
+                        v-model="loginForm.passWord"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="login" class="pull-right" style="width: 100%">登录</el-button>
+              <el-button type="primary" @click="login" class="pull-right"
+                         style="width: 100%" v-loading.fullscreen.lock="fullscreenLoading">登录</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -43,14 +45,15 @@
             { required: true, message: '请输入登录密码', trigger: 'blur' },
             { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
           ]
-        }
+        },
+        fullscreenLoading:false
       }
     },
     methods:{
       login(){
-        console.log("in login")
         this.$refs.loginFormRef.validate(async valid => {
           if (!valid) return
+          this.fullscreenLoading = true
           userHttp.login(this.loginForm).then(res => {
             console.log(res)
             if (res && res.code==20000) {
@@ -62,9 +65,14 @@
               }
               this.$store.commit('addEmp',emp)
               window.sessionStorage.setItem('token',emp.token)
+              this.fullscreenLoading = false
               this.$router.push('/home')
             } else {
-              this.$message.error(res.message)
+              this.fullscreenLoading = false
+              this.$message({
+                message:res.message,
+                type:"error"
+              })
             }
           })
         })

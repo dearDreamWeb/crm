@@ -1,5 +1,6 @@
 package com.example.controller.system;
 
+import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.DeptReq;
 import com.example.service.DeptService;
@@ -20,16 +21,19 @@ public class DeptController {
     @Autowired
     private DeptService deptService;
 
+    @SysLog("添加部门")
     @PostMapping("/add")
     public ResultVo addDept(DeptReq deptReq) {
         return deptService.addDept(deptReq);
     }
 
+    @SysLog("删除部门")
     @PostMapping("/del")
     public ResultVo delDept(DeptReq deptReq) {
         return deptService.delDept(deptReq);
     }
 
+    @SysLog("编辑部门")
     @PostMapping("/edit")
     public ResultVo editDept(DeptReq deptReq) {
         return deptService.editDept(deptReq);
@@ -45,6 +49,7 @@ public class DeptController {
         return deptService.listDept();
     }
 
+    @SysLog("角色授权")
     @PostMapping("/auth")
     public ResultVo auth(DeptReq deptReq) {
         return deptService.auth(deptReq);
