@@ -10,7 +10,7 @@ import com.example.entity.request.EmpReq;
  */
 public interface EmpService {
     ResultVo addEmp(EmpReq empReq);
-    ResultVo delEmp(Integer empId);
+    ResultVo delEmp(EmpReq empReq);
     ResultVo editEmp(EmpReq empReq);
     ResultVo getEmp(Integer empId);
     ResultVo listEmp(EmpReq empReq,Integer pageNum,Integer pageSize);

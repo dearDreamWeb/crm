@@ -13,6 +13,8 @@ import com.example.service.DeptService;
 import com.example.util.CheckUtils;
 import com.example.util.MyListUtils;
 import com.example.util.ResultUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,8 +105,23 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public ResultVo listDept() {
-        return null;
+    public ResultVo listDept(DeptReq deptReq,Integer pageNum,Integer pageSize) {
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+        PageHelper.startPage(pageNum,pageSize);
+        List<DeptResp> deptResps = deptMapper.listDept(deptReq);
+        PageInfo<DeptResp> list = new PageInfo<>(deptResps);
+        return ResultUtils.response(list);
+    }
+
+    @Override
+    public ResultVo listDept(DeptReq deptReq) {
+        List<DeptResp> deptResps = deptMapper.listDept(deptReq);
+        return ResultUtils.response(deptResps);
     }
 
     @Override

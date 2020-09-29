@@ -64,7 +64,7 @@
         <result property="isDelete" column="is_delete"/>
     </resultMap>
 
-    <insert id="addUser" parameterType="com.example.entity.response.EmpResp">
+    <insert id="addEmp" parameterType="com.example.entity.response.EmpResp">
         <selectKey keyColumn="emp_id" keyProperty="empId" resultType="Integer" order="AFTER">
             select last_insert_id();
         </selectKey>
@@ -86,7 +86,7 @@
         <if test="sex != null">
             ,sex = #{sex}
         </if>
-        <if test="phone != null">
+        <if test="phone != null and phone != ''">
             ,phone = #{phone}
         </if>
         <if test="empStatus != null">
@@ -100,7 +100,8 @@
 
     <select id="getEmp" resultMap="EmpDetailResult" parameterType="Integer">
         SELECT e.emp_id,e.emp_name,e.nick_name,e.email,e.phone,e.sex,
-            e.emp_status,e.remark,d.dept_id,d.dept_name,d.dept_key
+            e.emp_status,e.remark,e.version,e.create_time,e.update_time,
+            e.is_delete,d.dept_id,d.dept_name,d.dept_key
         FROM emp e
         LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id
         LEFT JOIN dept d ON d.dept_id = ed.dept_id
@@ -109,7 +110,7 @@
 
     <select id="listEmp" resultMap="EmpResult">
         SELECT emp_id,emp_name,nick_name,sex,email,phone,emp_status,remark,create_time
-        FROM emp WHERE 1 = 1 AND is_delete = 0
+        FROM emp WHERE 1 = 1 AND is_delete = 0 AND emp_name != 'admin'
         <if test="empName != null and empName != ''">
             AND emp_name LIKE CONCAT('%',#{empName},'%')
         </if>
@@ -128,6 +129,7 @@
         <if test="empStatus != null">
             AND emp_status = #{empStatus}
         </if>
+        ORDER BY create_time DESC
     </select>
 
     <select id="findMenuByToken" resultMap="MenuResult">
@@ -138,6 +140,18 @@
         LEFT JOIN dept_menu dm ON dm.dept_id = d.dept_id
         LEFT JOIN menu m ON m.menu_id = dm.menu_id
         WHERE e.token = #{token}
+    </select>
+
+    <select id="getShowMenuByToken" resultMap="MenuResult">
+        SELECT m.menu_id,m.menu_name,m.pid,m.icon,m.url,
+        m.perms,m.menu_type,m.is_show
+        FROM emp e
+        LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id
+        LEFT JOIN dept d ON d.dept_id = ed.dept_id
+        LEFT JOIN dept_menu dm ON dm.dept_id = d.dept_id
+        LEFT JOIN menu m ON m.menu_id = dm.menu_id
+        WHERE m.is_show = 1 AND e.token = #{token}
+        GROUP BY menu_id
     </select>
 
     <select id="getEmpByToken" resultMap="EmpDetailResult">
@@ -179,7 +193,7 @@
     </update>
 
     <update id="delEmp" parameterType="Integer">
-        UPDATE emp SET emp_status = 1,version = version+1
-        WHERE emp_id = #{empId} AND version = #{version}
+        UPDATE emp SET is_delete = 1,version = version + 1
+        WHERE emp_id = #{empId}
     </update>
 </mapper>

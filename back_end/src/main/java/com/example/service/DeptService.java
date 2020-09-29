@@ -13,6 +13,9 @@ public interface DeptService {
     ResultVo delDept(DeptReq deptReq);
     ResultVo editDept(DeptReq deptReq);
     ResultVo getDept(Integer deptId);
-    ResultVo listDept();
+    ResultVo listDept(DeptReq deptReq,
+                      Integer pageNum,
+                      Integer pageSize);
+    ResultVo listDept(DeptReq deptReq);
     ResultVo auth(DeptReq deptReq);
 }

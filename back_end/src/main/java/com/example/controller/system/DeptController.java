@@ -5,10 +5,7 @@ import com.example.entity.ResultVo;
 import com.example.entity.request.DeptReq;
 import com.example.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author: pengjia
@@ -23,7 +20,7 @@ public class DeptController {
 
     @SysLog("添加部门")
     @PostMapping("/add")
-    public ResultVo addDept(DeptReq deptReq) {
+    public ResultVo addDept(@RequestBody DeptReq deptReq) {
         return deptService.addDept(deptReq);
     }
 
@@ -45,8 +42,15 @@ public class DeptController {
     }
 
     @GetMapping("/list")
-    public ResultVo listDept() {
-        return deptService.listDept();
+    public ResultVo listDept(DeptReq deptReq,
+                             @RequestParam("pageNum")Integer pageNum,
+                             @RequestParam("pageSize")Integer pageSize) {
+        return deptService.listDept(deptReq,pageNum,pageSize);
+    }
+
+    @GetMapping("/list_all")
+    public ResultVo listAll(DeptReq deptReq) {
+        return deptService.listDept(deptReq);
     }
 
     @SysLog("角色授权")

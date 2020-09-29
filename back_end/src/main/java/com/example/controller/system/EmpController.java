@@ -22,20 +22,19 @@ public class EmpController {
 
     @SysLog("添加用户")
     @PostMapping("/add")
-    public ResultVo addEmp(EmpReq empReq) {
+    public ResultVo addEmp(@RequestBody EmpReq empReq) {
         return empService.addEmp(empReq);
     }
 
     @SysLog("删除用户")
     @PostMapping("/del")
-    public ResultVo delEmp(@RequestParam("empId") Integer empId) {
-        System.err.println(empId);
-        return empService.delEmp(empId);
+    public ResultVo delEmp(@RequestBody EmpReq empReq) {
+        return empService.delEmp(empReq);
     }
 
     @SysLog("编辑用户")
     @PostMapping("/edit")
-    public ResultVo editEmp(EmpReq empReq) {
+    public ResultVo editEmp(@RequestBody EmpReq empReq) {
         return empService.editEmp(empReq);
     }
 

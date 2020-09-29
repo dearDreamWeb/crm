@@ -30,7 +30,7 @@ public class EmpResp {
     private Date createTime;
     private Date updateTime;
     private Integer isDelete;
-    private List<Integer> deptIds;
+    private Integer deptId;
     private DeptResp dept;
     private List<MenuResp> menus;
 }

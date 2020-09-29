@@ -12,7 +12,7 @@
           <i class="el-icon-s-home"></i>
           <span slot="title">首页</span>
         </el-menu-item>
-        <el-submenu index="1">
+        <!--<el-submenu index="1">
           <template slot="title">
             <i class="el-icon-tickets"></i>
             <span slot="title">测试</span>
@@ -20,6 +20,20 @@
           <el-menu-item index="/user">
             <i class="el-icon-monitor"></i>
             <span slot="title">页面2</span>
+          </el-menu-item>
+        </el-submenu>-->
+        <el-submenu :index="index + ''" v-for="(item,index) in menuList"
+                    :key="item.menuId">
+          <template slot="title">
+            <i :class="item.icon"></i>
+            <span>{{item.menuName}}</span>
+          </template>
+          <el-menu-item :index="subItem.url + ''" v-for="subItem in item.children"
+                        :key="subItem.menuId">
+            <template slot="title">
+              <i :class="subItem.icon"></i>
+              <span>{{subItem.menuName}}</span>
+            </template>
           </el-menu-item>
         </el-submenu>
       </el-menu>
@@ -50,11 +64,14 @@
 </template>
 
 <script>
+  import {userHttp} from "../../network/system/user";
+
   export default {
     name: "Layout",
     data(){
       return{
-        isCollapse:false
+        isCollapse:false,
+        menuList:[]
       }
     },
     methods:{
@@ -62,9 +79,21 @@
         this.$store.commit('clearAll')
         window.sessionStorage.clear()
         this.$router.push('/login')
+      },
+      getMenuList() {
+        userHttp.getMenuList().then(res => {
+          if (res.code === 20000) {
+            this.menuList = res.data
+            this.$store.commit('addMenu',res.data)
+            this.$message.success(res.message)
+          } else {
+            this.$message.error(res.message)
+          }
+        })
       }
     },
     created() {
+      this.getMenuList()
     }
   }
 </script>
