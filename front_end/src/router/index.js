@@ -28,6 +28,14 @@ const routes = [
       {
         path: '/user',
         component: () => import('../views/user/User')
+      },
+      {
+        path: '/dept',
+        component: () => import('../views/dept/Dept')
+      },
+      {
+        path: '/menu',
+        component: () => import('../views/menu/Menu')
       }
     ]
   }
