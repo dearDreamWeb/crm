@@ -122,7 +122,9 @@ public class EmpServiceImpl implements EmpService {
     }
 
     @Override
-    public ResultVo listEmp(EmpReq empReq, Integer pageNum, Integer pageSize) {
+    public ResultVo listEmp(EmpReq empReq) {
+        Integer pageNum = empReq.getPageNum();
+        Integer pageSize = empReq.getPageSize();
         if (pageNum == null) {
             pageNum = 1;
         }

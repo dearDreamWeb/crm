@@ -44,22 +44,41 @@
         </el-card>
       </transition>
 
-      <el-table border style="width: 100%;margin-top: 10px;margin-bottom: 10px">
-        <el-table-column label="NAME" sortable></el-table-column>
-        <el-table-column label="NAME"></el-table-column>
-        <el-table-column label="NAME"></el-table-column>
-        <el-table-column label="NAME"></el-table-column>
-        <el-table-column label="NAME"></el-table-column>
-        <el-table-column label="NAME"></el-table-column>
-        <el-table-column label="NAME"></el-table-column>
+      <el-table :data="listForm" border style="width: 100%;margin-top: 10px;margin-bottom: 10px">
+        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column prop="deptName" label="部门名称" sortable></el-table-column>
+        <el-table-column prop="deptKey" label="标识"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间"></el-table-column>
       </el-table>
     </el-card>
   </div>
 </template>
 
 <script>
+  import {deptHttp} from "../../network/system/dept";
+
   export default {
-    name: "Dept"
+    name: "Dept",
+    data() {
+      return {
+        listForm:[],
+        pageNum:1,
+        pageSize:10,
+        total:1
+      }
+    },
+    methods: {
+      initDept() {
+        deptHttp.listPage(this.pageNum,this.pageSize).then(res => {
+          this.listForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
+      }
+    },
+    created() {
+      this.initDept()
+    }
   }
 </script>
 

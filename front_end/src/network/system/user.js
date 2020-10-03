@@ -22,7 +22,7 @@ export const userHttp = {
   },
   listPage:function (pageNum,pageSize) {
     let params = {
-      url:'/emp/list',
+      url:'/emp/dict_list',
       data:{
         'pageNum':pageNum,
         'pageSize':pageSize
@@ -71,6 +71,7 @@ export const userHttp = {
         'email':emp.email,
         'phone':emp.phone,
         'sex':emp.sex,
+        'empStatus':emp.empStatus,
         'remark':emp.remark,
         'deptId':emp.deptId
       }
@@ -80,7 +81,18 @@ export const userHttp = {
   queryEmp:function (emp) {
     let params = {
       url:'/emp/list',
-      data:emp
+      data:{
+        'empName':emp.empName,
+        'nickName':emp.nickName,
+        'email':emp.email,
+        'phone':emp.phone,
+        'sex':emp.sex,
+        'empStatus':emp.empStatus,
+        'startDate':emp.startDate,
+        'endDate':emp.endDate,
+        'pageNum':emp.pageNum,
+        'pageSize':emp.pageSize
+      }
     }
     return get(params)
   }

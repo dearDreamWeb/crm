@@ -13,5 +13,15 @@ export const deptHttp = {
       url:'/dept/list_all',
     }
     return get(params)
+  },
+  listPage:function (pageNum,pageSize) {
+    let params = {
+      url:'/dept/list',
+      data: {
+        'pageNum':pageNum,
+        'pageSize':pageSize
+      }
+    }
+    return get(params)
   }
 }

@@ -4,6 +4,8 @@ import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.EmpReq;
 import com.example.service.EmpService;
+import com.example.util.ResultUtils;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,9 +46,8 @@ public class EmpController {
     }
 
     @GetMapping("/list")
-    public ResultVo listEmp(EmpReq empReq,@RequestParam("pageNum")Integer pageNum,
-                            @RequestParam("pageSize")Integer pageSize) {
-        return empService.listEmp(empReq,pageNum,pageSize);
+    public ResultVo listEmp(EmpReq empReq) {
+        return empService.listEmp(empReq);
     }
 
     @PostMapping("/login")

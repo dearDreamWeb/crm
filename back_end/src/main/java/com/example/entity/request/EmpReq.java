@@ -31,4 +31,8 @@ public class EmpReq {
     private Date updateTime;
     private Integer isDelete;
     private Integer deptId;
+    private String startDate;
+    private String endDate;
+    private Integer pageNum;
+    private Integer pageSize;
 }

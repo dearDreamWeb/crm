@@ -1,16 +1,16 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template>
   <div>
     <el-card class="box-card">
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input placeholder="请输入内容" size="mini" class="input-with-select">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input v-model="searchInput" placeholder="请输入账号查询" size="mini" class="input-with-select">
+            <el-button @click="searchInputClick" slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
         <el-col :span="12">
           <el-button type="primary" size="mini" icon="el-icon-plus" @click="openAddDialog">添加用户</el-button>
           <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
-          <el-button type="primary" size="mini" icon="el-icon-refresh"></el-button>
+          <el-button type="primary" size="mini" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
         <el-col :span="6">
           <el-button type="warning" size="mini" icon="el-icon-edit"
@@ -22,23 +22,62 @@
 
       <transition name="el-zoom-in-top">
         <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px;">
-          <el-form size="mini" label-position="right" label-width="80px">
+          <el-form :model="searchForm" ref="advancedSearchFormRef"
+                   size="mini" label-position="right" label-width="80px">
             <el-row>
               <el-col>
                 <el-form-item label="高级搜索"></el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
-              <el-col :span="12">
-                <el-form-item label="问题">
-                  <el-input size="mini" placeholder="INPUT" clearable></el-input>
+              <el-col :span="8">
+                <el-form-item prop="empName" label="昵称">
+                  <el-input v-model="searchForm.empName" size="mini" placeholder="请输入昵称" clearable></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="8">
+                <el-form-item prop="email" label="邮箱">
+                  <el-input v-model="searchForm.email" size="mini" placeholder="请输入邮箱" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item prop="phone" label="手机">
+                  <el-input v-model="searchForm.phone" size="mini" placeholder="请输入手机" clearable></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="10">
                 <el-form-item label="日期">
-                  <el-date-picker type="daterange" range-separator="至"
-                                  start-placeholder="开始日期" end-placeholder="结束日期">
-                  </el-date-picker>
+                  <el-date-picker v-model="searchForm.startDate" format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                  placeholder="请输入"></el-date-picker>
+                  <span>-</span>
+                  <el-date-picker v-model="searchForm.endDate" format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                  placeholder="请输入"></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item prop="empStatus" label="状态">
+                  <el-select v-model="searchForm.empStatus" clearable>
+                    <el-option label="正常" value="1"></el-option>
+                    <el-option label="冻结" value="0"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item prop="sex" label="性别">
+                  <el-select v-model="searchForm.sex" clearable>
+                    <el-option label="男" value="1"></el-option>
+                    <el-option label="女" value="0"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item>
+                  <el-button size="mini" @click="advancedQueryClick"
+                             type="primary" icon="el-icon-search"></el-button>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -46,20 +85,20 @@
         </el-card>
       </transition>
 
-      <el-table :data="listForm" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
+      <el-table :data="listForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column prop="empName" label="empName" sortable width="130px"></el-table-column>
-        <el-table-column prop="nickName" label="nickName"></el-table-column>
-        <el-table-column prop="email" label="email" width="180px"></el-table-column>
-        <el-table-column prop="sex" label="sex" width="100px">
+        <el-table-column prop="empName" label="账号" sortable width="130px"></el-table-column>
+        <el-table-column prop="nickName" label="昵称"></el-table-column>
+        <el-table-column prop="email" label="邮箱" width="180px"></el-table-column>
+        <el-table-column prop="sex" label="性别" width="100px">
           <template slot-scope="scope">
             {{scope.row.sex | sexFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="phone" label="phone"></el-table-column>
-        <el-table-column prop="empStatus" label="empStatus" align="center">
+        <el-table-column prop="phone" label="手机"></el-table-column>
+        <el-table-column prop="empStatus" label="状态" align="center">
           <template slot-scope="scope">
             <el-switch active-color="#13ce66" inactive-color="#ff4949"
                        v-model="scope.row.empStatus" :active-value="1"
@@ -67,19 +106,19 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="creteTime">
+        <el-table-column prop="创建时间" label="creteTime">
           <template slot-scope="scope">
             {{scope.row.createTime | dateFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="remark" label="remark"></el-table-column>
+        <el-table-column prop="remark" label="备注"></el-table-column>
       </el-table>
 
-      <el-pagination background @size-change="handleSizeChange"
+      <el-pagination background
                      @current-change="handleCurrentChange"
                      :current-page="pageNum" :page-sizes="[1,2,5,10]"
                      :page-size="pageSize" :total="total"
-                     layout="sizes, prev, pager, next, jumper, total">
+                     layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-card>
 
@@ -227,6 +266,18 @@
         cb(new Error('请输入合法的手机号'))
       }
       return{
+        searchInput:'',
+        searchForm:{
+          empName:'',
+          nickName:'',
+          email:'',
+          sex:'',
+          phone:'',
+          startDate:'',
+          endDate:'',
+          pageNum:1,
+          pageSize:10
+        },
         rowEmpId: 0,
         buttonDisabled:true,
         pageNum:1,
@@ -268,6 +319,46 @@
       }
     },
     methods:{
+      resetForm() {
+        this.$refs.advancedSearchFormRef.resetFields()
+        this.searchInput = ''
+        this.initList()
+      },
+      advancedQueryClick() {
+        userHttp.queryEmp(this.searchForm).then(res => {
+          if (res.code === 20000) {
+            this.listForm = res.data.list
+            this.total = res.data.total
+            this.pageNum = res.data.pageNum
+          }
+        })
+      },
+      empStatusChange(emp) {
+        this.$confirm('是否继续？','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(()=>{
+          this.tableLoading = true
+          userHttp.editEmp(emp).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+              this.tableLoading = false
+            }
+          })
+        })
+      },
+      searchInputClick() {
+        this.listForm.empName = this.searchInput
+        userHttp.queryEmp(this.listForm).then(res => {
+          this.listForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
+      },
       editHandleClose() {
         this.$refs.editFormRef.resetFields()
         this.editEmpButtonLoading = false
@@ -353,17 +444,10 @@
       openAddDialog() {
         this.addDialog = true
       },
-      handleSizeChange(pageIndex) {
-        this.pageSize = pageIndex
-        userHttp.listPage(this.pageNum,this.pageSize).then(res => {
-          this.listForm = res.data.list
-          this.total = res.data.total
-          this.pageNum = res.data.pageNum
-        })
-      },
       handleCurrentChange(pageIndex) {
-        this.pageNum = pageIndex
-        userHttp.listPage(this.pageNum,this.pageSize).then(res => {
+        this.searchForm.pageNum = pageIndex
+        this.searchForm.pageSize = this.pageSize
+        userHttp.queryEmp(this.searchForm).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
@@ -371,7 +455,7 @@
       },
       initList() {
         this.tableLoading = true
-        userHttp.listPage(this.pageNum,this.pageSize).then(res => {
+        userHttp.queryEmp(this.searchForm).then(res => {
           if (res.code === 20000) {
             this.listForm = res.data.list;
             this.total = res.data.total

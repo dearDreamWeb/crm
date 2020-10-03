@@ -90,7 +90,7 @@
             ,phone = #{phone}
         </if>
         <if test="empStatus != null">
-            ,emp_status != #{empStatus}
+            ,emp_status = #{empStatus}
         </if>
         <if test="remark != null and remark != ''">
             ,remark = #{remark}
@@ -110,25 +110,34 @@
 
     <select id="listEmp" resultMap="EmpResult">
         SELECT emp_id,emp_name,nick_name,sex,email,phone,emp_status,remark,create_time
-        FROM emp WHERE 1 = 1 AND is_delete = 0 AND emp_name != 'admin'
-        <if test="empName != null and empName != ''">
-            AND emp_name LIKE CONCAT('%',#{empName},'%')
-        </if>
-        <if test="nickName != null and nickName != ''">
-            AND nick_name LIKE CONCAT('%',#{nickName},'%')
-        </if>
-        <if test="sex != null">
-            AND sex = #{sex}
-        </if>
-        <if test="email != null and email != ''">
-            AND email LIKE CONCAT('%',#{email},'%')
-        </if>
-        <if test="phone != null">
-            AND phone LIKE CONCAT('%',#{phone},'%')
-        </if>
-        <if test="empStatus != null">
-            AND emp_status = #{empStatus}
-        </if>
+        FROM emp
+        <where>
+            <if test="empName != null and empName != ''">
+                AND emp_name LIKE CONCAT('%',#{empName},'%')
+            </if>
+            <if test="nickName != null and nickName != ''">
+                AND nick_name LIKE CONCAT('%',#{nickName},'%')
+            </if>
+            <if test="sex != null">
+                AND sex = #{sex}
+            </if>
+            <if test="email != null and email != ''">
+                AND email LIKE CONCAT('%',#{email},'%')
+            </if>
+            <if test="phone != null">
+                AND phone LIKE CONCAT('%',#{phone},'%')
+            </if>
+            <if test="empStatus != null">
+                AND emp_status = #{empStatus}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND date_format(create_date,'%y%m%d') &gt; = date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND date_format(create_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+            AND is_delete = 0 AND emp_name != 'admin'
+        </where>
         ORDER BY create_time DESC
     </select>
 
