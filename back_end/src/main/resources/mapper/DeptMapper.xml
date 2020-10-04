@@ -68,7 +68,7 @@
     </select>
 
     <select id="listDept" resultMap="DeptResult">
-        SELECT dept_id,dept_name,dept_key FROM dept WHERE is_delete = 0
+        SELECT dept_id,dept_name,dept_key,create_time,version,is_delete FROM dept WHERE is_delete = 0
         <if test="deptName != null and deptName != ''">
             ,dept_name LIKE CONCAT('%',#{deptName},'%')
         </if>

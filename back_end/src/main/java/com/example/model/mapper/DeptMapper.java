@@ -17,6 +17,6 @@ public interface DeptMapper {
     int delDept(Integer deptId);
     int editDept(DeptReq deptReq);
     DeptResp getDept(Integer deptId);
-    List<DeptResp> listDept();
+    List<DeptResp> listDept(DeptReq deptReq);
     int checkDept(String deptKey);
 }

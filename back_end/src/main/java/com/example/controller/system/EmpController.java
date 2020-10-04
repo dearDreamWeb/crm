@@ -4,6 +4,8 @@ import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.EmpReq;
 import com.example.service.EmpService;
+import com.example.util.ResultUtils;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,20 +24,19 @@ public class EmpController {
 
     @SysLog("添加用户")
     @PostMapping("/add")
-    public ResultVo addEmp(EmpReq empReq) {
+    public ResultVo addEmp(@RequestBody EmpReq empReq) {
         return empService.addEmp(empReq);
     }
 
     @SysLog("删除用户")
     @PostMapping("/del")
-    public ResultVo delEmp(@RequestParam("empId") Integer empId) {
-        System.err.println(empId);
-        return empService.delEmp(empId);
+    public ResultVo delEmp(@RequestBody EmpReq empReq) {
+        return empService.delEmp(empReq);
     }
 
     @SysLog("编辑用户")
     @PostMapping("/edit")
-    public ResultVo editEmp(EmpReq empReq) {
+    public ResultVo editEmp(@RequestBody EmpReq empReq) {
         return empService.editEmp(empReq);
     }
 
@@ -45,9 +46,8 @@ public class EmpController {
     }
 
     @GetMapping("/list")
-    public ResultVo listEmp(EmpReq empReq,@RequestParam("pageNum")Integer pageNum,
-                            @RequestParam("pageSize")Integer pageSize) {
-        return empService.listEmp(empReq,pageNum,pageSize);
+    public ResultVo listEmp(EmpReq empReq) {
+        return empService.listEmp(empReq);
     }
 
     @PostMapping("/login")

@@ -52,26 +52,25 @@ public class EmpServiceImpl implements EmpService {
         empReq.setPassWord(passWordMd5);
         empReq.setEmpStatus(1);
         int addEmp = empMapper.addEmp(empReq);
-        if (addEmp != 1){
+        if (addEmp != 1) {
             throw new SysException(ResultEnum.USER_ADD_FAIL.getCode(),
                     ResultEnum.USER_ADD_FAIL.getMessage());
         }
         Integer empId = empReq.getEmpId();
-        List<Integer> deptIdList = empReq.getDeptIdList();
-        if (deptIdList != null && deptIdList.size() > 0) {
-            for (Integer deptId : deptIdList) {
-                int addEmpDept = empDeptMapper.addEmpDept(empId, deptId);
-                if (addEmpDept != 1){
-                    throw new SysException(ResultEnum.USER_ADD_FAIL.getCode(),
-                            ResultEnum.USER_ADD_FAIL.getMessage());
-                }
+        Integer reqDeptId = empReq.getDeptId();
+        if (reqDeptId != null) {
+            int addEmpDept = empDeptMapper.addEmpDept(empId, reqDeptId);
+            if (addEmpDept != 1) {
+                throw new SysException(ResultEnum.USER_ADD_FAIL.getCode(),
+                        ResultEnum.USER_ADD_FAIL.getMessage());
             }
         }
         return ResultUtils.response(addEmp);
     }
 
     @Override
-    public ResultVo delEmp(Integer empId) {
+    public ResultVo delEmp(EmpReq empReq) {
+        Integer empId = empReq.getEmpId();
         EmpResp emp = empMapper.getEmp(empId);
         if (emp == null) {
             throw new SysException(ResultEnum.USER_NOT_EXIST.getCode(),
@@ -93,21 +92,21 @@ public class EmpServiceImpl implements EmpService {
             throw new SysException(ResultEnum.USER_NOT_EXIST.getCode(),
                     ResultEnum.USER_NOT_EXIST.getMessage());
         }
+        empReq.setVersion(emp.getVersion());
+        empReq.setUpdateTime(DateUtils.getDate());
         int editEmp = empMapper.editEmp(empReq);
         if (editEmp != 1) {
             throw new SysException(ResultEnum.USER_UPDATE_FAIL.getCode(),
                     ResultEnum.USER_UPDATE_FAIL.getMessage());
         }
-        List<Integer> deptIdList = empReq.getDeptIdList();
-        if (deptIdList != null && deptIdList.size() > 0) {
+        Integer reqDeptEditId = empReq.getDeptId();
+        if (reqDeptEditId != null) {
             Integer empId = empReq.getEmpId();
             empMapper.delEmp(empId);
-            for (Integer deptId : deptIdList) {
-                int addEmpDept = empDeptMapper.addEmpDept(empId, deptId);
-                if (addEmpDept != 1) {
-                    throw new SysException(ResultEnum.USER_UPDATE_FAIL.getCode(),
-                            ResultEnum.USER_UPDATE_FAIL.getMessage());
-                }
+            int addEmpDept = empDeptMapper.addEmpDept(empId, reqDeptEditId);
+            if (addEmpDept != 1) {
+                throw new SysException(ResultEnum.USER_UPDATE_FAIL.getCode(),
+                        ResultEnum.USER_UPDATE_FAIL.getMessage());
             }
         }
         return ResultUtils.response(editEmp);
@@ -116,16 +115,21 @@ public class EmpServiceImpl implements EmpService {
     @Override
     public ResultVo getEmp(Integer empId) {
         EmpResp emp = empMapper.getEmp(empId);
+        DeptResp dept = emp.getDept();
+        Integer deptId = dept.getDeptId();
+        emp.setDeptId(deptId);
         return ResultUtils.response(emp);
     }
 
     @Override
-    public ResultVo listEmp(EmpReq empReq,Integer pageNum,Integer pageSize) {
+    public ResultVo listEmp(EmpReq empReq) {
+        Integer pageNum = empReq.getPageNum();
+        Integer pageSize = empReq.getPageSize();
         if (pageNum == null) {
             pageNum = 1;
         }
         if (pageSize == null) {
-            pageSize = 20;
+            pageSize = 10;
         }
         PageHelper.startPage(pageNum,pageSize);
         List<EmpResp> empResps = empMapper.listEmp(empReq);
@@ -157,6 +161,7 @@ public class EmpServiceImpl implements EmpService {
         long time = date.getTime();
         String timeStamp = empResp.getEmpName()+empResp.getEmpId()+time;
         String token = DigestUtils.md5DigestAsHex(timeStamp.getBytes());
+        empResp.setToken(token);
         empMapper.updateToken(empName,token);
         return ResultUtils.response(empResp);
     }

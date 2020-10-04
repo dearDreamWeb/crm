@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.entity.ResultVo;
 import com.example.entity.request.EmpReq;
+import com.github.pagehelper.PageInfo;
 
 /**
  * @author: pengjia
@@ -10,10 +11,10 @@ import com.example.entity.request.EmpReq;
  */
 public interface EmpService {
     ResultVo addEmp(EmpReq empReq);
-    ResultVo delEmp(Integer empId);
+    ResultVo delEmp(EmpReq empReq);
     ResultVo editEmp(EmpReq empReq);
     ResultVo getEmp(Integer empId);
-    ResultVo listEmp(EmpReq empReq,Integer pageNum,Integer pageSize);
+    ResultVo listEmp(EmpReq empReq);
     ResultVo login(EmpReq empReq);
     ResultVo getShowMenuByToken(String token);
     ResultVo pwd(EmpReq empReq);
