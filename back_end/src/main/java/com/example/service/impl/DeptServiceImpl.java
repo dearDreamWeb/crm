@@ -11,6 +11,7 @@ import com.example.model.mapper.DeptMenuMapper;
 import com.example.model.mapper.EmpDeptMapper;
 import com.example.service.DeptService;
 import com.example.util.CheckUtils;
+import com.example.util.DateUtils;
 import com.example.util.MyListUtils;
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
@@ -80,6 +81,8 @@ public class DeptServiceImpl implements DeptService {
             throw new SysException(ResultEnum.DEPT_NOT_EXIST.getCode(),
                     ResultEnum.DEPT_NOT_EXIST.getMessage());
         }
+        deptReq.setVersion(deptResp.getVersion());
+        deptReq.setUpdateTime(DateUtils.getDate());
         int editDept = deptMapper.editDept(deptReq);
         if (editDept != 1) {
             throw new SysException(ResultEnum.DEPT_UPDATE_FAIL.getCode(),
@@ -91,21 +94,25 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public ResultVo getDept(Integer deptId) {
         DeptResp dept = deptMapper.getDept(deptId);
-        List<MenuResp> menus = dept.getMenus();
+        /*List<MenuResp> menus = dept.getMenus();
         if (!MyListUtils.isEmpty(menus)) {
             List<Integer> list = new ArrayList<>();
             for (MenuResp menu : menus) {
                 if (menu != null && menu.getMenuType() == 3) {
                     list.add(menu.getMenuId());
+                } else {
+                    list.add(null);
                 }
             }
             dept.setMenuIds(list);
-        }
+        }*/
         return ResultUtils.response(dept);
     }
 
     @Override
-    public ResultVo listDept(DeptReq deptReq,Integer pageNum,Integer pageSize) {
+    public ResultVo listDept(DeptReq deptReq) {
+        Integer pageNum = deptReq.getPageNum();
+        Integer pageSize = deptReq.getPageSize();
         if (pageNum == null) {
             pageNum = 1;
         }
@@ -118,11 +125,11 @@ public class DeptServiceImpl implements DeptService {
         return ResultUtils.response(list);
     }
 
-    @Override
+    /*@Override
     public ResultVo listDept(DeptReq deptReq) {
         List<DeptResp> deptResps = deptMapper.listDept(deptReq);
         return ResultUtils.response(deptResps);
-    }
+    }*/
 
     @Override
     public ResultVo auth(DeptReq deptReq) {

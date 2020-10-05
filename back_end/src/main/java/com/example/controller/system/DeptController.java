@@ -26,13 +26,13 @@ public class DeptController {
 
     @SysLog("删除部门")
     @PostMapping("/del")
-    public ResultVo delDept(DeptReq deptReq) {
+    public ResultVo delDept(@RequestBody DeptReq deptReq) {
         return deptService.delDept(deptReq);
     }
 
     @SysLog("编辑部门")
     @PostMapping("/edit")
-    public ResultVo editDept(DeptReq deptReq) {
+    public ResultVo editDept(@RequestBody DeptReq deptReq) {
         return deptService.editDept(deptReq);
     }
 
@@ -42,10 +42,8 @@ public class DeptController {
     }
 
     @GetMapping("/list")
-    public ResultVo listDept(DeptReq deptReq,
-                             @RequestParam("pageNum")Integer pageNum,
-                             @RequestParam("pageSize")Integer pageSize) {
-        return deptService.listDept(deptReq,pageNum,pageSize);
+    public ResultVo listDept(DeptReq deptReq) {
+        return deptService.listDept(deptReq);
     }
 
     @GetMapping("/list_all")

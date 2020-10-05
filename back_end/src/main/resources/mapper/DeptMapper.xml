@@ -55,11 +55,11 @@
         <if test="deptKey != null and deptKey != ''">
             ,dept_key = #{deptKey}
         </if>
-        WHERE dept_id = #{deptId}
+        WHERE dept_id = #{deptId} AND version = #{version}
     </update>
 
     <select id="getDept" resultMap="DeptDetailResult">
-        SELECT d.dept_id,d.dept_name,d.dept_key,m.menu_id,m.menu_name,m.pid,m.pids,
+        SELECT d.dept_id,d.dept_name,d.dept_key,d.version,m.menu_id,m.menu_name,m.pid,m.pids,
             m.url,m.icon,m.perms,m.menu_type,m.is_show
         FROM dept d
         LEFT JOIN dept_menu dm ON d.dept_id = dm.dept_id
@@ -68,13 +68,23 @@
     </select>
 
     <select id="listDept" resultMap="DeptResult">
-        SELECT dept_id,dept_name,dept_key,create_time,version,is_delete FROM dept WHERE is_delete = 0
-        <if test="deptName != null and deptName != ''">
-            ,dept_name LIKE CONCAT('%',#{deptName},'%')
-        </if>
-        <if test="deptKey != null and deptKey != ''">
-            ,dept_key LIKE CONCAT('%',#{deptKey},'%')
-        </if>
+        SELECT dept_id,dept_name,dept_key,create_time,version,is_delete FROM dept
+        <where>
+            <if test="deptName != null and deptName != ''">
+                AND dept_name LIKE CONCAT('%',#{deptName},'%')
+            </if>
+            <if test="deptKey != null and deptKey != ''">
+                AND dept_key LIKE CONCAT('%',#{deptKey},'%')
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND date_format(create_date,'%y%m%d') &gt; = date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND date_format(create_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+            AND is_delete = 0
+        </where>
+        ORDER BY create_time DESC
     </select>
 
     <select id="checkDept" resultType="int">

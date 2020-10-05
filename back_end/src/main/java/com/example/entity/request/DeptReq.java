@@ -19,9 +19,13 @@ public class DeptReq {
     private Integer deptId;
     private String deptName;
     private String deptKey;
-    private Integer verion;
+    private Integer version;
     private Date createTime;
     private Date updateTime;
     private Integer isDelete;
+    private String startDate;
+    private String endDate;
+    private Integer pageNum;
+    private Integer pageSize;
     private List<Integer> menuIdList;
 }
