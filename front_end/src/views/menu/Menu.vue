@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-card>
+      <el-button type="primary" icon="el-icon-plus" size="mini" @click="addDialoh = true">添加菜单</el-button>
       <tree-table class="treeTable" :data="treeList" :columns="columns"
                   :selection-type="false" :expand-type="false"
                   show-index index-text="#" border :show-row-hover="false">
@@ -23,6 +24,67 @@
         </template>
       </tree-table>
     </el-card>
+
+    <el-dialog title="菜单添加" :visible.sync="addDialog" @close="addHandleClose">
+      <el-form :model="addForm" :rules="addFormRules"
+               ref="addFormRef" label-width="100px"
+               label-position="right">
+        <el-form-item label="菜单名称" prop="menuName">
+          <el-input size="mini" placeholder="请输入菜单名称" v-model="addForm.menuName"></el-input>
+        </el-form-item>
+        <el-form-item label="匹配路由" prop="url">
+          <el-input size="mini" placeholder="请输入匹配路由" v-model="addForm.url"></el-input>
+        </el-form-item>
+        <el-form-item label="权限标识" prop="perms">
+          <el-input size="mini" placeholder="请输入权限标识" v-model="addForm.perms"></el-input>
+        </el-form-item>
+        <el-form-item label="导航显示">
+          <el-radio-group v-model="addForm.isShow">
+            <el-radio :label=1>显示</el-radio>
+            <el-radio :label=0>不显示</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="父级菜单">
+          <el-cascader v-model="addForm.pidList" :options="treeList"
+                       @change="addHandleChange" clearable :props="defaultProps">
+          </el-cascader>
+        </el-form-item>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="addDialog = false">取消</el-button>
+        <el-button type="primary" @click="addClick">确定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog title="菜单编辑" :visible.sync="editDialog" @close="editHandleClose">
+      <el-form :model="editForm" label-width="70px" ref="editFormRef">
+        <el-form-item label="菜单名称" prop="menuName">
+          <el-input size="mini" v-model="editForm.menuName"></el-input>
+        </el-form-item>
+        <el-form-item label="匹配路由" prop="url">
+          <el-input size="mini" v-model="editForm.url"></el-input>
+        </el-form-item>
+        <el-form-item label="权限标识" prop="perms">
+          <el-input size="mini" v-model="editForm.perms"></el-input>
+        </el-form-item>
+        <el-form-item label="导航显示" prop="isShow">
+          <el-radio-group v-model="editForm.isShow">
+            <el-radio :label=1>显示</el-radio>
+            <el-radio :label=0>不显示</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="父级菜单" prop="pidList">
+          <el-cascader v-model="editForm.pidList" :options="treeList"
+                       :props="defaultProps" @change="editHandleChange"
+                       clearable>
+          </el-cascader>
+        </el-form-item>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="editDialog = false">取消</el-button>
+        <el-button type="primary" @click="editClick">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -33,6 +95,35 @@
     name: "Menu",
     data() {
       return {
+        editForm:{
+          menuId:'',
+          menuName:'',
+          pid:'',
+          pidList:[],
+          type:'',
+          perms:'',
+          url:'',
+          isShow:''
+        },
+        editDialog:false,
+        addDialog:false,
+        addForm:{
+          menuName:'',
+          type:'',
+          url:'',
+          perms:'',
+          isShow:0,
+          pid:'',
+          pidList:[]
+        },
+        addFormRules:{
+          menuName:[
+            {required:true,message:'请输入菜单名称',trigger:'blur'}
+          ],
+          perms:[
+            {required:true,message:'请输入菜单标识',trigger:'blur'}
+          ]
+        },
         treeList:[],
         columns: [
           {label: '菜单名称',prop: 'menuName'},
@@ -53,6 +144,89 @@
       }
     },
     methods: {
+      delBtn(menuId) {
+        this.$confirm('此操作讲永久删除，是否继续','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          menuHttp.del(menuId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+            }
+          })
+        })
+      },
+      editClick() {
+        menuHttp.edit(this.editForm).then(res => {
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.initList()
+          } else {
+            this.$message.error(res.message)
+          }
+          this.editDialog = false
+        })
+      },
+      editBtn(menuId) {
+        this.editDialog = true
+        this.editForm.menuId = menuId
+        menuHttp.get(menuId).then(res => {
+          this.editForm = res.data
+        })
+      },
+      addClick() {
+        this.$refs.addFormRef.validate(valid => {
+          if (!valid) return
+          menuHttp.add(this.addForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+            }
+            this.addDialog = false
+          })
+        })
+      },
+      editHandleChange() {
+        const len = this.editForm.pidList.length
+        if (len > 0) {
+          this.editForm.pid = this.editForm.pidList[len - 1]
+          this.editForm.type = len + 1
+        } else {
+          this.editForm.pid = 0
+          this.editForm.pidList = [0]
+          this.editForm.type = 1
+        }
+      },
+      addHandleChange() {
+        const len = this.addForm.pidList.length
+        if (len > 0) {
+          this.addForm.pid = this.addForm.pidList[len-1]
+          this.addForm.type = len + 1
+        } else {
+          this.addForm.pid = 0
+          this.addForm.pidList = [0]
+          this.addForm.type = 1
+        }
+      },
+      editHandleClose() {
+        this.$refs.editFormRef.resetFields()
+        this.editForm.pid = 0
+        this.editForm.pidList = []
+        this.editForm.type = 1
+      },
+      addHandleClose() {
+        this.$refs.addFormRef.resetFields()
+        this.addForm.pid = 0
+        this.addForm.pidList = []
+        this.addForm.type = 1
+        this.addForm.isShow = 0
+      },
       initList() {
         menuHttp.tree().then(res => {
           this.treeList = res.data
