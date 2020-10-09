@@ -67,5 +67,15 @@ export const deptHttp = {
       }
     }
     return get(params)
+  },
+  auth:function (dept) {
+    let params = {
+      url:'/dept/auth',
+      data:{
+        'deptId':dept.deptId,
+        'menuIdList':dept.menuIdList
+      }
+    }
+    return postJson(params)
   }
 }

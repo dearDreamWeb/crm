@@ -1,5 +1,6 @@
 package com.example.controller.system;
 
+import com.example.anno.CheckPermissions;
 import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.EmpReq;
@@ -24,18 +25,21 @@ public class EmpController {
 
     @SysLog("添加用户")
     @PostMapping("/add")
+    @CheckPermissions("system:emp:add")
     public ResultVo addEmp(@RequestBody EmpReq empReq) {
         return empService.addEmp(empReq);
     }
 
     @SysLog("删除用户")
     @PostMapping("/del")
+    @CheckPermissions("system:emp:del")
     public ResultVo delEmp(@RequestBody EmpReq empReq) {
         return empService.delEmp(empReq);
     }
 
     @SysLog("编辑用户")
     @PostMapping("/edit")
+    @CheckPermissions("system:emp:edit")
     public ResultVo editEmp(@RequestBody EmpReq empReq) {
         return empService.editEmp(empReq);
     }
@@ -46,6 +50,7 @@ public class EmpController {
     }
 
     @GetMapping("/list")
+//    @CheckPermissions("system:emp:index")
     public ResultVo listEmp(EmpReq empReq) {
         return empService.listEmp(empReq);
     }

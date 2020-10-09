@@ -94,18 +94,16 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public ResultVo getDept(Integer deptId) {
         DeptResp dept = deptMapper.getDept(deptId);
-        /*List<MenuResp> menus = dept.getMenus();
+        List<MenuResp> menus = dept.getMenus();
         if (!MyListUtils.isEmpty(menus)) {
             List<Integer> list = new ArrayList<>();
             for (MenuResp menu : menus) {
-                if (menu != null && menu.getMenuType() == 3) {
+                if (menu != null && menu.getMenuType() < 4) {
                     list.add(menu.getMenuId());
-                } else {
-                    list.add(null);
                 }
             }
             dept.setMenuIds(list);
-        }*/
+        }
         return ResultUtils.response(dept);
     }
 
@@ -143,7 +141,7 @@ public class DeptServiceImpl implements DeptService {
         if (menuIds != null && menuIds.size() > 0) {
             deptMenuMapper.delByDeptId(deptId);
             for (Integer menuId : menuIds) {
-                int addDeptMenu = deptMenuMapper.addDeptMenu(menuId, deptId);
+                int addDeptMenu = deptMenuMapper.addDeptMenu(deptId, menuId);
                 if (addDeptMenu != 1) {
                     throw new SysException(ResultEnum.DEPT_AUTH_FAIL.getCode(),
                             ResultEnum.DEPT_AUTH_FAIL.getMessage());

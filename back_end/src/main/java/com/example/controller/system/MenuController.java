@@ -1,5 +1,6 @@
 package com.example.controller.system;
 
+import com.example.anno.CheckPermissions;
 import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.MenuReq;
@@ -20,18 +21,21 @@ public class MenuController {
 
     @SysLog("添加菜单")
     @PostMapping("/add")
+    @CheckPermissions("system:menu:add")
     public ResultVo addMenu(@RequestBody MenuReq menuReq) {
         return menuService.addMenu(menuReq);
     }
 
     @SysLog("删除菜单")
     @PostMapping("/del")
+    @CheckPermissions("system:menu:del")
     public ResultVo delMenu(@RequestBody MenuReq menuReq) {
         return menuService.delMenu(menuReq);
     }
 
     @SysLog("编辑菜单")
     @PostMapping("/edit")
+    @CheckPermissions("system:menu:edit")
     public ResultVo editMenu(@RequestBody MenuReq menuReq) {
         return menuService.editMenu(menuReq);
     }
@@ -42,11 +46,13 @@ public class MenuController {
     }
 
     @GetMapping("/list")
+    @CheckPermissions("system:menu:index")
     public ResultVo listMenu(MenuReq menuReq) {
         return menuService.listMenu(menuReq);
     }
 
     @GetMapping("/tree")
+    @CheckPermissions("system:menu:index")
     public ResultVo treeMenu(MenuReq menuReq) {
         return menuService.treeMenu(menuReq);
     }

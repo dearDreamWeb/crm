@@ -22,7 +22,7 @@ export const userHttp = {
   },
   listPage:function (pageNum,pageSize) {
     let params = {
-      url:'/emp/dict_list',
+      url:'/emp/list',
       data:{
         'pageNum':pageNum,
         'pageSize':pageSize

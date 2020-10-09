@@ -1,5 +1,6 @@
 package com.example.controller.system;
 
+import com.example.anno.CheckPermissions;
 import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.DeptReq;
@@ -20,18 +21,21 @@ public class DeptController {
 
     @SysLog("添加部门")
     @PostMapping("/add")
+    @CheckPermissions("system:dept:add")
     public ResultVo addDept(@RequestBody DeptReq deptReq) {
         return deptService.addDept(deptReq);
     }
 
     @SysLog("删除部门")
     @PostMapping("/del")
+    @CheckPermissions("system:dept:del")
     public ResultVo delDept(@RequestBody DeptReq deptReq) {
         return deptService.delDept(deptReq);
     }
 
     @SysLog("编辑部门")
     @PostMapping("/edit")
+    @CheckPermissions("system:dept:edit")
     public ResultVo editDept(@RequestBody DeptReq deptReq) {
         return deptService.editDept(deptReq);
     }
@@ -42,6 +46,7 @@ public class DeptController {
     }
 
     @GetMapping("/list")
+    @CheckPermissions("system:dept:index")
     public ResultVo listDept(DeptReq deptReq) {
         return deptService.listDept(deptReq);
     }
@@ -53,7 +58,8 @@ public class DeptController {
 
     @SysLog("角色授权")
     @PostMapping("/auth")
-    public ResultVo auth(DeptReq deptReq) {
+    @CheckPermissions("system:dept:auth")
+    public ResultVo auth(@RequestBody DeptReq deptReq) {
         return deptService.auth(deptReq);
     }
 }

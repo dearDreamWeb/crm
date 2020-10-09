@@ -453,7 +453,7 @@
           this.pageNum = res.data.pageNum
         })
       },
-      initList() {
+      /*initList() {
         this.tableLoading = true
         userHttp.queryEmp(this.searchForm).then(res => {
           if (res.code === 20000) {
@@ -468,10 +468,19 @@
             })
           }
         })
+      },*/
+      initList() {
+        this.tableLoading = true
+        userHttp.listPage(this.pageNum,this.pageSize).then(res => {
+          this.listForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+          this.tableLoading = false
+        })
       },
       initDeptList() {
         deptHttp.listAll().then(res => {
-          this.deptList = res.data
+          this.deptList = res.data.list
         })
       },
       iHeaderRowStyle:function({row,rowIndex}){

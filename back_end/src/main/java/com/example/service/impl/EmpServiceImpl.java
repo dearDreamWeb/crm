@@ -50,7 +50,7 @@ public class EmpServiceImpl implements EmpService {
         //密码加密
         String passWordMd5 = DigestUtils.md5DigestAsHex(DigestUtils.md5DigestAsHex(passWord.getBytes()).getBytes());
         empReq.setPassWord(passWordMd5);
-        empReq.setEmpStatus(1);
+        empReq.setEmpStatus(0);
         int addEmp = empMapper.addEmp(empReq);
         if (addEmp != 1) {
             throw new SysException(ResultEnum.USER_ADD_FAIL.getCode(),

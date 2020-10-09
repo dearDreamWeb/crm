@@ -7,43 +7,19 @@
             <el-button @click="searchInputClick" slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="10">
           <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">添加部门</el-button>
           <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-button type="warning" size="mini" icon="el-icon-edit"
                      :disabled="buttonDisabled" @click="openEditDept">修改部门</el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete"
                      :disabled="buttonDisabled" @click="deleteDept">删除部门</el-button>
+          <el-button type="success" size="mini" icon="el-icon-tickets"
+                     :disabled="buttonDisabled" @click="authClick">角色授权</el-button>
         </el-col>
       </el-row>
-
-      <transition name="el-zoom-in-top">
-        <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px">
-          <el-form size="mini" label-position="right" label-width="80px">
-            <el-row>
-              <el-col>
-                <el-form-item label-width="高级搜索"></el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="12">
-                <el-form-item label="问题">
-                  <el-input size="mini" placeholder="INPUT" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="日期">
-                  <el-date-picker type="daterange" range-separator="至"
-                                  start-placeholder="开始日期" end-placeholder="结束日期">
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </el-card>
-      </transition>
 
       <el-table :data="listForm" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
@@ -105,16 +81,29 @@
                    :loading="editDeptButtonLoading">确定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="授权" :visible.sync="allotDialog" @close="authDialogClose">
+      <el-tree :data="menuTree" :props="defaultProps" ref="treeRef"
+               show-checkbox node-key="menuId" default-expand-all
+               :default-checked-keys="defaultKeys">
+      </el-tree>
+      <span slot="footer">
+        <el-button @click="allotDialog = false">取消</el-button>
+        <el-button type="primary" @click="allotClick">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import {deptHttp} from "../../network/system/dept";
+  import {menuHttp} from "../../network/system/menu";
 
   export default {
     name: "Dept",
     data() {
       return {
+        allotDialog:false,
         searchInput:'',
         editDialog:false,
         editForm:{},
@@ -139,10 +128,48 @@
         listForm:[],
         pageNum:1,
         pageSize:10,
-        total:1
+        total:1,
+        menuTree:[],
+        defaultKeys:[],
+        defaultProps: {
+          children:'children',
+          label:'menuName'
+        },
+        dept:{
+          deptId:'',
+          menuIdList:[]
+        }
       }
     },
     methods: {
+      allotClick() {
+        this.dept.menuIdList = [
+          ...this.$refs.treeRef.getCheckedKeys(),//获取全选的menuId
+          ...this.$refs.treeRef.getHalfCheckedKeys()//获取半选的menuId
+        ]
+        deptHttp.auth(this.dept).then(res => {
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+          } else {
+            this.$message.error(res.message)
+          }
+          this.allotDialog = false
+        })
+      },
+      authDialogClose() {
+        this.defaultKeys = []
+      },
+      authClick(deptId) {
+        this.allotDialog = true
+        deptId = this.rowDeptId
+        this.dept.deptId = this.rowDeptId
+        menuHttp.tree().then(res => {
+          this.menuTree = res.data
+        })
+        deptHttp.getDept(deptId).then(res => {
+          this.defaultKeys = res.data.menuIds
+        })
+      },
       searchInputClick() {
         this.listForm.deptName = this.searchInput
         deptHttp.list(this.listForm).then(res => {
