@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /*
 YQQ
@@ -17,9 +18,9 @@ public class szOrder {
     private Integer ordId;//订单编号
     private String ordHead;//负责人
     private BigDecimal ordTotalmoney;//总金额
-    private Data ordCreatetime;// 创建时间
-    private Data ordDealtime;//成交时间
-    private Data ordFahuotime;//发货时间
+    private Date ordCreatetime;// 创建时间
+    private Date ordDealtime;//成交时间
+    private Date ordFahuotime;//发货时间
     private BigDecimal ordHuikuanmoney;//回款金额
     private String ordConsignee;//收货人
     private String ordProvince;//省份

@@ -40,6 +40,12 @@
         <if test="perms != null and perms != ''">
             ,perms = #{perms}
         </if>
+        <if test="url != null and url != ''">
+            ,url = #{url}
+        </if>
+        <if test="icon != null and icon != ''">
+            ,icon = #{icon}
+        </if>
         <if test="menuType != null">
             ,menu_type = #{menuType}
         </if>
@@ -72,7 +78,7 @@
         SELECT COUNT(menu_id) FROM menu WHERE url = #{url}
     </select>
 
-    <select id="delMenu" parameterType="Integer">
-        UPDATE menu SET is_delete = 1 WHERE menu_id = #{menuId}
-    </select>
+    <delete id="delMenu" parameterType="Integer">
+        DELETE FROM menu WHERE menu_id = #{menuId}
+    </delete>
 </mapper>
