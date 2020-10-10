@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author: pengjia
@@ -23,4 +24,5 @@ public class DictResp {
     private Date createTime;
     private Date updateTime;
     private Integer isDelete;
+    private List<DictResp> children;
 }

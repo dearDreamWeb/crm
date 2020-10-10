@@ -12,16 +12,6 @@
           <i class="el-icon-s-home"></i>
           <span slot="title">首页</span>
         </el-menu-item>
-        <!--<el-submenu index="1">
-          <template slot="title">
-            <i class="el-icon-tickets"></i>
-            <span slot="title">测试</span>
-          </template>
-          <el-menu-item index="/user">
-            <i class="el-icon-monitor"></i>
-            <span slot="title">页面2</span>
-          </el-menu-item>
-        </el-submenu>-->
         <el-submenu :index="index + ''" v-for="(item,index) in menuList"
                     :key="item.menuId">
           <template slot="title">

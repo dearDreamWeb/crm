@@ -36,6 +36,10 @@ const routes = [
       {
         path: '/menu',
         component: () => import('../views/menu/Menu')
+      },
+      {
+        path: '/dict',
+        component: () => import('../views/dict/Dict')
       }
     ]
   }

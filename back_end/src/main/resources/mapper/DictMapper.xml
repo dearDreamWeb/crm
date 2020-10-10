@@ -61,11 +61,16 @@
             <if test="endDate != null and endDate != ''">
                 AND date_format(create_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
+            AND is_delete = 0
         </where>
-        ORDER BY create_time DESC
     </select>
 
     <select id="checkDict" resultType="int">
         SELECT count(dict_code) FROM dict WHERE dict_code = #{dictCode}
+    </select>
+
+    <select id="listPidDict" resultMap="DictResult">
+        SELECT dict_id,dict_code,dict_name,pid,version,create_time,update_time,is_delete
+        FROM dict WHERE pid = 0
     </select>
 </mapper>
