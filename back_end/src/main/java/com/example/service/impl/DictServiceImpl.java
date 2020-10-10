@@ -5,11 +5,10 @@ import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
 import com.example.entity.request.DictReq;
 import com.example.entity.response.DictResp;
+import com.example.entity.response.MenuResp;
 import com.example.model.mapper.DictMapper;
 import com.example.service.DictService;
-import com.example.util.CheckUtils;
-import com.example.util.DateUtils;
-import com.example.util.ResultUtils;
+import com.example.util.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,11 @@ public class DictServiceImpl implements DictService {
             throw new SysException(ResultEnum.DICT_EXIST.getCode(),
                     ResultEnum.DICT_EXIST.getMessage());
         }
+        Integer pid = dictReq.getPid();
+        if (pid == null) {
+            pid = 0;
+        }
+        dictReq.setPid(pid);
         int addDict = dictMapper.addDict(dictReq);
         if (addDict != 1) {
             throw new SysException(ResultEnum.DICT_ADD_FAIL.getCode(),
@@ -98,4 +102,18 @@ public class DictServiceImpl implements DictService {
         PageInfo<DictResp> list = new PageInfo<>(dictResps);
         return ResultUtils.response(list);
     }
+
+    @Override
+    public ResultVo listPidDict(DictReq dictReq) {
+        List<DictResp> dictResps = dictMapper.listPidDict(dictReq);
+        return ResultUtils.response(dictResps);
+    }
+
+    @Override
+    public ResultVo treeDict(DictReq dictReq) {
+        List<DictResp> dictResps = dictMapper.listDict(dictReq);
+        dictResps = TreeUtils.listToDictTree(dictResps);
+        return ResultUtils.response(dictResps);
+    }
+
 }

@@ -50,4 +50,14 @@ public class DictController {
     public ResultVo listDict(@RequestBody DictReq dictReq) {
         return dictService.listDict(dictReq);
     }
+
+    @GetMapping("/tree")
+    public ResultVo treeDict(DictReq dictReq) {
+        return dictService.treeDict(dictReq);
+    }
+
+    @GetMapping("/get_pid")
+    public ResultVo getPid(DictReq dictReq) {
+        return dictService.listPidDict(dictReq);
+    }
 }

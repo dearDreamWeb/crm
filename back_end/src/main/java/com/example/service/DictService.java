@@ -14,4 +14,6 @@ public interface DictService {
     ResultVo editDict(DictReq dictReq);
     ResultVo getDict(Integer dictId);
     ResultVo listDict(DictReq dictReq);
+    ResultVo listPidDict(DictReq dictReq);
+    ResultVo treeDict(DictReq dictReq);
 }
