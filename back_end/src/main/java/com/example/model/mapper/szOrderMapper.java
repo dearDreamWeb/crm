@@ -9,8 +9,8 @@ import java.util.List;
 @Repository
 public interface szOrderMapper {
     List<szOrder> listszOrder(szOrder szOrder);//全部
-    szOrder queryszOrderById(int ordId);//单条
+    szOrder queryszOrderById(Integer ordId);//单条
     int addszOrder(szOrder szOrder);//增
     int updateszOrder(szOrder szOrder);//改
-    int deleteszOrder(int ordId);//删
+    int deleteszOrder(Integer ordId);//删
 }
