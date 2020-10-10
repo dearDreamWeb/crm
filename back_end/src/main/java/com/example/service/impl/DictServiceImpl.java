@@ -89,18 +89,9 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public ResultVo listDict(DictReq dictReq) {
-        Integer pageNum = dictReq.getPageNum();
-        Integer pageSize = dictReq.getPageSize();
-        if (pageNum == null) {
-            pageNum = 1;
-        }
-        if (pageSize == null) {
-            pageSize = 10;
-        }
-        PageHelper.startPage(pageNum,pageSize);
         List<DictResp> dictResps = dictMapper.listDict(dictReq);
-        PageInfo<DictResp> list = new PageInfo<>(dictResps);
-        return ResultUtils.response(list);
+        dictResps = TreeUtils.listToDictTree(dictResps);
+        return ResultUtils.response(dictResps);
     }
 
     @Override

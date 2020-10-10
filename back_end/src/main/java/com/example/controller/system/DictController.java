@@ -47,7 +47,7 @@ public class DictController {
 
     @GetMapping("/list")
     @CheckPermissions("system:dict:index")
-    public ResultVo listDict(@RequestBody DictReq dictReq) {
+    public ResultVo listDict(DictReq dictReq) {
         return dictService.listDict(dictReq);
     }
 

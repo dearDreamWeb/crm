@@ -23,5 +23,45 @@ export const dictHttp = {
       }
     }
     return postJson(params)
+  },
+  get:function (dictId) {
+    let params = {
+      url:'/dict',
+      data:{
+        'dictId':dictId
+      }
+    }
+    return get(params)
+  },
+  edit:function (dict) {
+    let params = {
+      url:'/dict/edit',
+      data:{
+        'dictId':dict.dictId,
+        'dictName':dict.dictName,
+        'dictCode':dict.dictCode,
+        'pid':dict.pid
+      }
+    }
+    return postJson(params)
+  },
+  del:function (dictId) {
+    let params = {
+      url:'/dict/del',
+      data:{
+        'dictId':dictId
+      }
+    }
+    return postJson(params)
+  },
+  list:function (dict) {
+    let params = {
+      url:'/dict/list',
+      data:{
+        'dictName':dict.dictName,
+        'dictCode':dict.dictCode
+      }
+    }
+    return get(params)
   }
 }

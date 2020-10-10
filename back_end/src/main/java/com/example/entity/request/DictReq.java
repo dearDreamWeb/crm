@@ -25,6 +25,4 @@ public class DictReq {
     private Integer isDelete;
     private String startDate;
     private String endDate;
-    private Integer pageNum;
-    private Integer pageSize;
 }
