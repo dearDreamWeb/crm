@@ -5,6 +5,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Care {
     private Integer careId;
     private String careZt;//关怀主题

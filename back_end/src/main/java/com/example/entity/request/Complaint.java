@@ -5,6 +5,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Complaint {
     private Integer complaintId;//投诉编号
     private String complaintZt;//投诉主题
