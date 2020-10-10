@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.DictMapper">
+    <resultMap id="DictResult" type="com.example.entity.response.DictResp">
+        <id column="dict_id" property="dictId"/>
+        <result column="dict_code" property="dictCode"/>
+        <result column="dict_name" property="dictName"/>
+        <result column="pid" property="pid"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+    </resultMap>
+
+    <insert id="addDict" parameterType="com.example.entity.response.DictResp">
+        <selectKey keyColumn="dict_id" keyProperty="dictId" resultType="Integer" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        INSERT INTO dict(dict_code,dict_name,pid) VALUES
+        (#{dictCode},#{dictName},#{pid})
+    </insert>
+
+    <delete id="delDict" parameterType="Integer">
+        UPDATE dict SET is_delete = 1,version = version + 1
+        WHERE dict_id = #{dictId}
+    </delete>
+
+    <update id="editDict" parameterType="com.example.entity.request.DictReq">
+        UPDATE dict SET update_time = #{updateTime},version = version + 1
+        <if test="dictCode != null and dictCode != ''">
+            ,dict_code = #{dictCode}
+        </if>
+        <if test="dictName != null and dictName != ''">
+            ,dict_name = #{dictName}
+        </if>
+        <if test="pid != null and pid != ''">
+            ,pid = #{pid}
+        </if>
+        WHERE dict_id = #{dictId} AND version = #{version}
+    </update>
+
+    <select id="getDict" resultMap="DictResult" parameterType="Integer">
+        SELECT dict_id,dict_code,dict_name,pid,version,create_time,update_time,is_delete
+        FROM dict WHERE dict_id = #{dictId}
+    </select>
+
+    <select id="listDict" resultMap="DictResult">
+        SELECT dict_id,dict_code,dict_name,pid,version,create_time,update_time,is_delete
+        FROM dict
+        <where>
+            <if test="dictCode != null and dictCode != ''">
+                AND dict_code LIKE CONCAT('%',#{dictCode},'%')
+            </if>
+            <if test="dictName != null and dictName != ''">
+                AND dict_name LIKE CONCAT('%',#{dictName},'%')
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND date_format(create_date,'%y%m%d') &gt; = date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND date_format(create_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="checkDict" resultType="int">
+        SELECT count(dict_code) FROM dict WHERE dict_code = #{dictCode}
+    </select>
+</mapper>
