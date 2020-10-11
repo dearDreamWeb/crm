@@ -54,6 +54,12 @@ public enum ResultEnum {
     DICT_NOT_EXIST(80022,"字典不存在"),
     DICT_PID_NOT_SELF(8002,"字典父级id不能是自己"),
 
+    ACTIVITY_ADD_FAIL(80023,"活动添加失败"),
+    ACTIVITY_EXIST(80024,"活动已存在"),
+    ACTIVITY_DEL_FAIL(80025,"活动删除失败"),
+    ACTIVITY_UPDATE_FAIL(80026,"活动更新失败"),
+    ACTIVITY_NOT_EXIST(80027,"活动不存在"),
+
     PLACEHOLDER(null,null);//占位符，方便快速编写代码（无其他业务作用）
 
     private Integer code;
