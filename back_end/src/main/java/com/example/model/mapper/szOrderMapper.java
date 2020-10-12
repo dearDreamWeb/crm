@@ -8,9 +8,9 @@ import java.util.List;
 /*1003 yqq*/
 @Repository
 public interface szOrderMapper {
-    List<szOrder> listszOrder(szOrder szOrder);//全部
+    int addszOrder(szOrder szorder);//增
+    int delszOrder(Integer ordId);//删
+    int editszOrder(szOrder szorder);//改
     szOrder queryszOrderById(Integer ordId);//单条
-    int addszOrder(szOrder szOrder);//增
-    int updateszOrder(szOrder szOrder);//改
-    int deleteszOrder(Integer ordId);//删
+    List<szOrder> listszOrder(szOrder szorder);//全部
 }
