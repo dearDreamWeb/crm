@@ -1,12 +1,12 @@
-<!--
+/*
 @author: pengjia
 @date: 2020/10/12
 @description:
--->
+*/
 import {postJson,get} from "../request";
 
 export const activityHttp = {
-  addActivity:function(activity) {
+  add:function(activity) {
     let params = {
       url: '/activity/add',
       data: {
@@ -21,12 +21,12 @@ export const activityHttp = {
     }
     return postJson(params)
   },
-  listPage:function (pageNum,pageSize) {
+  list:function (activity) {
     let params = {
       url: '/activity/list',
       data: {
-        'pageNum': pageNum,
-        'pageSize': pageSize
+        'activityTitle': activity.activityTitle,
+        'createBy': activity.createBy
       }
     }
     return get(params)
