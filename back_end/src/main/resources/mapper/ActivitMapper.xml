@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.ActivityMapper">
+    <resultMap id="ActivityResult" type="com.example.entity.response.ActivityResp">
+        <id column="activity_id" property="activityId"/>
+        <result column="activity_title" property="activityTitle"/>
+        <result column="content" property="content"/>
+        <result column="activity_link" property="activityLink"/>
+        <result column="views" property="views"/>
+        <result column="create_by" property="createBy"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="emp_id" property="empId"/>
+    </resultMap>
+
+    <insert id="addActivity" parameterType="com.example.entity.response.ActivityResp">
+        <selectKey keyColumn="activity_id" keyProperty="activityId" resultType="Integer" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        INSERT INTO activity(activity_title,content,activity_link,views,create_by,start_time,end_time,emp_id)
+        VALUES (#{activityTitle},#{content},#{activityLink},#{views},#{createBy},#{startTime},#{endTime})
+    </insert>
+
+    <update id="editActivity" parameterType="com.example.entity.request.ActivityReq">
+        UPDATE activity SET update_time = #{updateTime},version = version + 1
+        <if test="activityTitle != null and activityTitle != ''">
+            ,activity_title = #{activityTitle}
+        </if>
+        <if test="content != null and content != ''">
+            ,content = #{content}
+        </if>
+        <if test="activityLink != null and activityLink != ''">
+            ,activity_link = #{activityLink}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            ,start_time = #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            ,end_time = #{endTime}
+        </if>
+        <if test="empId != null">
+            ,emp_id = #{empId}
+        </if>
+        WHERE activit_id = #{activitId} AND version = #{version}
+    </update>
+
+    <update id="delActivity" parameterType="Integer">
+        UPDATE activity SET is_delete = 1,version = version + 1
+        WHERE activity_id = #{activityId}
+    </update>
+
+    <select id="getActivity" resultMap="ActivityResult" parameterType="Integer">
+        SELECT activity_id,activity_title,content,activity_link,views,create_by,
+            start_time,end_time,version,create_time,update_time,is_delete,emp_id
+        FROM activity WHERE activity_id = #{activityId}
+    </select>
+
+    <select id="listActivity" resultMap="ActivityResult">
+        SELECT activity_id,activity_title,content,activity_link,views,create_by,
+            start_time,end_time,version,create_time,update_time,is_delete,emp_id
+        FROM activity
+        <where>
+            <if test="activityTitle != null and activityTitle != ''">
+                AND activity_title = #{activityTitle}
+            </if>
+            AND is_delete = 0
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="checkActivity" resultType="int">
+        SELECT COUNT(activity_title) FROM activity
+        WHERE activity_title = #{activityTitle}
+    </select>
+</mapper>

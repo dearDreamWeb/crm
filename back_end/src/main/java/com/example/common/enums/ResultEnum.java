@@ -20,6 +20,12 @@ public enum ResultEnum {
     NOT_AUTH(90003,"您没有该功能权限"),
     ACCOUNT_NOT_LOGIN(90004,"该账号不能登录"),
 
+    DATA_ADD_FAIL(10001,"数据添加失败"),
+    DATA_EXIST(10002,"数据已存在"),
+    DATA_DEL_FAIL(10003,"数据删除失败"),
+    DATA_UPDATE_FAIL(10004,"数据更新失败"),
+    DATA_NOT_EXIST(10005,"数据不存在"),
+
     USER_ADD_FAIL(80001,"用户添加失败"),
     USER_EXIST(80002,"用户已存在"),
     USER_DEL_FAIL(80003,"用户删除失败"),
@@ -40,6 +46,19 @@ public enum ResultEnum {
     MENU_UPDATE_FAIL(80015,"菜单修改失败"),
     MENU_NOT_EXIST(80016,"菜单不存在"),
     MENU_PID_NOT_SELF(80017,"父级id不能是自己"),
+
+    DICT_ADD_FAIL(80018,"字典添加失败"),
+    DICT_EXIST(80019,"字典已存在"),
+    DICT_DEL_FAIL(80020,"字典删除失败"),
+    DICT_UPDATE_FAIL(80021,"字典更新失败"),
+    DICT_NOT_EXIST(80022,"字典不存在"),
+    DICT_PID_NOT_SELF(8002,"字典父级id不能是自己"),
+
+    ACTIVITY_ADD_FAIL(80023,"活动添加失败"),
+    ACTIVITY_EXIST(80024,"活动已存在"),
+    ACTIVITY_DEL_FAIL(80025,"活动删除失败"),
+    ACTIVITY_UPDATE_FAIL(80026,"活动更新失败"),
+    ACTIVITY_NOT_EXIST(80027,"活动不存在"),
 
     PLACEHOLDER(null,null);//占位符，方便快速编写代码（无其他业务作用）
 

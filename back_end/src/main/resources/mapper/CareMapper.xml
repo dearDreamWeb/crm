@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.CareMapper">
+    <resultMap id="CareResult" type="com.example.entity.request.Care">
+        <id property="careId" column="care_id"/>
+        <result property="careZt" column="care_carezt"/>
+        <result property="carelxrcontacts" column="care_lxrcontacts"/>
+        <result property="careData" column="care_data"/>
+        <result property="careexecutor" column="care_executor"/>
+        <result property="carenr" column="care_nr"/>
+        <result property="carecustomerfk" column="care_customerfk"/>
+    </resultMap>
+<insert id="addCare" parameterType="com.example.entity.request.Care">
+    <selectKey keyProperty="careId" keyColumn="care_id" resultType="Integer" order="AFTER">
+        SELECT last_insert_id();
+    </selectKey>
+    insert into care(care_carezt,care_lxrcontacts,care_data,care_executor,care_nr,care_customerfk) VALUES
+    (#{careZt},#{carelxrcontacts},#{careData},#{careexecutor},#{carenr},#{carecustomerfk})
+</insert>
+
+    <update id="updateCare" parameterType="com.example.entity.request.Care">
+
+    </update>
+</mapper>
