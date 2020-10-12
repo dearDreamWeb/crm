@@ -9,7 +9,7 @@
         </el-col>
         <el-col :span="12">
           <el-button type="primary" icon="el-icon-plus" size="mini"
-                     @click="addDialog = true">添加字典</el-button>
+                     @click="openAddDialog">添加字典</el-button>
         </el-col>
       </el-row>
       <tree-table class="treeTable" :data="treeList" :columns="columns"
@@ -134,6 +134,10 @@
       }
     },
     methods:{
+      openAddDialog() {
+        this.addDialog = true
+        this.initDict()
+      },
       searchInputClick() {
         this.searchForm.dictName = this.searchInput
         dictHttp.list(this.searchForm).then(res => {

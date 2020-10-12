@@ -49,4 +49,9 @@ public class ClueController {
     public ResultVo listClue(@RequestBody ClueReq clueReq) {
         return clueService.listClue(clueReq);
     }
+
+    @PostMapping("/front/add")
+    public ResultVo frontAddClue(@RequestBody ClueReq clueReq) {
+        return clueService.addClue(clueReq);
+    }
 }

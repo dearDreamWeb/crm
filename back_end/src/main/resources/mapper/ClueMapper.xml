@@ -73,7 +73,7 @@
             select last_insert_id();
         </selectKey>
         INSERT INTO clue(clue_name,clue_phone,clue_status,handle_result,handle_person,remark,activity_id,emp_id)
-        VALUES (#{clueName},#{cluePhone},#{clueStatus},#{handleResult},#{handlePerson},#{remark},#{activityId},#{empId)})
+        VALUES (#{clueName},#{cluePhone},#{clueStatus},#{handleResult},#{handlePerson},#{remark},#{activityId},#{empId})
     </insert>
 
     <update id="delClue" parameterType="Integer">

@@ -27,6 +27,7 @@ public class WenAppConfig implements WebMvcConfigurer {
         registry.addInterceptor(authorityInterceptor).addPathPatterns("/**")
                 .excludePathPatterns("/user/login","/user/logout")
                 .excludePathPatterns("/app/**")
-                .excludePathPatterns("/static/images/**");
+                .excludePathPatterns("/static/images/**")
+                .excludePathPatterns("/clue/front/**");
     }
 }
