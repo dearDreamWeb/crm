@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.ClueMapper">
+    <resultMap id="ClueResult" type="com.example.entity.response.ClueResp">
+        <id column="clue_id" property="clueId"/>
+        <result column="clue_name" property="clueName"/>
+        <result column="clue_phone" property="cluePhone"/>
+        <result column="clue_status" property="clueStatus"/>
+        <result column="handle_result" property="handleResult"/>
+        <result column="handle_person" property="handlePerson"/>
+        <result column="remark" property="remark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="activity_id" property="activityId"/>
+        <result column="emp_id" property="empId"/>
+    </resultMap>
+
+    <resultMap id="ClueDetailResult" type="com.example.entity.response.ClueResp">
+        <id column="clue_id" property="clueId"/>
+        <result column="clue_name" property="clueName"/>
+        <result column="clue_phone" property="cluePhone"/>
+        <result column="clue_status" property="clueStatus"/>
+        <result column="handle_result" property="handleResult"/>
+        <result column="handle_person" property="handlePerson"/>
+        <result column="remark" property="remark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="activity_id" property="activityId"/>
+        <result column="emp_id" property="empId"/>
+        <association property="activityResp" resultMap="ActivityResult"/>
+        <association property="empResp" resultMap="EmpResult"/>
+    </resultMap>
+
+    <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
+        <id property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="sex" column="sex"/>
+        <result property="passWord" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="empStatus" column="emp_status"/>
+        <result property="token" column="token"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <resultMap id="ActivityResult" type="com.example.entity.response.ActivityResp">
+        <id column="activity_id" property="activityId"/>
+        <result column="activity_title" property="activityTitle"/>
+        <result column="content" property="content"/>
+        <result column="activity_link" property="activityLink"/>
+        <result column="views" property="views"/>
+        <result column="create_by" property="createBy"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+    </resultMap>
+
+    <insert id="addClue" parameterType="com.example.entity.request.ClueReq">
+        <selectKey keyColumn="clue_id" keyProperty="clueId" resultType="Integer" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        INSERT INTO clue(clue_name,clue_phone,clue_status,handle_result,handle_person,remark,activity_id,emp_id)
+        VALUES (#{clueName},#{cluePhone},#{clueStatus},#{handleResult},#{handlePerson},#{remark},#{activityId},#{empId)})
+    </insert>
+
+    <update id="delClue" parameterType="Integer">
+        UPDATE clue SET is_delete = 1,version = version + 1
+        WHERE clue_id = #{clueId}
+    </update>
+
+    <update id="editClue" parameterType="com.example.entity.request.ClueReq">
+        UPDATE clue SET update_time = #{updateTime},version = version + 1
+        <if test="clueName != null and clueName != ''">
+            ,clue_name = #{clueName}
+        </if>
+        <if test="cluePhone != null and cluePhone != ''">
+            ,clue_phone = #{cluePhone}
+        </if>
+        <if test="clueStatus != null">
+            ,clue_status = #{clueStatus}
+        </if>
+        <if test="handleResult != null">
+            ,handle_result = #{handleResult}
+        </if>
+        <if test="handlePerson != null and handlePerson != ''">
+            ,handle_person = #{handlePerson}
+        </if>
+        <if test="remark != null and remark != ''">
+            ,remark = #{remark}
+        </if>
+        WHERE clue_id = #{clueId} AND version = #{version}
+    </update>
+
+    <select id="getClue" resultMap="ClueDetailResult" parameterType="Integer">
+        SELECT clue_id,clue_name,clue_phone,clue_status,handle_result,handle_person,remark,
+            version,create_time,update_time,is_delete,activity_id,emp_id
+        FROM clue WHERE clue_id = #{clueId}
+    </select>
+
+    <select id="listClue" resultMap="ClueResult">
+        SELECT clue_id,clue_name,clue_phone,clue_status,handle_result,handle_person,remark,
+            version,create_time,update_time,is_delete,activity_id,emp_id
+        FROM clue
+        <where>
+            <if test="clueName != null and clueName != ''">
+                AND clue_name LIKE CONCAT('%',#{clueName},'%')
+            </if>
+            <if test="cluePhone != null and cluePhone != ''">
+                AND clue_phone LIKE CONCAT('%',#{cluePhone},'%')
+            </if>
+            <if test="clueStatus != null">
+                AND clue_status = #{clueStatus}
+            </if>
+            <if test="handleResult != null">
+                AND handle_result = #{handleResult}
+            </if>
+            <if test="handlePerson != null and handlePerson != ''">
+                AND handle_person LIKE CONCAT('%',#{handlePerson},'%')
+            </if>
+            <if test="activityId != null">
+                AND activity_id = #{activityId}
+            </if>
+            <if test="empId != null">
+                AND emp_id = #{empId}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND date_format(create_date,'%y%m%d') &gt; = date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND date_format(create_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+            AND is_delete = 0
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>
