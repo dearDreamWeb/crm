@@ -98,10 +98,11 @@ public class DeptServiceImpl implements DeptService {
         if (!MyListUtils.isEmpty(menus)) {
             List<Integer> list = new ArrayList<>();
             for (MenuResp menu : menus) {
-                if (menu != null && menu.getMenuType() < 4) {
+                if (menu != null && menu.getMenuType() >= 3) {
                     list.add(menu.getMenuId());
                 }
             }
+            /* */
             dept.setMenuIds(list);
         }
         return ResultUtils.response(dept);

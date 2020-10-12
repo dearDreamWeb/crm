@@ -154,7 +154,7 @@
           pid:'',
           pidList:[],
           icon:'',
-          type:'',
+          menuType:'',
           perms:'',
           url:'',
           isShow:''
@@ -163,7 +163,7 @@
         addDialog:false,
         addForm:{
           menuName:'',
-          type:'',
+          menuType:'',
           url:'',
           icon:'',
           perms:'',
@@ -258,35 +258,35 @@
         const len = this.editForm.pidList.length
         if (len > 0) {
           this.editForm.pid = this.editForm.pidList[len - 1]
-          this.editForm.type = len + 1
+          this.editForm.menuType = len + 1
         } else {
           this.editForm.pid = 0
           this.editForm.pidList = [0]
-          this.editForm.type = 1
+          this.editForm.menuType = 1
         }
       },
       addHandleChange() {
         const len = this.addForm.pidList.length
         if (len > 0) {
           this.addForm.pid = this.addForm.pidList[len-1]
-          this.addForm.type = len + 1
+          this.addForm.menuType = len + 1
         } else {
           this.addForm.pid = 0
           this.addForm.pidList = [0]
-          this.addForm.type = 1
+          this.addForm.menuType = 1
         }
       },
       editHandleClose() {
         this.$refs.editFormRef.resetFields()
         this.editForm.pid = 0
         this.editForm.pidList = []
-        this.editForm.type = 1
+        this.editForm.menuType = 1
       },
       addHandleClose() {
         this.$refs.addFormRef.resetFields()
         this.addForm.pid = 0
         this.addForm.pidList = []
-        this.addForm.type = 1
+        this.addForm.menuType = 1
         this.addForm.isShow = 0
       },
       initList() {

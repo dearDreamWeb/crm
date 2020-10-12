@@ -48,7 +48,26 @@
 
 <script>
   export default {
-    name: "Activity"
+    name: "Activity",
+    data() {
+      return {
+        listForm:[],
+        pageNum:1,
+        pageSize:10,
+        total:1
+      }
+    },
+    methods:{
+      initList() {
+
+      },
+      iHeaderRowStyle:function({row,rowIndex}){
+        return 'height:20px'
+      },
+      iHeaderCellStyle:function({row,column,rowIndex,columnIndex}){
+        return 'padding:5px'
+      }
+    }
   }
 </script>
 
