@@ -24,7 +24,7 @@
         <el-dialog
           title="新建工单"
           :visible.sync="dialogVisible"
-          width="80%"
+          width="50%"
           :before-close="handleClose">
           <el-form ref="form" :model="form" label-width="80px">
             <el-row>
@@ -77,14 +77,16 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="维修人">
-                  <el-input v-model="form.wxr"></el-input>
+                  <el-input v-model="form.xlh"></el-input>
                 </el-form-item>
-              </el-col >
-              <el-form-item label="上门时间">
-                <el-col :span="8">
+              </el-col>
+
+              <el-col :span="8">
+                <el-form-item label="上门时间">
                   <el-date-picker type="date" placeholder="选择日期" v-model="form.date2" style="width: 100%;"></el-date-picker>
-                </el-col>
-              </el-form-item>
+                </el-form-item>
+              </el-col>
+
               <el-col :span="8">
                 <el-form-item label="故障描述">
                   <el-input v-model="form.gzms"></el-input>
@@ -221,7 +223,7 @@
           cpbh:'',
           ddbh:'',
           xlh:'',
-          wxry:'',
+          wxr:'',
           gzms:'',
           hf:'',
           zb:'',
@@ -260,8 +262,8 @@
     margin-bottom: 20px;
   }
   :last-child {
-     margin-bottom: 0;
-   }
+    margin-bottom: 0;
+  }
 
   .el-col {
     border-radius: 4px;

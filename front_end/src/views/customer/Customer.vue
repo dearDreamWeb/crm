@@ -11,112 +11,111 @@
           </el-option>
         </el-select><div class="grid-content bg-purple"></div></el-col>
         <el-col :span="6"><el-input class="ssk2"
-                                    placeholder="请输入投诉主题"
+                                    placeholder="请输入服务主题"
                                     v-model="input"
                                     clearable>
         </el-input><div class="grid-content bg-purple-light"></div></el-col>
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </el-row>
       <el-row>
-        <el-col :span="7">投诉<div class="grid-content bg-purple"></div></el-col>
+        <el-col :span="7">客户服务<div class="grid-content bg-purple"></div></el-col>
         <el-col :span="12"><div class="grid-content bg-purple-light"></div></el-col>
         <el-col :span="2"><el-button type="text" @click="addBtn">新建</el-button><div class="grid-content bg-purple"></div></el-col>
         <el-dialog
-          title="投诉"
+          title="客户服务"
           :visible.sync="dialogVisible"
           width="50%"
           :before-close="handleClose">
           <el-form ref="form" :model="form" label-width="80px">
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="对应客户">
+              <el-col :span="12">
+                <el-form-item label="主题">
                   <el-input v-model="form.gdbh"></el-input>
                 </el-form-item>
               </el-col >
-              <el-col :span="8">
-                <el-form-item label="投诉主题">
+              <el-col :span="12">
+                <el-form-item label="对应客户">
                   <el-input v-model="form.khname"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="接待人">
+
+
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="联系人">
+                  <el-input v-model="form.jdr"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="执行人">
                   <el-input v-model="form.jdr"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
+            <el-row>
+
+              <el-col :span="12">
+                <el-form-item label="时间">
+                  <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
+                </el-form-item>
+              </el-col>
+            </el-row>
 
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="分类">
-                  <el-select v-model="form.region" placeholder="请选择分类">
-                    <el-option label="产品投诉" value="shanghai"></el-option>
-                    <el-option label="服务投诉" value="beijing"></el-option>
-                    <el-option label="客户意见" value="beijing"></el-option>
-                    <el-option label="其他" value="beijing"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col >
+              <el-col :span="12">
+                <el-form-item label="服务类型">
 
-              <el-col :span="24">
-                <el-form-item label="描述">
-
-                  <el-input type="textarea" v-model="form.desc"></el-input>
-
+                  <el-radio-group v-model="radio">
+                    <el-radio :label="3">答疑</el-radio>
+                    <el-radio :label="6">故障排除</el-radio>
+                    <el-radio :label="9">其他</el-radio>
+                  </el-radio-group>
                 </el-form-item>
               </el-col>
 
             </el-row>
-            <el-form-item label="时间">
-              <el-col :span="8">
-                <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-              </el-col>
-
-            </el-form-item>
             <el-row>
-              <el-col :span="8">
-
-              </el-col >
-              <el-form-item label="紧急程度">
-                <el-col :span="8">
-                  <el-radio-group v-model="radio">
-                    <el-radio :label="3">非常紧急</el-radio>
-                    <el-radio :label="6">急</el-radio>
-                    <el-radio :label="9">普通</el-radio>
-                  </el-radio-group>
-                </el-col>
-              </el-form-item>
-              <el-col :span="24">
-
-              </el-col>
-              <el-form-item label="处理结果">
-                <el-col :span="8">
+              <el-col :span="12">
+                <el-form-item label="服务方式">
                   <el-radio-group v-model="radio1">
+                    <el-radio :label="3">电话</el-radio>
+                    <el-radio :label="6">上门</el-radio>
+                    <el-radio :label="9">其他</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="状态">
+                  <el-radio-group v-model="radio2">
                     <el-radio :label="3">未处理</el-radio>
                     <el-radio :label="6">处理中</el-radio>
                     <el-radio :label="9">处理完成</el-radio>
                   </el-radio-group>
-                </el-col>
-              </el-form-item>
-              <el-col :span="24">
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
                 <el-form-item label="客户反馈">
 
                   <el-input type="textarea" v-model="form.desc2"></el-input>
 
                 </el-form-item>
               </el-col>
+
             </el-row>
-            <div style="width: 37%">
-              <el-form-item label="投诉人">
-                <el-input v-model="form.tsr"></el-input>
-              </el-form-item>
-            </div>
-            <div style="margin-top:10px ">
-              <el-form-item label="处理过程">
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="服务内容">
 
-                <el-input type="textarea" v-model="form.desc1"></el-input>
+                  <el-input type="textarea" v-model="form.desc2"></el-input>
 
-              </el-form-item>
-            </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-form>
           <div style="text-align: center;margin-top: 10px">
 
@@ -146,7 +145,7 @@
           </el-table-column>
           <el-table-column
             prop="name"
-            label="投诉主题"
+            label="主题"
             width="120">
           </el-table-column>
           <el-table-column
@@ -156,12 +155,12 @@
           </el-table-column>
           <el-table-column
             prop="address"
-            label="费用"
+            label="服务类型"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             prop="address"
-            label="分类"
+            label="服务方式"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
@@ -171,24 +170,10 @@
           </el-table-column>
           <el-table-column
             prop="address"
-            label="紧急程度"
+            label="执行人"
             show-overflow-tooltip>
           </el-table-column>
-          <el-table-column
-            prop="address"
-            label="接待人"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="处理结果"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="投诉人"
-            show-overflow-tooltip>
-          </el-table-column>
+
         </el-table><div class="grid-content bg-purple-light"></div></el-col>
         <el-col :span="0"><div class="grid-content bg-purple"></div></el-col>
         <el-col :span="0"><div class="grid-content bg-purple-light"></div></el-col>

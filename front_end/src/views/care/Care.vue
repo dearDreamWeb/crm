@@ -11,114 +11,75 @@
           </el-option>
         </el-select><div class="grid-content bg-purple"></div></el-col>
         <el-col :span="6"><el-input class="ssk2"
-                                    placeholder="请输入投诉主题"
+                                    placeholder="请输入关怀主题"
                                     v-model="input"
                                     clearable>
         </el-input><div class="grid-content bg-purple-light"></div></el-col>
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </el-row>
       <el-row>
-        <el-col :span="7">投诉<div class="grid-content bg-purple"></div></el-col>
+        <el-col :span="7">客户关怀<div class="grid-content bg-purple"></div></el-col>
         <el-col :span="12"><div class="grid-content bg-purple-light"></div></el-col>
         <el-col :span="2"><el-button type="text" @click="addBtn">新建</el-button><div class="grid-content bg-purple"></div></el-col>
         <el-dialog
-          title="投诉"
+          title="客户关怀"
           :visible.sync="dialogVisible"
           width="50%"
           :before-close="handleClose">
-          <el-form ref="form" :model="form" label-width="80px">
+          <el-form ref="form" :model="form" :rules="rules" label-width="80px">
             <el-row>
               <el-col :span="8">
-                <el-form-item label="对应客户">
-                  <el-input v-model="form.gdbh"></el-input>
+                <el-form-item label="关怀主题">
+                  <el-input v-model="form.ghzt"></el-input>
                 </el-form-item>
               </el-col >
               <el-col :span="8">
-                <el-form-item label="投诉主题">
+                <el-form-item label="联系人">
+                  <el-input v-model="form.lxr"></el-input>
+                </el-form-item>
+              </el-col>
+
+            </el-row>
+
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="客户">
                   <el-input v-model="form.khname"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="接待人">
-                  <el-input v-model="form.jdr"></el-input>
+                <el-form-item label="日期">
+                  <el-date-picker type="date" placeholder="选择日期" v-model="form.date2" style="width: 100%;"></el-date-picker>
+                </el-form-item>
+              </el-col>
+
+
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="执行人">
+                  <el-input v-model="form.zxr"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="关怀内容">
+
+                  <el-input type="textarea" v-model="form.ghnr"></el-input>
+
                 </el-form-item>
               </el-col>
             </el-row>
-
             <el-row>
               <el-col :span="8">
-                <el-form-item label="分类">
-                  <el-select v-model="form.region" placeholder="请选择分类">
-                    <el-option label="产品投诉" value="shanghai"></el-option>
-                    <el-option label="服务投诉" value="beijing"></el-option>
-                    <el-option label="客户意见" value="beijing"></el-option>
-                    <el-option label="其他" value="beijing"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col >
-
-              <el-col :span="24">
-                <el-form-item label="描述">
-
-                  <el-input type="textarea" v-model="form.desc"></el-input>
-
-                </el-form-item>
-              </el-col>
-
-            </el-row>
-            <el-form-item label="时间">
-              <el-col :span="8">
-                <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-              </el-col>
-
-            </el-form-item>
-            <el-row>
-              <el-col :span="8">
-
-              </el-col >
-              <el-form-item label="紧急程度">
-                <el-col :span="8">
-                  <el-radio-group v-model="radio">
-                    <el-radio :label="3">非常紧急</el-radio>
-                    <el-radio :label="6">急</el-radio>
-                    <el-radio :label="9">普通</el-radio>
-                  </el-radio-group>
-                </el-col>
-              </el-form-item>
-              <el-col :span="24">
-
-              </el-col>
-              <el-form-item label="处理结果">
-                <el-col :span="8">
-                  <el-radio-group v-model="radio1">
-                    <el-radio :label="3">未处理</el-radio>
-                    <el-radio :label="6">处理中</el-radio>
-                    <el-radio :label="9">处理完成</el-radio>
-                  </el-radio-group>
-                </el-col>
-              </el-form-item>
-              <el-col :span="24">
                 <el-form-item label="客户反馈">
 
-                  <el-input type="textarea" v-model="form.desc2"></el-input>
+                  <el-input type="textarea" v-model="form.khfk"></el-input>
 
                 </el-form-item>
               </el-col>
             </el-row>
-            <div style="width: 37%">
-              <el-form-item label="投诉人">
-                <el-input v-model="form.tsr"></el-input>
-              </el-form-item>
-            </div>
-            <div style="margin-top:10px ">
-              <el-form-item label="处理过程">
-
-                <el-input type="textarea" v-model="form.desc1"></el-input>
-
-              </el-form-item>
-            </div>
           </el-form>
-          <div style="text-align: center;margin-top: 10px">
+          <div style="text-align: center;">
 
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -145,48 +106,28 @@
             <template slot-scope="scope">{{ scope.row.date }}</template>
           </el-table-column>
           <el-table-column
-            prop="name"
-            label="投诉主题"
+            prop="ghzt"
+            label="关怀主题"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="对应客户"
+            prop="lxr"
+            label="联系人"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="费用"
+            prop="khname"
+            label="客户"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="分类"
+            prop="rq"
+            label="日期"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="时间"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="紧急程度"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="接待人"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="处理结果"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="投诉人"
+            prop="zxr"
+            label="执行人"
             show-overflow-tooltip>
           </el-table-column>
         </el-table><div class="grid-content bg-purple-light"></div></el-col>
@@ -243,14 +184,14 @@
         dialogVisible: false,
         tableData: [],
         form: {
-          gdbh:'',
+          ghzt:'',
           khname: '',
-          jdr:'',
-          wtms:'',
-          cpbh:'',
-          ddbh:'',
+          lxr:'',
+          zxr:'',
+          khfk:'',
+          ghnr:'',
           xlh:'',
-          tsr:'',
+          wxr:'',
           gzms:'',
           hf:'',
           zb:'',
@@ -260,16 +201,20 @@
           delivery: false,
           type: [],
           resource: '',
-          desc: '',
-          desc1:''
+          desc: ''
         },
         num: 1,
-        radio: 3,
-        radio1: 3,
-        radio2: 3
+        rules:{
+          ghzt:[
+            {required: true, message: '请输入活动名称', trigger: 'blur'},
+            { min: 5, max: 8, message: '长度在 5 到 8个字符', trigger: 'blur' }
+          ],
+          date2:[
+            {type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+          ]
+        }
       }
     },
-
     methods:{
       addBtn(){
         this.dialogVisible = true;
