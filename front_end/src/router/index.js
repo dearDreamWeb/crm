@@ -44,6 +44,10 @@ const routes = [
       {
         path: '/activity',
         component: () => import('../views/activity/Activity')
+      },
+      {
+        path: '/order',
+        component: () => import('../views/shouzhong/Szorder')
       }
     ]
   }

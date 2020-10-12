@@ -38,7 +38,7 @@
       </el-table-column>
       <el-table-column label="结束时间">
         <template slot-scope="scope">
-          
+
         </template>
       </el-table-column>
     </el-table>
