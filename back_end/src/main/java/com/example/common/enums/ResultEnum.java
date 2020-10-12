@@ -60,6 +60,13 @@ public enum ResultEnum {
     ACTIVITY_UPDATE_FAIL(80026,"活动更新失败"),
     ACTIVITY_NOT_EXIST(80027,"活动不存在"),
 
+    //订单
+    ORDER_ADD_FAIL(80028,"订单添加失败"),
+    ORDER_EXIST(80029,"订单已存在"),
+    ORDER_DEL_FAIL(80030,"订单删除失败"),
+    ORDER_UPDATE_FAIL(80031,"订单更新失败"),
+    ORDER_NOT_EXIST(80032,"订单不存在"),
+
     PLACEHOLDER(null,null);//占位符，方便快速编写代码（无其他业务作用）
 
     private Integer code;
