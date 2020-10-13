@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /*
 YQQ
@@ -26,6 +27,7 @@ public class szOrder {
     private String ordProvince;//省份
     private String ordCity;//市
     private String ordCountry;//区/县
+    private String ordDetail;//区/县
     private Integer ordPhone;//收货手机号
     private Integer cusId;//客户编号
     private Integer offerId;//报价编号

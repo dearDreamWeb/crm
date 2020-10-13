@@ -7,9 +7,13 @@ import com.example.entity.request.szOrder;
 import com.example.model.mapper.szOrderMapper;
 import com.example.service.szOrderService;
 import com.example.util.ResultUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author: yangqianqian
@@ -45,19 +49,24 @@ public class szOrderServicelmpl implements szOrderService {
     }
     @Override
     public ResultVo editszOrder(szOrder szorder) {
-        System.out.println("【订单】修改修改");
+        System.out.println("【订单】修改修改...");
         int editszOrder=szorderMapper.editszOrder(szorder);
-
         return null;
     }
 
     @Override
     public ResultVo queryszOrderById(Integer ordId) {
-        return null;
+        System.out.println("【订单】单条单条...");
+        /*Integer ordId = deptReq.getDeptId();*/
+        szOrder szorder=szorderMapper.queryszOrderById(ordId);
+        return ResultUtils.response(szorder);
     }
-
     @Override
     public ResultVo listszOrder(szOrder szorder) {
-        return null;
+        System.out.println("【订单】全部全部...");
+        /*List<szOrder> list=
+        return szorderMapper.listszOrder(szorder);*/
+
+       return null;
     }
 }
