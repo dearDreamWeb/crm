@@ -42,7 +42,7 @@ const routes = [
         component: () => import('../views/dict/Dict')
       },
       {
-        path: '/szorder',
+        path: '/order',
         component: () => import('../views/shouzhong/szorder')
       }
     ]

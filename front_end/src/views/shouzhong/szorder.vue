@@ -1,5 +1,5 @@
 <template>
-  <div class="szorder">
+  <div>
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
@@ -32,6 +32,71 @@
       </el-table>
     </el-card>
 
+    <el-dialog title="员工添加" :visible.sync="addDialog" @close="addHandleClose">
+      <el-form :model="addForm" label-width="100px" ref="addFormRef"
+               label-position="right" :rules="formRules">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="账号" prop="empName">
+              <el-input v-model="addForm.empName" size="mini" placeholder="请输入账号（必填）" clearable/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="昵称" prop="nickName">
+              <el-input v-model="addForm.nickName" size="mini" placeholder="请输入昵称" clearable/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="邮箱" prop="email">
+              <el-input v-model="addForm.email" size="mini" placeholder="请输入邮箱" clearable/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="密码" prop="passWord">
+              <el-input v-model="addForm.passWord" size="mini" placeholder="请输入密码" clearable/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="手机号" prop="phone">
+              <el-input v-model="addForm.phone" size="mini" placeholder="请输入手机号（必填）" clearable/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="addForm.remark" type="textarea" size="mini" placeholder="请输入备注" clearable/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="部门">
+              <el-select v-model="addForm.deptIdList" placeholder="请选择部门">
+                <el-option v-for="item in deptList" :key="item.deptId"
+                           :label="item.deptName" :value="item.deptId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="性别">
+              <el-radio-group v-model="addForm.sex">
+                <el-radio :label=1>男</el-radio>
+                <el-radio :label=0>女</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="addDialog = false">取消</el-button>
+        <el-button type="primary" @click="addEmpClick"
+                   :loading="addEmpButtonLoading">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
