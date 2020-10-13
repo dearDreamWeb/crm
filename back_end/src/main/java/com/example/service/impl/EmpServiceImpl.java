@@ -133,7 +133,6 @@ public class EmpServiceImpl implements EmpService {
         }
         PageHelper.startPage(pageNum,pageSize);
         List<EmpResp> empResps = empMapper.listEmp(empReq);
-        System.out.println("总查询条数："+empResps.size());
         PageInfo<EmpResp> list = new PageInfo<>(empResps);
         return ResultUtils.response(list);
     }
@@ -150,6 +149,11 @@ public class EmpServiceImpl implements EmpService {
         if (empStatus == null || empStatus == 0) {
             throw new SysException(ResultEnum.ACCOUNT_NOT_ACTIVATE.getCode(),
                     ResultEnum.ACCOUNT_NOT_ACTIVATE.getMessage());
+        }
+        Integer isDelete = empResp.getIsDelete();
+        if (isDelete == 1) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
         }
         String passWordDb = empResp.getPassWord();
         String passWord = empReq.getPassWord();

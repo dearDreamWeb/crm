@@ -88,4 +88,27 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityResp> activityResps = activityMapper.listActivity(activityReq);
         return ResultUtils.response(activityResps);
     }
+
+    @Override
+    public ResultVo batchEditActivity(ActivityReq activityReq) {
+        List<Integer> list = activityReq.getActivityIdList();
+        Integer empId = activityReq.getEmpId();
+        if (list == null && list.size() < 0) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+        if (empId == null) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+//        int batchEditActivity = activityMapper.batchEditActivity(list,empId);
+        int batchEditActivity = activityMapper.batchEditActivity(activityReq);
+        return ResultUtils.response(batchEditActivity);
+    }
+
+    @Override
+    public ResultVo listNotAuth() {
+        List<ActivityResp> activityResps = activityMapper.listNotAuth();
+        return ResultUtils.response(activityResps);
+    }
 }

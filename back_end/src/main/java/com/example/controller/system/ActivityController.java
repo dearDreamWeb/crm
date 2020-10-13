@@ -45,4 +45,14 @@ public class ActivityController {
     public ResultVo listActivity(ActivityReq activityReq) {
         return activityService.listActivity(activityReq);
     }
+
+    @GetMapping("/list_not_auth")
+    public ResultVo listNotAuth() {
+        return activityService.listNotAuth();
+    }
+
+    @PostMapping("/batch_edit")
+    public ResultVo batchEdit(@RequestBody ActivityReq activityReq) {
+        return activityService.batchEditActivity(activityReq);
+    }
 }

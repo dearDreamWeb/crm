@@ -174,7 +174,7 @@
     </select>
 
     <select id="login" resultMap="EmpResult">
-        SELECT emp_id,emp_name,nick_name,sex,email,phone,emp_status,password,token
+        SELECT emp_id,emp_name,nick_name,sex,email,phone,emp_status,password,token,is_delete
         FROM emp
         WHERE emp_name = #{empName}
     </select>

@@ -2,6 +2,7 @@ package com.example.model.mapper;
 
 import com.example.entity.request.ActivityReq;
 import com.example.entity.response.ActivityResp;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,5 +19,7 @@ public interface ActivityMapper {
     int editActivity(ActivityReq activityReq);
     ActivityResp getActivity(Integer activityId);
     List<ActivityResp> listActivity(ActivityReq activityReq);
+    List<ActivityResp> listNotAuth();
+    int batchEditActivity(ActivityReq activityReq);
     int checkActivity(String activityTitle);
 }

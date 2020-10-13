@@ -8,16 +8,16 @@
   <el-card>
     <el-row :gutter="20">
       <el-col :span="6">
-        <el-input placeholder="请输入活动名称搜索" clearable size="mini">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-input v-model="searchInput" placeholder="请输入活动名称搜索" clearable size="mini">
+          <el-button slot="append" icon="el-icon-search" @click="searchClick"></el-button>
         </el-input>
       </el-col>
-      <el-col :span="10">
+      <el-col :span="12">
         <el-button type="primary" size="mini" icon="el-icon-plus"
                    @click="openAddDialog">添加活动</el-button>
         <el-button type="primary" size="mini" icon="el-icon-refresh"></el-button>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <el-button type="warning" size="mini" icon="el-icon-edit"
                    :disabled="buttonDisabled" @click="openEditDialog">修改活动</el-button>
         <el-button type="danger" size="mini" icon="el-icon-delete"
@@ -48,7 +48,7 @@
 
     <el-row :gutter="20">
       <el-col :span="6" v-for="item in listForm" :key="item.activityId">
-        <el-card shadow="hover">
+        <el-card shadow="hover" style="margin-top: 10px">
           <el-row type="flex" justify="space-between">
             <el-col :span="1">
               <el-tag>{{item.activityTitle}}</el-tag>
@@ -174,6 +174,8 @@
     name: "Activity",
     data() {
       return {
+        searchInput:'',
+
         editDialog:false,
         editActivityLoading:false,
         editForm:{},
@@ -187,7 +189,7 @@
           startTime:'',
           endTime:'',
           activityDate:'',
-          empId:'',
+          empId:0,
           views:0
         },
         formRules:{
@@ -211,6 +213,13 @@
       }
     },
     methods:{
+      searchClick() {
+        this.listForm.activityTitle = this.searchInput
+        activityHttp.list(this.listForm).then(res => {
+          this.listForm = res.data
+        })
+      },
+
       deleteActivity(activityId) {
         this.$confirm('此操作将删除该数据，是否继续？','提示',{
           confirmButtonText:'确定',
@@ -272,7 +281,6 @@
         this.addForm.startTime = this.addForm.activityDate[0]
         this.addForm.endTime = this.addForm.activityDate[1]
         this.addForm.createBy = this.$store.state.empName
-        this.addForm.empId = this.$store.state.empId
         this.$refs.addFormRef.validate(valid => {
           if (!valid) return
           this.addActivityLoading = true

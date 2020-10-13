@@ -3,20 +3,22 @@
     <el-card class="box-card">
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input v-model="searchInput" placeholder="请输入账号查询" size="mini" class="input-with-select">
+          <el-input v-model="searchInput" placeholder="请输入账号查询" size="mini" clearable>
             <el-button @click="searchInputClick" slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="10">
           <el-button type="primary" size="mini" icon="el-icon-plus" @click="openAddDialog">添加用户</el-button>
           <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
           <el-button type="primary" size="mini" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-button type="warning" size="mini" icon="el-icon-edit"
                      :disabled="buttonDisabled" @click="openEditEmp">修改用户</el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete"
                      :disabled="buttonDisabled" @click="deleteEmp">删除用户</el-button>
+          <el-button type="success" size="mini" icon="el-icon-tickets"
+                     :disabled="buttonDisabled" @click="authActivity">分配活动</el-button>
         </el-col>
       </el-row>
 
@@ -111,7 +113,7 @@
             {{scope.row.createTime | dateFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="remark" label="备注"></el-table-column>
+        <el-table-column prop="remark" label="备注" show-overflow-tooltip></el-table-column>
       </el-table>
 
       <el-pagination background
@@ -248,12 +250,29 @@
                    :loading="editEmpButtonLoading">确定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="分配活动" :visible.sync="authDialog" @close="authHandleClose">
+      <el-transfer
+        @change="authTransferChange"
+        filterable :titles="['未分配', '已分配']"
+        filter-placeholder="请输入活动标题搜索"
+        v-model="transferValue"
+        :data="transferData">
+      </el-transfer>
+      <hr>
+      <span>
+        <el-button @click="authDialog = false">取消</el-button>
+        <el-button type="primary" :loading="authActivityLoading"
+                   @click="authActivityClick">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import {userHttp} from "../../network/system/user";
   import {deptHttp} from "../../network/system/dept";
+  import {activityHttp} from "../../network/pre_sale/activity";
 
   export default {
     name: "User",
@@ -266,6 +285,16 @@
         cb(new Error('请输入合法的手机号'))
       }
       return{
+        batchForm:{
+          empId:'',
+          activityIdList:[]
+        },
+        transferData: [],
+        transferValue: [],
+        authActivityLoading:false,
+
+        authDialog:false,
+
         searchInput:'',
         searchForm:{
           empName:'',
@@ -319,10 +348,49 @@
       }
     },
     methods:{
+      authTransferChange() {
+        console.log(this.transferValue)
+        this.batchForm.activityIdList = this.transferValue
+      },
+      authActivityClick() {
+        this.authActivityLoading = true
+        activityHttp.batchEdit(this.batchForm).then(res => {
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.authDialog = false
+            this.authActivityLoading = false
+          } else {
+            this.$message({
+              message:res.message,
+              type:'error'
+            })
+            this.authActivityLoading = false
+          }
+        })
+      },
+      authHandleClose() {
+        this.transferValue = []
+        this.authActivityLoading = false
+      },
+      authActivity() {
+        this.transferData = []
+        this.authDialog = true
+        this.batchForm.empId = this.rowEmpId
+        activityHttp.listNotAuth().then(res => {
+          for (let i=0;i<res.data.length;i++) {
+            this.transferData.push({
+              key:res.data[i].activityId,
+              label:res.data[i].activityTitle
+            })
+          }
+        })
+      },
       resetForm() {
         this.$refs.advancedSearchFormRef.resetFields()
         this.searchInput = ''
         this.initList()
+        this.rowEmpId = 0
+        this.buttonDisabled = true
       },
       advancedQueryClick() {
         userHttp.queryEmp(this.searchForm).then(res => {

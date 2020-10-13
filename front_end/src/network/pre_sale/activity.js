@@ -45,11 +45,11 @@ export const activityHttp = {
         'activityTitle': activity.activityTitle,
         'content': activity.content,
         'activityLink': activity.activityLink,
+        'views':activity.views,
         'createBy': activity.createBy,
         'startTime': activity.startTime,
         'endTime': activity.endTime,
         'empId': activity.empId,
-        'views':activity.views
       }
     }
     return postJson(params)
@@ -60,6 +60,31 @@ export const activityHttp = {
       data: {
         'activityTitle': activity.activityTitle,
         'createBy': activity.createBy
+      }
+    }
+    return get(params)
+  },
+  listNotAuth:function () {
+    let params = {
+      url: '/activity/list_not_auth'
+    }
+    return get(params)
+  },
+  batchEdit:function (activity) {
+    let params = {
+      url:'/activity/batch_edit',
+      data:{
+        'empId':activity.empId,
+        'activityIdList':activity.activityIdList
+      }
+    }
+    return postJson(params)
+  },
+  getActivityListByEmpId:function (empId) {
+    let params = {
+      url:'/activity/get_by_emp',
+      data:{
+        'empId':empId
       }
     }
     return get(params)

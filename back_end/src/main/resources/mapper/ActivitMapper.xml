@@ -18,7 +18,7 @@
         <result column="emp_id" property="empId"/>
     </resultMap>
 
-    <insert id="addActivity" parameterType="com.example.entity.response.ActivityResp">
+    <insert id="addActivity" parameterType="com.example.entity.request.ActivityReq">
         <selectKey keyColumn="activity_id" keyProperty="activityId" resultType="Integer" order="AFTER">
             select last_insert_id();
         </selectKey>
@@ -66,7 +66,7 @@
         FROM activity
         <where>
             <if test="activityTitle != null and activityTitle != ''">
-                AND activity_title = #{activityTitle}
+                AND activity_title LIKE CONCAT('%',#{activityTitle},'%')
             </if>
             AND is_delete = 0
         </where>
@@ -77,4 +77,17 @@
         SELECT COUNT(activity_title) FROM activity
         WHERE activity_title = #{activityTitle}
     </select>
+
+    <select id="listNotAuth" resultMap="ActivityResult">
+        SELECT activity_id,activity_title,is_delete,emp_id FROM activity
+        WHERE emp_id = 0
+    </select>
+    
+    <update id="batchEditActivity" parameterType="com.example.entity.request.ActivityReq">
+        UPDATE activity SET emp_id = #{empId}
+        WHERE activity_id IN
+        <foreach collection="activityIdList" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

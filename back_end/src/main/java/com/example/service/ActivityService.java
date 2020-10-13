@@ -3,6 +3,8 @@ package com.example.service;
 import com.example.entity.ResultVo;
 import com.example.entity.request.ActivityReq;
 
+import java.util.List;
+
 /**
  * @author: pengjia
  * @date: 2020/10/11
@@ -14,4 +16,6 @@ public interface ActivityService {
     ResultVo editActivity(ActivityReq activityReq);
     ResultVo getActivity(Integer activityId);
     ResultVo listActivity(ActivityReq activityReq);
+    ResultVo batchEditActivity(ActivityReq activityReq);
+    ResultVo listNotAuth();
 }
