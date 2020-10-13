@@ -20,6 +20,45 @@
 </insert>
 
     <update id="updateCare" parameterType="com.example.entity.request.Care">
-
+        update care set careData = #{care_data},version = version +1
+        <if test="care_carezt !=null and care_carezt != ''">
+            ,careZt = #{care_carezt}
+        </if>
+        <if test="care_lxrcontacts !=null and care_lxrcontacts != ''">
+            ,carelxrcontacts = #{care_lxrcontacts}
+        </if>
+        <if test="care_executor !=null and care_executor != ''">
+            ,careexecutor = #{care_carezt}
+        </if>
+        <if test="care_nr !=null and care_nr != ''">
+            ,carenr = #{care_carezt}
+        </if>
+        <if test="care_customerfk !=null and care_customerfk != ''">
+            ,carecustomerfk = #{care_carezt}
+        </if>
+        where careId = #{care_id} and version = #{version}
     </update>
+    <delete id="deleteCare" parameterType="Integer">
+        UPDATE care SET is_delete = 1,version = version + 1
+        WHERE careId = #{care_id}
+    </delete>
+    <select id="listCare" resultMap="CareResult">
+        SELECT careId,careZt,carelxrcontacts,careData,version,careexecutor,carenr,carecustomerfk
+        FROM care
+        <where>
+            <if test="care_carezt != null and care_carezt != ''">
+                AND careZt LIKE CONCAT('%',#{care_carezt},'%')
+            </if>
+            <if test="care_lxrcontacts != null and care_lxrcontacts != ''">
+                AND carelxrcontacts LIKE CONCAT('%',#{care_lxrcontacts},'%')
+            </if>
+            <if test="careData != null and care_data != ''">
+                AND care_data LIKE CONCAT('%',#{care_data},'%')
+            </if>
+            <if test="care_lxrcontacts != null and care_lxrcontacts != ''">
+                AND carelxrcontacts LIKE CONCAT('%',#{care_lxrcontacts},'%')
+            </if>
+            AND is_delete = 0
+        </where>
+    </select>
 </mapper>

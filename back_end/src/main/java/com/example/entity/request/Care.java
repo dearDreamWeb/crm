@@ -4,7 +4,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
+
+/**
+ * @author: liuleimin
+ * @date: 2020/10/10
+ * @description:
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Care {
     private Integer careId;
     private String careZt;//关怀主题
