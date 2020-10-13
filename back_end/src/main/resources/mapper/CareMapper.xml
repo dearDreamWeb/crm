@@ -15,50 +15,46 @@
     <selectKey keyProperty="careId" keyColumn="care_id" resultType="Integer" order="AFTER">
         SELECT last_insert_id();
     </selectKey>
-    insert into care(care_carezt,care_lxrcontacts,care_data,care_executor,care_nr,care_customerfk) VALUES
+    insert into care(care_carezt,care_lxrcontacts,care_executor,care_carenr,care_customerfk) VALUES
     (#{careZt},#{carelxrcontacts},#{careData},#{careexecutor},#{carenr},#{carecustomerfk})
 </insert>
 
     <update id="updateCare" parameterType="com.example.entity.request.Care">
-        update care set careData = #{care_data},version = version +1
-        <if test="care_carezt !=null and care_carezt != ''">
-            ,careZt = #{care_carezt}
+        update care set careData = #{care_data}
+        <if test="careZt !=null and careZt != ''">
+            ,care_carezt = #{careZt}
         </if>
-        <if test="care_lxrcontacts !=null and care_lxrcontacts != ''">
-            ,carelxrcontacts = #{care_lxrcontacts}
+        <if test="carelxrcontacts !=null and carelxrcontacts != ''">
+            ,care_lxrcontacts = #{carelxrcontacts}
         </if>
-        <if test="care_executor !=null and care_executor != ''">
-            ,careexecutor = #{care_carezt}
+        <if test="careexecutor !=null and careexecutor != ''">
+            ,care_executor = #{careexecutor}
         </if>
-        <if test="care_nr !=null and care_nr != ''">
-            ,carenr = #{care_carezt}
+        <if test="carenr !=null and carenr != ''">
+            ,care_carenr = #{carenr}
         </if>
-        <if test="care_customerfk !=null and care_customerfk != ''">
-            ,carecustomerfk = #{care_carezt}
+        <if test="carecustomerfk !=null and carecustomerfk != ''">
+            ,care_customerfk = #{carecustomerfk}
         </if>
-        where careId = #{care_id} and version = #{version}
+        where careId = #{care_id}
     </update>
     <delete id="deleteCare" parameterType="Integer">
         UPDATE care SET is_delete = 1,version = version + 1
         WHERE careId = #{care_id}
     </delete>
     <select id="listCare" resultMap="CareResult">
-        SELECT careId,careZt,carelxrcontacts,careData,version,careexecutor,carenr,carecustomerfk
+        SELECT care_id,care_carezt,care_lxrcontacts,care_date,care_executor,care_carenr,care_customerfk
         FROM care
         <where>
-            <if test="care_carezt != null and care_carezt != ''">
-                AND careZt LIKE CONCAT('%',#{care_carezt},'%')
+            <if test="careZt != null and careZt != ''">
+                AND care_carezt LIKE CONCAT('%',#{careZt},'%')
             </if>
-            <if test="care_lxrcontacts != null and care_lxrcontacts != ''">
-                AND carelxrcontacts LIKE CONCAT('%',#{care_lxrcontacts},'%')
+            <if test="carelxrcontacts != null and carelxrcontacts != ''">
+                AND care_lxrcontacts LIKE CONCAT('%',#{carelxrcontacts},'%')
             </if>
-            <if test="careData != null and care_data != ''">
-                AND care_data LIKE CONCAT('%',#{care_data},'%')
+            <if test="careexecutor != null and careexecutor != ''">
+                AND care_executor LIKE CONCAT('%',#{careexecutor},'%')
             </if>
-            <if test="care_lxrcontacts != null and care_lxrcontacts != ''">
-                AND carelxrcontacts LIKE CONCAT('%',#{care_lxrcontacts},'%')
-            </if>
-            AND is_delete = 0
         </where>
     </select>
 </mapper>
