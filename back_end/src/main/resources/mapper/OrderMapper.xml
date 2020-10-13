@@ -14,7 +14,18 @@
         <result property="ordProvince" column="ord_province"/>
         <result property="ordCity" column="ord_city"/>
         <result property="ordCountry" column="ord_country"/>
+        <result property="ordDetail" column="ord_detail"/>
         <result property="ordPhone" column="ord_phone"/>
+        <result property="cusId" column="cus_id"/>
+        <result property="offerId" column="offer_id"/>
     </resultMap>
-
+    <!--查全部-->
+    <select id="addszOrder" resultMap="szOrderResult">
+        select ord_id,ord_head,ord_totalmoney,ord_createtime,ord_dealtime,ord_fahuotime
+        ,ord_huikuanmoney,ord_consignee,ord_province,ord_city,ord_country,ord_detail,ord_phone from sz_order
+    </select>
+    <!--删-->
+    <update id="delszOrder" parameterType="Integer">
+        UPDATE sz_order SET is_delete = 1 WHERE ord_id = #{ordId}
+    </update>
 </mapper>
