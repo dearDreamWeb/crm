@@ -20,74 +20,95 @@
       <el-row>
         <el-col :span="7">维修工单<div class="grid-content bg-purple"></div></el-col>
         <el-col :span="12"><div class="grid-content bg-purple-light"></div></el-col>
-        <el-col :span="2"><el-button type="text" @click="addBtn">新建工单</el-button><div class="grid-content bg-purple"></div></el-col>
+        <el-col :span="2"> <el-button type="success" @click="addBtn" icon="el-icon-circle-plus-outline" circle>新建维修工单</el-button><div class="grid-content bg-purple"></div></el-col>
         <el-dialog
-          title="新建工单"
+          title="维修工单"
           :visible.sync="dialogVisible"
           width="50%"
           :before-close="handleClose">
           <el-form ref="form" :model="form" label-width="80px">
             <el-row>
-              <el-col :span="8">
+              <el-col :span="12">
                 <el-form-item label="工单编号">
                   <el-input v-model="form.gdbh"></el-input>
                 </el-form-item>
               </el-col >
-              <el-col :span="8">
-                <el-form-item label="客户名">
+              <el-col :span="12">
+                <el-form-item label="接单人">
                   <el-input v-model="form.khname"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="接单人">
-                  <el-input v-model="form.jdr"></el-input>
+
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="客户名">
+                  <el-input
+                    placeholder="请输入内容"
+                    v-model="input"
+                    :disabled="true">
+                  </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item>
+                  <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
+
+                    <el-button slot="append" icon="el-icon-search"></el-button>
+                  </el-input>
                 </el-form-item>
               </el-col>
             </el-row>
-
             <el-row>
-              <el-col :span="8">
+              <el-col :span="12">
                 <el-form-item label="订单编号">
                   <el-input v-model="form.ddbh"></el-input>
                 </el-form-item>
               </el-col >
-              <el-col :span="8">
+              <el-col :span="12">
                 <el-form-item label="产品编号">
                   <el-input v-model="form.cpbh"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="接单时间">
+                  <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
                 <el-form-item label="序列号">
                   <el-input v-model="form.xlh"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item label="接单时间">
-              <el-col :span="8">
-                <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-              </el-col>
-              <el-col :span="16">
+            <el-row>
+              <el-col :span="12">
                 <el-form-item label="问题描述">
 
                   <el-input type="textarea" v-model="form.desc"></el-input>
 
                 </el-form-item>
+
               </el-col>
-            </el-form-item>
-            <el-row>
-              <el-col :span="8">
+              <el-col :span="12">
                 <el-form-item label="维修人">
                   <el-input v-model="form.xlh"></el-input>
                 </el-form-item>
               </el-col>
+            </el-row>
+            <el-row>
 
-              <el-col :span="8">
+
+              <el-col :span="12">
                 <el-form-item label="上门时间">
                   <el-date-picker type="date" placeholder="选择日期" v-model="form.date2" style="width: 100%;"></el-date-picker>
                 </el-form-item>
               </el-col>
 
-              <el-col :span="8">
+              <el-col :span="12">
                 <el-form-item label="故障描述">
                   <el-input v-model="form.gzms"></el-input>
                 </el-form-item>
@@ -100,13 +121,16 @@
                 </el-form-item>
               </el-col >
               <el-col :span="8">
-                <el-form-item label="是否在保">
-                  <el-switch v-model="form.zb"></el-switch>
-                </el-form-item>
-              </el-col >
-              <el-col :span="8">
                 <el-form-item label="费用">
                   <el-input-number v-model="num" :precision="2" :step="0.1" :max="100000"></el-input-number>
+                </el-form-item>
+              </el-col >
+
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="是否在保">
+                  <el-switch v-model="form.zb"></el-switch>
                 </el-form-item>
               </el-col >
             </el-row>

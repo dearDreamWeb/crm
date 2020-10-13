@@ -11,9 +11,14 @@ import com.example.service.CareService;
 import com.example.util.CheckUtils;
 import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author: liuleimin
@@ -34,7 +39,7 @@ public class CareServicelmpl implements CareService {
             throw new SysException(ResultEnum.DICT_ADD_FAIL.getCode(),
                     ResultEnum.DICT_ADD_FAIL.getMessage());
         }
-        return ResultUtils.response(addCare(care));
+        return ResultUtils.response(addCare);
     }
 
     @Override
@@ -54,12 +59,25 @@ public class CareServicelmpl implements CareService {
 
     @Override
     public ResultVo listCare(Care care) {
-        return null;
+        Integer pageNum = care.getPageNum();
+        Integer pageSize = care.getPageSize();
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+        PageHelper.startPage(pageNum,pageSize);
+        List<Care> empResps = careMapper.listCare(care);
+        PageInfo<Care> list = new PageInfo<>(empResps);
+        return ResultUtils.response(list);
     }
 
     @Override
+
     public ResultVo getCare(Integer careId) {
-        return null;
+        Care care = careMapper.getCare(careId);
+        return ResultUtils.response(care);
     }
 
     @Override
