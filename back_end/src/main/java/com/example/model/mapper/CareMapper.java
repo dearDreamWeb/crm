@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface CareMapper {
     List<Care> listCare(Care care);
-    Care getCare(Care careId);
+    Care getCare(Integer careId);
     int addCare(Care care);
     int updateCare(Care care);
     int deleteCare(int careId);

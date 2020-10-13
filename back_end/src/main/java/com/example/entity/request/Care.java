@@ -6,6 +6,11 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author: liuleimin
+ * @date: 2020/10/10
+ * @description:
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
