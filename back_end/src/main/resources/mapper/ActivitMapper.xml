@@ -23,7 +23,7 @@
             select last_insert_id();
         </selectKey>
         INSERT INTO activity(activity_title,content,activity_link,views,create_by,start_time,end_time,emp_id)
-        VALUES (#{activityTitle},#{content},#{activityLink},#{views},#{createBy},#{startTime},#{endTime})
+        VALUES (#{activityTitle},#{content},#{activityLink},#{views},#{createBy},#{startTime},#{endTime},#{empId})
     </insert>
 
     <update id="editActivity" parameterType="com.example.entity.request.ActivityReq">
@@ -46,7 +46,7 @@
         <if test="empId != null">
             ,emp_id = #{empId}
         </if>
-        WHERE activit_id = #{activitId} AND version = #{version}
+        WHERE activity_id = #{activityId} AND version = #{version}
     </update>
 
     <update id="delActivity" parameterType="Integer">

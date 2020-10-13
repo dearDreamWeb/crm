@@ -21,8 +21,8 @@ public class ActivityReq {
     private String activityLink;
     private Integer views;
     private String createBy;
-    private Date startTime;//活动开始时间
-    private Date endTime;//活动结束时间
+    private String startTime;//活动开始时间
+    private String endTime;//活动结束时间
     private Integer version;
     private Date createTime;
     private Date updateTime;

@@ -133,6 +133,7 @@ public class EmpServiceImpl implements EmpService {
         }
         PageHelper.startPage(pageNum,pageSize);
         List<EmpResp> empResps = empMapper.listEmp(empReq);
+        System.out.println("总查询条数："+empResps.size());
         PageInfo<EmpResp> list = new PageInfo<>(empResps);
         return ResultUtils.response(list);
     }

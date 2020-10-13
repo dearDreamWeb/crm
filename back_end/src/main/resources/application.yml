@@ -27,3 +27,7 @@ qiniu:
   secretKey: YVsbx4ZeZ4VQINSgN6HFCzN-t7gXodq8-VRQyrsg
   bucket: pengjia
   path: www.eblog.icu
+
+logging:
+  level:
+    com.example.model.mapper : debug

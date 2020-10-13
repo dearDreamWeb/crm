@@ -13,14 +13,15 @@
         </el-input>
       </el-col>
       <el-col :span="10">
-        <el-button type="primary" size="mini" icon="el-icon-plus">添加活动</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-plus"
+                   @click="openAddDialog">添加活动</el-button>
         <el-button type="primary" size="mini" icon="el-icon-refresh"></el-button>
       </el-col>
       <el-col :span="8">
         <el-button type="warning" size="mini" icon="el-icon-edit"
-                   :disabled="buttonDisabled">修改活动</el-button>
+                   :disabled="buttonDisabled" @click="openEditDialog">修改活动</el-button>
         <el-button type="danger" size="mini" icon="el-icon-delete"
-                   :disabled="buttonDisabled">删除活动</el-button>
+                   :disabled="buttonDisabled" @click="deleteActivity">删除活动</el-button>
       </el-col>
     </el-row>
 
@@ -71,30 +72,98 @@
           </div>
         </el-card>
       </el-col>
-      <!--<el-col :span="8">
-        <el-card>
-          <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-          <div>
-            <span>好吃的汉堡</span>
-            <div class="bottom clearfix">
-              <el-button type="text" class="button">操作按钮</el-button>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card>
-          <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-          <div>
-            <span>好吃的汉堡</span>
-            <div class="bottom clearfix">
-              <el-button type="text" class="button">操作按钮</el-button>
-            </div>
-          </div>
-        </el-card>
-      </el-col>-->
     </el-row>
   </el-card>
+
+  <el-dialog title="活动添加" :visible.sync="addDialog" @close="addHandleClose">
+    <el-form :model="addForm" label-width="100px" label-position="right"
+             ref="addFormRef" :rules="formRules">
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="活动名称" prop="activityTitle">
+            <el-input v-model="addForm.activityTitle" clearable size="mini"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="活动链接" prop="activityLink">
+            <el-input v-model="addForm.activityLink" clearable size="mini"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col>
+          <el-form-item label="内容" prop="content">
+            <el-input v-model="addForm.content" clearable size="mini" type="textarea"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col>
+          <el-form-item label="活动日期">
+            <el-date-picker
+              v-model="addForm.activityDate"
+              type="daterange"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <span slot="footer">
+      <el-button @click="addDialog = false">取消</el-button>
+      <el-button type="primary" :loading="addActivityLoading"
+                 @click="addActivityClick">确定</el-button>
+    </span>
+  </el-dialog>
+
+  <el-dialog title="活动修改" :visible.sync="editDialog" @close="editHandleClose">
+    <el-form :model="editForm" label-width="100px" label-position="right"
+             ref="editFormRef" :rules="formRules">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="活动标题" prop="activityTitle">
+            <el-input v-model="editForm.activityTitle" size="mini"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="活动链接" prop="activityLink">
+            <el-input v-model="editForm.activityLink" size="mini"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col>
+          <el-form-item label="活动内容" prop="content">
+            <el-input size="mini" v-model="editForm.content" type="textarea"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col>
+          <el-form-item label="活动日期">
+            <el-date-picker
+              v-model="editForm.activityDate"
+              type="daterange"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <span slot="footer">
+      <el-button @click="editDialog = false">取消</el-button>
+      <el-button type="primary" @click="editActivityClick"
+                 :loading="editActivityLoading">确定</el-button>
+    </span>
+  </el-dialog>
 </div>
 </template>
 
@@ -105,6 +174,32 @@
     name: "Activity",
     data() {
       return {
+        editDialog:false,
+        editActivityLoading:false,
+        editForm:{},
+
+        addDialog:false,
+        addForm:{
+          activityTitle:'',
+          content:'',
+          activityLink:'',
+          createBy:'',
+          startTime:'',
+          endTime:'',
+          activityDate:'',
+          empId:'',
+          views:0
+        },
+        formRules:{
+          activityTitle:[
+            {required:true,message:'请输入活动名称',trigger:'blur'}
+          ],
+          activityLink:[
+            {required:true,message:'请输入活动链接',trigger:'blur'}
+          ]
+        },
+        addActivityLoading:false,
+
         listForm:[],
         pageNum:1,
         pageSize:10,
@@ -116,6 +211,93 @@
       }
     },
     methods:{
+      deleteActivity(activityId) {
+        this.$confirm('此操作将删除该数据，是否继续？','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          activityId = this.rowActivityId
+          activityHttp.del(activityId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+            } else {
+              this.$message({
+                message:res.message,
+                type:'error'
+              })
+            }
+          })
+        })
+      },
+
+      openEditDialog() {
+        this.editDialog = true
+        this.getActivityDetail()
+      },
+      getActivityDetail() {
+        activityHttp.getActivity(this.rowActivityId).then(res => {
+          this.editForm = res.data
+          this.editForm.activityDate = [res.data.startTime,res.data.endTime]
+        })
+      },
+      editActivityClick() {
+        this.editActivityLoading = true
+        this.editForm.activityId = this.rowActivityId
+        activityHttp.edit(this.editForm).then(res => {
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.initList()
+            this.editActivityLoading = false
+            this.editDialog = false
+          } else {
+            this.$message({
+              message:res.message,
+              type:'error'
+            })
+            this.editActivityLoading = false
+          }
+        })
+      },
+      editHandleClose() {
+        this.$refs.editFormRef.resetFields()
+        this.editActivityLoading = false
+      },
+
+      openAddDialog() {
+        this.addDialog = true
+      },
+      addActivityClick() {
+        this.addForm.startTime = this.addForm.activityDate[0]
+        this.addForm.endTime = this.addForm.activityDate[1]
+        this.addForm.createBy = this.$store.state.empName
+        this.addForm.empId = this.$store.state.empId
+        this.$refs.addFormRef.validate(valid => {
+          if (!valid) return
+          this.addActivityLoading = true
+          activityHttp.add(this.addForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+              this.addActivityLoading = false
+              this.addDialog = false
+            } else {
+              this.addActivityLoading = false
+              this.$message({
+                message:res.message,
+                type:'error'
+              })
+            }
+          })
+        })
+      },
+      addHandleClose() {
+        this.$refs.addFormRef.resetFields()
+        this.addActivityLoading = false
+        this.addForm.activityDate = ''
+      },
+
       handleRowClick(row,event,column) {
         this.rowActivityId = row.activityId
         if (this.rowActivityId != 0) {
