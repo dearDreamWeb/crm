@@ -13,9 +13,9 @@
         </el-col>
         <el-col :span="6">
           <el-button type="warning" size="mini" icon="el-icon-edit"
-                     :disabled="buttonDisabled" @click="openEditDept">修改订单</el-button>
+                     :disabled="buttonDisabled" @click="openEditOrder">修改订单</el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete"
-                     :disabled="buttonDisabled" @click="delorder">删除订单</el-button>
+                     :disabled="buttonDisabled" @click="delOrder">删除订单</el-button>
         </el-col>
       </el-row>
 
@@ -23,197 +23,161 @@
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column prop="orderName" label="负责人" sortable></el-table-column>
-        <el-table-column prop="orderName" label="总金额" sortable></el-table-column>
-        <el-table-column prop="orderName" label="创建时间" sortable></el-table-column>
-        <el-table-column prop="orderName" label="成交时间" sortable></el-table-column>
-        <el-table-column prop="orderName" label="发货时间" sortable></el-table-column>
-        <el-table-column prop="orderName" label="回款金额" sortable></el-table-column>
+        <el-table-column prop="ordTheme" label="主题" sortable></el-table-column>
+        <el-table-column prop="ordHead" label="负责人" sortable></el-table-column>
+        <el-table-column prop="ordTotalmoney" label="总金额" sortable></el-table-column>
+        <el-table-column prop="ordCreatetime" label="创建时间" sortable></el-table-column>
+        <el-table-column prop="ordDealtime" label="成交时间" sortable></el-table-column>
+        <el-table-column prop="ordFahuotime" label="发货时间" sortable></el-table-column>
+        <el-table-column prop="ordHuikuanmoney" label="回款金额" sortable></el-table-column>
       </el-table>
+      <el-pagination background
+                     @current-change="handleCurrentChange"
+                     :current-page="pageNum" :page-sizes="[1,2,5,10]"
+                     :page-size="pageSize" :total="total"
+                     layout="prev, pager, next, jumper, total">
+      </el-pagination>
     </el-card>
 
-    <el-dialog title="员工添加" :visible.sync="addDialog" @close="addHandleClose">
+    <el-dialog title="订单添加" :visible.sync="addDialog" @close="addHandleClose">
       <el-form :model="addForm" label-width="100px" ref="addFormRef"
                label-position="right" :rules="formRules">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="账号" prop="empName">
-              <el-input v-model="addForm.empName" size="mini" placeholder="请输入账号（必填）" clearable/>
+            <el-form-item label="负责人" prop="ordHead">
+              <el-input v-model="addForm.ordHead" size="mini" placeholder="请输入负责人" clearable/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="昵称" prop="nickName">
-              <el-input v-model="addForm.nickName" size="mini" placeholder="请输入昵称" clearable/>
+            <el-form-item label="总金额" prop="ordTotalmoney">
+              <el-input v-model="addForm.ordTotalmoney" size="mini" placeholder="总金额" clearable/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="省" prop="ordProvince">
+              <el-input v-model="addForm.ordProvince" size="mini" placeholder="省" clearable/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="市" prop="ordCity">
+              <el-input v-model="addForm.ordCity" size="mini" placeholder="市" clearable/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="区/县" prop="ordCountry">
+              <el-input v-model="addForm.ordCountry" size="mini" placeholder="区/县" clearable/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="详细地址" prop="ordDetail">
+              <el-input v-model="addForm.ordDetail" size="mini" placeholder="详细地址" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="邮箱" prop="email">
-              <el-input v-model="addForm.email" size="mini" placeholder="请输入邮箱" clearable/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="密码" prop="passWord">
-              <el-input v-model="addForm.passWord" size="mini" placeholder="请输入密码" clearable/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="手机号" prop="phone">
-              <el-input v-model="addForm.phone" size="mini" placeholder="请输入手机号（必填）" clearable/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="备注" prop="remark">
-              <el-input v-model="addForm.remark" type="textarea" size="mini" placeholder="请输入备注" clearable/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="部门">
-              <el-select v-model="addForm.deptIdList" placeholder="请选择部门">
-                <el-option v-for="item in deptList" :key="item.deptId"
-                           :label="item.deptName" :value="item.deptId">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="性别">
-              <el-radio-group v-model="addForm.sex">
-                <el-radio :label=1>男</el-radio>
-                <el-radio :label=0>女</el-radio>
-              </el-radio-group>
+            <el-form-item label="手机号" prop="ordPhone">
+              <el-input v-model="addForm.ordPhone" size="mini" placeholder="收货手机号" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
       <span slot="footer">
         <el-button @click="addDialog = false">取消</el-button>
-        <el-button type="primary" @click="addEmpClick"
-                   :loading="addEmpButtonLoading">确定</el-button>
+        <el-button type="primary" @click="addOrderClick"
+                   :loading="addOrderButtonLoading">确定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import {deptHttp} from "../../network/system/dept";
+  import {orderHttp} from "../../network/system/order";
+  import {userHttp} from "../../network/system/user";
 
   export default {
     name: "Order",
     data() {
       return {
         searchInput:'',
-        editDialog:false,
         editForm:{},
-        editDeptButtonLoading:false,
-        addDeptButtonLoading:false,
-        formRules:{
-          orderName:[
+        /*formRules:{
+          ordHead:[
             {required:true,message:'请输入订单名称',trigger:'blur'},
           ]
-        },
-        addForm: {
-          orderName:''
-        },
+        },*/
         addDialog:false,
-        rowDeptId: 0,
+        rowordId: 0,
         tableLoading:false,
         buttonDisabled:true,
         listForm:[],
         pageNum:1,
-        pageSize:10,
-        total:1
+        pageSize:2,
+        total:1,
+        addForm: {
+          ordTheme:'',
+          ordHead:'',
+          ordTotalmoney:'',
+          ordCreatetime:'',
+          ordDealtime:'',
+          ordFahuotime:'',
+          ordHuikuanmoney:'',
+          pageNum:1,
+          pageSize:2
+        },
+        formRules:{
+
+        },
+        addOrderButtonLoading:false,
+
       }
     },
     methods: {
       searchInputClick() {
-        this.listForm.orderName = this.searchInput
-        deptHttp.list(this.listForm).then(res => {
+        this.listForm.ordHead = this.searchInput
+        orderHttp.list(this.listForm).then(res => {
           this.listForm = res.data.list
-          this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
       },
       resetForm() {
-        this.initDept()
         this.searchInput = ''
       },
       editHandleClose() {
         this.$refs.editFormRef.resetFields()
-        this.editDeptButtonLoading = false
       },
-      editDeptClick() {
-        this.editDeptButtonLoading = true
-        this.editForm.deptId = this.rowDeptId
-        deptHttp.editDept(this.editForm).then(res => {
-          if (res.code === 20000) {
-            this.$message.success(res.message)
-            this.initDept()
-            this.editDeptButtonLoading = false
-            this.editDialog = false
-          } else {
-            this.$message({
-              message:res.message,
-              type:'error'
-            })
-            this.editDeptButtonLoading = false
-          }
-        })
+      addHandleClose(){
+        /*添加订单*/
       },
-      openEditDept() {
-        this.editDialog = true
-        this.getDeptDetail()
+      openEditOrder(){
+        /*修改订单*/
       },
-      getDeptDetail() {
-        deptHttp.getDept(this.rowDeptId).then(res => {
-          this.editForm = res.data
-        })
+      delOrder(){
+        /*删除订单*/
       },
-
-      openAddDialog() {
-        this.addDialog = true
-      },
-      addDeptClick() {
-        this.$refs.addFormRef.validate(valid => {
-          if (!valid) return
-          this.addDeptButtonLoading = true
-          deptHttp.addDept(this.addForm).then(res => {
-            if (res.code === 20000) {
-              this.$message.success(res.message)
-              this.initDept()
-              this.addDeptButtonLoading = false
-              this.addDialog = false
-            } else {
-              this.addDeptButtonLoading = false
-              this.$message({
-                message:res.message,
-                type:'error'
-              })
-            }
-          })
-        })
-      },
-      addHandleClose() {
-        this.$refs.addFormRef.resetFields()
-        this.addDeptButtonLoading = false
-      },
-      handleRowClick(row,event,column) {
-        this.rowDeptId = row.deptId
-        if (this.rowDeptId != 0) {
-          this.buttonDisabled = false
-        }
-      },
-      initDept() {
-        deptHttp.listPage(this.pageNum,this.pageSize).then(res => {
+      handleCurrentChange(pageIndex) {
+        this.pageNum = pageIndex
+        this.pageSize = this.pageSize
+        orderHttp.listPage(this.pageNum,this.pageSize).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
+      },
+
+      getDeptDetail() {
+        orderHttp.getDept(this.rowordId).then(res => {
+          this.editForm = res.data
+        })
+      },
+      openAddDialog() {
+        this.addDialog = true
+      },
+      handleRowClick(row,event,column) {
       },
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'
@@ -221,9 +185,19 @@
       iHeaderCellStyle:function({row,column,rowIndex,columnIndex}){
         return 'padding:5px'
       },
+      addOrderClick(){
+
+      },
+      initList() {
+        orderHttp.listPage(this.pageNum,this.pageSize).then(res => {
+          this.listForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
+      },
     },
     created() {
-      this.initDept()
+      this.initList()
     }
   }
 </script>
