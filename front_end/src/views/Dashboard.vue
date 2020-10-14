@@ -54,6 +54,21 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-row>
+      <el-col>
+        <el-card>
+          任务调度待解决<hr>
+          10月14待完成任务：线索模块前后端增删改查
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col>
+        <el-card header="消息提醒思路">
+          在vue加载dom完成后，用create函数请求后台的数据，接收到之后统计消息。然后用element的徽标标记。当用户点击之后调用后台查看消息
+        </el-card>
+      </el-col>
+    </el-row>
     <el-row :gutter="20">
       <!--<el-col :span="18">
         <el-card>
@@ -112,9 +127,64 @@
           </el-col>
         </el-row>
       </el-col>-->
-      <div style="width: 30%">
-        <e-icon-picker v-model="icon"/>
-      </div>
+      <el-col :span="6">
+        <el-row>
+          <el-col>
+            <el-card>
+              <div>
+                <e-icon-picker v-model="icon"/>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col>
+            <el-card>
+              （已完成）页面长时间未操作，清除session和vuex，方式采用前端解决<br>后续考虑走后端
+            </el-card>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col>
+            <el-card header="实现任务调度的四种方式">
+              Timer<br>
+              ScheduledExecutor<br>
+              开源工具包 Quartz<br>
+              开源工具包 JCronTab
+              <hr>
+              https://developer.ibm.com/zh/articles/j-lo-taskschedule/
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-col :span="18">
+        <el-card header="防止用户多端登录解决方法">
+          <p>两种解决方案：
+            1、将用户的登录信息用一个标志位的字段保存起来，每次登录成功就标记1，注销登录就标记为0，当标记为1的时候不允许别人登录。
+
+            2、将用户的登录信息保存在application内置作用域内， 然后利用session监听器监听每一个登录用户的登录情况。
+          </p>
+          <hr>
+          <br>
+          <p>
+            第一种方式 每次登录 都需要操作数据库，多了一些不必要的性能开销，而且在登录状态下 万一突然电脑关闭了，那就永远都不能登录了，
+            可用性比较低。
+          </p>
+          <p>
+            第二种方式的具体实现：
+            1、在处理登录的login方法中，先查询数据库验证下该用户是否存在，如果存在 判断该登录账户是否已经锁定了，
+            然后从application内置作用域对象中取出所有的登录信息，查看该username账户是否已经登录，如果登录了，就友好提示下，
+            反之表示可以登录，将该登录信息以键值对的方式保存在application中。
+            2、登录入口处理完之后，考虑到会话结束的话，那么对应的登录用户也应该相应的注销登录。我们可以写一个Session监听器，
+            监听sessioon销毁的时候，我们将登录的用户注销掉，也就是从application中移除。表示该用户已经下线了。
+            3、另外，还有一个问题，如果说登录的用户突然关闭了浏览器或者页面而没有点击退出按钮。那么可以利用beforeunload 事件，
+            在浏览器刷新或者关闭的时候触发。
+          </p>
+          <p>https://blog.csdn.net/chenghui0317/article/details/9373345</p>
+        </el-card>
+      </el-col>
     </el-row>
   </div>
 </template>
