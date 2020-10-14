@@ -18,7 +18,7 @@
           <el-button type="danger" size="mini" icon="el-icon-delete"
                      :disabled="buttonDisabled" @click="deleteEmp">删除用户</el-button>
           <el-button type="success" size="mini" icon="el-icon-tickets"
-                     :disabled="buttonDisabled" @click="authActivity">分配活动</el-button>
+                     :disabled="buttonDisabled" @click="openAuthDialog">分配活动</el-button>
         </el-col>
       </el-row>
 
@@ -252,18 +252,33 @@
     </el-dialog>
 
     <el-dialog title="分配活动" :visible.sync="authDialog" @close="authHandleClose">
-      <el-transfer
-        @change="authTransferChange"
-        filterable :titles="['未分配', '已分配']"
-        filter-placeholder="请输入活动标题搜索"
-        v-model="transferValue"
-        :data="transferData">
-      </el-transfer>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <span>活动标题：</span>
+          <el-select v-model="transferValue" multiple
+                     filterable placeholder="请选择(可搜索)">
+            <el-option
+              v-for="item in transferOptions"
+              :key="item.activityId"
+              :label="item.activityTitle"
+              :value="item.activityId">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="12">
+          <el-card>
+            <span v-for="(item,index) in alreadyAuthValue" :key="index">
+              <el-tag>{{item.activityTitle}}</el-tag>
+              <el-divider direction="vertical"></el-divider>
+            </span>
+          </el-card>
+        </el-col>
+      </el-row>
       <hr>
-      <span>
+      <span slot="footer">
         <el-button @click="authDialog = false">取消</el-button>
-        <el-button type="primary" :loading="authActivityLoading"
-                   @click="authActivityClick">确定</el-button>
+        <el-button type="primary" @click="authActivityClick"
+                   :loading="authActivityButtonLoading">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -285,15 +300,15 @@
         cb(new Error('请输入合法的手机号'))
       }
       return{
-        batchForm:{
+        authDialog:false,
+        transferValue:[],
+        transferOptions:[],
+        alreadyAuthValue:[],
+        authActivityButtonLoading:false,
+        authForm:{
           empId:'',
           activityIdList:[]
         },
-        transferData: [],
-        transferValue: [],
-        authActivityLoading:false,
-
-        authDialog:false,
 
         searchInput:'',
         searchForm:{
@@ -348,43 +363,49 @@
       }
     },
     methods:{
-      authTransferChange() {
-        console.log(this.transferValue)
-        this.batchForm.activityIdList = this.transferValue
-      },
       authActivityClick() {
-        this.authActivityLoading = true
-        activityHttp.batchEdit(this.batchForm).then(res => {
-          if (res.code === 20000) {
-            this.$message.success(res.message)
-            this.authDialog = false
-            this.authActivityLoading = false
-          } else {
-            this.$message({
-              message:res.message,
-              type:'error'
-            })
-            this.authActivityLoading = false
-          }
+        this.authForm.empId = this.rowEmpId
+        this.authForm.activityIdList = this.transferValue
+        this.$confirm('分配后不可撤销','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          this.authActivityButtonLoading = true
+          activityHttp.batchEdit(this.authForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.authActivityButtonLoading = false
+              this.authDialog = false
+            } else {
+              this.authActivityButtonLoading = false
+              this.$message({
+                message:res.message,
+                type:'error'
+              })
+            }
+          })
         })
       },
       authHandleClose() {
         this.transferValue = []
-        this.authActivityLoading = false
       },
-      authActivity() {
-        this.transferData = []
+      openAuthDialog() {
         this.authDialog = true
-        this.batchForm.empId = this.rowEmpId
+        this.initNotAuthActivity()
+        this.getActivityByEmpId()
+      },
+      initNotAuthActivity() {
         activityHttp.listNotAuth().then(res => {
-          for (let i=0;i<res.data.length;i++) {
-            this.transferData.push({
-              key:res.data[i].activityId,
-              label:res.data[i].activityTitle
-            })
-          }
+          this.transferOptions = res.data
         })
       },
+      getActivityByEmpId() {
+        activityHttp.getActivityListByEmpId(this.rowEmpId).then(res => {
+          this.alreadyAuthValue = res.data
+        })
+      },
+
       resetForm() {
         this.$refs.advancedSearchFormRef.resetFields()
         this.searchInput = ''

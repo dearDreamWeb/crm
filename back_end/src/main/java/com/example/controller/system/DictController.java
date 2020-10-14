@@ -60,4 +60,9 @@ public class DictController {
     public ResultVo getPid(DictReq dictReq) {
         return dictService.listPidDict(dictReq);
     }
+
+    @GetMapping("/tree_get")
+    public ResultVo treeById(@RequestParam("dictId")Integer dictId) {
+        return dictService.treeDictById(dictId);
+    }
 }

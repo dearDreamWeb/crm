@@ -19,5 +19,6 @@ public interface DictMapper {
     DictResp getDict(Integer dictId);
     List<DictResp> listDict(DictReq dictReq);
     List<DictResp> listPidDict(DictReq dictReq);
+    List<DictResp> treeDictById(Integer dictId);
     int checkDict(String dictCode);
 }

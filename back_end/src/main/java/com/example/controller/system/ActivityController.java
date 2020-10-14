@@ -55,4 +55,9 @@ public class ActivityController {
     public ResultVo batchEdit(@RequestBody ActivityReq activityReq) {
         return activityService.batchEditActivity(activityReq);
     }
+
+    @GetMapping("/get_by_emp")
+    public ResultVo getByEmp(@RequestParam("empId")Integer empId) {
+        return activityService.listByEmp(empId);
+    }
 }

@@ -13,6 +13,18 @@
         <result column="is_delete" property="isDelete"/>
     </resultMap>
 
+    <resultMap id="DictDetailResult" type="com.example.entity.response.DictResp">
+        <id column="dict_id" property="dictId"/>
+        <result column="dict_code" property="dictCode"/>
+        <result column="dict_name" property="dictName"/>
+        <result column="pid" property="pid"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <collection property="children" resultMap="DictResult"/>
+    </resultMap>
+
     <insert id="addDict" parameterType="com.example.entity.response.DictResp">
         <selectKey keyColumn="dict_id" keyProperty="dictId" resultType="Integer" order="AFTER">
             select last_insert_id();
@@ -40,7 +52,7 @@
         WHERE dict_id = #{dictId} AND version = #{version}
     </update>
 
-    <select id="getDict" resultMap="DictResult" parameterType="Integer">
+    <select id="getDict" resultMap="DictDetailResult" parameterType="Integer">
         SELECT dict_id,dict_code,dict_name,pid,version,create_time,update_time,is_delete
         FROM dict WHERE dict_id = #{dictId}
     </select>
@@ -72,5 +84,12 @@
     <select id="listPidDict" resultMap="DictResult">
         SELECT dict_id,dict_code,dict_name,pid,version,create_time,update_time,is_delete
         FROM dict WHERE pid = 0
+    </select>
+
+    <select id="treeDictById" resultMap="DictResult">
+        SELECT
+            d2.dict_id,d2.dict_code,d2.dict_name,d2.pid
+        FROM dict d1
+        LEFT JOIN dict d2 ON d1.dict_id = d2.pid WHERE d1.dict_id = #{dictId}
     </select>
 </mapper>

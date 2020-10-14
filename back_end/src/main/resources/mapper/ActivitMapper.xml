@@ -90,4 +90,10 @@
             #{item}
         </foreach>
     </update>
+
+    <select id="listByEmp" resultMap="ActivityResult">
+        SELECT activity_id,activity_title,content,activity_link,views,create_by,
+            start_time,end_time,version,create_time,update_time,is_delete,emp_id
+        FROM activity WHERE emp_id = #{empId} AND is_delete = 0
+    </select>
 </mapper>

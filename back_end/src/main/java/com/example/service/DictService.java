@@ -16,4 +16,5 @@ public interface DictService {
     ResultVo listDict(DictReq dictReq);
     ResultVo listPidDict(DictReq dictReq);
     ResultVo treeDict(DictReq dictReq);
+    ResultVo treeDictById(Integer dictId);
 }

@@ -107,6 +107,16 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    public ResultVo listByEmp(Integer empId) {
+        List<ActivityResp> activityResps = activityMapper.listByEmp(empId);
+        if (activityResps == null && activityResps.size() < 0) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+        return ResultUtils.response(activityResps);
+    }
+
+    @Override
     public ResultVo listNotAuth() {
         List<ActivityResp> activityResps = activityMapper.listNotAuth();
         return ResultUtils.response(activityResps);

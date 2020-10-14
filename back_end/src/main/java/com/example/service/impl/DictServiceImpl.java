@@ -107,4 +107,13 @@ public class DictServiceImpl implements DictService {
         return ResultUtils.response(dictResps);
     }
 
+    @Override
+    public ResultVo treeDictById(Integer dictId) {
+        DictResp dictResp = dictMapper.getDict(dictId);
+        List<DictResp> dictResps = dictMapper.treeDictById(dictId);
+        dictResp.setChildren(dictResps);
+        return ResultUtils.response(dictResp);
+    }
+
+
 }
