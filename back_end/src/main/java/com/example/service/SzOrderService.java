@@ -1,12 +1,12 @@
 package com.example.service;
 
 import com.example.entity.ResultVo;
-import com.example.entity.request.szOrder;
+import com.example.entity.request.SzOrder;
 
-public interface szOrderService {
-    ResultVo addszOrder(szOrder szorder);
-    ResultVo delszOrder(szOrder szorder);
-    ResultVo editszOrder(szOrder szorder);
-    ResultVo queryszOrderById(Integer ordId);
-    ResultVo listszOrder(szOrder szorder);
+public interface SzOrderService {
+    ResultVo addszOrder(SzOrder szorder);
+    ResultVo delszOrder(SzOrder szorder);
+    ResultVo editszOrder(SzOrder szorder);
+    ResultVo getszOrder(Integer ordId);
+    ResultVo listszOrder(SzOrder szorder);
 }

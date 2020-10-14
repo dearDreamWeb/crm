@@ -15,8 +15,9 @@ YQQ
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class szOrder {
+public class SzOrder {
     private Integer ordId;//订单编号
+    private String ordTheme;//主题
     private String ordHead;//负责人
     private BigDecimal ordTotalmoney;//总金额
     private Date ordCreatetime;// 创建时间
@@ -31,4 +32,6 @@ public class szOrder {
     private Integer ordPhone;//收货手机号
     private Integer cusId;//客户编号
     private Integer offerId;//报价编号
+    private Integer pageNum;
+    private Integer pageSize;
 }
