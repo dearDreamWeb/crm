@@ -105,9 +105,13 @@
     </update>
 
     <select id="getClue" resultMap="ClueDetailResult" parameterType="Integer">
-        SELECT clue_id,clue_name,clue_phone,clue_status,handle_result,handle_person,remark,
-            version,create_time,update_time,is_delete,activity_id,emp_id
-        FROM clue WHERE clue_id = #{clueId}
+        SELECT cl.clue_id,cl.clue_name,cl.clue_phone,cl.clue_status,cl.handle_result,cl.handle_person,
+                cl.remark,cl.version,cl.create_time,cl.update_time,cl.is_delete,cl.activity_id,cl.emp_id,
+                a.activity_id,a.activity_title,e.emp_name,e.token
+        FROM clue cl
+        LEFT JOIN emp e ON e.emp_id = cl.emp_id
+        LEFT JOIN activity a ON a.activity_id = cl.activity_id
+        WHERE cl.clue_id = #{clueId}
     </select>
 
     <select id="listClue" resultMap="ClueResult">
@@ -137,10 +141,10 @@
                 AND emp_id = #{empId}
             </if>
             <if test="startDate != null and startDate != ''">
-                AND date_format(create_date,'%y%m%d') &gt; = date_format(#{startDate},'%y%m%d')
+                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
             </if>
             <if test="endDate != null and endDate != ''">
-                AND date_format(create_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
             AND is_delete = 0
         </where>

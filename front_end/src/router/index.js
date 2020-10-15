@@ -52,6 +52,10 @@ const routes = [
       {
         path: '/care',
         component: () => import('../views/care/Care')
+      },
+      {
+        path: '/clue',
+        component: () => import('../views/clue/Clue')
       }
     ]
   }

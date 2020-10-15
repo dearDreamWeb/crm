@@ -101,7 +101,7 @@
     <select id="getEmp" resultMap="EmpDetailResult" parameterType="Integer">
         SELECT e.emp_id,e.emp_name,e.nick_name,e.email,e.phone,e.sex,
             e.emp_status,e.remark,e.version,e.create_time,e.update_time,
-            e.is_delete,d.dept_id,d.dept_name,d.dept_key
+            e.is_delete,d.dept_id,d.dept_name,d.dept_key,e.token
         FROM emp e
         LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id
         LEFT JOIN dept d ON d.dept_id = ed.dept_id
@@ -130,11 +130,11 @@
             <if test="empStatus != null">
                 AND emp_status = #{empStatus}
             </if>
-            <if test="startDate != null and startDate != ''">
-                AND date_format(create_date,'%y%m%d') &gt; = date_format(#{startDate},'%y%m%d')
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
             </if>
-            <if test="endDate != null and endDate != ''">
-                AND date_format(create_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
             AND is_delete = 0 AND emp_name != 'admin'
         </where>

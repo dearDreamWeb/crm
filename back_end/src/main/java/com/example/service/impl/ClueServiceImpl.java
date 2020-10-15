@@ -12,6 +12,7 @@ import com.example.model.mapper.ClueMapper;
 import com.example.model.mapper.EmpMapper;
 import com.example.service.ClueService;
 import com.example.util.CheckUtils;
+import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -41,6 +42,12 @@ public class ClueServiceImpl implements ClueService {
     @Override
     public ResultVo addClue(ClueReq clueReq) {
         CheckUtils.validate(clueReq);
+        clueReq.setClueStatus(20);
+        Integer activityId = clueReq.getActivityId();
+        if (activityId == null) {
+            clueReq.setEmpId(0);
+            clueReq.setActivityId(0);
+        }
         int addClue = clueMapper.addClue(clueReq);
         if (addClue != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
@@ -72,6 +79,8 @@ public class ClueServiceImpl implements ClueService {
             throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
                     ResultEnum.DATA_NOT_EXIST.getMessage());
         }
+        clueReq.setVersion(clue.getVersion());
+        clueReq.setUpdateTime(DateUtils.getDate());
         int editClue = clueMapper.editClue(clueReq);
         if (editClue != 1) {
             throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
@@ -81,14 +90,22 @@ public class ClueServiceImpl implements ClueService {
     }
 
     @Override
-    public ResultVo getClue(Integer clueId) {
+    public ResultVo getClue(Integer clueId,String token) {
         ClueResp clue = clueMapper.getClue(clueId);
-        Integer activityId = clue.getActivityId();
+        if (clue == null) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
         Integer empId = clue.getEmpId();
-        ActivityResp activity = activityMapper.getActivity(activityId);
-        EmpResp emp = empMapper.getEmp(empId);
-        clue.setActivityResp(activity);
-        clue.setEmpResp(emp);
+        if (empId != 0) {
+            throw new SysException(ResultEnum.CLUE_NOT_BE_EDIT.getCode(),
+                    ResultEnum.CLUE_NOT_BE_EDIT.getMessage());
+        }
+        EmpResp empResp = clue.getEmpResp();
+        if (empResp == null && !empResp.getToken().equals(token)) {
+            throw new SysException(ResultEnum.CLUE_NOT_BE_EDIT.getCode(),
+                    ResultEnum.CLUE_NOT_BE_EDIT.getMessage());
+        }
         return ResultUtils.response(clue);
     }
 
