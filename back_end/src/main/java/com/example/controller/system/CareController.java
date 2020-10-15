@@ -1,6 +1,6 @@
 package com.example.controller.system;
 
-import com.example.anno.CheckPermissions;
+
 import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.Care;
@@ -28,7 +28,8 @@ public class CareController {
     @SysLog("删除关怀")
     @PostMapping("/del")
     public ResultVo delDict(@RequestBody Care care) {
-        return careService.deleteCare(care);
+        System.out.println("获取的参数是："+care);
+        return careService.deleteCare(care.getCareId());
     }
 
     @SysLog("修改关怀")
@@ -36,6 +37,12 @@ public class CareController {
     public ResultVo editDict(@RequestBody Care care) {
         return careService.updateCare(care);
     }
+
+    @GetMapping
+    public ResultVo getDict(@RequestParam("careId")Integer careId) {
+        return careService.getCare(careId);
+    }
+
 
     @GetMapping("/list")
     public ResultVo listDict(Care care) {

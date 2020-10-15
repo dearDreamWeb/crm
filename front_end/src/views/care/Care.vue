@@ -167,13 +167,12 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input v-model="searchInput" size="mini" placeholder="请输入内容" clearable>
+          <el-input v-model="searchInput" size="mini" placeholder="请输入主题内容查询" clearable>
             <el-button @click="searchInputClick" slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
         <el-col :span="10">
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">新增</el-button>
-          <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm"></el-button>
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="addDialog = true">新增</el-button>
         </el-col>
         <el-col :span="8">
           <el-button type="warning" size="mini" icon="el-icon-edit"
@@ -189,9 +188,10 @@
         <el-table-column type="index" width="20"></el-table-column>
         <el-table-column prop="careZt" label="关怀主题" sortable></el-table-column>
         <el-table-column prop="carelxrcontacts" label="联系人"></el-table-column>
+        <el-table-column prop="cusId" label="客户"></el-table-column>
         <el-table-column prop="careData" label="时间">
           <template slot-scope="scope">
-            {{scope.row.createTime | dateFormat}}
+            {{scope.row.careData | dateFormat}}
           </template>
         </el-table-column>
         <el-table-column prop="careexecutor" label="执行人"></el-table-column>
@@ -204,6 +204,134 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-card>
+
+    <el-dialog
+      title="新增关怀"
+      :visible.sync="addDialog"
+      width="50%"
+      @close="handleClose">
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="关怀主题" prop="careZt">
+              <el-input v-model="form.careZt"></el-input>
+            </el-form-item>
+          </el-col >
+          <el-col :span="8">
+            <el-form-item label="联系人">
+              <el-input v-model="form.carelxrcontacts"></el-input>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="客户">
+              <el-input
+                placeholder="请输入内容"
+                v-model="input"
+                :disabled="true">
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="日期">
+              <el-date-picker type="date" placeholder="选择日期" v-model="form.careData" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="执行人">
+              <el-input v-model="form.careexecutor"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="关怀内容">
+              <el-input type="textarea" v-model="form.carenr"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="客户反馈">
+              <el-input type="textarea" v-model="form.carecustomerfk"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div style="text-align: center;">
+
+        <el-button @click="addDialog = false">取 消</el-button>
+        <el-button type="primary" @click="addClick" :loading="addDictButtonLoading">确 定</el-button>
+      </div>
+
+    </el-dialog>
+
+    <el-dialog
+      title="修改关怀"
+      :visible.sync="editDialog"
+      width="50%"
+      @close="editHandleClose">
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="关怀主题" prop="careZt">
+              <el-input v-model="form.careZt"></el-input>
+            </el-form-item>
+          </el-col >
+          <el-col :span="8">
+            <el-form-item label="联系人">
+              <el-input v-model="form.carelxrcontacts"></el-input>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="客户">
+              <el-input
+                placeholder="请输入内容"
+                v-model="input"
+                :disabled="true">
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="日期">
+              <el-date-picker type="date" placeholder="选择日期" v-model="form.careData" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="执行人">
+              <el-input v-model="form.careexecutor"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="关怀内容">
+              <el-input type="textarea" v-model="form.carenr"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="客户反馈">
+              <el-input type="textarea" v-model="form.carecustomerfk"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div style="text-align: center;">
+
+        <el-button @click="editDialog = false">取 消</el-button>
+        <el-button type="primary" @click="editCareClick" :loading="addDictButtonLoading">确 定</el-button>
+      </div>
+
+    </el-dialog>
   </div>
 
 
@@ -211,91 +339,121 @@
 <script>
   import {careHttp} from "../../network/system/care";
 
+
   export default {
     data() {
       return {
+        rowCareId:0,
+
+        addDialog:false,
         buttonDisabled:true,
+        addDictButtonLoading:false,
+        editEmpButtonLoading:false,
+        editDialog:false,
         searchInput:'',
         careZt:'',
-        carelxrcontacts:'',
+
         careData:'',
-        careexecutor:'',
+
         listForm:[],
         tableLoading:'',
         total:0,
         pageNum:1,
-        pageSize:10,
-        // value: '',
-        // input: '',
-        // dialogVisible: false,
-        // tableData: [],
-        // form: {
-        //   careZt:'',
-        //   cusId: '',
-        //   carelxrcontacts:'',
-        //   careexecutor:'',
-        //   carecustomerfk:'',
-        //   carenr:'',
-        //   xlh:'',
-        //   wxr:'',
-        //   gzms:'',
-        //   hf:'',
-        //   zb:'',
-        //   region: '',
-        //   date1: '',
-        //   careData: '',
-        //   delivery: false,
-        //   type: [],
-        //   resource: '',
-        //   desc: ''
-        // },
-        // num: 1,
-        // rules:{
-        //   ghzt:[
-        //     {required: true, message: '请输入活动名称', trigger: 'blur'},
-        //     { min: 5, max: 8, message: '长度在 5 到 8个字符', trigger: 'blur' }
-        //   ],
-        //   date2:[
-        //     {type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-        //   ]
-        // }
+        pageSize:3,
+        value: '',
+        input: '',
+
+        tableData: [],
+        form: {
+          careZt:'',
+          cusId: '',
+          carelxrcontacts:'',
+          careexecutor:'',
+          carecustomerfk:'',
+          carenr:'',
+          region: '',
+          date1: '',
+          careData: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        num: 1,
+        rules:{
+          careZt:[
+            {required: true, message: '请输入活动名称', trigger: 'blur'},
+            { min: 5, max: 8, message: '长度在 5 到 8个字符', trigger: 'blur' }
+          ]
+
+        }
       }
     },
     methods:{
-    //   addBtn(){
-    //     this.dialogVisible = true;
-    //     console.log(123)
-    //   },
-    //   handleClose(done) {
-    //     this.$confirm('确认关闭？')
-    //       .then(_ => {
-    //         done();
-    //       })
-    //       .catch(_ => {});
-    //   },
-    //   onSubmit() {
-    //     console.log('submit!');
-    //   },
-    //
-    //   delBtn(careId) {
-    //     this.$confirm('此操作将永久删除，是否继续','提示',{
-    //       confirmButtonText: '确定',
-    //       cancelButtonText: '取消',
-    //       type: 'warning'
-    //     }).then(() => {
-    //       this.fullscreenLoading = true
-    //       careHttp.del(careId).then(res => {
-    //         if (res.code === 20000) {
-    //           this.$message.success(res.message)
-    //           this.initList()
-    //           this.fullscreenLoading = false
-    //         } else {
-    //           this.$message.error(res.message)
-    //           this.fullscreenLoading = false
-    //         }
-    //       })
-    //     })
-    //   },
+      addClick(){
+        this.$refs.form.validate(valid => {
+          if (!valid) return
+          this.addDictButtonLoading = true
+          careHttp.add(this.form).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+              this.addDialog = false
+              this.addDictButtonLoading = false
+            } else {
+              this.$message({
+                message:res.message,
+                type:"error"
+              })
+              this.addDictButtonLoading = false
+            }
+          })
+        })
+      },
+      editCareClick(){
+        this.editEmpButtonLoading = true
+        this.form.careId = this.rowCareId
+        careHttp.update(this.form).then(res => {
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.initList()
+            this.editEmpButtonLoading = false
+            this.editDialog = false
+          } else {
+            this.$message({
+              message:res.message,
+              type:'error'
+            })
+            this.editEmpButtonLoading = false
+          }
+        })
+      },
+      openEditCare(){
+        this.editDialog = true
+        this.getEmpDetail()
+      },
+      getEmpDetail(){
+        careHttp.get(this.rowCareId).then(res =>{
+          this.form = res.data
+        })
+      },
+      deleteCare() {
+        this.$confirm('此操作将永久删除，是否继续','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          careHttp.del(this.rowCareId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+
+            } else {
+              this.$message.error(res.message)
+            }
+          })
+        })
+      },
     //   editClick() {
     //     this.editDictButtonLoading = true
     //     careHttp.edit(this.editForm).then(res => {
@@ -310,9 +468,10 @@
     //       }
     //     })
     //   },
-    //   editHandleClose() {
-    //     this.$refs.editFormRef.resetFields()
-    //   },
+      editHandleClose() {
+        this.$refs.form.resetFields()
+        this.editEmpButtonLoading = false
+      },
     //   editBtn(careId) {
     //     this.editDialog = true
     //     this.editForm.careId = careId
@@ -340,9 +499,9 @@
     //       })
     //     })
     //   },
-    //   addHandleClose() {
-    //     this.$refs.addFormRef.resetFields()
-    //   },
+      addHandleClose() {
+        this.$refs.form.resetFields()
+      },
     //   initList() {
     //     careHttp.list().then(res => {
     //       this.listForm = res.data
@@ -358,22 +517,23 @@
     //   this.initList()
     //   this.initDict()
       searchInputClick(){
-
+        this.listForm.careZt = this.searchInput
+        careHttp.list(this.listForm).then(res => {
+          this.listForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
       },
-      openAddDialog(){
 
+
+      handleClose(){
+        this.$refs.form.resetFields()
       },
-      resetForm(){
-
-      },
-      openEditCare(){
-
-      },
-      deleteCare(){
-
-      },
-      handleRowClick(){
-
+      handleRowClick(row,event,column) {
+        this.rowCareId = row.careId
+        if (this.careId != 0) {
+          this.buttonDisabled = false
+        }
       },
       iHeaderCellStyle(){
 
@@ -381,14 +541,20 @@
       iHeaderRowStyle(){
 
       },
-      handleCurrentChange(){
-
+      handleCurrentChange(pageIndex){
+        this.pageNum = pageIndex
+        this.pageSize = this.pageSize
+        careHttp.listPage(this.pageNum,this.pageSize).then(res => {
+          this.listForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
       },
       initList(){
         careHttp.listPage(this.pageNum,this.pageSize).then(res =>{
           this.listForm = res.data.list
-          this.total = res.date.total
-          this.pageNum = res.date.pageNum
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
         })
       }
 
@@ -401,31 +567,5 @@
 </script>
 
 <style>
-  /*.el-row {*/
-  /*  margin-bottom: 20px;*/
-  /*}*/
-  /*:last-child {*/
-  /*  margin-bottom: 0;*/
-  /*}*/
 
-  /*.el-col {*/
-  /*  border-radius: 4px;*/
-  /*}*/
-  /*.bg-purple-dark {*/
-  /*  background: white;*/
-  /*}*/
-  /*.bg-purple {*/
-  /*  background: white;*/
-  /*}*/
-  /*.bg-purple-light {*/
-  /*  background: white;*/
-  /*}*/
-  /*.grid-content {*/
-  /*  border-radius: 4px;*/
-  /*  min-height: 10px;*/
-  /*}*/
-  /*.row-bg {*/
-  /*  padding: 10px 0;*/
-  /*  background-color: #f9fafc;*/
-  /*}*/
 </style>

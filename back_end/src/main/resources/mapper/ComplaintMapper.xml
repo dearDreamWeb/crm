@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.ComplaintMapper">
+    <resultMap id="ComplaintResult" type="com.example.entity.request.Complaint">
+        <id property="complaintId" column="complaint_id"/>
+        <result property="complaintZt" column="complaint_complaintzt"/>
+        <result property="complaintReceptionist" column="complaint_receptionist"/>
+        <result property="complaintClassification" column="complaint_classification"/>
+        <result property="complaintDescribe" column="complaint_describe"/>
+        <result property="complaintData" column="complaint_data"/>
+        <result property="complaintComplainants" column="complaint_complainants"/>
+        <result property="complaintUrgent" column="complaint_urgent"/>
+        <result property="complaintHandle" column="complaint_handle"/>
+        <result property="complaintHandlegc" column="complaint_handlegc"/>
+        <result property="complaintCustomerfk" column="complaint_customerfk"/>
+        <result property="complaintHfvisit" column="complaint_hfvisit"/>
+    </resultMap>
+    <insert id="addComplaint" parameterType="com.example.entity.request.Complaint">
+        <selectKey keyProperty="complaintId" keyColumn="complaint_id" resultType="Integer" order="AFTER">
+            SELECT last_insert_id();
+        </selectKey>
+        insert into complaint(complaint_complaintzt,complaint_receptionist,complaint_classification,complaint_describe,complaint_data,complaint_complainants,complaint_urgent,complaint_handle,complaint_handlegc,complaint_customerfk,complaint_hfvisit) VALUES
+        (#{complaintZt},#{complaintReceptionist},#{complaintClassification},#{complaintDescribe},#{complaintData},#{complaintComplainants},#{complaintUrgent},#{complaintHandle},#{complaintHandlegc},#{complaintCustomerfk},#{complaintHfvisit})
+    </insert>
+
+    <update id="updateComplaint" parameterType="com.example.entity.request.Complaint">
+        update complaint set complaintData = #{complaint_data}
+        <if test="complaintZt !=null and complaintZt != ''">
+            ,complaint_complaintzt = #{complaintZt}
+        </if>
+        <if test="complaintReceptionist !=null and complaintReceptionist != ''">
+            ,complaint_receptionist = #{complaintReceptionist}
+        </if>
+        <if test="complaintClassification !=null and complaintClassification != ''">
+            ,complaint_classification = #{complaintClassification}
+        </if>
+        <if test="complaintDescribe !=null and complaintDescribe != ''">
+            ,complaint_describe = #{complaintDescribe}
+        </if>
+        <if test="complaintComplainants !=null and complaintComplainants != ''">
+            ,complaint_complainants = #{complaintComplainants}
+        </if>
+
+        <if test="complaintUrgent !=null and complaintUrgent != ''">
+            ,complaint_urgent = #{complaintUrgent}
+        </if>
+        <if test="complaintHandle !=null and complaintHandle != ''">
+            ,complaint_handle = #{complaintHandle}
+        </if>
+        <if test="complaintHandlegc !=null and complaintHandlegc != ''">
+            ,complaint_handlegc = #{complaintHandlegc}
+        </if>
+        <if test="complaintCustomerfk !=null and complaintCustomerfk != ''">
+            ,complaint_customerfk = #{complaintCustomerfk}
+        </if>
+        <if test="complaintHfvisit !=null and complaintHfvisit != ''">
+            ,complaint_hfvisit = #{complaintHfvisit}
+        </if>
+        where complaintId = #{complaint_id}
+    </update>
+    <delete id="deleteComplaint" parameterType="Integer">
+        UPDATE complaint SET is_delete = 1,version = version + 1
+        WHERE complaintId = #{complaint_id}
+    </delete>
+    <select id="listComplaint" resultMap="ComplaintResult">
+        SELECT complaint_id,complaint_complaintzt,complaint_receptionist,complaint_classification,complaint_describe,complaint_data,complaint_complainants,complaint_urgent,complaint_handle,complaint_handlegc,complaint_customerfk,complaint_hfvisit
+        FROM complaint
+        <where>
+            <if test="complaintZt != null and complaintZt != ''">
+                AND complaint_complaintzt LIKE CONCAT('%',#{complaintZt},'%')
+            </if>
+            <if test="complaintReceptionist != null and complaintReceptionist != ''">
+                AND complaint_receptionist LIKE CONCAT('%',#{complaintReceptionist},'%')
+            </if>
+            <if test="complaintClassification != null and complaintClassification != ''">
+                AND complaint_classification LIKE CONCAT('%',#{complaintClassification},'%')
+            </if>
+        </where>
+    </select>
+</mapper>
