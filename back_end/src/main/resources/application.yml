@@ -21,7 +21,7 @@ server:
   port: 8099
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.example.model
+  type-aliases-package: com.example.entity.request
 qiniu:
   accessKey: xFxGG0o6rZe129GPodzx77HGwQWz_r4xIm7Gg-ts
   secretKey: YVsbx4ZeZ4VQINSgN6HFCzN-t7gXodq8-VRQyrsg
