@@ -23,7 +23,7 @@
           <el-button type="warning" size="mini" icon="el-icon-edit"
                      :disabled="buttonDisabled" @click="openEditDialog">修改线索</el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete"
-                     :disabled="buttonDisabled">删除线索</el-button>
+                     :disabled="buttonDisabled" @click="delClue">删除线索</el-button>
         </el-col>
       </el-row>
 
@@ -226,6 +226,27 @@
       }
     },
     methods: {
+      delClue(clueId) {
+        this.$confirm('此操作将删除改线索，是否继续？','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          clueId = this.rowClueId
+          clueHttp.del(clueId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+            } else {
+              this.$message({
+                message:res.message,
+                type:'error'
+              })
+            }
+          })
+        })
+      },
+
       openBefore() {
         clueHttp.get(this.rowClueId).then(res => {
           if (res.code === 20000) {

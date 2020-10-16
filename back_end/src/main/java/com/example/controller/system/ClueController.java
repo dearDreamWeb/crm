@@ -31,8 +31,10 @@ public class ClueController {
     @SysLog("删除线索")
     @PostMapping("/del")
     @CheckPermissions("system:clue:del")
-    public ResultVo delClue(@RequestBody ClueReq clueReq) {
-        return clueService.delClue(clueReq);
+    public ResultVo delClue(@RequestBody ClueReq clueReq,
+                            HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return clueService.delClue(clueReq,token);
     }
 
     @SysLog("编辑线索")

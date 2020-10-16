@@ -68,6 +68,7 @@ public enum ResultEnum {
     ORDER_NOT_EXIST(80032,"订单不存在"),
 
     CLUE_NOT_BE_EDIT(80033,"您不能修改此条线索"),
+    CLUE_NOT_BE_DEL(80034,"您不能删除此条线索"),
 
     PLACEHOLDER(null,null);//占位符，方便快速编写代码（无其他业务作用）
 

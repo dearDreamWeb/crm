@@ -57,12 +57,22 @@ public class ClueServiceImpl implements ClueService {
     }
 
     @Override
-    public ResultVo delClue(ClueReq clueReq) {
+    public ResultVo delClue(ClueReq clueReq,String token) {
         Integer clueId = clueReq.getClueId();
         ClueResp clue = clueMapper.getClue(clueId);
         if (clue == null) {
             throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
                     ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+        Integer empId = clue.getEmpId();
+        if (empId != 0) {
+            throw new SysException(ResultEnum.CLUE_NOT_BE_DEL.getCode(),
+                    ResultEnum.CLUE_NOT_BE_DEL.getMessage());
+        }
+        EmpResp empResp = clue.getEmpResp();
+        if (empResp == null && !empResp.getToken().equals(token)) {
+            throw new SysException(ResultEnum.CLUE_NOT_BE_DEL.getCode(),
+                    ResultEnum.CLUE_NOT_BE_DEL.getMessage());
         }
         int delClue = clueMapper.delClue(clueId);
         if (delClue != 1) {

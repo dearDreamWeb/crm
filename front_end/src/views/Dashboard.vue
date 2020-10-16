@@ -66,6 +66,8 @@
       <el-col :span="12">
         <el-card header="消息提醒思路">
           在vue加载dom完成后，用create函数请求后台的数据，接收到之后统计消息。然后用element的徽标标记。当用户点击之后调用后台查看消息
+          <hr>
+          信息过期后人性化提示
         </el-card>
       </el-col>
       <el-col :span="12">
@@ -133,6 +135,13 @@
           <el-col>
             <el-card>
               除了超级管理员账号之外，所有账号不能对敏感按钮做操作
+            </el-card>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-card>
+              后期考虑接口文档：丝袜哥
             </el-card>
           </el-col>
         </el-row>

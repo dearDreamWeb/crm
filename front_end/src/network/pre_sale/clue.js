@@ -61,5 +61,14 @@ export const clueHttp = {
       }
     }
     return postJson(params)
+  },
+  del:function (clueId) {
+    let params = {
+      url:'/clue/del',
+      data:{
+        'clueId':clueId
+      }
+    }
+    return postJson(params)
   }
 }
