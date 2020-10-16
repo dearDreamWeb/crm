@@ -35,6 +35,8 @@ public class CareController {
     @SysLog("修改关怀")
     @PostMapping("/update")
     public ResultVo editDict(@RequestBody Care care) {
+
+        System.out.println("待膝盖的数据是："+care);
         return careService.updateCare(care);
     }
 
