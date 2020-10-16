@@ -21,7 +21,7 @@ public class SzOrder {
     private Integer ordState;//订单状态
     private String ordHead;//负责人
     private BigDecimal ordTotalmoney;//总金额
-    private Date ordCreatetime;// 创建时间
+    private String ordStarttime;// 开始时间(签单时间）
     private Date ordDealtime;//成交时间
     private Date ordFahuotime;//发货时间
     private BigDecimal ordHuikuanmoney;//回款金额
@@ -31,6 +31,7 @@ public class SzOrder {
     private String ordCountry;//区/县
     private String ordDetail;//区/县
     private String ordPhone;//收货手机号
+    private String ordCreatetime;//订单创建时间（不是签单时间)
     private Integer cusId;//客户编号
     private Integer offerId;//报价编号
     private Integer pageNum;
