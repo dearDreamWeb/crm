@@ -6,6 +6,7 @@ import com.example.entity.ResultVo;
 import com.example.entity.request.SzOrder;
 import com.example.model.mapper.SzOrderMapper;
 import com.example.service.SzOrderService;
+import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -49,17 +50,13 @@ public class SzOrderServicelmpl implements SzOrderService {
     }
     @Override
     public ResultVo editszOrder(SzOrder szorder) {
-        /*
-        care.setCarelxrcontacts(care.getCarelxrcontacts());
-        care.setCareData(DateUtils.getDate());
-        */
         System.out.println("【订单】修改修改...");
         SzOrder deptResp = szorderMapper.getszOrder(szorder.getOrdId());
         if (deptResp == null) {
-            throw new SysException(ResultEnum.DEPT_NOT_EXIST.getCode(),
-                    ResultEnum.DEPT_NOT_EXIST.getMessage());
+            throw new SysException(ResultEnum.ORDER_UPDATE_FAIL.getCode(),
+                    ResultEnum.ORDER_UPDATE_FAIL.getMessage());
         }
-
+        /*szorder.setOrdStarttime(DateUtils.getDate());*/
         int editszOrder = szorderMapper.editszOrder(szorder);
         if (editszOrder != 1) {
             throw new SysException(ResultEnum.ORDER_UPDATE_FAIL.getCode(),

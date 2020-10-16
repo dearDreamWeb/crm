@@ -5,13 +5,11 @@ export const orderHttp = {
     let params = {
       url:'/order/add',
       data:{
+        'ordTheme':order.ordTheme,
         'ordHead':order.ordHead,
         'ordTotalmoney':order.ordTotalmoney,
-        'ordProvince':order.ordProvince,
-        'ordCity':order.ordCity,
-        'ordCountry':order.ordCountry,
-        'ordDetail':order.ordDetail,
-        'ordPhone':order.ordPhone
+        'ordStarttime':order.ordStarttime,
+        'ordState':order.ordState
       }
     }
     return postJson(params)
@@ -29,13 +27,12 @@ export const orderHttp = {
     let params = {
       url:'/order/edit',
       data:{
+        'ordId':order.ordId,
+        'ordTheme':order.ordTheme,
         'ordHead':order.ordHead,
         'ordTotalmoney':order.ordTotalmoney,
-        'ordProvince':order.ordProvince,
-        'ordCity':order.ordCity,
-        'ordCountry':order.ordCountry,
-        'ordDetail':order.ordDetail,
-        'ordPhone':order.ordPhone
+        'ordStarttime':order.ordStarttime,
+        'ordState':order.ordState
       }
     }
     return postJson(params)
@@ -53,13 +50,12 @@ export const orderHttp = {
     let params = {
       url:'/order/list_all',
       data:{
+        'ordTheme':order.ordTheme,
         'ordHead':order.ordHead,
         'ordTotalmoney':order.ordTotalmoney,
-        'ordProvince':order.ordProvince,
-        'ordCity':order.ordCity,
-        'ordCountry':order.ordCountry,
-        'ordDetail':order.ordDetail,
-        'ordPhone':order.ordPhone
+        'ordStarttime':order.ordStarttime,
+        'ordState':order.ordState
+
       }
     }
     return get(params)

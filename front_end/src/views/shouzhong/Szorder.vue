@@ -3,12 +3,13 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input v-model="searchInput" size="mini" placeholder="请输入内容" clearable>
+          <el-input v-model="searchInput" size="mini" placeholder="请输入主题进行查询" clearable>
             <el-button @click="searchInputClick" slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
         <el-col :span="12">
           <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">添加订单</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
           <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
         <el-col :span="6">
@@ -19,17 +20,73 @@
         </el-col>
       </el-row>
 
+      <transition name="el-zoom-in-top">
+        <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px;">
+          <el-form :model="searchForm" ref="advancedSearchFormRef"
+                   size="mini" label-position="right" label-width="80px">
+            <el-row>
+              <el-col>
+                <el-form-item label="高级搜索"></el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <el-form-item prop="ordTheme" label="主题">
+                  <el-input v-model="searchForm.ordTheme" size="mini" placeholder="请输入昵称" clearable></el-input>
+                </el-form-item>
+              </el-col>
+
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="10">
+                <el-form-item label="日期">
+                  <el-date-picker v-model="searchForm.startDate" format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                  placeholder="请输入"></el-date-picker>
+                  <span>-</span>
+                  <el-date-picker v-model="searchForm.endDate" format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                  placeholder="请输入"></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item prop="empStatus" label="订单状态">
+                  <el-select v-model="searchForm.empStatus" clearable>
+                    <el-option label="执行中" value="1"></el-option>
+                    <el-option label="已完成" value="0"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              
+              <el-col :span="4">
+                <el-form-item>
+                  <el-button size="mini" @click="advancedQueryClick"
+                             type="primary" icon="el-icon-search"></el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </el-card>
+      </transition>
+
       <el-table :data="listForm" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="ordTheme" label="主题" sortable></el-table-column>
-        <el-table-column prop="ordHead" label="负责人" sortable></el-table-column>
         <el-table-column prop="ordTotalmoney" label="总金额" sortable></el-table-column>
-        <el-table-column prop="ordCreatetime" label="创建时间" sortable></el-table-column>
-        <el-table-column prop="ordDealtime" label="成交时间" sortable></el-table-column>
-        <el-table-column prop="ordFahuotime" label="发货时间" sortable></el-table-column>
-        <el-table-column prop="ordHuikuanmoney" label="回款金额" sortable></el-table-column>
+        <el-table-column prop="ordStarttime" label="开始时间" sortable>
+          <template slot-scope="scope">
+            {{scope.row.ordStarttime | dateFormat}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="ordDealtime" label="成交时间" sortable>
+          <template slot-scope="scope">
+            {{scope.row.ordDealtime | dateFormat}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="ordState" label="订单状态" sortable></el-table-column>
+        <el-table-column prop="ordHead" label="负责人" sortable></el-table-column>
       </el-table>
       <el-pagination background
                      @current-change="handleCurrentChange"
@@ -44,18 +101,31 @@
                label-position="right" :rules="formRules">
         <el-row>
           <el-col :span="12">
+            <el-form-item label="主题" prop="ordTheme">
+              <el-input v-model="addForm.ordTheme" size="mini" placeholder="请输入主题" clearable/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="负责人" prop="ordHead">
               <el-input v-model="addForm.ordHead" size="mini" placeholder="请输入负责人" clearable/>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="总金额" prop="ordTotalmoney">
               <el-input v-model="addForm.ordTotalmoney" size="mini" placeholder="总金额" clearable/>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
+          <el-col :span="12">
+            <el-form-item label="订单状态" prop="ordState" >
+              <el-select v-model="addForm.ordState" clearable>
+                <el-option label="执行中" value="31"></el-option>
+                <el-option label="已完成" value="32"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+         <!-- <el-col :span="8">
             <el-form-item label="省" prop="ordProvince">
               <el-input v-model="addForm.ordProvince" size="mini" placeholder="省" clearable/>
             </el-form-item>
@@ -70,18 +140,17 @@
               <el-input v-model="addForm.ordCountry" size="mini" placeholder="区/县" clearable/>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="24">
             <el-form-item label="详细地址" prop="ordDetail">
               <el-input v-model="addForm.ordDetail" size="mini" placeholder="详细地址" clearable/>
             </el-form-item>
-          </el-col>
+          </el-col>-->
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="手机号" prop="ordPhone">
-              <el-input v-model="addForm.ordPhone" size="mini" placeholder="收货手机号" clearable/>
+            <el-form-item label="开始时间">
+              <el-date-picker type="date" placeholder="选择日期" v-model="addForm.ordStarttime" style="width: 100%;">
+              </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -90,6 +159,56 @@
         <el-button @click="addDialog = false">取消</el-button>
         <el-button type="primary" @click="addOrderClick"
                    :loading="addOrderButtonLoading">确定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog title="订单修改" :visible.sync="editDialog" @close="editHandleClose">
+      <el-form :model="editForm" label-width="100px" :rules="formRules"
+               label-position="right" ref="editFormRef">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="主题" prop="ordTheme">
+              <el-input v-model="editForm.ordTheme" size="mini"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="负责人" prop="ordHead">
+              <el-input v-model="editForm.ordHead" size="mini"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="总金额" prop="ordTotalmoney">
+              <el-input v-model="editForm.ordTotalmoney" size="mini"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="订单状态" prop="ordState">
+              <el-radio-group v-model="editForm.ordState">
+                <el-radio :label=31>执行中</el-radio>
+                <el-radio :label=32>已完成</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="12">
+            <el-form-item label="开始时间" prop="ordStarttime">
+              <el-date-picker v-model="editForm.ordStarttime" size="mini"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <!--<el-col :span="12">
+            <el-form-item label="成交时间" prop="ordStarttime">
+              <el-date-picker v-model="editForm.ordStarttime" size="mini"></el-date-picker>
+            </el-form-item>
+          </el-col>-->
+        </el-row>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="editDialog = false">取消</el-button>
+        <el-button type="primary" @click="editOrderClick"
+                   :loading="editOrderButtonLoading">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -104,60 +223,87 @@
     data() {
       return {
         searchInput:'',
-        editForm:{},
-        /*formRules:{
-          ordHead:[
-            {required:true,message:'请输入订单名称',trigger:'blur'},
-          ]
-        },*/
+        editForm:{
+
+        },
+        searchForm:{
+
+          pageNum:1,
+          pageSize:5
+        },
         addDialog:false,
         rowordId: 0,
         tableLoading:false,
         buttonDisabled:true,
+        advancedSearch:false,
         listForm:[],
         pageNum:1,
-        pageSize:2,
+        pageSize:5,
         total:1,
         addForm: {
           ordTheme:'',
-          ordHead:'',
           ordTotalmoney:'',
-          ordCreatetime:'',
+          ordStarttime:'',
           ordDealtime:'',
-          ordFahuotime:'',
-          ordHuikuanmoney:'',
+          ordState:'',
+          ordHead:'',
           pageNum:1,
-          pageSize:2
+          pageSize:5
         },
         formRules:{
-
+          ordHead:[
+            {required:true,message:'请输入订单名称',trigger:'blur'},
+          ]
         },
         addOrderButtonLoading:false,
-
+        editDialog:false,
+        editOrderButtonLoading:false,
       }
     },
     methods: {
       searchInputClick() {
-        this.listForm.ordHead = this.searchInput
+        this.listForm.ordTheme = this.searchInput
         orderHttp.list(this.listForm).then(res => {
           this.listForm = res.data.list
+          this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
       },
       resetForm() {
-        this.searchInput = ''
+        // this.searchInput = ''
       },
       editHandleClose() {
         this.$refs.editFormRef.resetFields()
+        this.editOrderButtonLoading = false
       },
       addHandleClose(){
         /*添加订单*/
       },
       openEditOrder(){
         /*修改订单*/
+        this.editDialog = true
+        this.getOrderDetail()
       },
-      delOrder(){
+      delOrder(ordId){
         /*删除订单*/
+        this.$confirm('确定删除此订单吗','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          ordId = this.rowordId
+          orderHttp.delOrder(ordId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+            } else {
+              this.$message({
+                message:res.message,
+                type:'error'
+              })
+            }
+          })
+        })
       },
       handleCurrentChange(pageIndex) {
         this.pageNum = pageIndex
@@ -168,9 +314,8 @@
           this.pageNum = res.data.pageNum
         })
       },
-
-      getDeptDetail() {
-        orderHttp.getDept(this.rowordId).then(res => {
+      getOrderDetail() {
+        orderHttp.getOrder(this.rowordId).then(res => {
           this.editForm = res.data
         })
       },
@@ -178,6 +323,10 @@
         this.addDialog = true
       },
       handleRowClick(row,event,column) {
+        this.rowordId= row.ordId
+        if (this.rowOrdId != 0) {
+          this.buttonDisabled = false
+        }
       },
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'
@@ -186,7 +335,42 @@
         return 'padding:5px'
       },
       addOrderClick(){
-
+        this.$refs.addFormRef.validate(valid => {
+          if (!valid) return
+          this.addOrderButtonLoading = true
+          orderHttp.addOrder(this.addForm).then(res =>{
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+              this.addOrderButtonLoading = false
+              this.addDialog = false
+            } else {
+              this.addOrderButtonLoading = false
+              this.$message({
+                message:res.message,
+                type:"error"
+              })
+            }
+          })
+        })
+      },
+      editOrderClick(){
+        this.editOrderButtonLoading = true
+        this.editForm.ordId = this.rowordId
+        orderHttp.editOrder(this.editForm).then(res => {
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.initList()
+            this.editOrderButtonLoading = false
+            this.editDialog = false
+          } else {
+            this.$message({
+              message:res.message,
+              type:'error'
+            })
+            this.editOrderButtonLoading = false
+          }
+        })
       },
       initList() {
         orderHttp.listPage(this.pageNum,this.pageSize).then(res => {
