@@ -210,16 +210,16 @@
       :visible.sync="addDialog"
       width="50%"
       @close="handleClose">
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="addform" :model="addform" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="8">
             <el-form-item label="关怀主题" prop="careZt">
-              <el-input v-model="form.careZt"></el-input>
+              <el-input v-model="addform.careZt"></el-input>
             </el-form-item>
           </el-col >
           <el-col :span="8">
             <el-form-item label="联系人">
-              <el-input v-model="form.carelxrcontacts"></el-input>
+              <el-input v-model="addform.carelxrcontacts"></el-input>
             </el-form-item>
           </el-col>
 
@@ -237,26 +237,26 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="日期">
-              <el-date-picker type="date" placeholder="选择日期" v-model="form.careData" style="width: 100%;"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期" v-model="addform.careData" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="执行人">
-              <el-input v-model="form.careexecutor"></el-input>
+              <el-input v-model="addform.careexecutor"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="关怀内容">
-              <el-input type="textarea" v-model="form.carenr"></el-input>
+              <el-input type="textarea" v-model="addform.carenr"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="客户反馈">
-              <el-input type="textarea" v-model="form.carecustomerfk"></el-input>
+              <el-input type="textarea" v-model="addform.carecustomerfk"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -264,7 +264,8 @@
       <div style="text-align: center;">
 
         <el-button @click="addDialog = false">取 消</el-button>
-        <el-button type="primary" @click="addClick" :loading="addDictButtonLoading">确 定</el-button>
+        <el-button type="primary" @click="addClick"
+                   :loading="addDictButtonLoading">确 定</el-button>
       </div>
 
     </el-dialog>
@@ -274,16 +275,16 @@
       :visible.sync="editDialog"
       width="50%"
       @close="editHandleClose">
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="updateform" :model="updateform" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="8">
             <el-form-item label="关怀主题" prop="careZt">
-              <el-input v-model="form.careZt"></el-input>
+              <el-input v-model="updateform.careZt"></el-input>
             </el-form-item>
           </el-col >
           <el-col :span="8">
             <el-form-item label="联系人">
-              <el-input v-model="form.carelxrcontacts"></el-input>
+              <el-input v-model="updateform.carelxrcontacts"></el-input>
             </el-form-item>
           </el-col>
 
@@ -301,26 +302,26 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="日期">
-              <el-date-picker type="date" placeholder="选择日期" v-model="form.careData" style="width: 100%;"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期" v-model="updateform.careData" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="执行人">
-              <el-input v-model="form.careexecutor"></el-input>
+              <el-input v-model="updateform.careexecutor"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="关怀内容">
-              <el-input type="textarea" v-model="form.carenr"></el-input>
+              <el-input type="textarea" v-model="updateform.carenr"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="客户反馈">
-              <el-input type="textarea" v-model="form.carecustomerfk"></el-input>
+              <el-input type="textarea" v-model="updateform.carecustomerfk"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -328,7 +329,7 @@
       <div style="text-align: center;">
 
         <el-button @click="editDialog = false">取 消</el-button>
-        <el-button type="primary" @click="editCareClick" :loading="addDictButtonLoading">确 定</el-button>
+        <el-button type="warning" @click="editCareClick" :loading="editDictButtonLoading">确 定</el-button>
       </div>
 
     </el-dialog>
@@ -344,11 +345,26 @@
     data() {
       return {
         rowCareId:0,
-
+        addform:{
+          careZt:'',
+          cusId: '',
+          carelxrcontacts:'',
+          careexecutor:'',
+          carecustomerfk:'',
+          carenr:'',
+          region: '',
+          date1: '',
+          careData: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        updateform:{},
         addDialog:false,
         buttonDisabled:true,
         addDictButtonLoading:false,
-        editEmpButtonLoading:false,
+        editDictButtonLoading:false,
         editDialog:false,
         searchInput:'',
         careZt:'',
@@ -383,7 +399,7 @@
         rules:{
           careZt:[
             {required: true, message: '请输入活动名称', trigger: 'blur'},
-            { min: 5, max: 8, message: '长度在 5 到 8个字符', trigger: 'blur' }
+            { min: 4, max: 8, message: '长度在 4 到 8个字符', trigger: 'blur' }
           ]
 
         }
@@ -391,10 +407,11 @@
     },
     methods:{
       addClick(){
-        this.$refs.form.validate(valid => {
+        console.log(this.$refs)
+        this.$refs["addform"].validate(valid => {
           if (!valid) return
           this.addDictButtonLoading = true
-          careHttp.add(this.form).then(res => {
+          careHttp.add(this.addform).then(res => {
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.initList()
@@ -411,30 +428,31 @@
         })
       },
       editCareClick(){
-        this.editEmpButtonLoading = true
-        this.form.careId = this.rowCareId
-        careHttp.update(this.form).then(res => {
+        this.editDictButtonLoading = true
+        this.updateform.careId = this.rowCareId
+        careHttp.update(this.updateform).then(res => {
           if (res.code === 20000) {
             this.$message.success(res.message)
             this.initList()
-            this.editEmpButtonLoading = false
+            this.editDictButtonLoading = false
             this.editDialog = false
           } else {
             this.$message({
               message:res.message,
               type:'error'
             })
-            this.editEmpButtonLoading = false
+            this.editDictButtonLoading = false
           }
         })
       },
       openEditCare(){
-        this.editDialog = true
+        this.editDialog = true;
         this.getEmpDetail()
       },
       getEmpDetail(){
         careHttp.get(this.rowCareId).then(res =>{
-          this.form = res.data
+          console.log("编辑获得的数据",res.data);
+          this.updateform = res.data;
         })
       },
       deleteCare() {
@@ -454,68 +472,16 @@
           })
         })
       },
-    //   editClick() {
-    //     this.editDictButtonLoading = true
-    //     careHttp.edit(this.editForm).then(res => {
-    //       if (res.code === 20000) {
-    //         this.$message.success(res.message)
-    //         this.initList()
-    //         this.editDictButtonLoading = false
-    //         this.editDialog = false
-    //       } else {
-    //         this.$message.error(res.message)
-    //         this.editDictButtonLoading = false
-    //       }
-    //     })
-    //   },
+
       editHandleClose() {
-        this.$refs.form.resetFields()
-        this.editEmpButtonLoading = false
+        this.$refs["updateform"].resetFields()
+        this.editDictButtonLoading = false
       },
-    //   editBtn(careId) {
-    //     this.editDialog = true
-    //     this.editForm.careId = careId
-    //     careHttp.get(careId).then(res => {
-    //       this.editForm = res.data
-    //     })
-    //   },
-    //   addClick() {
-    //     this.$refs.addFormRef.validate(valid => {
-    //       if (!valid) return
-    //       this.addDictButtonLoading = true
-    //       careHttp.add(this.addForm).then(res => {
-    //         if (res.code === 20000) {
-    //           this.$message.success(res.message)
-    //           this.initList()
-    //           this.addDialog = false
-    //           this.addDictButtonLoading = false
-    //         } else {
-    //           this.$message({
-    //             message:res.message,
-    //             type:"error"
-    //           })
-    //           this.addDictButtonLoading = false
-    //         }
-    //       })
-    //     })
-    //   },
+
       addHandleClose() {
-        this.$refs.form.resetFields()
+        this.$refs["addform"].resetFields()
       },
-    //   initList() {
-    //     careHttp.list().then(res => {
-    //       this.listForm = res.data
-    //     })
-    //   },
-    //   initDict() {
-    //     careHttp.getPidList().then(res => {
-    //       this.dictOption = res.data
-    //     })
-    //   }
-    // },
-    // created() {
-    //   this.initList()
-    //   this.initDict()
+
       searchInputClick(){
         this.listForm.careZt = this.searchInput
         careHttp.list(this.listForm).then(res => {
@@ -527,7 +493,7 @@
 
 
       handleClose(){
-        this.$refs.form.resetFields()
+        this.$refs["addform"].resetFields()
       },
       handleRowClick(row,event,column) {
         this.rowCareId = row.careId

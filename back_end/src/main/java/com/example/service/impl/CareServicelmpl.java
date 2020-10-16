@@ -89,7 +89,7 @@ public class CareServicelmpl implements CareService {
         }
 //        care.setCarelxrcontacts(care.getCarelxrcontacts());
 //        care.setCareData(DateUtils.getDate());
-        int updateCare = careMapper.updateCare(care);
+        int updateCare = careMapper.updateCare(careReq);
         if (updateCare != 1) {
             throw new SysException(ResultEnum.DICT_UPDATE_FAIL.getCode(),
                     ResultEnum.DICT_UPDATE_FAIL.getMessage());
