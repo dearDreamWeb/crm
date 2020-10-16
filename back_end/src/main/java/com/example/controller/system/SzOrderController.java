@@ -7,6 +7,8 @@ import com.example.service.SzOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+
 /**
  * @author: yangqianqian
  * @date: 2020/10/10
@@ -21,6 +23,7 @@ public class SzOrderController {
     @SysLog("添加订单")
     @PostMapping("/add")
     public ResultVo addszOrder(@RequestBody SzOrder szorder){
+        /*szorder.setOrdCreatetime(new Timestamp(System.currentTimeMillis()));*/
         return szorderService.addszOrder(szorder);
     }
 

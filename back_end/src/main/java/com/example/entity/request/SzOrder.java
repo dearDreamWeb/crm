@@ -18,6 +18,7 @@ YQQ
 public class SzOrder {
     private Integer ordId;//订单编号
     private String ordTheme;//主题
+    private Integer ordState;//订单状态
     private String ordHead;//负责人
     private BigDecimal ordTotalmoney;//总金额
     private Date ordCreatetime;// 创建时间
@@ -29,7 +30,7 @@ public class SzOrder {
     private String ordCity;//市
     private String ordCountry;//区/县
     private String ordDetail;//区/县
-    private Integer ordPhone;//收货手机号
+    private String ordPhone;//收货手机号
     private Integer cusId;//客户编号
     private Integer offerId;//报价编号
     private Integer pageNum;

@@ -49,12 +49,17 @@ public class SzOrderServicelmpl implements SzOrderService {
     }
     @Override
     public ResultVo editszOrder(SzOrder szorder) {
+        /*
+        care.setCarelxrcontacts(care.getCarelxrcontacts());
+        care.setCareData(DateUtils.getDate());
+        */
         System.out.println("【订单】修改修改...");
         SzOrder deptResp = szorderMapper.getszOrder(szorder.getOrdId());
         if (deptResp == null) {
             throw new SysException(ResultEnum.DEPT_NOT_EXIST.getCode(),
                     ResultEnum.DEPT_NOT_EXIST.getMessage());
         }
+
         int editszOrder = szorderMapper.editszOrder(szorder);
         if (editszOrder != 1) {
             throw new SysException(ResultEnum.ORDER_UPDATE_FAIL.getCode(),
