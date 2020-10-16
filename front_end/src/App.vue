@@ -31,6 +31,13 @@ export default {
           path:'/login'
         })
       },60*60*1000)
+    },
+    openMessage() {
+      this.$notify({
+        title: '提示',
+        message: '身份信息过期，请重新登录',
+        duration: 0
+      });
     }
   },
   created() {
