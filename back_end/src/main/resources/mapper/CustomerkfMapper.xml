@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.CustomerkfMapper">
+    <resultMap id="CustomerkfResult" type="com.example.entity.request.Customerkf">
+        <id property="customerId" column="customer_id"/>
+        <result property="customerTheme" column="customer_theme"/>
+        <result property="customerServicelx" column="customer_servicelx"/>
+        <result property="customerServicefs" column="customer_servicefs"/>
+
+        <result property="customerData" column="customer_data"/>
+        <result property="customerKhcontacts" column="customer_khcontacts"/>
+        <result property="customerState" column="customer_state"/>
+        <result property="customerExecutor" column="customer_executor"/>
+        <result property="customerServicenr" column="customer_servicenr"/>
+        <result property="customerCustomerfk" column="customer_customerfk"/>
+
+    </resultMap>
+    <insert id="addCustomerkf" parameterType="com.example.entity.request.Customerkf">
+        <selectKey keyProperty="customerId" keyColumn="customer_id" resultType="Integer" order="AFTER">
+            SELECT last_insert_id();
+        </selectKey>
+        insert into customer_service(customer_theme,customer_servicelx,customer_servicefs,customer_data,customer_khcontacts,customer_state,customer_executor,customer_servicenr,customer_customerfk) VALUES
+        (#{customerTheme},#{customerServicelx},#{customerServicefs},#{customerData},#{customerKhcontacts},#{customerState},#{customerExecutor},#{customerServicenr},#{customerCustomerfk})
+    </insert>
+
+    <update id="updateCustomerkf" parameterType="com.example.entity.request.Customerkf">
+        update customer_service set customerData = #{customer_data}
+        <if test="customerTheme !=null and customerTheme != ''">
+            ,customer_theme = #{customerTheme}
+        </if>
+        <if test="customerServicelx !=null and customerServicelx != ''">
+            ,customer_servicelx = #{customerServicelx}
+        </if>
+        <if test="customerServicefs !=null and customerServicefs != ''">
+            ,customer_servicefs = #{customerServicefs}
+        </if>
+        <if test="customerKhcontacts !=null and customerKhcontacts != ''">
+            ,customer_khcontacts = #{customerKhcontacts}
+        </if>
+        <if test="customerState !=null and customerState != ''">
+            ,customer_state = #{customerState}
+        </if>
+
+        <if test="customerExecutor !=null and customerExecutor != ''">
+            ,customer_executor = #{customerExecutor}
+        </if>
+        <if test="customerServicenr !=null and customerServicenr != ''">
+            ,customer_servicenr = #{customerServicenr}
+        </if>
+        <if test="customerCustomerfk !=null and customerCustomerfk != ''">
+            ,customer_customerfk = #{customerCustomerfk}
+        </if>
+        where customerId = #{customer_id}
+    </update>
+    <delete id="deleteCustomerkf" parameterType="Integer">
+        UPDATE customer_service SET is_delete = 1,version = version + 1
+        WHERE customerId = #{customer_id}
+    </delete>
+    <select id="listCustomerkf" resultMap="CustomerkfResult">
+        SELECT customer_id,customer_theme,customer_servicelx,customer_servicefs,customer_data,customer_khcontacts,customer_state,customer_executor,customer_servicenr,customer_customerfk
+        FROM customer_service
+        <where>
+            <if test="customerTheme != null and customerTheme != ''">
+                AND customer_theme LIKE CONCAT('%',#{customerTheme},'%')
+            </if>
+            <if test="customerServicelx != null and customerServicelx != ''">
+                AND customer_servicelx LIKE CONCAT('%',#{customerServicelx},'%')
+            </if>
+            <if test="customerServicefs != null and customerServicefs != ''">
+                AND customer_servicefs LIKE CONCAT('%',#{customerServicefs},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

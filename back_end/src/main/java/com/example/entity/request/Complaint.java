@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -23,5 +22,6 @@ public class Complaint {
     private String complaintCustomerfk;//客户反馈
     private String complaintHfvisit;//回访确认
     private String cusId;//客户id
-
+    private Integer pageNum;
+    private Integer pageSize;
 }

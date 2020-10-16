@@ -10,7 +10,7 @@ import com.example.entity.request.Care;
 public interface CareService {
     ResultVo addCare(Care care);
     ResultVo updateCare(Care careReq);
-    ResultVo deleteCare(Care careReq);
+    ResultVo deleteCare(Integer careId);
     ResultVo listCare(Care care);
     ResultVo getCare(Integer careId);
 }

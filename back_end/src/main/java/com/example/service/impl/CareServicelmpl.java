@@ -43,16 +43,16 @@ public class CareServicelmpl implements CareService {
     }
 
     @Override
-    public ResultVo deleteCare(Care careReq) {
-        Care care = careMapper.getCare(careReq.getCareId());
+    public ResultVo deleteCare(Integer careId) {
+        Care care = careMapper.getCare(careId);
         if (care == null) {
-            throw new SysException(ResultEnum.DICT_NOT_EXIST.getCode(),
-                    ResultEnum.DICT_NOT_EXIST.getMessage());
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
         }
-        int deleteCare = careMapper.deleteCare(care.getCareId());
+        int deleteCare = careMapper.deleteCare(careId);
         if (deleteCare != 1) {
-            throw new SysException(ResultEnum.DICT_DEL_FAIL.getCode(),
-                    ResultEnum.DICT_DEL_FAIL.getMessage());
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
         }
         return ResultUtils.response(deleteCare);
     }
@@ -87,8 +87,8 @@ public class CareServicelmpl implements CareService {
             throw new SysException(ResultEnum.DICT_NOT_EXIST.getCode(),
                     ResultEnum.DICT_NOT_EXIST.getMessage());
         }
-        care.setCarelxrcontacts(care.getCarelxrcontacts());
-        care.setCareData(DateUtils.getDate());
+//        care.setCarelxrcontacts(care.getCarelxrcontacts());
+//        care.setCareData(DateUtils.getDate());
         int updateCare = careMapper.updateCare(care);
         if (updateCare != 1) {
             throw new SysException(ResultEnum.DICT_UPDATE_FAIL.getCode(),

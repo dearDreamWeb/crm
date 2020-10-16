@@ -16,5 +16,5 @@ public interface CareMapper {
     Care getCare(Integer careId);
     int addCare(Care care);
     int updateCare(Care care);
-    int deleteCare(int careId);
+    int deleteCare(Integer careId);
 }
