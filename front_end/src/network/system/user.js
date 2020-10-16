@@ -95,5 +95,11 @@ export const userHttp = {
       }
     }
     return get(params)
+  },
+  list:function () {
+    let params = {
+      url:'/emp/list'
+    }
+    return get(params)
   }
 }

@@ -12,6 +12,6 @@ public interface ClueService {
     ResultVo addClue(ClueReq clueReq);
     ResultVo delClue(ClueReq clueReq);
     ResultVo editClue(ClueReq clueReq);
-    ResultVo getClue(Integer clueId);
+    ResultVo getClue(Integer clueId,String token);
     ResultVo listClue(ClueReq clueReq);
 }

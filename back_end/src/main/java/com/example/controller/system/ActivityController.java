@@ -1,5 +1,6 @@
 package com.example.controller.system;
 
+import com.example.anno.CheckPermissions;
 import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.ActivityReq;
@@ -20,18 +21,21 @@ public class ActivityController {
 
     @SysLog("添加活动")
     @PostMapping("/add")
+    @CheckPermissions("system:activity:add")
     public ResultVo addActivity(@RequestBody ActivityReq activityReq) {
         return activityService.addActivity(activityReq);
     }
 
     @SysLog("删除活动")
     @PostMapping("/del")
+    @CheckPermissions("system:activity:del")
     public ResultVo delActivity(@RequestBody ActivityReq activityReq) {
         return activityService.delActivity(activityReq);
     }
 
     @SysLog("编辑活动")
     @PostMapping("/edit")
+    @CheckPermissions("system:activity:edit")
     public ResultVo editActivity(@RequestBody ActivityReq activityReq) {
         return activityService.editActivity(activityReq);
     }
@@ -52,6 +56,7 @@ public class ActivityController {
     }
 
     @PostMapping("/batch_edit")
+    @CheckPermissions("system:activity:auth")
     public ResultVo batchEdit(@RequestBody ActivityReq activityReq) {
         return activityService.batchEditActivity(activityReq);
     }

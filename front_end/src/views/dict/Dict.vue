@@ -209,6 +209,7 @@
       },
       addHandleClose() {
         this.$refs.addFormRef.resetFields()
+        this.addForm.pid = ''
       },
       initList() {
         dictHttp.tree().then(res => {

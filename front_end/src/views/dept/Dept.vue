@@ -89,7 +89,8 @@
       </el-tree>
       <span slot="footer">
         <el-button @click="allotDialog = false">取消</el-button>
-        <el-button type="primary" @click="allotClick">确定</el-button>
+        <el-button type="primary" @click="allotClick"
+                   :loading="authMenuButtonLoading">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -103,6 +104,7 @@
     name: "Dept",
     data() {
       return {
+        authMenuButtonLoading:false,
         allotDialog:false,
         searchInput:'',
         editDialog:false,
@@ -147,11 +149,14 @@
           ...this.$refs.treeRef.getCheckedKeys(),//获取全选的menuId
           ...this.$refs.treeRef.getHalfCheckedKeys()//获取半选的menuId
         ]
+        this.authMenuButtonLoading = true
         deptHttp.auth(this.dept).then(res => {
           if (res.code === 20000) {
             this.$message.success(res.message)
+            this.authMenuButtonLoading = false
           } else {
             this.$message.error(res.message)
+            this.authMenuButtonLoading = false
           }
           this.allotDialog = false
         })

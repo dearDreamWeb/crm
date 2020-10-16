@@ -58,14 +58,23 @@
       <el-col>
         <el-card>
           任务调度待解决<hr>
-          10月14待完成任务：线索模块前后端增删改查
+          10月15待完成任务：线索模块前后端增删改查
         </el-card>
       </el-col>
     </el-row>
-    <el-row>
-      <el-col>
+    <el-row :gutter="20">
+      <el-col :span="12">
         <el-card header="消息提醒思路">
           在vue加载dom完成后，用create函数请求后台的数据，接收到之后统计消息。然后用element的徽标标记。当用户点击之后调用后台查看消息
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card header="删除时业务">
+          删除一条主要数据时，考虑其余表的数据引用，重要时不可删除或更改状态
+          <hr>
+          使用弹框添加的线索，后续处理（差不多已完善）
+          <hr>
+          删除线索只能由其所属员工删除
         </el-card>
       </el-col>
     </el-row>
@@ -80,52 +89,6 @@
             <el-col :span="4" class="text-info">2020-9-25</el-col>
           </el-row>
         </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-row>
-          <el-col>
-            <el-card>
-              <div slot="header">
-                <span>热销商品</span>
-              </div>
-              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
-                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
-              </div>
-              <hr>
-              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
-                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
-              </div>
-              <hr>
-              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
-                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
-              </div>
-              <hr>
-              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
-                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
-              </div>
-              <hr>
-              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
-                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
-              </div>
-              <hr>
-              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
-                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
-              </div>
-              <hr>
-              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
-                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
-              </div>
-              <hr>
-              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
-                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
-              </div>
-              <hr>
-              <div class="text-primary">2020联想(Lenovo)小新Ar14锐龙版轻海本14
-                <el-tag type="danger" size="mini" class="float-right">¥ 4599</el-tag>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
       </el-col>-->
       <el-col :span="6">
         <el-row>
@@ -155,6 +118,21 @@
               开源工具包 JCronTab
               <hr>
               https://developer.ibm.com/zh/articles/j-lo-taskschedule/
+            </el-card>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col>
+            <el-card>
+              获客页面的表单提交验证，前台后台
+            </el-card>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-card>
+              除了超级管理员账号之外，所有账号不能对敏感按钮做操作
             </el-card>
           </el-col>
         </el-row>

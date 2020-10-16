@@ -8,6 +8,8 @@ import com.example.service.ClueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author: pengjia
  * @date: 2020/10/12
@@ -41,12 +43,14 @@ public class ClueController {
     }
 
     @GetMapping
-    public ResultVo getClue(@RequestParam("clueId")Integer clueId) {
-        return clueService.getClue(clueId);
+    public ResultVo getClue(@RequestParam("clueId")Integer clueId,
+                            HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return clueService.getClue(clueId,token);
     }
 
     @GetMapping("/list")
-    public ResultVo listClue(@RequestBody ClueReq clueReq) {
+    public ResultVo listClue(ClueReq clueReq) {
         return clueService.listClue(clueReq);
     }
 
