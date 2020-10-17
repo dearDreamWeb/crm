@@ -1,168 +1,4 @@
 <template>
-  <!--<div>
-    <el-card>
-      <el-row :gutter="20">
-
-        <el-col :span="6">
-          <el-input class="ssk2"
-                                    placeholder="请输入关怀主题"
-                                    v-model="input"
-                                    clearable>
-        </el-input>
-          <div class="grid-content bg-purple-light"></div>
-        </el-col>
-        <el-button @click="careInput" type="primary" icon="el-icon-search">搜索</el-button>
-      </el-row>
-      <el-row>
-        <el-col :span="7">客户关怀<div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="12"><div class="grid-content bg-purple-light"></div></el-col>
-        <el-col :span="2"><el-button type="text" @click="addBtn">新建</el-button><div class="grid-content bg-purple"></div></el-col>
-        <el-dialog
-          title="客户关怀"
-          :visible.sync="dialogVisible"
-          width="50%"
-          :before-close="handleClose">
-          <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="关怀主题">
-                  <el-input v-model="form.careZt"></el-input>
-                </el-form-item>
-              </el-col >
-              <el-col :span="8">
-                <el-form-item label="联系人">
-                  <el-input v-model="form.carelxrcontacts"></el-input>
-                </el-form-item>
-              </el-col>
-
-            </el-row>
-
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="客户">
-                  <el-input
-                    placeholder="请输入内容"
-                    v-model="cusId"
-                    :disabled="true">
-                  </el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item>
-                  <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
-
-                    <el-button slot="append" icon="el-icon-search"></el-button>
-                  </el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="日期">
-                  <el-date-picker type="date" placeholder="选择日期" v-model="form.careData" style="width: 100%;"></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="执行人">
-                  <el-input v-model="form.careexecutor"></el-input>
-                </el-form-item>
-              </el-col>
-
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="关怀内容">
-                  <el-input type="textarea" v-model="form.carenr"></el-input>
-                </el-form-item>
-              </el-col>
-
-              <el-col :span="8">
-                <el-form-item label="客户反馈">
-                  <el-input type="textarea" v-model="form.carecustomerfk"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-            </el-row>
-          </el-form>
-          <div style="text-align: center;">
-
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-          </div>
-
-        </el-dialog>
-        <el-button><i class="el-icon-s-grid"></i></el-button>
-        <el-button><i class="el-icon-s-tools"></i></el-button>
-      </el-row>
-      <el-row>
-        <el-col :span="0"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="20">
-          <el-table
-                ref="multipleTable"
-                :data="tableData"
-                tooltip-effect="dark"
-                style="width: 100%">
-          <el-table-column
-                  type="selection"
-                  width="55">
-          </el-table-column>
-          <el-table-column
-                  prop="careId"
-            label="ID"
-            width="120">
-            <template slot-scope="scope">{{ scope.row.date }}</template>
-          </el-table-column>
-          <el-table-column
-            prop="careZt"
-            label="关怀主题"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="carelxrcontacts"
-            label="联系人"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="cusId"
-            label="客户"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="careData"
-            label="日期"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="careexecutor"
-            label="执行人"
-            show-overflow-tooltip>
-          </el-table-column>
-        </el-table><div class="grid-content bg-purple-light"></div></el-col>
-        <el-col :span="0"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="0"><div class="grid-content bg-purple-light"></div></el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="1"><el-button @click="delBtn(scope.row.careId)" v-loading.fullscreen.lock="fullscreenLoading"><i class="el-icon-delete"></i></el-button><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="1"><el-button><i class="el-icon-edit"></i></el-button><div class="grid-content bg-purple-light"></div></el-col>
-        <el-col :span="0"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="6"><div class="grid-content bg-purple-light"></div></el-col>
-        <el-col :span="0"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="4"><div class="block">
-
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage4"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="10"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="40">
-          </el-pagination>
-        </div><div class="grid-content bg-purple-light"></div></el-col>
-      </el-row>
-    </el-card>
-  </div>-->
   <div>
     <el-card>
       <el-row :gutter="20">
@@ -173,6 +9,8 @@
         </el-col>
         <el-col :span="10">
           <el-button size="mini" type="primary" icon="el-icon-plus" @click="addDialog = true">新增</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
         <el-col :span="8">
           <el-button type="warning" size="mini" icon="el-icon-edit"
@@ -181,6 +19,70 @@
                      :disabled="buttonDisabled" @click="deleteCare">删除</el-button>
         </el-col>
       </el-row>
+
+      <transition name="el-zoom-in-top">
+        <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px;">
+          <el-form :model="searchForm" ref="advancedSearchFormRef"
+                   size="mini" label-position="right" label-width="80px">
+            <el-row>
+              <el-col>
+                <el-form-item label="高级搜索"></el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <el-form-item prop="careZt" label="昵称">
+                  <el-input v-model="searchForm.careZt" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item prop="carelxrcontacts" label="联系人">
+                  <el-input v-model="searchForm.carelxrcontacts" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item prop="cusId" label="客户">
+                  <el-input v-model="searchForm.cusId" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="10">
+                <el-form-item label="日期">
+                  <el-date-picker v-model="searchForm.startDate" format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                  placeholder="请输入"></el-date-picker>
+                  <span>-</span>
+                  <el-date-picker v-model="searchForm.endDate" format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                  placeholder="请输入"></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item prop="careexecutor" label="执行人">
+                  <el-input v-model="searchForm.careexecutor" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item prop="carenr" label="内容">
+                  <el-input v-model="searchForm.carenr" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item prop="carecustomerfk" label="反馈内容">
+                  <el-input v-model="searchForm.carecustomerfk" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item>
+                  <el-button size="mini" @click="advancedQueryClick"
+                             type="primary" icon="el-icon-search"></el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </el-card>
+      </transition>
 
       <el-table :data="listForm" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
@@ -262,12 +164,10 @@
         </el-row>
       </el-form>
       <div style="text-align: center;">
-
         <el-button @click="addDialog = false">取 消</el-button>
         <el-button type="primary" @click="addClick"
                    :loading="addDictButtonLoading">确 定</el-button>
       </div>
-
     </el-dialog>
 
     <el-dialog
@@ -327,11 +227,9 @@
         </el-row>
       </el-form>
       <div style="text-align: center;">
-
         <el-button @click="editDialog = false">取 消</el-button>
         <el-button type="warning" @click="editCareClick" :loading="editDictButtonLoading">确 定</el-button>
       </div>
-
     </el-dialog>
   </div>
 
@@ -339,6 +237,7 @@
 </template>
 <script>
   import {careHttp} from "../../network/system/care";
+
 
 
   export default {
@@ -360,6 +259,25 @@
           resource: '',
           desc: ''
         },
+
+        searchForm:{
+          careZt:'',
+          cusId: '',
+          carelxrcontacts:'',
+          careexecutor:'',
+          startDate:'',
+          endDate:'',
+          carecustomerfk:'',
+          carenr:'',
+          region: '',
+          date1: '',
+
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        advancedSearch:false,
         updateform:{},
         addDialog:false,
         buttonDisabled:true,
@@ -425,6 +343,22 @@
               this.addDictButtonLoading = false
             }
           })
+        })
+      },
+      resetForm(){
+        this.$refs["advancedSearchFormRef"].resetFields()
+        this.searchInput = ''
+        this.initList()
+        this.rowCareId = 0
+        this.buttonDisabled = true
+      },
+      advancedQueryClick(){
+        careHttp.queryEmp(this.searchForm).then(res => {
+          if (res.code === 20000) {
+            this.listForm = res.data.list
+            this.total = res.data.total
+            this.pageNum = res.data.pageNum
+          }
         })
       },
       editCareClick(){
@@ -508,22 +442,21 @@
 
       },
       handleCurrentChange(pageIndex){
-        this.pageNum = pageIndex
-        this.pageSize = this.pageSize
-        careHttp.listPage(this.pageNum,this.pageSize).then(res => {
+        this.searchForm.pageNum = pageIndex
+        this.searchForm.pageSize = this.pageSize
+        careHttp.queryEmp(this.searchForm).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
       },
-      initList(){
-        careHttp.listPage(this.pageNum,this.pageSize).then(res =>{
+      initList() {
+        careHttp.listPage(this.pageNum, this.pageSize).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
-      }
-
+      },
     },
     created() {
       this.initList()
