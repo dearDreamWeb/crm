@@ -42,7 +42,7 @@ public class ClueServiceImpl implements ClueService {
     @Override
     public ResultVo addClue(ClueReq clueReq) {
         CheckUtils.validate(clueReq);
-        clueReq.setClueStatus(20);
+        clueReq.setClueStatus(0);
         Integer activityId = clueReq.getActivityId();
         if (activityId == null) {
             clueReq.setEmpId(0);

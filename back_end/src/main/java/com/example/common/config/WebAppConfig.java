@@ -14,11 +14,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 @ComponentScan(value = "com.example.common.interceptor")//扫描拦截器所在的包
-public class WenAppConfig implements WebMvcConfigurer {
+public class WebAppConfig implements WebMvcConfigurer {
     private AuthorityInterceptor authorityInterceptor;
 
     @Autowired
-    public WenAppConfig(AuthorityInterceptor authorityInterceptor){
+    public WebAppConfig(AuthorityInterceptor authorityInterceptor){
         this.authorityInterceptor = authorityInterceptor;
     }
 
@@ -28,6 +28,7 @@ public class WenAppConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/user/login","/user/logout")
                 .excludePathPatterns("/app/**")
                 .excludePathPatterns("/static/images/**")
-                .excludePathPatterns("/clue/front/**");
+                .excludePathPatterns("/clue/front/**")
+                .excludePathPatterns("/clue_page");
     }
 }

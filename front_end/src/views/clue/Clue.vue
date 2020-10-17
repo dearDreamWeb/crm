@@ -93,7 +93,11 @@
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="clueName" label="线索名称"></el-table-column>
         <el-table-column prop="cluePhone" label="联系方式"></el-table-column>
-        <el-table-column prop="clueStatus" label="线索状态"></el-table-column>
+        <el-table-column prop="clueStatus" label="线索状态">
+          <template slot-scope="scope">
+            {{scope.row.clueStatus | clueStatusFormat}}
+          </template>
+        </el-table-column>
         <el-table-column prop="handleResult" label="处理结果"></el-table-column>
         <el-table-column prop="handlePerson" label="处理人"></el-table-column>
         <el-table-column prop="createTime" label="创建时间">

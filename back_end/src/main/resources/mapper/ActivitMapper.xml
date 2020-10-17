@@ -71,10 +71,8 @@
     <select id="getActivity" resultMap="ActivityResult" parameterType="Integer">
         SELECT a.activity_id,a.activity_title,a.content,a.activity_link,a.views,
                 a.create_by,a.start_time,a.end_time,a.version,a.create_time,
-                a.update_time,a.is_delete,e.emp_name,e.phone,e.email
+                a.update_time,a.is_delete
         FROM activity a
-        LEFT JOIN activity_emp ae ON ae.activity_id = a.activity_id
-        LEFT JOIN emp e ON e.emp_id = ae.emp_id
         WHERE a.activity_id = #{activityId}
     </select>
 

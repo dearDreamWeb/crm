@@ -64,6 +64,10 @@ const routes = [
       {
         path: '/complaint',
         component: () => import('../views/complaint/Complaint')
+      },
+      {
+        path: '/activityDetail',
+        component: () => import('../views/activity/ActivityDetail')
       }
     ]
   }

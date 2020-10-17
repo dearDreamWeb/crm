@@ -21,3 +21,11 @@ export function sexFormat(sex) {
     return '女'
   }
 }
+
+export function clueStatusFormat(clueStatus) {
+  if (clueStatus === 1) {
+    return '已处理'
+  } else {
+    return '未处理'
+  }
+}

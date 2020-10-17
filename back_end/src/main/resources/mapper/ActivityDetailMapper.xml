@@ -11,6 +11,41 @@
         <result column="version" property="version"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
+        <association property="activityResp" resultMap="ActivityResult"/>
+        <association property="empResp" resultMap="EmpResult"/>
+    </resultMap>
+
+    <resultMap id="ActivityResult" type="com.example.entity.response.ActivityResp">
+        <id column="activity_id" property="activityId"/>
+        <result column="activity_title" property="activityTitle"/>
+        <result column="content" property="content"/>
+        <result column="activity_link" property="activityLink"/>
+        <result column="views" property="views"/>
+        <result column="create_by" property="createBy"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <collection property="emps" resultMap="EmpResult"/>
+    </resultMap>
+
+    <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
+        <id property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="sex" column="sex"/>
+        <result property="passWord" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="empStatus" column="emp_status"/>
+        <result property="token" column="token"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
     </resultMap>
 
     <insert id="addActivityDetail" parameterType="com.example.entity.request.ActivityDetailReq">
@@ -40,29 +75,35 @@
     </update>
 
     <select id="getActivityDetail" resultMap="ActivityDetailResultMap" parameterType="Integer">
-        SELECT activity_id,emp_id,url,auth_date,version,create_time,update_time
-        FROM activity_detail
-        WHERE  activity_detail_id = #{activityDetailId}
+        SELECT ad.activity_detail_id,ad.activity_id,ad.emp_id,ad.url,ad.auth_date,ad.version,
+            ad.create_time,ad.update_time,e.emp_name,a.activity_title
+        FROM activity_detail ad
+        INNER JOIN activity a ON a.activity_id = ad.activity_id
+        INNER JOIN emp e ON e.emp_id = ad.emp_id
+        WHERE  ad.activity_detail_id = #{activityDetailId}
     </select>
 
     <select id="listActivityDetail" resultMap="ActivityDetailResultMap">
-        SELECT activity_id,emp_id,url,auth_date,version,create_time,update_time
-        FROM activity_detail
+        SELECT ad.activity_detail_id,ad.activity_id,ad.emp_id,ad.url,ad.auth_date,ad.version,
+        ad.create_time,ad.update_time,e.emp_name,a.activity_title
+        FROM activity_detail ad
+        INNER JOIN activity a ON a.activity_id = ad.activity_id
+        INNER JOIN emp e ON e.emp_id = ad.emp_id
         <where>
-            <if test="activity_id != null">
-                AND activity_id = #{activityId}
+            <if test="activityId != null">
+                AND ad.activity_id = #{activityId}
             </if>
             <if test="empId != null">
-                AND emp_id = #{empId}
+                AND ad.emp_id = #{empId}
             </if>
             <if test="url != null and url != ''">
-                AND url LIKE CONCAT('%',#{url},'%')
+                AND ad.url LIKE CONCAT('%',#{url},'%')
             </if>
             <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
-                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+                AND date_format(ad.create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
             </if>
             <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
-                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+                AND date_format(ad.create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
         </where>
     </select>

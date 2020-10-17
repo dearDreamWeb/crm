@@ -72,5 +72,11 @@ export const activityHttp = {
       }
     }
     return postJson(params)
+  },
+  listNotArgs:function () {
+    let params = {
+      url: '/activity/list'
+    }
+    return get(params)
   }
 }

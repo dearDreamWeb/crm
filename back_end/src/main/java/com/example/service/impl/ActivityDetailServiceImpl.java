@@ -9,6 +9,8 @@ import com.example.model.mapper.ActivityDetailMapper;
 import com.example.service.ActivityDetailService;
 import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,24 +86,40 @@ public class ActivityDetailServiceImpl implements ActivityDetailService {
             throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
                     ResultEnum.DATA_NOT_EXIST.getMessage());
         }
-        int editActivityDetail = detailMapper.editActivityDetail(activityDetailReq);
-        if (editActivityDetail != 1) {
+        ActivityDetailResp activityDetail = detailMapper.getActivityDetail(activityDetailId);
+        if (activityDetail == null) {
             throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
                     ResultEnum.DATA_UPDATE_FAIL.getMessage());
         }
-        return ResultUtils.response(editActivityDetail);
+        activityDetail.setActivityTitle(activityDetail.getActivityResp().getActivityTitle());
+        activityDetail.setEmpName(activityDetail.getEmpResp().getEmpName());
+        return ResultUtils.response(activityDetail);
     }
 
     @Override
     public ResultVo listActivityDetail(ActivityDetailReq activityDetailReq) {
+        Integer pageNum = activityDetailReq.getPageNum();
+        Integer pageSize = activityDetailReq.getPageSize();
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+        PageHelper.startPage(pageNum,pageSize);
         List<ActivityDetailResp> activityDetailResps = detailMapper.listActivityDetail(activityDetailReq);
-        return ResultUtils.response(activityDetailResps);
+        for (int i=0;i<activityDetailResps.size();i++) {
+            activityDetailResps.get(i).setActivityTitle(activityDetailResps.get(i).getActivityResp().getActivityTitle());
+            activityDetailResps.get(i).setEmpName(activityDetailResps.get(i).getEmpResp().getEmpName());
+        }
+        PageInfo<ActivityDetailResp> list = new PageInfo<>(activityDetailResps);
+        return ResultUtils.response(list);
     }
 
     public static String generateUrl(Integer activityId,Integer empId) {
         String url = "";
         if (activityId != null && empId != null) {
-             url = "?activityId=" + activityId + "&empId=" + empId;
+             url = "http://localhost:8080/clue_page?activityId=" + activityId + "&empId=" + empId;
         }
         return url;
     }

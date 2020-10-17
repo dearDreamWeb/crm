@@ -23,4 +23,9 @@ public class ActivityDetailResp {
     private Integer version;
     private Date createTime;
     private Date updateTime;
+    private ActivityResp activityResp;
+    private EmpResp empResp;
+
+    private String activityTitle;
+    private String empName;
 }

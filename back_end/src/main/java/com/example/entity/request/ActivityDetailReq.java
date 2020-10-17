@@ -27,4 +27,6 @@ public class ActivityDetailReq {
     private String startDate;
     private String endDate;
     private List<Integer> empIdList;
+    private Integer pageNum;
+    private Integer pageSize;
 }

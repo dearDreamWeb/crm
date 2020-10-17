@@ -28,6 +28,6 @@ qiniu:
   bucket: pengjia
   path: www.eblog.icu
 
-logging:
-  level:
-    com.example.model.mapper : debug
+#logging:
+#  level:
+#    com.example.model.mapper : debug

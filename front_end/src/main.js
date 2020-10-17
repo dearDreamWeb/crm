@@ -6,6 +6,7 @@ import router from './router'
 import store from "./store";
 import ElementUI from 'element-ui'
 import TreeTable from 'vue-table-with-tree-grid'
+import urlUtils from "./common/urlUtils";
 import "@/style/app.scss"
 
 import iconPicker from 'e-icon-picker'
@@ -21,11 +22,13 @@ Vue.use(iconPicker,{
   eIconSymbol: true
 })
 Vue.component('tree-table', TreeTable)
+Vue.prototype.$urlUtil = urlUtils
 
 /*格式化*/
-import {sexFormat,dateFormat} from "./common/formatUtils";
+import {sexFormat,dateFormat,clueStatusFormat} from "./common/formatUtils";
 Vue.filter('dateFormat',dateFormat)
 Vue.filter('sexFormat',sexFormat)
+Vue.filter('clueStatusFormat',clueStatusFormat)
 
 /* eslint-disable no-new */
 new Vue({

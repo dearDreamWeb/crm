@@ -6,100 +6,75 @@
 <template>
 <div>
   <el-card>
-    <el-tabs v-model="activeName" @tab-click="tabHandleClick">
-      <el-tab-pane label="活动管理" name="first">
-        <el-card>
-          <el-row :gutter="20">
-            <el-col :span="6">
-              <el-input v-model="searchInput" placeholder="请输入活动名称搜索" clearable size="mini">
-                <el-button slot="append" icon="el-icon-search" @click="searchClick"></el-button>
-              </el-input>
+    <el-row :gutter="20">
+      <el-col :span="6">
+        <el-input v-model="searchInput" placeholder="请输入活动名称搜索" clearable size="mini">
+          <el-button slot="append" icon="el-icon-search" @click="searchClick"></el-button>
+        </el-input>
+      </el-col>
+      <el-col :span="10">
+        <el-button type="primary" size="mini" icon="el-icon-plus"
+                   @click="openAddDialog">添加活动</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-refresh"></el-button>
+      </el-col>
+      <el-col :span="8">
+        <el-button type="warning" size="mini" icon="el-icon-edit"
+                   :disabled="buttonDisabled" @click="openEditDialog">修改活动</el-button>
+        <el-button type="danger" size="mini" icon="el-icon-delete"
+                   :disabled="buttonDisabled" @click="deleteActivity">删除活动</el-button>
+        <el-button type="success" size="mini" icon="el-icon-tickets"
+                   :disabled="buttonDisabled" @click="openAuthDialog">分配活动</el-button>
+      </el-col>
+    </el-row>
+
+    <el-table :data="listForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
+              :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
+              highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
+      <el-table-column type="index" width="50"></el-table-column>
+      <el-table-column label="活动名称" prop="activityTitle" show-overflow-tooltip></el-table-column>
+      <el-table-column label="活动内容" prop="content" show-overflow-tooltip></el-table-column>
+      <el-table-column label="活动链接" prop="activityLink" show-overflow-tooltip></el-table-column>
+      <el-table-column label="访问量" prop="views"></el-table-column>
+      <el-table-column label="创建人" prop="createBy"></el-table-column>
+      <el-table-column label="开始时间">
+        <template slot-scope="scope">
+          {{scope.row.startTime | dateFormat}}
+        </template>
+      </el-table-column>
+      <el-table-column label="结束时间">
+        <template slot-scope="scope">
+          {{scope.row.endTime | dateFormat}}
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-row :gutter="20">
+      <el-col :span="6" v-for="item in listForm" :key="item.activityId">
+        <el-card shadow="hover" style="margin-top: 10px">
+          <el-row type="flex" justify="space-between">
+            <el-col :span="1">
+              <el-tag>{{item.activityTitle}}</el-tag>
             </el-col>
             <el-col :span="10">
-              <el-button type="primary" size="mini" icon="el-icon-plus"
-                         @click="openAddDialog">添加活动</el-button>
-              <el-button type="primary" size="mini" icon="el-icon-refresh"></el-button>
-            </el-col>
-            <el-col :span="8">
-              <el-button type="warning" size="mini" icon="el-icon-edit"
-                         :disabled="buttonDisabled" @click="openEditDialog">修改活动</el-button>
-              <el-button type="danger" size="mini" icon="el-icon-delete"
-                         :disabled="buttonDisabled" @click="deleteActivity">删除活动</el-button>
-              <el-button type="success" size="mini" icon="el-icon-tickets"
-                         :disabled="buttonDisabled" @click="openAuthDialog">分配活动</el-button>
+              <el-tag>{{item.views}}</el-tag>
             </el-col>
           </el-row>
-
-          <el-table :data="listForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
-                    :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
-                    highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
-            <el-table-column type="index" width="50"></el-table-column>
-            <el-table-column label="活动名称" prop="activityTitle" show-overflow-tooltip></el-table-column>
-            <el-table-column label="活动内容" prop="content" show-overflow-tooltip></el-table-column>
-            <el-table-column label="活动链接" prop="activityLink" show-overflow-tooltip></el-table-column>
-            <el-table-column label="访问量" prop="views"></el-table-column>
-            <el-table-column label="创建人" prop="createBy"></el-table-column>
-            <el-table-column label="开始时间">
-              <template slot-scope="scope">
-                {{scope.row.startTime | dateFormat}}
-              </template>
-            </el-table-column>
-            <el-table-column label="结束时间">
-              <template slot-scope="scope">
-                {{scope.row.endTime | dateFormat}}
-              </template>
-            </el-table-column>
-          </el-table>
-
-          <el-row :gutter="20">
-            <el-col :span="6" v-for="item in listForm" :key="item.activityId">
-              <el-card shadow="hover" style="margin-top: 10px">
-                <el-row type="flex" justify="space-between">
-                  <el-col :span="1">
-                    <el-tag>{{item.activityTitle}}</el-tag>
-                  </el-col>
-                  <el-col :span="10">
-                    <el-tag>{{item.views}}</el-tag>
-                  </el-col>
-                </el-row>
-                <hr>
-                <!--          <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">-->
-                <div>
-                  <hr>
-                  <span style="font-family: 楷体">{{item.content}}</span>
-                  <div>
-                    <el-button type="text">编辑</el-button>
-                    <el-button type="text" style="float: right">删除</el-button>
-                  </div>
-                  <el-tag>{{item.startTime | dateFormat}}</el-tag>
-                  至
-                  <el-tag>{{item.endTime | dateFormat}}</el-tag>
-                </div>
-              </el-card>
-            </el-col>
-          </el-row>
+          <hr>
+          <!--          <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">-->
+          <div>
+            <hr>
+            <span style="font-family: 楷体">{{item.content}}</span>
+            <div>
+              <el-button type="text">编辑</el-button>
+              <el-button type="text" style="float: right">删除</el-button>
+            </div>
+            <el-tag>{{item.startTime | dateFormat}}</el-tag>
+            至
+            <el-tag>{{item.endTime | dateFormat}}</el-tag>
+          </div>
         </el-card>
-      </el-tab-pane>
-      <el-tab-pane label="活动详情" name="second">
-        <el-card>
-          <el-select v-model="select" slot="prepend"
-                     placeholder="请选择" style="width: 150px">
-            <el-option label="餐厅名" value="1"></el-option>
-            <el-option label="订单号" value="2"></el-option>
-            <el-option label="用户电话" value="3"></el-option>
-          </el-select>
-          <el-input placeholder="请输入内容" v-model="detailSearchInput"
-                    style="width: 500px" size="mini">
-            <el-select v-model="select" slot="prepend"
-                       placeholder="请选择" style="width: 150px">
-              <el-option label="餐厅名" value="1"></el-option>
-              <el-option label="订单号" value="2"></el-option>
-              <el-option label="用户电话" value="3"></el-option>
-            </el-select>
-          </el-input>
-        </el-card>
-      </el-tab-pane>
-    </el-tabs>
+      </el-col>
+    </el-row>
   </el-card>
 
   <el-dialog title="活动添加" :visible.sync="addDialog" @close="addHandleClose">
@@ -233,7 +208,6 @@
     name: "Activity",
     data() {
       return {
-        activeName:'first',
 
         authDialog:false,
         authForm:{

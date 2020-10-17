@@ -70,5 +70,17 @@ export const clueHttp = {
       }
     }
     return postJson(params)
+  },
+  cluePageAdd:function (clue) {
+    let params = {
+      url:'/clue/front/add',
+      data:{
+        'clueName':clue.clueName,
+        'cluePhone':clue.cluePhone,
+        'activityId':clue.activityId,
+        'empId':clue.empId
+      }
+    }
+    return postJson(params)
   }
 }
