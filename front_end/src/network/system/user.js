@@ -101,5 +101,14 @@ export const userHttp = {
       url:'/emp/list'
     }
     return get(params)
-  }
+  },
+  listNotAuth(activityId) {
+    let params = {
+      url:'/emp/list_not_auth',
+      data:{
+        'activityId':activityId
+      }
+    }
+    return get(params)
+  },
 }

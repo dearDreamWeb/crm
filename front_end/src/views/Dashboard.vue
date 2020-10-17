@@ -80,8 +80,8 @@
         </el-card>
       </el-col>
     </el-row>
-    <!--<el-row :gutter="20">
-      &lt;!&ndash;<el-col :span="18">
+    <el-row :gutter="20">
+      <!--<el-col :span="18">
         <el-card>
           <div slot="header">
             <span>动态</span>
@@ -91,7 +91,7 @@
             <el-col :span="4" class="text-info">2020-9-25</el-col>
           </el-row>
         </el-card>
-      </el-col>&ndash;&gt;
+      </el-col>-->
       <el-col :span="6">
         <el-row>
           <el-col>
@@ -120,6 +120,10 @@
               开源工具包 JCronTab
               <hr>
               https://developer.ibm.com/zh/articles/j-lo-taskschedule/
+              <hr>
+              活动分配问题
+              <hr>
+              活动页面给员工联系电话
             </el-card>
           </el-col>
         </el-row>
@@ -172,7 +176,7 @@
           <p>https://blog.csdn.net/chenghui0317/article/details/9373345</p>
         </el-card>
       </el-col>
-    </el-row>-->
+    </el-row>
 
 
   </div>

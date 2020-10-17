@@ -16,7 +16,5 @@ public interface ActivityService {
     ResultVo editActivity(ActivityReq activityReq);
     ResultVo getActivity(Integer activityId);
     ResultVo listActivity(ActivityReq activityReq);
-    ResultVo batchEditActivity(ActivityReq activityReq);
     ResultVo listByEmp(Integer empId);
-    ResultVo listNotAuth();
 }

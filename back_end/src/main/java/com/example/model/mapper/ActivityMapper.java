@@ -19,8 +19,6 @@ public interface ActivityMapper {
     int editActivity(ActivityReq activityReq);
     ActivityResp getActivity(Integer activityId);
     List<ActivityResp> listActivity(ActivityReq activityReq);
-    List<ActivityResp> listNotAuth();
     List<ActivityResp> listByEmp(Integer empId);
-    int batchEditActivity(ActivityReq activityReq);
     int checkActivity(String activityTitle);
 }

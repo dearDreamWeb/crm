@@ -205,4 +205,15 @@
         UPDATE emp SET is_delete = 1,version = version + 1
         WHERE emp_id = #{empId}
     </update>
+
+    <select id="listNotAuthActivity" resultMap="EmpResult">
+        SELECT e.emp_id,e.emp_name
+        FROM emp e
+        WHERE
+            (SELECT COUNT(1) AS num
+            FROM activity_detail ad
+            INNER JOIN activity a ON a.activity_id = ad.activity_id
+            WHERE ad.emp_id = e.emp_id AND a.activity_id = #{activityId})
+        = 0 AND e.emp_name != 'admin'
+    </select>
 </mapper>

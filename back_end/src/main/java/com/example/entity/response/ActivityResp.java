@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author: pengjia
@@ -27,5 +28,6 @@ public class ActivityResp {
     private Date createTime;
     private Date updateTime;
     private Integer isDelete;
-    private Integer empId;
+    private List<Integer> empIdList;
+    private List<EmpResp> emps;
 }

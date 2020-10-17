@@ -17,8 +17,6 @@
                      :disabled="buttonDisabled" @click="openEditEmp">修改用户</el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete"
                      :disabled="buttonDisabled" @click="deleteEmp">删除用户</el-button>
-          <el-button type="success" size="mini" icon="el-icon-tickets"
-                     :disabled="buttonDisabled" @click="openAuthDialog">分配活动</el-button>
         </el-col>
       </el-row>
 
@@ -250,37 +248,6 @@
                    :loading="editEmpButtonLoading">确定</el-button>
       </span>
     </el-dialog>
-
-    <el-dialog title="分配活动" :visible.sync="authDialog" @close="authHandleClose">
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <span>活动标题：</span>
-          <el-select v-model="transferValue" multiple
-                     filterable placeholder="请选择(可搜索)">
-            <el-option
-              v-for="item in transferOptions"
-              :key="item.activityId"
-              :label="item.activityTitle"
-              :value="item.activityId">
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="12">
-          <el-card>
-            <span v-for="(item,index) in alreadyAuthValue" :key="index">
-              <el-tag>{{item.activityTitle}}</el-tag>
-              <el-divider direction="vertical"></el-divider>
-            </span>
-          </el-card>
-        </el-col>
-      </el-row>
-      <hr>
-      <span slot="footer">
-        <el-button @click="authDialog = false">取消</el-button>
-        <el-button type="primary" @click="authActivityClick"
-                   :loading="authActivityButtonLoading">确定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -300,16 +267,6 @@
         cb(new Error('请输入合法的手机号'))
       }
       return{
-        authDialog:false,
-        transferValue:[],
-        transferOptions:[],
-        alreadyAuthValue:[],
-        authActivityButtonLoading:false,
-        authForm:{
-          empId:'',
-          activityIdList:[]
-        },
-
         searchInput:'',
         searchForm:{
           empName:'',
@@ -363,49 +320,6 @@
       }
     },
     methods:{
-      authActivityClick() {
-        this.authForm.empId = this.rowEmpId
-        this.authForm.activityIdList = this.transferValue
-        this.$confirm('分配后不可撤销','提示',{
-          confirmButtonText:'确定',
-          cancelButtonText:'取消',
-          type:'warning'
-        }).then(() => {
-          this.authActivityButtonLoading = true
-          activityHttp.batchEdit(this.authForm).then(res => {
-            if (res.code === 20000) {
-              this.$message.success(res.message)
-              this.authActivityButtonLoading = false
-              this.authDialog = false
-            } else {
-              this.authActivityButtonLoading = false
-              this.$message({
-                message:res.message,
-                type:'error'
-              })
-            }
-          })
-        })
-      },
-      authHandleClose() {
-        this.transferValue = []
-      },
-      openAuthDialog() {
-        this.authDialog = true
-        this.initNotAuthActivity()
-        this.getActivityByEmpId()
-      },
-      initNotAuthActivity() {
-        activityHttp.listNotAuth().then(res => {
-          this.transferOptions = res.data
-        })
-      },
-      getActivityByEmpId() {
-        activityHttp.getActivityListByEmpId(this.rowEmpId).then(res => {
-          this.alreadyAuthValue = res.data
-        })
-      },
-
       resetForm() {
         this.$refs.advancedSearchFormRef.resetFields()
         this.searchInput = ''
@@ -542,22 +456,6 @@
           this.pageNum = res.data.pageNum
         })
       },
-      /*initList() {
-        this.tableLoading = true
-        userHttp.queryEmp(this.searchForm).then(res => {
-          if (res.code === 20000) {
-            this.listForm = res.data.list;
-            this.total = res.data.total
-            this.pageNum = res.data.pageNum
-            this.tableLoading = false
-          } else {
-            this.$message({
-              message:res.data,
-              type:'error'
-            })
-          }
-        })
-      },*/
       initList() {
         this.tableLoading = true
         userHttp.listPage(this.pageNum,this.pageSize).then(res => {

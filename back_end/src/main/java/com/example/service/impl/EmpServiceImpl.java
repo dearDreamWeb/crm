@@ -188,4 +188,10 @@ public class EmpServiceImpl implements EmpService {
     public ResultVo logout(EmpReq empReq) {
         return null;
     }
+
+    @Override
+    public ResultVo listNotAuthActivity(Integer activityId) {
+        List<EmpResp> empResps = empMapper.listNotAuthActivity(activityId);
+        return ResultUtils.response(empResps);
+    }
 }

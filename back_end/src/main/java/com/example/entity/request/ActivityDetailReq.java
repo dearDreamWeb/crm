@@ -9,24 +9,22 @@ import java.util.List;
 
 /**
  * @author: pengjia
- * @date: 2020/10/11
+ * @date: 2020/10/17
  * @description:
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ActivityReq {
+public class ActivityDetailReq {
+    private Integer activityDetailId;
     private Integer activityId;
-    private String activityTitle;
-    private String content;
-    private String activityLink;
-    private Integer views;
-    private String createBy;
-    private String startTime;//活动开始时间
-    private String endTime;//活动结束时间
+    private Integer empId;
+    private String url;
+    private Date authDate;
     private Integer version;
     private Date createTime;
     private Date updateTime;
-    private Integer isDelete;
+    private String startDate;
+    private String endDate;
     private List<Integer> empIdList;
 }

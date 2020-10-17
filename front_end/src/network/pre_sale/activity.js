@@ -48,8 +48,7 @@ export const activityHttp = {
         'views':activity.views,
         'createBy': activity.createBy,
         'startTime': activity.startTime,
-        'endTime': activity.endTime,
-        'empId': activity.empId,
+        'endTime': activity.endTime
       }
     }
     return postJson(params)
@@ -64,29 +63,14 @@ export const activityHttp = {
     }
     return get(params)
   },
-  listNotAuth:function () {
+  authActivity:function (activityDetail) {
     let params = {
-      url: '/activity/list_not_auth'
-    }
-    return get(params)
-  },
-  batchEdit:function (activity) {
-    let params = {
-      url:'/activity/batch_edit',
+      url: '/activity_detail/activity_auth',
       data:{
-        'empId':activity.empId,
-        'activityIdList':activity.activityIdList
+        'activityId':activityDetail.activityId,
+        'empIdList':activityDetail.empIdList
       }
     }
     return postJson(params)
-  },
-  getActivityListByEmpId:function (empId) {
-    let params = {
-      url:'/activity/get_by_emp',
-      data:{
-        'empId':empId
-      }
-    }
-    return get(params)
   }
 }

@@ -30,4 +30,5 @@ public interface EmpMapper {
     EmpResp getMenuByEmpId(Integer empId);
     int updatePassWord(@Param("empName")String empName,
                        @Param("newPassWordMd5")String newPassWordMd5);
+    List<EmpResp> listNotAuthActivity(Integer activityId);
 }

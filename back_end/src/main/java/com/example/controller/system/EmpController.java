@@ -70,4 +70,9 @@ public class EmpController {
     public ResultVo pwd(EmpReq empReq) {
         return empService.pwd(empReq);
     }
+
+    @GetMapping("/list_not_auth")
+    public ResultVo listNotAuth(@RequestParam("activityId")Integer activityId) {
+        return empService.listNotAuthActivity(activityId);
+    }
 }

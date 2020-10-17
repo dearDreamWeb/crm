@@ -17,6 +17,10 @@ const routes = [
     component: () => import('../views/Login')
   },
   {
+    path: '/clue_page',
+    component: () => import('../views/CluePage')
+  },
+  {
     path: '/base',
     component: () => import('../views/layout/Layout'),
     redirect: 'home',
@@ -56,6 +60,10 @@ const routes = [
       {
         path: '/clue',
         component: () => import('../views/clue/Clue')
+      },
+      {
+        path: '/complaint',
+        component: () => import('../views/complaint/Complaint')
       }
     ]
   }
@@ -69,6 +77,7 @@ const router = new Router({
 
 router.beforeEach((to,from,next)=>{
   if (to.path === '/login') return next()
+  if (to.path === '/clue_page') return next()
   const tokenStr = window.sessionStorage.getItem('token')
   if (!tokenStr) return next('/login')
   next()
