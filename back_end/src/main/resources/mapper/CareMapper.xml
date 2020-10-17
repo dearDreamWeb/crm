@@ -54,7 +54,14 @@
         <if test="careexecutor != null and careexecutor != ''">
             AND care_executor LIKE CONCAT('%',#{careexecutor},'%')
         </if>
+        <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+            AND date_format(care_date,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+        </if>
+        <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+            AND date_format(care_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+        </if>
     </where>
+    ORDER BY care_date DESC
 </select>
 
     <select id="getCare" resultMap="CareResult">

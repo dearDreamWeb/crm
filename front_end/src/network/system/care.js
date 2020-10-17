@@ -62,6 +62,25 @@ export const careHttp = {
     }
     return get(params)
   },
+  queryEmp:function (care) {
+    let params = {
+      url:'/care/list',
+      data:{
+        'careZt':care.careZt,
+        'carelxrcontacts':care.carelxrcontacts,
+
+        'empStatus':care.empStatus,
+        'startDate':care.startDate,
+        'endDate':care.endDate,
+        'careexecutor':care.careexecutor,
+        'carenr':care.carenr,
+        'carecustomerfk':care.carecustomerfk,
+        'pageNum':care.pageNum,
+        'pageSize':care.pageSize
+      }
+    }
+    return get(params)
+  },
   listPage:function (pageNum,pageSize) {
     let params = {
       url:'/care/list',

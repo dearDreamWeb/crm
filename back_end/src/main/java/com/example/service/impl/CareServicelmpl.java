@@ -74,7 +74,6 @@ public class CareServicelmpl implements CareService {
     }
 
     @Override
-
     public ResultVo getCare(Integer careId) {
         Care care = careMapper.getCare(careId);
         return ResultUtils.response(care);
