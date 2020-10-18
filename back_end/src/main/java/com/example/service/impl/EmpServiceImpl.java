@@ -16,6 +16,7 @@ import com.example.util.ResultUtils;
 import com.example.util.TreeUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,9 @@ public class EmpServiceImpl implements EmpService {
 
     @Autowired
     private EmpDeptMapper empDeptMapper;
+
+    @Autowired
+    private WebSocketService webSocketService;
 
     @Override
     public ResultVo addEmp(EmpReq empReq) {
@@ -118,6 +122,10 @@ public class EmpServiceImpl implements EmpService {
         DeptResp dept = emp.getDept();
         Integer deptId = dept.getDeptId();
         emp.setDeptId(deptId);
+        //服务器向客户端发送JSON：测试
+        Gson gson = new Gson();
+        String json = gson.toJson(emp);
+        webSocketService.sendMessageToSingle(json);
         return ResultUtils.response(emp);
     }
 

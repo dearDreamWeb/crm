@@ -55,6 +55,7 @@
 
 <script>
   import {userHttp} from "../../network/system/user";
+  import {socketHttp} from "../../network/websocket";
 
   export default {
     name: "Layout",
@@ -69,6 +70,7 @@
         this.$store.commit('clearAll')
         window.sessionStorage.clear()
         this.$router.push('/login')
+        socketHttp.closeWebSocket()
       },
       getMenuList() {
         userHttp.getMenuList().then(res => {

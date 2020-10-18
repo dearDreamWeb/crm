@@ -32,13 +32,26 @@ export default {
         })
       },60*60*1000)
     },
-    openMessage() {
-      this.$notify({
-        title: '提示',
-        message: '身份信息过期，请重新登录',
-        duration: 0
-      });
-    }
+
+    /*getWebSocket() {
+      let webSocket = new WebSocket('ws://localhost:8099/socket')
+      webSocket.onopen = function (event) {
+        console.log('websocket打开连接')
+      }
+      webSocket.onmessage = function (event) {
+        console.log(event)
+        console.log('webSocket收到消息：%c' + event.data,'color:green')
+        let message = JSON.parse(event.data)
+        console.log(message)
+      }
+      webSocket.onclose = function (event) {
+        console.log('webSocket关闭连接')
+      }
+      webSocket.onerror = function (event) {
+        console.log('websocket发生异常')
+      }
+      return webSocket
+    }*/
   },
   created() {
     if (sessionStorage.getItem("store")) {
@@ -47,6 +60,8 @@ export default {
     window.addEventListener("beforeunload",()=> {
       sessionStorage.setItem("store",JSON.stringify(this.$store.state))
     })
+
+    // this.getWebSocket()
   }
 }
 </script>
