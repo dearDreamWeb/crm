@@ -1,6 +1,4 @@
 package com.example.service.impl;
-
-
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
@@ -8,7 +6,7 @@ import com.example.entity.request.Complaint;
 import com.example.model.mapper.ComplaintMapper;
 import com.example.service.ComplaintService;
 import com.example.util.CheckUtils;
-import com.example.util.DateUtils;
+
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -42,13 +40,13 @@ public class ComplaintServicelmpl implements ComplaintService {
     }
 
     @Override
-    public ResultVo deleteComplaint(Complaint complaintReq) {
-        Complaint complaint = complaintMapper.getComplaint(complaintReq.getComplaintId());
+    public ResultVo deleteComplaint(Integer complaintId) {
+        Complaint complaint = complaintMapper.getComplaint(complaintId);
         if (complaint == null) {
             throw new SysException(ResultEnum.DICT_NOT_EXIST.getCode(),
                     ResultEnum.DICT_NOT_EXIST.getMessage());
         }
-        int deleteComplaint = complaintMapper.deleteComplaint(complaint.getComplaintId());
+        int deleteComplaint = complaintMapper.deleteComplaint(complaintId);
         if (deleteComplaint != 1) {
             throw new SysException(ResultEnum.DICT_DEL_FAIL.getCode(),
                     ResultEnum.DICT_DEL_FAIL.getMessage());
@@ -82,22 +80,21 @@ public class ComplaintServicelmpl implements ComplaintService {
 
 
     @Override
-    public ResultVo updateComplaint(Complaint ComplaintReq) {
-        Complaint complaint = complaintMapper.getComplaint(ComplaintReq.getComplaintId());
+    public ResultVo updateComplaint(Complaint complaintReq) {
+        Complaint complaint = complaintMapper.getComplaint(complaintReq.getComplaintId());
         if (complaint == null) {
             throw new SysException(ResultEnum.DICT_NOT_EXIST.getCode(),
                     ResultEnum.DICT_NOT_EXIST.getMessage());
         }
-        complaint.setComplaintClassification(complaint.getComplaintClassification());
-        complaint.setComplaintData(DateUtils.getDate());
-        int updateComplaint = complaintMapper.updateComplaint(complaint);
+//        care.setCarelxrcontacts(care.getCarelxrcontacts());
+//        care.setCareData(DateUtils.getDate());
+        int updateComplaint = complaintMapper.updateComplaint(complaintReq);
         if (updateComplaint != 1) {
             throw new SysException(ResultEnum.DICT_UPDATE_FAIL.getCode(),
                     ResultEnum.DICT_UPDATE_FAIL.getMessage());
         }
-        return ResultUtils.response(updateComplaint(complaint));
+        return ResultUtils.response(updateComplaint);
     }
-
 
 }
 

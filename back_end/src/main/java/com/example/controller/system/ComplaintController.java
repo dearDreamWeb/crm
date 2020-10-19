@@ -19,19 +19,23 @@ public class ComplaintController {
     @Autowired
     private ComplaintService complaintService;
 
-    @SysLog("添加关怀")
+    @SysLog("添加")
     @PostMapping("/add")
     public ResultVo addDict(@RequestBody Complaint complaint) {
         return complaintService.addComplaint(complaint);
     }
 
-    @SysLog("删除关怀")
+    @SysLog("删除")
     @PostMapping("/del")
     public ResultVo delDict(@RequestBody Complaint complaint) {
-        return complaintService.deleteComplaint(complaint);
+        return complaintService.deleteComplaint(complaint.getComplaintId());
+    }
+    @GetMapping
+    public ResultVo getDict(@RequestParam("complaintId")Integer complaintId) {
+        return complaintService.getComplaint(complaintId);
     }
 
-    @SysLog("修改关怀")
+    @SysLog("修改")
     @PostMapping("/update")
     public ResultVo editDict(@RequestBody Complaint complaint) {
         return complaintService.updateComplaint(complaint);

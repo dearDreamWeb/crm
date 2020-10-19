@@ -12,7 +12,7 @@ import com.example.entity.request.Customerkf;
 public interface CustomerkfService {
     ResultVo addCustomerkf(Customerkf customerkf);
     ResultVo updateCustomerkf(Customerkf customerkfReq);
-    ResultVo deleteCustomerkf(Customerkf customerkfReq);
+    ResultVo deleteCustomerkf(Integer customerkfReq);
     ResultVo listCustomerkf(Customerkf customerkf);
     ResultVo getCustomerkf(Integer customerId);
 }

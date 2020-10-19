@@ -11,7 +11,7 @@ import com.example.entity.request.Complaint;
 public interface ComplaintService {
     ResultVo addComplaint(Complaint complaint);
     ResultVo updateComplaint(Complaint complaintReq);
-    ResultVo deleteComplaint(Complaint complaintReq);
+    ResultVo deleteComplaint(Integer complaintReq);
     ResultVo listComplaint(Complaint complaint);
     ResultVo getComplaint(Integer complaintId);
 }

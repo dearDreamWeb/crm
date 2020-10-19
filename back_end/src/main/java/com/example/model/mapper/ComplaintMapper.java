@@ -16,5 +16,5 @@ public interface ComplaintMapper {
     Complaint getComplaint(Integer complaintId);
     int addComplaint(Complaint complaint);
     int updateComplaint(Complaint complaint);
-    int deleteComplaint(int complaintId);
+    int deleteComplaint(Integer complaintId);
 }

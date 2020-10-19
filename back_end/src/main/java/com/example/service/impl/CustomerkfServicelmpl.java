@@ -8,7 +8,7 @@ import com.example.entity.request.Customerkf;
 import com.example.model.mapper.CustomerkfMapper;
 import com.example.service.CustomerkfService;
 import com.example.util.CheckUtils;
-import com.example.util.DateUtils;
+
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -41,22 +41,20 @@ public class CustomerkfServicelmpl implements CustomerkfService {
         return ResultUtils.response(addCustomerkf);
     }
 
-
     @Override
-    public ResultVo deleteCustomerkf(Customerkf CustomerkfReq) {
-        Customerkf customerkf = customerkfMapper.getCustomerkf(CustomerkfReq.getCustomerId());
+    public ResultVo deleteCustomerkf(Integer customerId) {
+        Customerkf customerkf = customerkfMapper.getCustomerkf(customerId);
         if (customerkf == null) {
-            throw new SysException(ResultEnum.DICT_NOT_EXIST.getCode(),
-                    ResultEnum.DICT_NOT_EXIST.getMessage());
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
         }
-        int deleteCustomerkf = customerkfMapper.deleteCustomerkf(customerkf.getCustomerId());
+        int deleteCustomerkf = customerkfMapper.deleteCustomerkf(customerId);
         if (deleteCustomerkf != 1) {
-            throw new SysException(ResultEnum.DICT_DEL_FAIL.getCode(),
-                    ResultEnum.DICT_DEL_FAIL.getMessage());
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
         }
         return ResultUtils.response(deleteCustomerkf);
     }
-
     @Override
     public ResultVo listCustomerkf(Customerkf customerkf) {
         Integer pageNum = customerkf.getPageNum();
@@ -83,20 +81,20 @@ public class CustomerkfServicelmpl implements CustomerkfService {
 
 
     @Override
-    public ResultVo updateCustomerkf(Customerkf CustomerkfReq) {
-        Customerkf customerkf = customerkfMapper.getCustomerkf(CustomerkfReq.getCustomerId());
+    public ResultVo updateCustomerkf(Customerkf customerkfReq) {
+        Customerkf customerkf = customerkfMapper.getCustomerkf(customerkfReq.getCustomerId());
         if (customerkf == null) {
             throw new SysException(ResultEnum.DICT_NOT_EXIST.getCode(),
                     ResultEnum.DICT_NOT_EXIST.getMessage());
         }
-        customerkf.setCustomerCustomerfk(customerkf.getCustomerCustomerfk());
-        customerkf.setCustomerData(DateUtils.getDate());
-        int updateCustomerkf = customerkfMapper.updateCustomerkf(customerkf);
+//        customerkf.setCustomerCustomerfk(customerkf.getCustomerCustomerfk());
+//        customerkf.setCustomerData(DateUtils.getDate());
+        int updateCustomerkf = customerkfMapper.updateCustomerkf(customerkfReq);
         if (updateCustomerkf != 1) {
             throw new SysException(ResultEnum.DICT_UPDATE_FAIL.getCode(),
                     ResultEnum.DICT_UPDATE_FAIL.getMessage());
         }
-        return ResultUtils.response(updateCustomerkf(customerkf));
+        return ResultUtils.response(updateCustomerkf);
     }
 
 

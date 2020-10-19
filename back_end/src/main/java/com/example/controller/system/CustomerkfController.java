@@ -27,7 +27,7 @@ public class CustomerkfController {
     @SysLog("删除关怀")
     @PostMapping("/del")
     public ResultVo delDict(@RequestBody Customerkf customerkf) {
-        return customerkfService.deleteCustomerkf(customerkf);
+        return customerkfService.deleteCustomerkf(customerkf.getCustomerId());
     }
 
     @SysLog("修改关怀")
