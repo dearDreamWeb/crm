@@ -19,20 +19,33 @@
         <result property="ordDetail" column="ord_detail"/>
         <result property="ordPhone" column="ord_phone"/>
         <result property="ordCreatetime" column="ord_createtime"/>
+        <result property="ordDelete" column="ord_delete"/>
         <result property="cusId" column="cus_id"/>
         <result property="offerId" column="offer_id"/>
     </resultMap>
     <!--查全部-->
     <select id="listszOrder" resultMap="szOrderResult">
         SELECT ord_id,ord_theme,ord_state,ord_head,ord_totalmoney,ord_starttime,ord_dealtime,ord_fahuotime
-        ,ord_huikuanmoney,ord_consignee,ord_province,ord_city,ord_country,ord_detail,ord_phone,ord_createtime FROM sz_order
+        ,ord_huikuanmoney,ord_consignee,ord_province,ord_city,ord_country,ord_detail,ord_phone,ord_createtime,ord_delete FROM sz_order
         <where>
             <if test="ordTheme != null and ordTheme != ''">
-                AND ord_theme LIKE CONCAT('%',#{ordTheme},'%')   /*CONCAT连接字符串*/
+                AND ord_theme LIKE CONCAT('%',#{ordTheme},'%')
             </if>
             <if test="ordHead != null and ordHead != ''">
                 AND ord_head LIKE CONCAT('%',#{ordHead},'%')
             </if>
+
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(ord_starttime,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(ord_starttime,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+
+            <if test="ordState != null">
+                AND ord_state = #{ordState}
+            </if>
+            and  ord_delete = 0
         </where>
     </select>
     <!--单条-->
@@ -45,25 +58,29 @@
             SELECT last_insert_id();
         </selectKey>
         insert into sz_order(ord_theme,ord_state,ord_head,ord_totalmoney,ord_starttime,ord_dealtime,ord_fahuotime,
-        ord_huikuanmoney,ord_consignee,ord_province,ord_city,ord_country,ord_detail,ord_phone,ord_createtime) VALUES
+        ord_huikuanmoney,ord_consignee,ord_province,ord_city,ord_country,ord_detail,ord_phone,ord_createtime,ord_delete) VALUES
         (#{ordTheme},#{ordState},#{ordHead},#{ordTotalmoney},#{ordStarttime},#{ordDealtime},#{ordFahuotime},
-        #{ordHuikuanmoney},#{ordConsignee},#{ordProvince},#{ordCity},#{ordCountry},#{ordDetail},#{ordPhone},#{ordCreatetime})
+        #{ordHuikuanmoney},#{ordConsignee},#{ordProvince},#{ordCity},#{ordCountry},#{ordDetail},#{ordPhone},#{ordCreatetime},#{ordDelete})
     </insert>
     <!--删-->
-    <delete id="delszOrder" parameterType="Integer">
+    <!--<delete id="delszOrder" parameterType="Integer">
         DELETE FROM sz_order WHERE ord_id = #{ordId}
-    </delete>
+    </delete>-->
+    <update id="delszOrder" parameterType="Integer">
+        UPDATE sz_order SET ord_delete = 1
+        WHERE ord_id = #{ordId}
+    </update>
     <!--改-->
     <update id="editszOrder" parameterType="SzOrder">
         update sz_order set ord_createtime = #{ordCreatetime}
         <if test="ordTheme !=null and ordTheme != ''">
             ,ord_theme = #{ordTheme}
         </if>
-        <if test="ordState !=null and ordState != ''">
-            ,ord_state = #{ordState}
-        </if>
         <if test="ordHead !=null and ordHead != ''">
             ,ord_head = #{ordHead}
+        </if>
+        <if test="ordState !=null and ordState != ''">
+            ,ord_state = #{ordState}
         </if>
         <if test="ordStarttime !=null and ordStarttime != ''">
             ,ord_starttime = #{ordStarttime}

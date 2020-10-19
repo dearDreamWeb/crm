@@ -8,7 +8,7 @@ export const orderHttp = {
         'ordTheme':order.ordTheme,
         'ordHead':order.ordHead,
         'ordTotalmoney':order.ordTotalmoney,
-        'ordStarttime':order.ordStarttime,
+        'ordStarttime':order.ordStarttime,/*ordCreatetime*/
         'ordState':order.ordState
       }
     }
@@ -31,8 +31,8 @@ export const orderHttp = {
         'ordTheme':order.ordTheme,
         'ordHead':order.ordHead,
         'ordTotalmoney':order.ordTotalmoney,
-        'ordStarttime':order.ordStarttime,
-        'ordState':order.ordState
+        'ordState':order.ordState,
+        'ordStarttime':order.ordStarttime
       }
     }
     return postJson(params)
@@ -53,13 +53,15 @@ export const orderHttp = {
         'ordTheme':order.ordTheme,
         'ordHead':order.ordHead,
         'ordTotalmoney':order.ordTotalmoney,
-        'ordStarttime':order.ordStarttime,
-        'ordState':order.ordState
-
+        /*'ordStarttime':order.ordStarttime,*/
+        'ordState':order.ordState,
+        'startDate':order.startDate,
+        'endDate':order.endDate
       }
     }
     return get(params)
   },
+
   listPage:function (pageNum,pageSize) {
     let params = {
       url:'/order/list_all',
