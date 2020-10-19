@@ -29,3 +29,11 @@ export function clueStatusFormat(clueStatus) {
     return '未处理'
   }
 }
+
+export function ordStateFormat(ordState) {
+  if (ordState === 1){
+    return '已完成'
+  } else {
+    return '执行中'
+  }
+}

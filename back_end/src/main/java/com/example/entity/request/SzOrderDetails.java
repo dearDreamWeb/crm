@@ -13,7 +13,7 @@ YQQ
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class szOrderDetails {
+public class SzOrderDetails {
     private Integer odetId;//订单详情编号
     private Integer odetBuynum;//购买数量
     private BigDecimal odetBuymoney;//购买价格

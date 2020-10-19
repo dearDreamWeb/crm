@@ -32,8 +32,13 @@ public class SzOrder {
     private String ordDetail;//区/县
     private String ordPhone;//收货手机号
     private String ordCreatetime;//订单创建时间（不是签单时间)
+    private Integer ordDelete;//是否删除
+
     private Integer cusId;//客户编号
     private Integer offerId;//报价编号
+
+    private String startDate;
+    private String endDate;
     private Integer pageNum;
     private Integer pageSize;
 }
