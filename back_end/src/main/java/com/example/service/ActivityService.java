@@ -17,4 +17,5 @@ public interface ActivityService {
     ResultVo getActivity(Integer activityId);
     ResultVo listActivity(ActivityReq activityReq);
     ResultVo listByEmp(Integer empId);
+    ResultVo addViews(Integer activityId);
 }

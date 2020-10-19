@@ -111,4 +111,8 @@
         LEFT JOIN emp e ON e.emp_id = ae.emp_id
         WHERE e.emp_id = #{empId} AND a.is_delete = 0
     </select>
+
+    <update id="addViews">
+        UPDATE activity SET views = views + 1 WHERE activity_id = #{activityId}
+    </update>
 </mapper>

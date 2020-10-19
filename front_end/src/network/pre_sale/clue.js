@@ -14,6 +14,9 @@ export const clueHttp = {
         'cluePhone':clue.cluePhone,
         'clueStatus':clue.clueStatus,
         'handlePerson':clue.handlePerson,
+        'handleResult':clue.handleResult,
+        'activityId':clue.activityId,
+        'empId':clue.empId,
         'startDate':clue.startDate,
         'endDate':clue.endDate
       }
@@ -44,6 +47,15 @@ export const clueHttp = {
   get:function (clueId) {
     let params = {
       url:'/clue',
+      data:{
+        'clueId':clueId
+      }
+    }
+    return get(params)
+  },
+  getDetail:function(clueId) {
+    let params = {
+      url: '/clue/detail',
       data:{
         'clueId':clueId
       }

@@ -98,4 +98,10 @@ public class ActivityServiceImpl implements ActivityService {
         }
         return ResultUtils.response(activityResps);
     }
+
+    @Override
+    public ResultVo addViews(Integer activityId) {
+        int addViews = activityMapper.addViews(activityId);
+        return ResultUtils.response(addViews);
+    }
 }

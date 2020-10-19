@@ -135,4 +135,10 @@ public class ClueServiceImpl implements ClueService {
         return ResultUtils.response(list);
     }
 
+    @Override
+    public ResultVo getClueDetail(Integer clueId) {
+        ClueResp clue = clueMapper.getClue(clueId);
+        return ResultUtils.response(clue);
+    }
+
 }

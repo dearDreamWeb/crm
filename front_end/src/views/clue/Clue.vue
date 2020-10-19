@@ -24,6 +24,8 @@
                      :disabled="buttonDisabled" @click="openEditDialog">修改线索</el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete"
                      :disabled="buttonDisabled" @click="delClue">删除线索</el-button>
+          <el-button type="info" size="mini" icon="el-icon-zoom-in"
+                     :disabled="buttonDisabled" @click="getClueDetailButton">线索详情</el-button>
         </el-col>
       </el-row>
 
@@ -43,8 +45,11 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="处理人">
-                  <el-input v-model="searchForm.handlePerson" size="mini"
-                            placeholder="请输入处理人（可做下拉框）" clearable></el-input>
+                  <el-select v-model="searchForm.handlePerson" size="mini" clearable>
+                    <el-option v-for="item in empList" :key="item.empId"
+                               :label="item.empName" :value="item.empName">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -68,7 +73,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="线索状态">
-                  <el-select disabled v-model="searchForm.clueStatus" clearable size="mini">
+                  <el-select v-model="searchForm.clueStatus" clearable size="mini">
                     <el-option label="未处理" value="1"></el-option>
                     <el-option label="已处理" value="0"></el-option>
                   </el-select>
@@ -80,6 +85,26 @@
                              @click="advancedSearch = !advancedSearch"></el-button>
                   <el-button size="mini" @click="advancedQueryClick"
                              type="primary" icon="el-icon-search"></el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item label="活动" prop="activityId">
+                  <el-select v-model="searchForm.activityId" clearable size="mini">
+                    <el-option v-for="item in clueSearchActivityList" :key="item.activityId"
+                               :label="item.activityTitle" :value="item.activityId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="员工" prop="empId">
+                  <el-select v-model="searchForm.empId" clearable size="mini">
+                    <el-option v-for="item in empList" :key="item.empId"
+                               :label="item.empName" :value="item.empId">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -159,12 +184,78 @@
                    :loading="editClueButtonLoading">确定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="线索详情" :visible.sync="clueDetailDialog">
+      <el-form :model="clueDetail" label-position="right" label-width="100px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="线索名称">
+              <el-tag>{{clueDetail.clueName}}</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="联系方式">
+              <el-tag>{{clueDetail.cluePhone}}</el-tag>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="线索状态">
+              <el-tag v-if="clueDetail.clueStatus === 1">已处理</el-tag>
+              <el-tag v-else>未处理</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="处理结果">
+              <el-tag v-if="clueDetail.handleResult === 1">有效</el-tag>
+              <el-tag v-if="clueDetail.handleResult == null">暂未处理</el-tag>
+              <el-tag v-else>无效</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="创建时间">
+              <el-tag>{{clueDetail.createTime | dateFormat}}</el-tag>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="处理人">
+              <el-tag v-if="clueDetail.handlePerson == null">暂未处理</el-tag>
+              <el-tag v-else>{{clueDetail.handlePerson}}</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="来源">
+              <el-tag v-if="clueDetail.activityId == null">手动添加</el-tag>
+              <el-tag v-else>{{clueDetail.activityResp.activityTitle}}</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="所属员工">
+              <el-tag v-if="clueDetail.empId == null">手动添加</el-tag>
+              <el-tag v-else>{{clueDetail.empResp.empName}}</el-tag>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="备注">
+              <el-tag v-if="clueDetail.remark == null">暂无备注</el-tag>
+              <el-tag v-else>{{clueDetail.remark}}</el-tag>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import {clueHttp} from "../../network/pre_sale/clue";
   import {userHttp} from "../../network/system/user";
+  import {activityHttp} from "../../network/pre_sale/activity";
 
   export default {
     name: "Clue",
@@ -177,6 +268,9 @@
         cb(new Error('请输入合法的手机号'))
       }
       return {
+        clueDetail:{},
+        clueDetailDialog:false,
+
         editForm:{},
         editClueButtonLoading:false,
         editDialog:false,
@@ -208,6 +302,8 @@
         addClueButtonLoading:false,
         empList:[],
 
+        clueSearchEmpList:[],
+        clueSearchActivityList:[],
         searchInput:'',
         searchForm:{
           clueName:'',
@@ -215,6 +311,8 @@
           clueStatus:'',
           handleResult:'',
           handlePerson:'',
+          activityId:'',
+          empId:'',
           startDate:'',
           endDate:''
         },
@@ -230,6 +328,22 @@
       }
     },
     methods: {
+      getCLueDetail() {
+        clueHttp.getDetail(this.rowClueId).then(res => {
+          this.clueDetail = res.data
+        })
+      },
+      getClueDetailButton() {
+        this.clueDetailDialog = true
+        this.getCLueDetail()
+      },
+
+      initActivityList() {
+        activityHttp.listNotArgs().then(res => {
+          this.clueSearchActivityList = res.data
+        })
+      },
+
       delClue(clueId) {
         this.$confirm('此操作将删除改线索，是否继续？','提示',{
           confirmButtonText:'确定',
@@ -380,6 +494,7 @@
     created() {
       this.initList()
       this.initEmpList()
+      this.initActivityList()
     }
   }
 </script>

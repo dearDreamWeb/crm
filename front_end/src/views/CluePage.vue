@@ -102,6 +102,13 @@
         activityHttp.getActivity(this.activityId).then(res => {
           this.activity = res.data
         })
+      },
+      addViews() {
+        activityHttp.updateViews(this.activityId).then(res => {
+          if (res.code === 20000) {
+            console.log("成功")
+          }
+        })
       }
     },
     created() {
@@ -109,6 +116,7 @@
       this.empId = this.$urlUtil.getQueryVariable("empId")
 
       this.initActivity()
+      this.addViews()
     }
   }
 </script>

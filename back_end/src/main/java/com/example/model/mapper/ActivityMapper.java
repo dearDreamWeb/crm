@@ -21,4 +21,5 @@ public interface ActivityMapper {
     List<ActivityResp> listActivity(ActivityReq activityReq);
     List<ActivityResp> listByEmp(Integer empId);
     int checkActivity(String activityTitle);
+    int addViews(Integer activityId);
 }

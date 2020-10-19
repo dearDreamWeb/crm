@@ -15,7 +15,8 @@
       <el-col :span="10">
         <el-button type="primary" size="mini" icon="el-icon-plus"
                    @click="openAddDialog">添加活动</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-refresh"></el-button>
+        <el-button type="primary" size="mini" icon="el-icon-refresh"
+                   @click="refreshClick"></el-button>
       </el-col>
       <el-col :span="8">
         <el-button type="warning" size="mini" icon="el-icon-edit"
@@ -88,7 +89,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="活动链接" prop="activityLink">
-            <el-input v-model="addForm.activityLink" clearable size="mini"></el-input>
+            <el-input disabled v-model="addForm.activityLink" clearable size="mini"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -133,7 +134,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="活动链接" prop="activityLink">
-            <el-input v-model="editForm.activityLink" size="mini"></el-input>
+            <el-input disabled v-model="editForm.activityLink" size="mini"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -227,7 +228,7 @@
         addForm:{
           activityTitle:'',
           content:'',
-          activityLink:'',
+          activityLink:'http://localhost:8080/clue_page',
           createBy:'',
           startTime:'',
           endTime:'',
@@ -256,8 +257,10 @@
       }
     },
     methods:{
-      tabHandleClick(tab, event) {
-        console.log(tab, event);
+      refreshClick() {
+        this.searchInput = ''
+        this.initList()
+        this.rowActivityId = 0
       },
 
       authClick() {

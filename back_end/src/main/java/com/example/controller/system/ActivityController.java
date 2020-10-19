@@ -59,4 +59,9 @@ public class ActivityController {
     public ResultVo getByEmp(@RequestParam("empId")Integer empId) {
         return activityService.listByEmp(empId);
     }
+
+    @PostMapping("/add_views")
+    public ResultVo addViews(@RequestParam("activityId")Integer activityId) {
+        return activityService.addViews(activityId);
+    }
 }

@@ -51,6 +51,11 @@ public class ClueController {
         return clueService.getClue(clueId,token);
     }
 
+    @GetMapping("/detail")
+    public ResultVo getClueDetail(@RequestParam("clueId")Integer clueId) {
+        return clueService.getClueDetail(clueId);
+    }
+
     @GetMapping("/list")
     public ResultVo listClue(ClueReq clueReq) {
         return clueService.listClue(clueReq);

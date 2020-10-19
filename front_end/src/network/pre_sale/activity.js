@@ -78,5 +78,14 @@ export const activityHttp = {
       url: '/activity/list'
     }
     return get(params)
+  },
+  updateViews:function (activityId) {
+    let params = {
+      url:'/activity/add_views',
+      data:{
+        'activityId':activityId
+      }
+    }
+    return postJson(params)
   }
 }
