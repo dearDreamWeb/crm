@@ -114,20 +114,27 @@
 
       <el-table :data="listForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
-                highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
+                highlight-current-row @row-click="handleRowClick" v-loading="tableLoading" border>
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column prop="clueName" label="线索名称"></el-table-column>
         <el-table-column prop="cluePhone" label="联系方式"></el-table-column>
-        <el-table-column prop="clueStatus" label="线索状态">
+        <el-table-column prop="clueStatus" label="线索状态" width="120px">
           <template slot-scope="scope">
             {{scope.row.clueStatus | clueStatusFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="handleResult" label="处理结果"></el-table-column>
-        <el-table-column prop="handlePerson" label="处理人"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间">
+        <el-table-column prop="handleResult" label="处理结果" width="120px"></el-table-column>
+        <el-table-column prop="handlePerson" label="处理人" width="120px"></el-table-column>
+        <el-table-column prop="createTime" label="提交时间" width="120px">
           <template slot-scope="scope">
             {{scope.row.createTime | dateFormat}}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="70px" align="center">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" content="处理" placement="top">
+              <el-button type="text" icon="el-icon-thumb" size="medium"></el-button>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -214,7 +221,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="创建时间">
+            <el-form-item label="提交时间">
               <el-tag>{{clueDetail.createTime | dateFormat}}</el-tag>
             </el-form-item>
           </el-col>

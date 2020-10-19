@@ -107,7 +107,7 @@ public class EmpServiceImpl implements EmpService {
         Integer reqDeptEditId = empReq.getDeptId();
         if (reqDeptEditId != null) {
             Integer empId = empReq.getEmpId();
-            empMapper.delEmp(empId);
+            empDeptMapper.delByEmpId(empId);
             int addEmpDept = empDeptMapper.addEmpDept(empId, reqDeptEditId);
             if (addEmpDept != 1) {
                 throw new SysException(ResultEnum.USER_UPDATE_FAIL.getCode(),

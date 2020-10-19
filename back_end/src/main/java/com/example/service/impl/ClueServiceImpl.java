@@ -120,7 +120,7 @@ public class ClueServiceImpl implements ClueService {
     }
 
     @Override
-    public ResultVo listClue(ClueReq clueReq) {
+    public ResultVo listClue(ClueReq clueReq,String empName) {
         Integer pageNum = clueReq.getPageNum();
         Integer pageSize = clueReq.getPageSize();
         if (pageNum == null) {
@@ -130,7 +130,12 @@ public class ClueServiceImpl implements ClueService {
             pageSize = 10;
         }
         PageHelper.startPage(pageNum,pageSize);
-        List<ClueResp> clueResps = clueMapper.listClue(clueReq);
+        List<ClueResp> clueResps;
+        if (empName.equals("admin")) {
+            clueResps = clueMapper.listClue(clueReq);
+        } else {
+            clueResps = clueMapper.listClueByEmpId(clueReq,empName);
+        }
         PageInfo<ClueResp> list = new PageInfo<>(clueResps);
         return ResultUtils.response(list);
     }

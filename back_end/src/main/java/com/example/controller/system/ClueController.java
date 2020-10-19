@@ -4,6 +4,8 @@ import com.example.anno.CheckPermissions;
 import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.ClueReq;
+import com.example.entity.response.EmpResp;
+import com.example.model.mapper.EmpMapper;
 import com.example.service.ClueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 public class ClueController {
     @Autowired
     private ClueService clueService;
+
+    @Autowired
+    private EmpMapper empMapper;
 
     @SysLog("添加线索")
     @PostMapping("/add")
@@ -57,8 +62,10 @@ public class ClueController {
     }
 
     @GetMapping("/list")
-    public ResultVo listClue(ClueReq clueReq) {
-        return clueService.listClue(clueReq);
+    public ResultVo listClue(ClueReq clueReq,HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        return clueService.listClue(clueReq,empByToken.getEmpName());
     }
 
     @PostMapping("/front/add")

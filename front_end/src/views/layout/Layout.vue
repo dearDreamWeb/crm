@@ -7,7 +7,7 @@
         <h1>Element</h1>
       </el-header>
       <el-menu router :default-active="$route.path" :collapse="isCollapse"
-               active-text-color="#ffd04b">
+               active-text-color="#ffd04b" :unique-opened="true">
         <el-menu-item index="/home">
           <i class="el-icon-s-home"></i>
           <span slot="title">首页</span>
@@ -45,6 +45,24 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
+<!--        <div class="float-right" style="width: 10px"></div>-->
+        <div class="float-right">
+          <el-dropdown trigger="click">
+            <span class="el-dropdown-link">
+              个人代办<i class="el-icon-caret-bottom el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item class="clearfix">
+                评论
+                <el-badge class="mark" :value="12" />
+              </el-dropdown-item>
+              <el-dropdown-item class="clearfix">
+                回复
+                <el-badge class="mark" :value="3" />
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
       </el-header>
       <el-main>
         <router-view></router-view>
@@ -71,7 +89,7 @@
         this.$store.commit('clearAll')
         window.sessionStorage.clear()
         this.$router.push('/login')
-        socketHttp.closeWebSocket()
+        // socketHttp.closeWebSocket()
       },
       getMenuList() {
         userHttp.getMenuList().then(res => {

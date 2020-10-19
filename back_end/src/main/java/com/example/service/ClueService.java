@@ -13,6 +13,6 @@ public interface ClueService {
     ResultVo delClue(ClueReq clueReq,String token);
     ResultVo editClue(ClueReq clueReq);
     ResultVo getClue(Integer clueId,String token);
-    ResultVo listClue(ClueReq clueReq);
+    ResultVo listClue(ClueReq clueReq,String empName);
     ResultVo getClueDetail(Integer clueId);
 }

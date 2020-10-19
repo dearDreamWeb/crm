@@ -151,4 +151,41 @@
         ORDER BY create_time DESC
     </select>
 
+    <select id="listClueByEmpId" resultMap="ClueResult">
+        SELECT cl.clue_id,cl.clue_name,cl.clue_phone,cl.clue_status,cl.handle_result,cl.handle_person,
+        cl.remark,cl.version,cl.create_time,cl.update_time,cl.is_delete,cl.activity_id,cl.emp_id
+        FROM clue cl
+        INNER JOIN emp e ON e.emp_id = cl.emp_id
+        <where>
+            <if test="clueReq.clueName != null and clueReq.clueName != ''">
+                AND cl.clue_name LIKE CONCAT('%',#{clueReq.clueName},'%')
+            </if>
+            <if test="clueReq.cluePhone != null and clueReq.cluePhone != ''">
+                AND cl.clue_phone LIKE CONCAT('%',#{clueReq.cluePhone},'%')
+            </if>
+            <if test="clueReq.clueStatus != null">
+                AND cl.clue_status = #{clueReq.clueStatus}
+            </if>
+            <if test="clueReq.handleResult != null">
+                AND cl.handle_result = #{clueReq.handleResult}
+            </if>
+            <if test="clueReq.handlePerson != null and clueReq.handlePerson != ''">
+                AND cl.handle_person LIKE CONCAT('%',#{clueReq.handlePerson},'%')
+            </if>
+            <if test="clueReq.activityId != null">
+                AND cl.activity_id = #{clueReq.activityId}
+            </if>
+            <if test="clueReq.empId != null">
+                AND cl.emp_id = #{clueReq.empId}
+            </if>
+            <if test="clueReq.startDate != null and clueReq.startDate != ''">
+                AND date_format(cl.create_time,'%y%m%d') &gt;= date_format(#{clueReq.startDate},'%y%m%d')
+            </if>
+            <if test="clueReq.endDate != null and clueReq.endDate != ''">
+                AND date_format(cl.create_time,'%y%m%d') &lt;= date_format(#{clueReq.endDate},'%y%m%d')
+            </if>
+            AND cl.is_delete = 0 AND e.emp_name = #{empName}
+        </where>
+        ORDER BY create_time DESC
+    </select>
 </mapper>

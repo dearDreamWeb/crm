@@ -53,10 +53,8 @@
       <el-col :span="6" v-for="item in listForm" :key="item.activityId">
         <el-card shadow="hover" style="margin-top: 10px">
           <el-row type="flex" justify="space-between">
-            <el-col :span="1">
+            <el-col>
               <el-tag>{{item.activityTitle}}</el-tag>
-            </el-col>
-            <el-col :span="10">
               <el-tag>{{item.views}}</el-tag>
             </el-col>
           </el-row>

@@ -164,7 +164,7 @@
     </select>
 
     <select id="getEmpByToken" resultMap="EmpDetailResult">
-        SELECT e.emp_id,d.dept_id,d.dept_key,m.menu_id,m.menu_name,m.url,m.icon,m.perms
+        SELECT e.emp_id,e.emp_name,d.dept_id,d.dept_key,m.menu_id,m.menu_name,m.url,m.icon,m.perms
         FROM emp e
         LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id
         LEFT JOIN dept d ON d.dept_id = ed.dept_id

@@ -145,7 +145,8 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="密码" prop="passWord">
-              <el-input v-model="addForm.passWord" size="mini" placeholder="请输入密码" clearable/>
+              <el-input v-model="addForm.passWord" size="mini"
+                        placeholder="请输入密码" clearable show-password/>
             </el-form-item>
           </el-col>
         </el-row>
