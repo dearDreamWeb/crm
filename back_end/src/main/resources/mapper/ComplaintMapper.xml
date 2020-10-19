@@ -25,7 +25,7 @@
     </insert>
 
     <update id="updateComplaint" parameterType="com.example.entity.request.Complaint">
-        update complaint set complaintData = #{complaint_data}
+        update complaint set complaint_data = #{complaintData}
         <if test="complaintZt !=null and complaintZt != ''">
             ,complaint_complaintzt = #{complaintZt}
         </if>
@@ -57,11 +57,10 @@
         <if test="complaintHfvisit !=null and complaintHfvisit != ''">
             ,complaint_hfvisit = #{complaintHfvisit}
         </if>
-        where complaintId = #{complaint_id}
+        where complaint_id = #{complaintId}
     </update>
     <delete id="deleteComplaint" parameterType="Integer">
-        UPDATE complaint SET is_delete = 1,version = version + 1
-        WHERE complaintId = #{complaint_id}
+        DELETE FROM complaint WHERE complaint_id = #{complaintId}
     </delete>
     <select id="listComplaint" resultMap="ComplaintResult">
         SELECT complaint_id,complaint_complaintzt,complaint_receptionist,complaint_classification,complaint_describe,complaint_data,complaint_complainants,complaint_urgent,complaint_handle,complaint_handlegc,complaint_customerfk,complaint_hfvisit
@@ -76,6 +75,17 @@
             <if test="complaintClassification != null and complaintClassification != ''">
                 AND complaint_classification LIKE CONCAT('%',#{complaintClassification},'%')
             </if>
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(complaint_data,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(complaint_data,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+
         </where>
+        ORDER BY complaint_data DESC
+    </select>
+    <select id="getComplaint" resultMap="ComplaintResult">
+        SELECT * FROM complaint WHERE complaint_id = #{complaintId}
     </select>
 </mapper>

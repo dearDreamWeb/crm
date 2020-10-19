@@ -16,5 +16,5 @@ public interface CustomerkfMapper {
     Customerkf getCustomerkf(Integer customerId);
     int addCustomerkf(Customerkf customerkf);
     int updateCustomerkf(Customerkf customerkf);
-    int deleteCustomerkf(int customerId);
+    int deleteCustomerkf(Integer customerId);
 }
