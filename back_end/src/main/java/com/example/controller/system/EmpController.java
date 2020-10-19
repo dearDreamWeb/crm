@@ -75,4 +75,9 @@ public class EmpController {
     public ResultVo listNotAuth(@RequestParam("activityId")Integer activityId) {
         return empService.listNotAuthActivity(activityId);
     }
+
+    @PostMapping("/logout")
+    public ResultVo logout(@RequestParam("empName")String empName) {
+        return empService.logout(empName);
+    }
 }

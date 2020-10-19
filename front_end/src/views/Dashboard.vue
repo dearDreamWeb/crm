@@ -178,8 +178,6 @@
 
       </el-col>
     </el-row>
-
-
   </div>
 </template>
 
@@ -190,12 +188,11 @@
       return{
         icon:'',
         shopId:'',
-        empName:'admin'
       }
     },
     methods:{
 
-    }
+    },
   }
 </script>
 

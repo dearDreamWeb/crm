@@ -55,14 +55,15 @@
 
 <script>
   import {userHttp} from "../../network/system/user";
-  import {socketHttp} from "../../network/websocket";
+  import {socketHttp} from "../../socket/socket";
 
   export default {
     name: "Layout",
     data(){
       return{
         isCollapse:false,
-        menuList:[]
+        menuList:[],
+        empName:''
       }
     },
     methods:{
@@ -86,6 +87,7 @@
     },
     created() {
       this.getMenuList()
+      this.empName = this.$store.state.empName
     }
   }
 </script>

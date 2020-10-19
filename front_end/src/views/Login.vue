@@ -27,7 +27,7 @@
 
 <script>
   import {userHttp} from "../network/system/user";
-  import {socketHttp} from "../network/websocket";
+  import {socketHttp} from "../socket/socket";
 
   export default {
     name: "Login",
@@ -68,7 +68,7 @@
               window.sessionStorage.setItem('token',emp.token)
               this.fullscreenLoading = false
               this.$router.push('/home')
-              socketHttp.getWebSocket();
+              socketHttp.initWebSocket(emp.empName)
             } else {
               this.fullscreenLoading = false
               this.$message({
@@ -79,7 +79,8 @@
           })
         })
       }
-    }
+    },
+
   }
 </script>
 

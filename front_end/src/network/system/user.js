@@ -102,7 +102,7 @@ export const userHttp = {
     }
     return get(params)
   },
-  listNotAuth(activityId) {
+  listNotAuth:function(activityId) {
     let params = {
       url:'/emp/list_not_auth',
       data:{
@@ -111,4 +111,13 @@ export const userHttp = {
     }
     return get(params)
   },
+  logout:function (empName) {
+    let params = {
+      url: '/emp/logout',
+      data:{
+        'empName':empName
+      }
+    }
+    return postJson(params)
+  }
 }

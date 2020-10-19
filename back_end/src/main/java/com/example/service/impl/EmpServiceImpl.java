@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
+import com.example.controller.WebSocketController;
 import com.example.entity.ResultVo;
 import com.example.entity.request.EmpReq;
 import com.example.entity.response.DeptResp;
@@ -40,7 +41,7 @@ public class EmpServiceImpl implements EmpService {
     private EmpDeptMapper empDeptMapper;
 
     @Autowired
-    private WebSocketService webSocketService;
+    private WebSocketController webSocketService;
 
     @Override
     public ResultVo addEmp(EmpReq empReq) {
@@ -125,7 +126,7 @@ public class EmpServiceImpl implements EmpService {
         //服务器向客户端发送JSON：测试
         Gson gson = new Gson();
         String json = gson.toJson(emp);
-        webSocketService.sendMessageToSingle(json);
+        webSocketService.sendOneMessage(emp.getEmpName(),json);
         return ResultUtils.response(emp);
     }
 
@@ -193,8 +194,8 @@ public class EmpServiceImpl implements EmpService {
     }
 
     @Override
-    public ResultVo logout(EmpReq empReq) {
-        return null;
+    public ResultVo logout(String empName) {
+        return ResultUtils.response("退出成功");
     }
 
     @Override

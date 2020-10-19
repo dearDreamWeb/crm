@@ -18,6 +18,6 @@ public interface EmpService {
     ResultVo login(EmpReq empReq);
     ResultVo getShowMenuByToken(String token);
     ResultVo pwd(EmpReq empReq);
-    ResultVo logout(EmpReq empReq);
+    ResultVo logout(String empName);
     ResultVo listNotAuthActivity(Integer activityId);
 }
