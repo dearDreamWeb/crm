@@ -25,11 +25,17 @@ Vue.component('tree-table', TreeTable)
 Vue.prototype.$urlUtil = urlUtils
 
 /*格式化*/
-import {sexFormat,dateFormat,clueStatusFormat,ordStateFormat} from "./common/formatUtils";
+import {
+  sexFormat,dateFormat,clueStatusFormat,
+  ordStateFormat,dateTimeFormat,
+  clueHandleResultFormat
+} from "./common/formatUtils";
 Vue.filter('dateFormat',dateFormat)
 Vue.filter('sexFormat',sexFormat)
 Vue.filter('clueStatusFormat',clueStatusFormat)
 Vue.filter('ordStateFormat',ordStateFormat)
+Vue.filter('dateTimeFormat',dateTimeFormat)
+Vue.filter('clueHandleResultFormat',clueHandleResultFormat)
 
 /* eslint-disable no-new */
 new Vue({

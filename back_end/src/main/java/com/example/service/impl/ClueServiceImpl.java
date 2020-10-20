@@ -106,13 +106,13 @@ public class ClueServiceImpl implements ClueService {
             throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
                     ResultEnum.DATA_NOT_EXIST.getMessage());
         }
-        Integer empId = clue.getEmpId();
-        if (empId != 0) {
+        EmpResp empResp = empMapper.getEmpByToken(token);
+        if (empResp == null && !empResp.getToken().equals(token)) {
             throw new SysException(ResultEnum.CLUE_NOT_BE_EDIT.getCode(),
                     ResultEnum.CLUE_NOT_BE_EDIT.getMessage());
         }
-        EmpResp empResp = clue.getEmpResp();
-        if (empResp == null && !empResp.getToken().equals(token)) {
+        Integer empId = empResp.getEmpId();
+        if (empId != clue.getEmpId()) {
             throw new SysException(ResultEnum.CLUE_NOT_BE_EDIT.getCode(),
                     ResultEnum.CLUE_NOT_BE_EDIT.getMessage());
         }
@@ -144,6 +144,20 @@ public class ClueServiceImpl implements ClueService {
     public ResultVo getClueDetail(Integer clueId) {
         ClueResp clue = clueMapper.getClue(clueId);
         return ResultUtils.response(clue);
+    }
+
+    @Override
+    public ResultVo batchEditClueType(ClueReq clueReq) {
+        if (clueReq.getClueIdList().size() == 0) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+        int batchEditClueType = clueMapper.batchEditClueType(clueReq);
+        if (batchEditClueType == 0) {
+            throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
+                    ResultEnum.DATA_UPDATE_FAIL.getMessage());
+        }
+        return ResultUtils.response(batchEditClueType);
     }
 
 }

@@ -19,5 +19,7 @@ public interface ClueMapper {
     int editClue(ClueReq clueReq);
     ClueResp getClue(Integer clueId);
     List<ClueResp> listClue(ClueReq clueReq);
-    List<ClueResp> listClueByEmpId(@Param("clueReq")ClueReq clueReq, @Param("empName")String empName);
+    List<ClueResp> listClueByEmpId(@Param("clueReq")ClueReq clueReq,
+                                   @Param("empName")String empName);
+    int batchEditClueType(ClueReq clueReq);
 }

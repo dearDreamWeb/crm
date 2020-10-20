@@ -15,4 +15,5 @@ public interface ClueService {
     ResultVo getClue(Integer clueId,String token);
     ResultVo listClue(ClueReq clueReq,String empName);
     ResultVo getClueDetail(Integer clueId);
+    ResultVo batchEditClueType(ClueReq clueReq);
 }

@@ -72,4 +72,9 @@ public class ClueController {
     public ResultVo frontAddClue(@RequestBody ClueReq clueReq) {
         return clueService.addClue(clueReq);
     }
+
+    @PostMapping("/batch_edit_type")
+    public ResultVo batchEditClueType(@RequestBody ClueReq clueReq) {
+        return clueService.batchEditClueType(clueReq);
+    }
 }

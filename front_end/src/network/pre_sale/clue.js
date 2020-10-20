@@ -13,6 +13,7 @@ export const clueHttp = {
         'clueName':clue.clueName,
         'cluePhone':clue.cluePhone,
         'clueStatus':clue.clueStatus,
+        'clueType':clue.clueType,
         'handlePerson':clue.handlePerson,
         'handleResult':clue.handleResult,
         'activityId':clue.activityId,
@@ -91,6 +92,17 @@ export const clueHttp = {
         'cluePhone':clue.cluePhone,
         'activityId':clue.activityId,
         'empId':clue.empId
+      }
+    }
+    return postJson(params)
+  },
+  batchEditClueType:function (clue) {
+    let params = {
+      url:'/clue/batch_edit_type',
+      data:{
+        'handlePerson':clue.handlePerson,
+        'clueIdList':clue.clueIdList,
+        'clueType':clue.clueType
       }
     }
     return postJson(params)

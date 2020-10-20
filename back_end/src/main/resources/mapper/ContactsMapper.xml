@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.ContactsMapper">
+    <resultMap id="ContactsResult" type="com.example.entity.response.ContactsResp">
+        <id column="contacts_id" property="contactsId"/>
+        <result column="contacts_name" property="contactsName"/>
+        <result column="birthday" property="birthday"/>
+        <result column="sex" property="sex"/>
+        <result column="wechat" property="wechat"/>
+        <result column="contacts_phone" property="contactsPhone"/>
+        <result column="qq" property="qq"/>
+        <result column="email" property="email"/>
+        <result column="remark" property="remark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="contacts_dict_type" property="contactsDictType"/>
+        <result column="cus_id" property="cusId"/>
+    </resultMap>
+
+    <resultMap id="ContactsDetailResult" type="com.example.entity.response.ContactsResp">
+        <id column="contacts_id" property="contactsId"/>
+        <result column="contacts_name" property="contactsName"/>
+        <result column="birthday" property="birthday"/>
+        <result column="sex" property="sex"/>
+        <result column="wechat" property="wechat"/>
+        <result column="contacts_phone" property="contactsPhone"/>
+        <result column="qq" property="qq"/>
+        <result column="email" property="email"/>
+        <result column="remark" property="remark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="contacts_dict_type" property="contactsDictType"/>
+        <result column="cus_id" property="cusId"/>
+        <association property="customerResp" resultMap="CustomerResult"/>
+    </resultMap>
+
+    <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
+        <id column="cus_id" property="cusId"/>
+        <result column="cus_name" property="cusName"/>
+        <result column="life_cycle" property="lifeCycle"/>
+        <result column="first_signing_time" property="firstSigningTime"/>
+        <result column="abbreviation" property="abbreviation"/>
+        <result column="credit" property="credit"/>
+        <result column="settlement" property="settlement"/>
+        <result column="company_account" property="companyAccount"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="detail_address" property="detailAddress"/>
+        <result column="cus_remark" property="cusRemark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="cus_dict_source" property="cusDictSource"/>
+        <result column="cus_dict_stage" property="cusDictStage"/>
+        <result column="qualitative_id" property="qualitativeId"/>
+        <result column="grading_id" property="gradingId"/>
+        <result column="ration_id" property="rationId"/>
+        <result column="emp_id" property="empId"/>
+    </resultMap>
+
+    <insert id="addContacts" parameterType="com.example.entity.request.ContactsReq">
+        <selectKey keyColumn="contacts_id" keyProperty="contactsId" resultType="Integer" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        INSERT contacts(contacts_name,birthday,sex,wechat,
+            contacts_phone,qq,email,remark,contacts_dict_type,cus_id)
+        VALUES (#{contactsName},#{birthday},#{sex},#{wechat},#{contactsPhone},
+                #{qq},#{email},#{remark},#{contactsDictType},#{cusId})
+    </insert>
+
+    <update id="delContacts" parameterType="Integer">
+        UPDATE contacts SET is_delete = 1 WHERE contacts_id = #{contactsId}
+    </update>
+
+    <update id="editContacts" parameterType="com.example.entity.request.ContactsReq">
+        UPDATE contacts SET update_time = #{updateTime},version = version + 1
+        <if test="contactsName != null and contactsName != ''">
+            ,contacts_name = #{contactsName}
+        </if>
+        <if test="birthday != null and birthday != ''">
+            ,birthday = #{birthday}
+        </if>
+        <if test="sex != null">
+            ,sex = #{sex}
+        </if>
+        <if test="wechat != null and wechat != ''">
+            ,wechat = #{wechat}
+        </if>
+        <if test="contactsPhone != null and contactsPhone != ''">
+            ,contacts_phone = #{contactsPhone}
+        </if>
+        <if test="qq != null and qq != ''">
+            ,qq = #{qq}
+        </if>
+        <if test="email != null and email != ''">
+            ,email = #{email}
+        </if>
+        <if test="remark != null and remark != ''">
+            ,remark = #{remark}
+        </if>
+        <if test="contactsDictType != null and contactsDictType != ''">
+            ,contacts_dict_type = #{contactsDictType}
+        </if>
+        <if test="cusId != null">
+            ,cus_id = #{cusId}
+        </if>
+        WHERE contacts_id = #{contactsId} AND version = #{version}
+    </update>
+
+    <select id="getContacts" resultMap="ContactsResult">
+        SELECT contacts_id,contacts_name,birthday,sex,wechat,
+            contacts_phone,qq,email,remark,contacts_dict_type,cus_id
+        FROM contacts
+        WHERE contacts_id = #{contactsId}
+    </select>
+
+    <select id="listContacts" resultMap="ContactsResult">
+        SELECT contacts_id,contacts_name,birthday,sex,wechat,
+            contacts_phone,qq,email,remark,contacts_dict_type,cus_id
+        FROM contacts
+    </select>
+</mapper>

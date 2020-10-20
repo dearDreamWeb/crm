@@ -17,9 +17,9 @@
           <h1 style="font-family: 华文琥珀;color: red">截至~~~{{activity.endTime}}~~~结束</h1>
           <hr>
           <el-form :model="clueForm" ref="clueFormRef" :rules="clueFormRules">
-            <el-form-item label="公司名称" prop="clueName">
+            <el-form-item label="名称" prop="clueName">
               <el-input v-model="clueForm.clueName" clearable
-                        placeholder="请输入公司名称"></el-input>
+                        placeholder="请输入名称"></el-input>
             </el-form-item>
             <el-form-item label="联系方式" prop="cluePhone">
               <el-input v-model="clueForm.cluePhone" clearable

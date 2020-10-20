@@ -12,20 +12,23 @@
             <el-button @click="searchInputClick" slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="9">
           <el-button type="primary" icon="el-icon-plus" size="mini" @click="addDialog = true">添加线索</el-button>
           <el-button type="primary" icon="el-icon-zoom-in" size="mini"
                      @click="advancedSearch = !advancedSearch">高级查询</el-button>
           <el-button type="primary" icon="el-icon-refresh"
                      size="mini" @click="resetForm"></el-button>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="9">
           <el-button type="warning" size="mini" icon="el-icon-edit"
-                     :disabled="buttonDisabled" @click="openEditDialog">修改线索</el-button>
+                     :disabled="buttonDisabled" @click="openEditDialog">修改</el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete"
-                     :disabled="buttonDisabled" @click="delClue">删除线索</el-button>
+                     :disabled="buttonDisabled" @click="delClue">删除</el-button>
           <el-button type="info" size="mini" icon="el-icon-zoom-in"
-                     :disabled="buttonDisabled" @click="getClueDetailButton">线索详情</el-button>
+                     :disabled="buttonDisabled" @click="getClueDetailButton">详情</el-button>
+          <el-button type="success" size="mini" icon="el-icon-edit-outline"
+                     :disabled="this.multipleClueIdList.length == 0"
+                     @click="openClueTypeEdit">批量</el-button>
         </el-col>
       </el-row>
 
@@ -114,8 +117,9 @@
 
       <el-table :data="listForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
-                highlight-current-row @row-click="handleRowClick" v-loading="tableLoading" border>
-        <el-table-column type="index" width="50"></el-table-column>
+                highlight-current-row @row-click="handleRowClick" v-loading="tableLoading"
+                border @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="50" :selectable="checkSelectTable"></el-table-column>
         <el-table-column prop="clueName" label="线索名称"></el-table-column>
         <el-table-column prop="cluePhone" label="联系方式"></el-table-column>
         <el-table-column prop="clueStatus" label="线索状态" width="120px">
@@ -133,7 +137,8 @@
         <el-table-column label="操作" width="70px" align="center">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="处理" placement="top">
-              <el-button type="text" icon="el-icon-thumb" size="medium"></el-button>
+              <el-button type="text" icon="el-icon-thumb" size="medium"
+                         @click="manipulateClueClick(scope.row.clueId)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -256,6 +261,152 @@
         </el-row>
       </el-form>
     </el-dialog>
+
+    <el-dialog title="采集信息" center :visible.sync="clueManipulateDialog"
+               width="30%" top="55px">
+      <el-form :model="manipulateForm" label-width="100px" label-position="right">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="数据所有人">
+              <el-tag>{{manipulateForm.empName}}</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-button type="text" icon="el-icon-share">共享</el-button>
+          </el-col>
+          <el-col :span="6">
+            <el-button type="text" icon="el-icon-s-promotion">转移</el-button>
+          </el-col>
+        </el-row>
+        <el-form-item label="来源">
+          <el-tag>{{manipulateForm.activityTitle}}</el-tag>
+        </el-form-item>
+        <el-form-item label="归属">
+          <el-tag>{{manipulateForm.empName}}</el-tag>
+        </el-form-item>
+        <el-form-item label="提交时间">
+          <el-tag>{{manipulateForm.createTime | dateTimeFormat}}</el-tag>
+        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="状态">
+              <el-tag>{{manipulateForm.clueStatus | clueStatusFormat}}</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="结果">
+              <el-tag v-if="manipulateForm.handleResult == null">暂未处理</el-tag>
+              <el-tag v-else>{{manipulateForm.handleResult}}</el-tag>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer">
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-tooltip class="item" effect="dark" content="转为客户" placement="top">
+              <el-button type="warning" icon="el-icon-s-custom" circle
+                         @click="openCustomerDialog"></el-button>
+            </el-tooltip>
+          </el-col>
+          <el-col :span="6">
+            <el-tooltip class="item" effect="dark" content="加入代办" placement="top">
+              <el-button type="success" icon="el-icon-timer" circle></el-button>
+            </el-tooltip>
+          </el-col>
+          <el-col :span="6">
+            <el-tooltip class="item" effect="dark" content="转成订单" placement="top">
+              <el-button type="primary" icon="el-icon-tickets" circle></el-button>
+            </el-tooltip>
+          </el-col>
+          <el-col :span="6">
+            <el-tooltip class="item" effect="dark" content="设为无效" placement="top">
+              <el-button type="danger" icon="el-icon-error" circle></el-button>
+            </el-tooltip>
+          </el-col>
+        </el-row>
+      </span>
+    </el-dialog>
+
+    <el-dialog title="更改线索类型" :visible.sync="editClueTypeDialog" width="30%">
+      <el-form>
+        <el-form-item label="线索类型：" label-width="120px">
+          <el-radio v-model="clueBatchEditTypeForm.clueType" :label="0">个人线索</el-radio>
+          <el-radio v-model="clueBatchEditTypeForm.clueType" :label="1">公司线索</el-radio>
+        </el-form-item>
+        <span>提交后不可修改</span>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="editClueTypeDialog = false">取消</el-button>
+        <el-button type="primary" @click="editClueTypeClick"
+                   :loading="batchEditTypeLoading">确定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog title="新建客户" :visible.sync="clueTurnCustomerDialog" top="30px">
+      <el-form :model="addCustomerForm" label-width="80px" label-position="right">
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="公司名称" prop="cusName">
+              <el-select style="width: 550px">
+                <el-option></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="公司简称">
+              <el-input></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="姓名">
+              <el-select>
+                <el-option></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="手机">
+              <el-input></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="来源">
+              <el-select>
+                <el-option></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="QQ">
+              <el-input></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="微信">
+              <el-input></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="备注">
+              <el-input type="textarea"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer">
+        <el-button size="mini" @click="clueTurnCustomerDialog = false">取消</el-button>
+        <el-button type="primary" size="mini">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -275,6 +426,29 @@
         cb(new Error('请输入合法的手机号'))
       }
       return {
+        clueTurnCustomerDialog:false,
+        addCustomerForm:{},
+
+        batchEditTypeLoading:false,
+        clueBatchEditTypeForm:{
+          clueIdList:[],
+          clueType:0,
+          handlePerson:''
+        },
+        multipleClueIdList:[],
+        clueTypeRadio:0,
+        editClueTypeDialog:false,
+
+
+        manipulateForm:{
+          empName:'',
+          activityTitle:'',
+          createTime:'',
+          clueStatus:'',
+          handleResult:''
+        },
+        clueManipulateDialog:false,
+
         clueDetail:{},
         clueDetailDialog:false,
 
@@ -335,6 +509,58 @@
       }
     },
     methods: {
+      openCustomerDialog() {
+        this.clueTurnCustomerDialog = true
+      },
+
+      checkSelectTable(row,index) {
+        if (row.clueType == null) {
+          return true
+        } else {
+          return false
+        }
+      },
+      handleSelectionChange(val) {
+        this.multipleClueIdList = []
+        for (let i=0;i<val.length;i++) {
+          if (this.multipleClueIdList.indexOf(val[i].clueId === -1)) {
+            this.multipleClueIdList.push(val[i].clueId)
+          }
+        }
+      },
+      editClueTypeClick() {
+        if (this.multipleClueIdList.length > 0) {
+          this.batchEditTypeLoading = true
+          this.clueBatchEditTypeForm.clueIdList = this.multipleClueIdList
+          this.clueBatchEditTypeForm.handlePerson = this.$store.state.empName
+          clueHttp.batchEditClueType(this.clueBatchEditTypeForm).then(res => {
+            if (res.code === 20000) {
+              this.batchEditTypeLoading = false
+              this.editClueTypeDialog = false
+              this.initList()
+              this.$message.success(res.message)
+            } else {
+              this.$message({
+                message:res.message,
+                type:'error'
+              })
+              this.batchEditTypeLoading = false
+            }
+          })
+        }
+      },
+      openClueTypeEdit() {
+        this.editClueTypeDialog = true
+      },
+      manipulateClueClick(clueId) {
+        this.clueManipulateDialog = true
+        clueHttp.getDetail(clueId).then(res => {
+          this.manipulateForm = res.data
+          this.manipulateForm.empName = res.data.empResp.empName
+          this.manipulateForm.activityTitle = res.data.activityResp.activityTitle
+        })
+      },
+
       getCLueDetail() {
         clueHttp.getDetail(this.rowClueId).then(res => {
           this.clueDetail = res.data

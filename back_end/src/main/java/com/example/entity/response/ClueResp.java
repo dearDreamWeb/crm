@@ -19,6 +19,7 @@ public class ClueResp {
     private String clueName;
     private String cluePhone;
     private Integer clueStatus;
+    private Integer clueType;
     private Integer handleResult;
     private String handlePerson;
     private String remark;

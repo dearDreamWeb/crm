@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.CustomerMapper">
+    <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
+        <id column="cus_id" property="cusId"/>
+        <result column="cus_name" property="cusName"/>
+        <result column="life_cycle" property="lifeCycle"/>
+        <result column="first_signing_time" property="firstSigningTime"/>
+        <result column="abbreviation" property="abbreviation"/>
+        <result column="credit" property="credit"/>
+        <result column="settlement" property="settlement"/>
+        <result column="company_account" property="companyAccount"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="detail_address" property="detailAddress"/>
+        <result column="cus_remark" property="cusRemark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="cus_dict_source" property="cusDictSource"/>
+        <result column="cus_dict_stage" property="cusDictStage"/>
+        <result column="qualitative_id" property="qualitativeId"/>
+        <result column="grading_id" property="gradingId"/>
+        <result column="ration_id" property="rationId"/>
+        <result column="emp_id" property="empId"/>
+    </resultMap>
+
+    <resultMap id="CustomerResultDetail" type="com.example.entity.response.CustomerResp">
+        <id column="cus_id" property="cusId"/>
+        <result column="cus_name" property="cusName"/>
+        <result column="life_cycle" property="lifeCycle"/>
+        <result column="first_signing_time" property="firstSigningTime"/>
+        <result column="abbreviation" property="abbreviation"/>
+        <result column="credit" property="credit"/>
+        <result column="settlement" property="settlement"/>
+        <result column="company_account" property="companyAccount"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="detail_address" property="detailAddress"/>
+        <result column="cus_remark" property="cusRemark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="cus_dict_source" property="cusDictSource"/>
+        <result column="cus_dict_stage" property="cusDictStage"/>
+        <result column="qualitative_id" property="qualitativeId"/>
+        <result column="grading_id" property="gradingId"/>
+        <result column="ration_id" property="rationId"/>
+        <result column="emp_id" property="empId"/>
+        <association property="empResp" resultMap="EmpResult"/>
+    </resultMap>
+
+    <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
+        <id property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="sex" column="sex"/>
+        <result property="passWord" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="empStatus" column="emp_status"/>
+        <result property="token" column="token"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <insert id="addCustomer" parameterType="com.example.entity.request.CustomerReq">
+        <selectKey keyColumn="cus_id" keyProperty="cusId" resultType="Integer" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        INSERT INTO customer(cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
+            company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
+            qualitative_id,grading_id,ration_id,emp_id) VALUES
+        (#{cusName},#{lifeCycle},#{firstSigningTime},#{abbreviation},#{credit},#{settlement},#{companyAccount},#{province},
+        #{city},#{detailAddress},#{cusRemark},#{cusDictSource},#{cusDictStage},#{qualitativeId},#{gradingId},#{rationId},#{empId})
+    </insert>
+
+    <update id="delCustomer" parameterType="Integer">
+        UPDATE customer SET is_delete = 1,version = version + 1 WHERE cus_id = #{cusId}
+    </update>
+
+    <update id="editCustomer" parameterType="com.example.entity.request.CustomerReq">
+        UPDATE customer SET update_time = #{updateTime},version = version + 1
+        <if test="cusName != null and cusName != ''">
+            ,cus_name = #{cusName}
+        </if>
+        <if test="lifeCycle != null">
+            ,life_cycle = #{lifeCycle}
+        </if>
+        <if test="firstSigningTime != null and firstSigningTime != ''">
+            ,first_signing_time = #{firstSigningTime}
+        </if>
+        <if test="abbreviation != null and abbreviation != ''">
+            ,abbreviation = #{abbreviation}
+        </if>
+        <if test="credit != null and credit != ''">
+            ,credit = #{credit}
+        </if>
+        <if test="settlement != null">
+            ,settlement != #{settlement}
+        </if>
+        <if test="companyAccount != null and companyAccount != ''">
+            ,company_account = #{companyAccount}
+        </if>
+        <if test="province != null">
+            ,province = #{province}
+        </if>
+        <if test="city != null">
+            ,city = #{city}
+        </if>
+        <if test="detailAddress != null and detailAddress != ''">
+            ,detail_address = #{detailAddress}
+        </if>
+        <if test="cusRemark != null and cusRemark != ''">
+            ,cus_remark = #{cusRemark}
+        </if>
+        <if test="cusDictSource != null and cusDictSource != ''">
+            ,cus_dict_source = #{cusDictSource}
+        </if>
+        <if test="cusDictStage != null and cusDictStage != ''">
+            ,cus_dict_stage = #{cusDictStage}
+        </if>
+        <if test="qualitativeId != null">
+            ,qualitative_id = #{qualitativeId}
+        </if>
+        <if test="gradingId != null and">
+            ,grading_id = #{gradingId}
+        </if>
+        <if test="rationId != null">
+            ,ration_id = #{rationId}
+        </if>
+        <if test="empId != null">
+            ,emp_id = #{empId}
+        </if>
+        WHERE cus_id = #{cusId} AND version = #{version}
+    </update>
+
+    <select id="getCustomer" resultMap="CustomerResult">
+        SELECT cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
+            company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
+            qualitative_id,grading_id,ration_id,emp_id
+        FROM customer
+        WHERE cus_id = #{cusId}
+    </select>
+
+    <select id="listCustomer" resultMap="CustomerResult">
+        SELECT cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
+            company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
+            qualitative_id,grading_id,ration_id,emp_id
+        FROM customer
+    </select>
+</mapper>

@@ -7,6 +7,7 @@
         <result column="clue_name" property="clueName"/>
         <result column="clue_phone" property="cluePhone"/>
         <result column="clue_status" property="clueStatus"/>
+        <result column="clue_type" property="clueType"/>
         <result column="handle_result" property="handleResult"/>
         <result column="handle_person" property="handlePerson"/>
         <result column="remark" property="remark"/>
@@ -23,6 +24,7 @@
         <result column="clue_name" property="clueName"/>
         <result column="clue_phone" property="cluePhone"/>
         <result column="clue_status" property="clueStatus"/>
+        <result column="clue_type" property="clueType"/>
         <result column="handle_result" property="handleResult"/>
         <result column="handle_person" property="handlePerson"/>
         <result column="remark" property="remark"/>
@@ -72,8 +74,8 @@
         <selectKey keyColumn="clue_id" keyProperty="clueId" resultType="Integer" order="AFTER">
             select last_insert_id();
         </selectKey>
-        INSERT INTO clue(clue_name,clue_phone,clue_status,handle_result,handle_person,remark,activity_id,emp_id)
-        VALUES (#{clueName},#{cluePhone},#{clueStatus},#{handleResult},#{handlePerson},#{remark},#{activityId},#{empId})
+        INSERT INTO clue(clue_name,clue_phone,clue_status,clue_type,handle_result,handle_person,remark,activity_id,emp_id)
+        VALUES (#{clueName},#{cluePhone},#{clueStatus},#{clueType},#{handleResult},#{handlePerson},#{remark},#{activityId},#{empId})
     </insert>
 
     <update id="delClue" parameterType="Integer">
@@ -92,6 +94,9 @@
         <if test="clueStatus != null">
             ,clue_status = #{clueStatus}
         </if>
+        <if test="clueType != null">
+            ,clue_type = #{clueType}
+        </if>
         <if test="handleResult != null">
             ,handle_result = #{handleResult}
         </if>
@@ -105,7 +110,7 @@
     </update>
 
     <select id="getClue" resultMap="ClueDetailResult" parameterType="Integer">
-        SELECT cl.clue_id,cl.clue_name,cl.clue_phone,cl.clue_status,cl.handle_result,cl.handle_person,
+        SELECT cl.clue_id,cl.clue_name,cl.clue_phone,cl.clue_status,cl.clue_type,cl.handle_result,cl.handle_person,
                 cl.remark,cl.version,cl.create_time,cl.update_time,cl.is_delete,cl.activity_id,cl.emp_id,
                 a.activity_id,a.activity_title,e.emp_name,e.token
         FROM clue cl
@@ -115,7 +120,7 @@
     </select>
 
     <select id="listClue" resultMap="ClueResult">
-        SELECT clue_id,clue_name,clue_phone,clue_status,handle_result,handle_person,remark,
+        SELECT clue_id,clue_name,clue_phone,clue_status,clue_type,handle_result,handle_person,remark,
             version,create_time,update_time,is_delete,activity_id,emp_id
         FROM clue
         <where>
@@ -127,6 +132,9 @@
             </if>
             <if test="clueStatus != null">
                 AND clue_status = #{clueStatus}
+            </if>
+            <if test="clueType != null">
+                AND clue_type = #{clueType}
             </if>
             <if test="handleResult != null">
                 AND handle_result = #{handleResult}
@@ -152,7 +160,7 @@
     </select>
 
     <select id="listClueByEmpId" resultMap="ClueResult">
-        SELECT cl.clue_id,cl.clue_name,cl.clue_phone,cl.clue_status,cl.handle_result,cl.handle_person,
+        SELECT cl.clue_id,cl.clue_name,cl.clue_phone,cl.clue_status,cl.clue_type,cl.handle_result,cl.handle_person,
         cl.remark,cl.version,cl.create_time,cl.update_time,cl.is_delete,cl.activity_id,cl.emp_id
         FROM clue cl
         INNER JOIN emp e ON e.emp_id = cl.emp_id
@@ -165,6 +173,9 @@
             </if>
             <if test="clueReq.clueStatus != null">
                 AND cl.clue_status = #{clueReq.clueStatus}
+            </if>
+            <if test="clueReq.clueType != null">
+                AND cl.clue_type = #{clueReq.clueType}
             </if>
             <if test="clueReq.handleResult != null">
                 AND cl.handle_result = #{clueReq.handleResult}
@@ -188,4 +199,12 @@
         </where>
         ORDER BY create_time DESC
     </select>
+
+    <update id="batchEditClueType" parameterType="com.example.entity.request.ClueReq">
+        UPDATE clue SET clue_type = #{clueType},update_time = #{updateTime},handle_person = #{handlePerson}
+        WHERE clue_id IN
+        <foreach collection="clueIdList" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author: pengjia
@@ -19,6 +20,7 @@ public class ClueReq {
     private String clueName;
     private String cluePhone;
     private Integer clueStatus;
+    private Integer clueType;
     private Integer handleResult;
     private String handlePerson;
     private String remark;
@@ -32,4 +34,5 @@ public class ClueReq {
     private Integer pageSize;
     private String startDate;
     private String endDate;
+    private List<Integer> clueIdList;
 }
