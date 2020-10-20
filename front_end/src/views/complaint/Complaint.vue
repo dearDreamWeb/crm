@@ -47,27 +47,7 @@
               </el-col>
             </el-row>
             <el-row :gutter="20">
-              <el-col :span="10">
-                <el-form-item label="日期">
-                  <el-date-picker v-model="searchForm.startDate" format="yyyy-MM-dd"
-                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
-                                  placeholder="请输入"></el-date-picker>
-                  <span>-</span>
-                  <el-date-picker v-model="searchForm.endDate" format="yyyy-MM-dd"
-                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
-                                  placeholder="请输入"></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="紧急程度">
-                  <el-select v-model="searchForm.complaintUrgent" placeholder="请选择">
-                    <el-option label="非常急" value="非常急"></el-option>
-                    <el-option label="急" value="急"></el-option>
-                    <el-option label="普通" value="普通"></el-option>
 
-                  </el-select>
-                </el-form-item>
-              </el-col>
               <el-col :span="6">
                 <el-form-item prop="complaintClassification" label="分类">
                   <el-select v-model="searchForm.complaintClassification" placeholder="请选择分类">
@@ -75,16 +55,6 @@
                     <el-option label="服务投诉" value="服务投诉"></el-option>
                     <el-option label="客户意见" value="客户意见"></el-option>
                     <el-option label="其他" value="其他"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="处理结果">
-                  <el-select v-model="searchForm.complaintHandlegc" placeholder="请选择">
-                    <el-option label="未处理" value="未处理"></el-option>
-                    <el-option label="处理中" value="处理中"></el-option>
-                    <el-option label="处理完成" value="处理完成"></el-option>
-
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -102,7 +72,7 @@
       <el-table :data="listForm" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
-        <el-table-column type="index" width="20"></el-table-column>
+        <el-table-column type="index" width="40"></el-table-column>
         <el-table-column prop="complaintZt" label="投诉主题" sortable></el-table-column>
         <el-table-column prop="complaintClassification" label="分类"></el-table-column>
         <el-table-column prop="cusId" label="客户"></el-table-column>
@@ -179,7 +149,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="处理结果">
               <el-select v-model="addform.complaintHandlegc" placeholder="请选择">
                 <el-option label="未处理" value="未处理"></el-option>
@@ -190,7 +160,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="紧急程度">
               <el-select v-model="addform.complaintUrgent" placeholder="请选择">
                 <el-option label="非常急" value="非常急"></el-option>
@@ -278,9 +248,14 @@
             </el-form-item>
           </el-col>
 
+          <el-col :span="8">
+          <el-form-item label="处理过程">
+            <el-input type="textarea" v-model="updateform.complaintHandle"></el-input>
+          </el-form-item>
+          </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="处理结果">
               <el-select v-model="updateform.complaintHandlegc" placeholder="请选择">
                 <el-option label="未处理" value="未处理"></el-option>
@@ -291,7 +266,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="紧急程度">
               <el-select v-model="updateform.complaintUrgent" placeholder="请选择">
                 <el-option label="非常急" value="非常急"></el-option>
@@ -308,7 +283,11 @@
               <el-input v-model="updateform.complaintComplainants"></el-input>
             </el-form-item>
           </el-col>
-
+          <el-col :span="8">
+            <el-form-item label="描述">
+              <el-input type="textarea" v-model="updateform.complaintDescribe"></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
 
       </el-form>

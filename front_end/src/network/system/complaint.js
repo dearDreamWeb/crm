@@ -32,6 +32,7 @@ export const complaintHttp = {
     let params = {
       url:'/complaint/update',
       data:{
+        'complaintId':complaint.complaintId,
         'complaintZt':complaint.complaintZt,
         'complaintReceptionist':complaint.complaintReceptionist,
         'complaintClassification':complaint.complaintClassification,
@@ -81,7 +82,7 @@ export const complaintHttp = {
         'complaintReceptionist':complaint.complaintReceptionist,
         'complaintClassification':complaint.complaintClassification,
         'complaintDescribe':complaint.complaintDescribe,
-        
+
         'complaintComplainants':complaint.complaintComplainants,
         'complaintUrgent':complaint.complaintUrgent,
         'complaintHandle':complaint.complaintHandle,

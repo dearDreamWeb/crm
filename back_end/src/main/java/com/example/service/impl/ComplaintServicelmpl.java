@@ -86,8 +86,6 @@ public class ComplaintServicelmpl implements ComplaintService {
             throw new SysException(ResultEnum.DICT_NOT_EXIST.getCode(),
                     ResultEnum.DICT_NOT_EXIST.getMessage());
         }
-//        care.setCarelxrcontacts(care.getCarelxrcontacts());
-//        care.setCareData(DateUtils.getDate());
         int updateComplaint = complaintMapper.updateComplaint(complaintReq);
         if (updateComplaint != 1) {
             throw new SysException(ResultEnum.DICT_UPDATE_FAIL.getCode(),
