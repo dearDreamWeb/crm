@@ -38,6 +38,7 @@ public class ComplaintController {
     @SysLog("修改")
     @PostMapping("/update")
     public ResultVo editDict(@RequestBody Complaint complaint) {
+        System.out.println("待膝盖的数据是："+complaint);
         return complaintService.updateComplaint(complaint);
     }
 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.QaMapper">
+    <resultMap id="QaResult" type="com.example.entity.request.Qa">
+        <id property="qaId" column="qa_id"/>
+        <result property="qaWtproblem" column="qa_wtproblem"/>
+        <result property="qaJjsolve" column="qa_jjsolve"/>
+        <result property="qaCustomerfk" column="qa_customerfk"/>
+        <result property="qaData" column="qa_data"/>
+    </resultMap>
+    <insert id="addQa" parameterType="com.example.entity.request.Qa">
+        <selectKey keyProperty="qaId" keyColumn="qa_id" resultType="Integer" order="AFTER">
+            SELECT last_insert_id();
+        </selectKey>
+        insert into qa(qa_wtproblem,qa_jjsolve,qa_customerfk,qa_data) VALUES
+        (#{qaWtproblem},#{qaJjsolve},#{qaCustomerfk},#{qaData})
+    </insert>
+
+    <update id="updateQa" parameterType="com.example.entity.request.Qa">
+        update qa set qa_data = #{qaData}
+        <if test="qaWtproblem !=null and qaWtproblem != ''">
+            ,qa_wtproblem = #{qaWtproblem}
+        </if>
+        <if test="qaJjsolve !=null and qaJjsolve != ''">
+            ,qa_jjsolve = #{qaJjsolve}
+        </if>
+        <if test="qaCustomerfk !=null and qaCustomerfk != ''">
+            ,qa_customerfk = #{qaCustomerfk}
+        </if>
+        where qa_id = #{qaId}
+    </update>
+    <delete id="deleteQa" parameterType="Integer">
+        DELETE FROM qa WHERE qa_id = #{qaId}
+    </delete>
+    <select id="listQa" resultMap="QaResult">
+        SELECT qa_id,qa_wtproblem,qa_jjsolve,qa_customerfk,qa_data
+        FROM qa
+        <where>
+            <if test="qaWtproblem != null and qaWtproblem != ''">
+                AND qa_wtproblem LIKE CONCAT('%',#{qaWtproblem},'%')
+            </if>
+            <if test="qaJjsolve != null and qaJjsolve != ''">
+                AND qa_jjsolve LIKE CONCAT('%',#{qaJjsolve},'%')
+            </if>
+            <if test="qaCustomerfk != null and qaCustomerfk != ''">
+                AND qa_customerfk LIKE CONCAT('%',#{qaCustomerfk},'%')
+            </if>
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(qa_data,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(qa_data,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+        </where>
+        ORDER BY qa_data DESC
+    </select>
+    <select id="getQa" resultMap="QaResult">
+        SELECT * FROM qa WHERE qa_id = #{qaId}
+    </select>
+</mapper>

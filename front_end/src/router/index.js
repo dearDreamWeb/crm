@@ -68,6 +68,14 @@ const routes = [
       {
         path: '/activityDetail',
         component: () => import('../views/activity/ActivityDetail')
+      },
+      {
+        path: '/qa_library',
+        component: () => import('../views/qa/Qa')
+      },
+      {
+        path: '/syslog',
+        component: () => import('../views/syslog/Syslog')
       }
     ]
   }

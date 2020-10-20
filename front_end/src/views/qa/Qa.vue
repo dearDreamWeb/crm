@@ -8,7 +8,7 @@
           </el-input>
         </el-col>
         <el-col :span="10">
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="addDialog = true">新增</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAdd">新增</el-button>
           <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
           <el-button type="primary" size="mini" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
@@ -31,48 +31,23 @@
             </el-row>
             <el-row :gutter="20">
               <el-col :span="8">
-                <el-form-item prop="careZt" label="昵称">
-                  <el-input v-model="searchForm.careZt" size="mini" placeholder="请输入" clearable></el-input>
+                <el-form-item prop="qaWtproblem" label="标题">
+                  <el-input v-model="searchForm.qaWtproblem" size="mini" placeholder="请输入" clearable></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item prop="carelxrcontacts" label="联系人">
-                  <el-input v-model="searchForm.carelxrcontacts" size="mini" placeholder="请输入" clearable></el-input>
+                <el-form-item prop="qaJjsolve" label="答案">
+                  <el-input v-model="searchForm.qaJjsolve" size="mini" placeholder="请输入" clearable></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item prop="cusId" label="客户">
-                  <el-input v-model="searchForm.cusId" size="mini" placeholder="请输入" clearable></el-input>
+                <el-form-item prop="qaCustomerfk" label="录入人">
+                  <el-input v-model="searchForm.qaCustomerfk" size="mini" placeholder="请输入" clearable></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
-              <el-col :span="10">
-                <el-form-item label="日期">
-                  <el-date-picker v-model="searchForm.startDate" format="yyyy-MM-dd"
-                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
-                                  placeholder="请输入"></el-date-picker>
-                  <span>-</span>
-                  <el-date-picker v-model="searchForm.endDate" format="yyyy-MM-dd"
-                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
-                                  placeholder="请输入"></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item prop="careexecutor" label="执行人">
-                  <el-input v-model="searchForm.careexecutor" size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item prop="carenr" label="内容">
-                  <el-input v-model="searchForm.carenr" size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item prop="carecustomerfk" label="反馈内容">
-                  <el-input v-model="searchForm.carecustomerfk" size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
+
               <el-col :span="4">
                 <el-form-item>
                   <el-button size="mini" @click="advancedQueryClick"
@@ -88,15 +63,15 @@
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="40"></el-table-column>
-        <el-table-column prop="careZt" label="关怀主题" sortable></el-table-column>
-        <el-table-column prop="carelxrcontacts" label="联系人"></el-table-column>
-        <el-table-column prop="cusId" label="客户"></el-table-column>
-        <el-table-column prop="careData" label="时间">
+        <el-table-column prop="qaWtproblem" label="标题" sortable></el-table-column>
+        <el-table-column prop="qaJjsolve" label="答案"></el-table-column>
+        <el-table-column prop="qaCustomerfk" label="录入人"></el-table-column>
+        <el-table-column prop="qaData" label="录入日期">
           <template slot-scope="scope">
-            {{scope.row.careData | dateFormat}}
+            {{scope.row.qaData | dateFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="careexecutor" label="执行人"></el-table-column>
+
       </el-table>
 
       <el-pagination background
@@ -108,20 +83,20 @@
     </el-card>
 
     <el-dialog
-      title="新增关怀"
+      title="新增"
       :visible.sync="addDialog"
       width="50%"
       @close="handleClose">
       <el-form ref="addform" :model="addform" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="关怀主题" prop="careZt">
-              <el-input v-model="addform.careZt"></el-input>
+            <el-form-item label="标题" prop="qaWtproblem">
+              <el-input v-model="addform.qaWtproblem"></el-input>
             </el-form-item>
           </el-col >
           <el-col :span="8">
-            <el-form-item label="联系人">
-              <el-input v-model="addform.carelxrcontacts"></el-input>
+            <el-form-item label="录入人">
+              <el-input v-model="addform.qaCustomerfk"></el-input>
             </el-form-item>
           </el-col>
 
@@ -129,36 +104,13 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="客户">
-              <el-input
-                placeholder="请输入内容"
-                v-model="input"
-                :disabled="true">
-              </el-input>
+            <el-form-item label="答案">
+              <el-input type="textarea" v-model="addform.qaJjsolve"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="日期">
-              <el-date-picker type="date" placeholder="选择日期" v-model="addform.careData" style="width: 100%;"></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="执行人">
-              <el-input v-model="addform.careexecutor"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="关怀内容">
-              <el-input type="textarea" v-model="addform.carenr"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="客户反馈">
-              <el-input type="textarea" v-model="addform.carecustomerfk"></el-input>
+            <el-form-item label="录入日期">
+              <el-date-picker type="date" placeholder="选择日期" v-model="addform.qaData" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -171,20 +123,20 @@
     </el-dialog>
 
     <el-dialog
-      title="修改关怀"
+      title="修改"
       :visible.sync="editDialog"
       width="50%"
       @close="editHandleClose">
       <el-form ref="updateform" :model="updateform" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="关怀主题" prop="careZt">
-              <el-input v-model="updateform.careZt"></el-input>
+            <el-form-item label="标题" prop="qaWtproblem">
+              <el-input v-model="updateform.qaWtproblem"></el-input>
             </el-form-item>
           </el-col >
           <el-col :span="8">
-            <el-form-item label="联系人">
-              <el-input v-model="updateform.carelxrcontacts"></el-input>
+            <el-form-item label="录入人">
+              <el-input v-model="updateform.qaCustomerfk"></el-input>
             </el-form-item>
           </el-col>
 
@@ -192,36 +144,13 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="客户">
-              <el-input
-                placeholder="请输入内容"
-                v-model="input"
-                :disabled="true">
-              </el-input>
+            <el-form-item label="答案">
+              <el-input type="textarea" v-model="updateform.qaJjsolve"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="日期">
-              <el-date-picker type="date" placeholder="选择日期" v-model="updateform.careData" style="width: 100%;"></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="执行人">
-              <el-input v-model="updateform.careexecutor"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="关怀内容">
-              <el-input type="textarea" v-model="updateform.carenr"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="客户反馈">
-              <el-input type="textarea" v-model="updateform.carecustomerfk"></el-input>
+            <el-form-item label="录入日期">
+              <el-date-picker type="date" placeholder="选择日期" v-model="updateform.qaData" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -236,7 +165,7 @@
 
 </template>
 <script>
-  import {careHttp} from "../../network/system/care";
+  import {qaHttp} from "../../network/system/qa";
 
 
 
@@ -245,15 +174,12 @@
       return {
         rowCareId:0,
         addform:{
-          careZt:'',
-          cusId: '',
-          carelxrcontacts:'',
-          careexecutor:'',
-          carecustomerfk:'',
-          carenr:'',
-          region: '',
+          qaWtproblem:'',
+          qaJjsolve:'',
+          qaCustomerfk:'',
+          qaData:'',
+
           date1: '',
-          careData: '',
           delivery: false,
           type: [],
           resource: '',
@@ -261,17 +187,13 @@
         },
 
         searchForm:{
-          careZt:'',
-          cusId: '',
-          carelxrcontacts:'',
-          careexecutor:'',
+          qaWtproblem:'',
+          qaJjsolve:'',
+          qaCustomerfk:'',
           startDate:'',
           endDate:'',
-          carecustomerfk:'',
-          carenr:'',
           region: '',
           date1: '',
-
           delivery: false,
           type: [],
           resource: '',
@@ -285,10 +207,10 @@
         editDictButtonLoading:false,
         editDialog:false,
         searchInput:'',
-        careZt:'',
-
-        careData:'',
-
+        qaWtproblem:'',
+        qaJjsolve:'',
+        qaCustomerfk:'',
+        qaData:'',
         listForm:[],
         tableLoading:'',
         total:0,
@@ -299,15 +221,12 @@
 
         tableData: [],
         form: {
-          careZt:'',
-          cusId: '',
-          carelxrcontacts:'',
-          careexecutor:'',
-          carecustomerfk:'',
-          carenr:'',
+          qaWtproblem:'',
+          qaJjsolve:'',
+          qaCustomerfk:'',
           region: '',
           date1: '',
-          careData: '',
+          qaData: '',
           delivery: false,
           type: [],
           resource: '',
@@ -315,9 +234,8 @@
         },
         num: 1,
         rules:{
-          careZt:[
-            {required: true, message: '请输入活动名称', trigger: 'blur'},
-            { min: 4, max: 8, message: '长度在 4 到 8个字符', trigger: 'blur' }
+          qaWtproblem:[
+            {required: true, message: '请输入活动名称', trigger: 'blur'}
           ]
 
         }
@@ -325,11 +243,11 @@
     },
     methods:{
       addClick(){
-        console.log(this.$refs)
+
         this.$refs["addform"].validate(valid => {
           if (!valid) return
           this.addDictButtonLoading = true
-          careHttp.add(this.addform).then(res => {
+          qaHttp.add(this.addform).then(res => {
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.initList()
@@ -353,7 +271,7 @@
         this.buttonDisabled = true
       },
       advancedQueryClick(){
-        careHttp.queryEmp(this.searchForm).then(res => {
+        qaHttp.queryEmp(this.searchForm).then(res => {
           if (res.code === 20000) {
             this.listForm = res.data.list
             this.total = res.data.total
@@ -363,8 +281,8 @@
       },
       editCareClick(){
         this.editDictButtonLoading = true
-        this.updateform.careId = this.rowCareId
-        careHttp.update(this.updateform).then(res => {
+        this.updateform.qaId = this.rowCareId
+        qaHttp.update(this.updateform).then(res => {
           if (res.code === 20000) {
             this.$message.success(res.message)
             this.initList()
@@ -384,9 +302,10 @@
         this.getEmpDetail()
       },
       getEmpDetail(){
-        careHttp.get(this.rowCareId).then(res =>{
+        qaHttp.get(this.rowCareId).then(res =>{
           console.log("编辑获得的数据",res.data);
           this.updateform = res.data;
+          console.log(this.updateform);
         })
       },
       deleteCare() {
@@ -395,7 +314,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          careHttp.del(this.rowCareId).then(res => {
+          qaHttp.del(this.rowCareId).then(res => {
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.initList()
@@ -417,8 +336,8 @@
       },
 
       searchInputClick(){
-        this.listForm.careZt = this.searchInput
-        careHttp.list(this.listForm).then(res => {
+        this.listForm.qaWtproblem = this.searchInput
+        qaHttp.list(this.listForm).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
@@ -430,8 +349,8 @@
         this.$refs["addform"].resetFields()
       },
       handleRowClick(row,event,column) {
-        this.rowCareId = row.careId
-        if (this.careId != 0) {
+        this.rowCareId = row.qaId
+        if (this.qaId != 0) {
           this.buttonDisabled = false
         }
       },
@@ -444,19 +363,25 @@
       handleCurrentChange(pageIndex){
         this.searchForm.pageNum = pageIndex
         this.searchForm.pageSize = this.pageSize
-        careHttp.queryEmp(this.searchForm).then(res => {
+        qaHttp.queryEmp(this.searchForm).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
       },
       initList() {
-        careHttp.listPage(this.pageNum, this.pageSize).then(res => {
+        qaHttp.listPage(this.pageNum, this.pageSize).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
       },
+      //打开新增的窗口
+      openAdd(){
+        this.addDialog=true;//显示新增的对话框
+        //重置新增的表单中的内容
+        this.addform={};
+      }
     },
     created() {
       this.initList()
