@@ -20,7 +20,7 @@ public class SzDeliver {
     private String delCompany;//物流公司
     private String delPeople;//发货人
     private Date delDelivertime;//发货时间
-    private Date delState;//状态（0未发/1已发）
+    private Integer delState;//状态（0未发/1已发）
     private Date delCreatetime;//创建时间
     private Integer delDelete;//1是0否删除
 

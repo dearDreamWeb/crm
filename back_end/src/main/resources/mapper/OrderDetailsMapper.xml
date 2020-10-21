@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.SzOrderDetailsMapper">
+    <resultMap id="OrdandOrdDetResult" type="com.example.entity.request.SzOrderDetails">
+        <id property="odetId" column="odet_id"/>
+        <result property="odetBuynum" column="odet_buynum"/>
+        <result property="odetBuymoney" column="odet_buymoney"/>
+        <result property="ordId" column="ord_id"/>
+        <result property="productId" column="product_id"/>
+    </resultMap>
+    <!--订单和订单详情-->
+    <select id="listOrderANDOrderDet" resultMap="OrdandOrdDetResult">
+        SELECT odet_id,odet_buynum,odet_buymoney,ord_id,product_id FROM sz_order_details WHERE ord_id=#{odetId}
+    </select>
+</mapper>

@@ -3,20 +3,20 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input v-model="searchInput" size="mini" placeholder="请输入主题进行查询" clearable>
+          <el-input v-model="searchInput" size="mini" placeholder="发货单号查询" clearable>
             <el-button @click="searchInputClick" slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
         <el-col :span="12">
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">添加订单</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">添加发货</el-button>
           <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
           <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
         <el-col :span="6">
           <el-button type="warning" size="mini" icon="el-icon-edit"
-                     :disabled="buttonDisabled" @click="openEditOrder">修改订单</el-button>
+                     :disabled="buttonDisabled" @click="openEditDeliver">修改发货单</el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete"
-                     :disabled="buttonDisabled" @click="delOrder">删除订单</el-button>
+                     :disabled="buttonDisabled" @click="delDeliver">删除发货单</el-button>
         </el-col>
       </el-row>
 
@@ -24,25 +24,20 @@
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column prop="ordTheme" label="主题" sortable></el-table-column>
-        <el-table-column prop="ordTotalmoney" label="总金额" sortable></el-table-column>
-        <el-table-column prop="ordStarttime" label="开始时间" sortable>
+        <el-table-column prop="delDelivertime" label="发货时间" sortable>
           <template slot-scope="scope">
-            {{scope.row.ordStarttime | dateFormat}}
+            <el-tag>{{scope.row.delDelivertime | dateFormat}}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="ordDealtime" label="成交时间" sortable>
+        <el-table-column prop="delWuliuid" label="发货单号" sortable></el-table-column>
+        <el-table-column prop="szOrder.ordHead" label="订单" sortable>
+      </el-table-column>
+        <el-table-column prop="delPeople" label="发货人" sortable></el-table-column>
+        <el-table-column prop="delState" label="发货状态" sortable>
           <template slot-scope="scope">
-            {{scope.row.ordDealtime | dateFormat}}
+            {{scope.row.delState | delStateFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="ordState" label="订单状态" sortable>
-          <template slot-scope="scope">
-            {{scope.row.ordState | ordStateFormat}}
-          </template>
-        </el-table-column>
-        <!--<el-table-column prop="ordState" label="订单状态" sortable></el-table-column>-->
-        <el-table-column prop="ordHead" label="负责人" sortable></el-table-column>
       </el-table>
       <el-pagination background
                      @current-change="handleCurrentChange"
@@ -55,7 +50,7 @@
 </template>
 
 <script>
-  import {deliverHttp} from "../../network/system/order";
+  import {deliverHttp} from "../../network/system/deliver";
 
   export default {
     name: "SzDeliver",
@@ -66,7 +61,7 @@
 
         },
         addDialog:false,
-        rowordId: 0,
+        rowdelId: 0,
         tableLoading:false,
         buttonDisabled:true,
         advancedSearch:false,
@@ -75,56 +70,60 @@
         pageSize:5,
         total:1,
         formRules:{
-          ordHead:[
-            {required:true,message:'请输入订单名称',trigger:'blur'},
-          ]
+          /* ordHead:[
+             {required:true,message:'请输入订单名称',trigger:'blur'},
+           ]*/
         },
-        addOrderButtonLoading:false,
         editDialog:false,
-        editOrderButtonLoading:false,
       }
     },
     methods: {
       searchInputClick() {
-        this.listForm.ordTheme = this.searchInput
-        orderHttp.list(this.listForm).then(res => {
+        this.listForm.delWuliuid = this.searchInput
+        deliverHttp.list(this.listForm).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
+      },
+      openAddDialog(){
+
       },
       resetForm() {
         this.$refs.advancedSearchFormRef.resetFields()
         this.searchInput = ''
         this.initList()
-        this.rowordId = 0
+        this.rowdelId = 0
         this.buttonDisabled = true
       },
       editHandleClose() {
         this.$refs.editFormRef.resetFields()
-        this.editOrderButtonLoading = false
       },
       addHandleClose(){
         /*添加*/
       },
-      openEditOrder(){
+      openEditDeliver(){
         /*修改*/
       },
+      delDeliver(){
+        /*删除*/
+      },
+
       handleCurrentChange(pageIndex) {
         this.pageNum = pageIndex
         this.pageSize = this.pageSize
-        orderHttp.listPage(this.pageNum,this.pageSize).then(res => {
+        deliverHttp.listPage(this.pageNum,this.pageSize).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
       },
-      openAddDialog() {
+     /* openAddDialog() {
         this.addDialog = true
-      },
+      },*/
       handleRowClick(row,event,column) {
-        this.rowordId= row.ordId
-        if (this.rowOrdId != 0) {
+        this.rowdelId= row.delId
+        if (this.rowDelId != 0) {
           this.buttonDisabled = false
         }
       },
@@ -135,7 +134,7 @@
         return 'padding:5px'
       },
       initList() {
-        orderHttp.listPage(this.pageNum,this.pageSize).then(res => {
+        deliverHttp.listPage(this.pageNum,this.pageSize).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum

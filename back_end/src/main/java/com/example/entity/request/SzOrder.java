@@ -37,6 +37,8 @@ public class SzOrder {
     private Integer cusId;//客户编号
     private Integer offerId;//报价编号
 
+    List<SzOrderDetails> SzOrderDetails;
+
     private String startDate;
     private String endDate;
     private Integer pageNum;

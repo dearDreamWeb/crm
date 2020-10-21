@@ -17,6 +17,6 @@ public class SzOrderDetails {
     private Integer odetId;//订单详情编号
     private Integer odetBuynum;//购买数量
     private BigDecimal odetBuymoney;//购买价格
-    private Integer ordId;//客户编号
-    private Integer proId;//产品编号
+    private Integer ordId;//订单编号
+    private Integer productId;//产品编号
 }

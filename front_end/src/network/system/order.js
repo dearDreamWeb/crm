@@ -23,6 +23,15 @@ export const orderHttp = {
     }
     return postJson(params)
   },
+  szxiangq:function (id) {
+    let params = {
+      url:'/details/all',
+      data:{
+        'odetId':id
+      }
+    }
+    return get(params)
+  },
   editOrder:function (order) {
     let params = {
       url:'/order/edit',
