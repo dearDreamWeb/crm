@@ -67,6 +67,13 @@ public enum ResultEnum {
     ORDER_UPDATE_FAIL(80031,"订单更新失败"),
     ORDER_NOT_EXIST(80032,"订单不存在"),
 
+    //发货单
+    Deliver_ADD_FAIL(80033,"发货单添加失败"),
+    Deliver_EXIST(80034,"发货单已存在"),
+    Deliver_DEL_FAIL(80035,"发货单删除失败"),
+    Deliver_UPDATE_FAIL(80036,"发货单更新失败"),
+    Deliver_NOT_EXIST(80037,"发货单不存在"),
+
     CLUE_NOT_BE_EDIT(80033,"您不能修改此条线索"),
     CLUE_NOT_BE_DEL(80034,"您不能删除此条线索"),
 

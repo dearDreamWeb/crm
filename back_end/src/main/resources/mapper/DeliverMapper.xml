@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.SzDeliverMapper">
+    <resultMap id="szDeliverResult" type="com.example.entity.request.SzDeliver">
+        <id property="delId" column="del_id"/>
+        <result property="delWuliuid" column="del_wuliuid"/>
+        <result property="delCompany" column="del_company"/>
+        <result property="delPeople" column="del_people"/>
+        <result property="delDelivertime" column="del_delivertime"/>
+        <result property="delState" column="del_state"/>
+        <result property="delCreatetime" column="del_createtime"/>
+        <result property="delDelete" column="del_delete"/>
+    </resultMap>
+
+    <resultMap id="szDeliverDetailResult" type="com.example.entity.request.SzDeliver">
+        <id property="delId" column="del_id"/>
+        <result property="delWuliuid" column="del_wuliuid"/>
+        <result property="delCompany" column="del_company"/>
+        <result property="delPeople" column="del_people"/>
+        <result property="delDelivertime" column="del_delivertime"/>
+        <result property="delState" column="del_state"/>
+        <result property="delCreatetime" column="del_createtime"/>
+        <result property="delDelete" column="del_delete"/>
+        <association property="szorder" resultMap="szOrderResult"/>
+    </resultMap>
+
+    <resultMap id="szOrderResult" type="com.example.entity.request.SzOrder">
+        <id property="ordId" column="ord_id"/>
+        <result property="ordTheme" column="ord_theme"/>
+        <result property="ordState" column="ord_state"/>
+        <result property="ordHead" column="ord_head"/>
+        <result property="ordTotalmoney" column="ord_totalmoney"/>
+        <result property="ordStarttime" column="ord_starttime"/>
+        <result property="ordDealtime" column="ord_dealtime"/>
+        <result property="ordFahuotime" column="ord_fahuotime"/>
+        <result property="ordHuikuanmoney" column="ord_huikuanmoney"/>
+        <result property="ordConsignee" column="ord_consignee"/>
+        <result property="ordProvince" column="ord_province"/>
+        <result property="ordCity" column="ord_city"/>
+        <result property="ordCountry" column="ord_country"/>
+        <result property="ordDetail" column="ord_detail"/>
+        <result property="ordPhone" column="ord_phone"/>
+        <result property="ordCreatetime" column="ord_createtime"/>
+        <result property="ordDelete" column="ord_delete"/>
+    </resultMap>
+
+<!--全部-->
+    <select id="listszDeliver" resultMap="szDeliverResult">
+        SELECT del_id, del_wuliuid, del_company, del_people, del_delivertime, del_state, del_createtime, del_delete
+        FROM sz_deliver
+        <where>
+            <if test="delWuliuid != null and delWuliuid != ''">
+                AND del_wuliuid LIKE CONCAT('%',#{delWuliuid},'%')
+            </if>
+            <if test="delCompany != null and delCompany != ''">
+                AND del_company LIKE CONCAT('%',#{delCompany},'%')
+            </if>
+            <if test="delPeople != null and delPeople != ''">
+                AND del_people LIKE CONCAT('%',#{delPeople},'%')
+            </if>
+            <if test="delDelivertime != null and delDelivertime != ''">
+                AND del_delivertime LIKE CONCAT('%',#{delDelivertime},'%')
+            </if>
+            <if test="delState != null">
+                AND del_state = #{delState}
+            </if>
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(del_createtime,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(del_createtime,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+        </where>
+        ORDER BY del_createtime DESC
+    </select>
+<!--单条-->
+    <select id="getszDeliver" resultMap="szDeliverDetailResult" parameterType="Integer">
+        SELECT d.del_id,d.del_wuliuid,d.del_company,d.del_people,
+            d.del_delivertime,d.del_state
+            ,o.ord_id,o.ord_theme,o.ord_head
+            from sz_deliver d
+            left join sz_order o on o.ord_id=d.ord_id
+            where d.del_id = #{delId}
+    </select>
+<!--增-->
+    <insert id="addszDeliver" parameterType="com.example.entity.request.SzDeliver">
+        <selectKey keyColumn="del_id" keyProperty="delId" resultType="Integer" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        insert into sz_deliver(del_wuliuid, del_company, del_people, del_delivertime,  del_state)
+        values (#{delWuliuid},#{delCompany},#{delPeople},#{delDelivertime},#{delState})
+    </insert>
+<!--删-->
+    <update id="delszDeliver" parameterType="Integer">
+        UPDATE emp SET is_delete = 1
+        WHERE emp_id = #{empId}
+    </update>
+<!--改-->
+    <update id="editszDeliver" parameterType="com.example.entity.request.SzDeliver">
+        UPDATE sz_deliver SET del_createtime = #{delCreatetime}
+        <if test="delWuliuid != null and delWuliuid != ''">
+            ,del_wuliuid = #{delWuliuid}
+        </if>
+        <if test="delCompany != null and delCompany != ''">
+            ,del_company = #{delCompany}
+        </if>
+        <if test="delPeople != null and delPeople != ''">
+            ,del_people = #{delPeople}
+        </if>
+        <if test="delDelivertime != null and delDelivertime != ''">
+            ,del_delivertime = #{delDelivertime}
+        </if>
+        <if test="delPeople != null and delPeople != ''">
+            ,del_people = #{delPeople}
+        </if>
+        <if test="delState != null">
+            ,del_state = #{delState}
+        </if>
+            WHERE del_id = #{delId}
+    </update>
+</mapper>
