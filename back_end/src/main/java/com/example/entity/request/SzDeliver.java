@@ -19,11 +19,16 @@ public class SzDeliver {
     private String delWuliuid;//物流编号
     private String delCompany;//物流公司
     private String delPeople;//发货人
-    private Date delExpecttime;//预计到货时间
-    private Date delActualtime;//实际到货时间
+    private Date delDelivertime;//发货时间
     private Date delState;//状态（0未发/1已发）
+    private Date delCreatetime;//创建时间
+    private Integer delDelete;//1是0否删除
 
     private Integer ordId;//订单编号 (外键 关联订单)
+    private SzOrder szorder;
+
+    private String startDate;
+    private String endDate;
     private Integer pageNum;
     private Integer pageSize;
 }

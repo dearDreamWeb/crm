@@ -54,6 +54,10 @@ const routes = [
         component: () => import('../views/shouzhong/Szorder')
       },
       {
+        path: '/deliver',
+        component: () => import('../views/shouzhong/SzDeliver')
+      },
+      {
         path: '/care',
         component: () => import('../views/care/Care')
       },
