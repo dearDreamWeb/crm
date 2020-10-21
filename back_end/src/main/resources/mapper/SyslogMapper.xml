@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.SyslogMapper">
+    <resultMap id="SyslogResult" type="com.example.entity.request.Syslog">
+        <id property="logId" column="log_id"/>
+        <result property="logTitle" column="log_title"/>
+        <result property="userId" column="user_id"/>
+        <result property="logMethod" column="method"/>
+        <result property="logContent" column="content"/>
+        <result property="logIp" column="ip"/>
+        <result property="logUri" column="uri"/>
+        <result property="createTime" column="create_time"/>
+        <association property="emp" resultMap="EmpResult"/>
+    </resultMap>
+
+    <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
+        <id property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="sex" column="sex"/>
+        <result property="passWord" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="empStatus" column="emp_status"/>
+        <result property="token" column="token"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <select id="getSyslog" resultMap="SyslogResult" parameterType="Integer">
+        select
+        from sys_log s
+        inner join emp e on s.user_id = e.emp_id
+        where e.emp_id = #{empId}
+    </select>
+
+    <select id="listSyslog" resultMap="SyslogResult">
+        SELECT log_id,log_title,user_id,method,content,ip,uri,create_time
+        FROM sys_log
+        <where>
+            <if test="logTitle != null and logTitle != ''">
+                AND log_title LIKE CONCAT('%',#{logTitle},'%')
+            </if>
+            <if test="userId != null and userId != ''">
+                AND user_id LIKE CONCAT('%',#{userId},'%')
+            </if>
+            <if test="logMethod != null and logMethod != ''">
+                AND method LIKE CONCAT('%',#{logMethod},'%')
+            </if>
+            <if test="logContent != null and logContent != ''">
+                AND content LIKE CONCAT('%',#{logContent},'%')
+            </if>
+            <if test="logIp != null and logIp != ''">
+                AND ip LIKE CONCAT('%',#{logIp},'%')
+            </if>
+            <if test="logUri != null and logUri != ''">
+                AND uri LIKE CONCAT('%',#{logUri},'%')
+            </if>
+            <if test="createTime != null and createTime != ''">
+                AND create_time LIKE CONCAT('%',#{logMethod},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

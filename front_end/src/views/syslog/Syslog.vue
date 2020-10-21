@@ -4,50 +4,36 @@
       <el-row :gutter="20">
         <el-col :span="6">
           <el-form :v-model="searchForm">
-            <el-form-item>
-              <el-select size="mini" placeholder="请选择分类">
-                <el-option label="产品投诉" value="产品投诉"></el-option>
-                <el-option label="服务投诉" value="服务投诉"></el-option>
-                <el-option label="客户意见" value="客户意见"></el-option>
-                <el-option label="其他" value="其他"></el-option>
+            <el-form-item label="名称">
+              <el-select v-model="searchForm.empIdList" size="mini" placeholder="请选择名称">
+                <el-option v-for="item in empList" :key="item.empId" :label="item.empName" :value="item.empId"></el-option>
+
               </el-select>
             </el-form-item>
-            <el-form-item label="审批人">
-              <el-input placeholder="请输入内容"></el-input>
+            <el-form-item prop="logTitle" label="标题">
+              <el-input v-model="searchForm.logTitle" placeholder="请输入标题"></el-input>
             </el-form-item>
-            <el-form-item label="审批人">
-              <el-input placeholder="请输入内容"></el-input>
-            </el-form-item>
-            <el-form-item label="审批人">
-              <el-input placeholder="请输入内容"></el-input>
-            </el-form-item>
-            <el-form-item label="审批人">
-              <el-input placeholder="请输入内容"></el-input>
+            <el-form-item prop="logId" label="id">
+              <el-input v-model="searchForm.logId" placeholder="请输入id"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="">查询</el-button>
+              <el-button type="primary" @click="advancedQueryClick">查询</el-button>
             </el-form-item>
           </el-form>
         </el-col>
 
           <el-col :span="18">
-            <el-timeline size="mini">
-              <el-timeline-item timestamp="2018/4/12" placement="top">
+            <el-timeline size="mini" :data="listForm" @row-click="handleRowClick" v-loading="tableLoading">
+              <el-timeline-item timestamp="" placement="top">
                 <el-card>
-                  <h4>更新 Github 模板</h4>
-                  <p>王小虎 提交于 2018/4/12 20:46</p>
-                </el-card>
-              </el-timeline-item>
-              <el-timeline-item timestamp="2018/4/3" placement="top">
-                <el-card>
-                  <h4>更新 Github 模板</h4>
-                  <p>王小虎 提交于 2018/4/3 20:46</p>
-                </el-card>
-              </el-timeline-item>
-              <el-timeline-item timestamp="2018/4/2" placement="top">
-                <el-card>
-                  <h4>更新 Github 模板</h4>
-                  <p>王小虎 提交于 2018/4/2 20:46</p>
+                  <p type="index" width="50"></p>
+                  <p prop="logTitle" label="标题"></p>
+                  <p prop="userId" label="操作人id"></p>
+                  <p prop="logMethod" label="方法"></p>
+                  <p prop="logContent" label="操作内容"></p>
+                  <p prop="logIp" label="ip"></p>
+                  <p prop="logUri" label="uri"></p>
+                  <p prop="createTime" label="时间"></p>
                 </el-card>
               </el-timeline-item>
             </el-timeline>
@@ -59,13 +45,35 @@
 </template>
 
 <script>
+    import {syslogHttp} from "../../network/system/syslog";
+
     export default {
       data(){
         return{
 
-            searchForm: ''
-
+            searchForm:{
+              logTitle:'',
+              logId:'',
+              empIdList:[]
+            },
+          listForm:[],
+          tableLoading:false,
         }
+      },
+      methods:{
+        advancedQueryClick(){
+          syslogHttp.queryEmp(this.searchForm).then(res =>{
+            if (res.code ===20000){
+              this.listForm = res.data.list
+            }
+          })
+        },
+        handleRowClick(row,event,column) {
+          this.rowEmpId = row.logId
+          if (this.rowEmpId != 0) {
+            this.buttonDisabled = false
+          }
+        },
       }
     }
 </script>
