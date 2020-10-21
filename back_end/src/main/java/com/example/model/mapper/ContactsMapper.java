@@ -18,4 +18,5 @@ public interface ContactsMapper {
     int editContacts(ContactsReq contactsReq);
     ContactsResp getContacts(Integer contactsId);
     List<ContactsResp> listContacts(ContactsReq contactsReq);
+    int addContactsAndCustomer(ContactsReq contactsReq);
 }

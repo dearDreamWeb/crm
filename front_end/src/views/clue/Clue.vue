@@ -343,68 +343,72 @@
       </span>
     </el-dialog>
 
-    <el-dialog title="新建客户" :visible.sync="clueTurnCustomerDialog" top="30px">
-      <el-form :model="addCustomerForm" label-width="80px" label-position="right">
+    <el-dialog title="新建客户" :visible.sync="clueTurnCustomerDialog"
+               top="30px" @close="addCusAndConFormClose">
+      <el-form :model="addCusAndConForm" label-width="80px" label-position="right"
+               ref="addCusAndConFormRef">
         <el-row>
           <el-col :span="24">
             <el-form-item label="公司名称" prop="cusName">
-              <el-select style="width: 550px">
-                <el-option></el-option>
+              <el-select v-model="addCusAndConForm.cusName" style="width: 550px" filterable allow-create>
+                <el-option v-for="item in companyList" :key="item.clueId"
+                           :label="item.clueName" :value="item.clueName"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="公司简称">
-              <el-input></el-input>
+            <el-form-item label="公司简称" prop="abbreviation">
+              <el-input v-model="addCusAndConForm.abbreviation"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="姓名">
-              <el-select>
-                <el-option></el-option>
+            <el-form-item label="姓名" prop="contactsName">
+              <el-input  v-model="addCusAndConForm.contactsName"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="手机" prop="contactsPhone">
+              <el-input v-model="addCusAndConForm.contactsPhone"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="来源" prop="cusDictSource">
+              <el-select v-model="addCusAndConForm.cusDictSource">
+                <el-option v-for="item in dictList.children" :key="item.dictId"
+                           :label="item.dictName" :value="item.dictId">
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="手机">
-              <el-input></el-input>
+            <el-form-item label="QQ" prop="qq">
+              <el-input v-model="addCusAndConForm.qq"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="来源">
-              <el-select>
-                <el-option></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="QQ">
-              <el-input></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="微信">
-              <el-input></el-input>
+            <el-form-item label="微信" prop="wechat">
+              <el-input v-model="addCusAndConForm.wechat"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col>
-            <el-form-item label="备注">
-              <el-input type="textarea"></el-input>
+            <el-form-item label="备注" prop="cusRemark">
+              <el-input v-model="addCusAndConForm.cusRemark" type="textarea"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
       <span slot="footer">
         <el-button size="mini" @click="clueTurnCustomerDialog = false">取消</el-button>
-        <el-button type="primary" size="mini">确定</el-button>
+        <el-button type="primary" size="mini" :loading="clueTurnCustomerClickLoading"
+                   @click="clueTurnCustomerClick">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -414,6 +418,8 @@
   import {clueHttp} from "../../network/pre_sale/clue";
   import {userHttp} from "../../network/system/user";
   import {activityHttp} from "../../network/pre_sale/activity";
+  import {dictHttp} from "../../network/system/dict";
+  import {customerHttp} from "../../network/pre_sale/customer";
 
   export default {
     name: "Clue",
@@ -426,8 +432,22 @@
         cb(new Error('请输入合法的手机号'))
       }
       return {
+        clueTurnCustomerClickLoading:false,
+        dictList:[],
+
+        companyList:[],
         clueTurnCustomerDialog:false,
-        addCustomerForm:{},
+        addCusAndConForm:{
+          empId:'',
+          cusName:'',
+          abbreviation:'',
+          cusDictSource:'',
+          cusRemark:'',
+          contactsName:'',
+          contactsPhone:'',
+          qq:'',
+          wechat:''
+        },
 
         batchEditTypeLoading:false,
         clueBatchEditTypeForm:{
@@ -440,13 +460,7 @@
         editClueTypeDialog:false,
 
 
-        manipulateForm:{
-          empName:'',
-          activityTitle:'',
-          createTime:'',
-          clueStatus:'',
-          handleResult:''
-        },
+        manipulateForm:{},
         clueManipulateDialog:false,
 
         clueDetail:{},
@@ -509,8 +523,40 @@
       }
     },
     methods: {
+      clueTurnCustomerClick() {
+        this.clueTurnCustomerClickLoading = true
+        customerHttp.addCusAndCon(this.addCusAndConForm).then(res => {
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.clueTurnCustomerDialog = false
+            this.clueTurnCustomerClickLoading = false
+          } else {
+            this.$message({
+              message:res.message,
+              type:'error'
+            })
+            this.clueTurnCustomerClickLoading = false
+          }
+        })
+      },
+      initDictList() {
+        dictHttp.tree_dict_byId(2).then(res => {
+          this.dictList = res.data
+        })
+      },
+      listCompanyMethod() {
+        clueHttp.listCompany().then(res => {
+          this.companyList = res.data
+        })
+      },
       openCustomerDialog() {
         this.clueTurnCustomerDialog = true
+        this.listCompanyMethod()
+        this.initDictList()
+      },
+      addCusAndConFormClose() {
+        this.$refs.addCusAndConFormRef.resetFields()
+        this.clueTurnCustomerClickLoading = false
       },
 
       checkSelectTable(row,index) {
@@ -558,6 +604,11 @@
           this.manipulateForm = res.data
           this.manipulateForm.empName = res.data.empResp.empName
           this.manipulateForm.activityTitle = res.data.activityResp.activityTitle
+          this.addCusAndConForm.empId = this.manipulateForm.empId
+          if (this.manipulateForm.clueType === 0 && this.manipulateForm.clueType == null) {
+            this.addCusAndConForm.contactsName = this.manipulateForm.clueName
+            this.addCusAndConForm.contactsPhone = this.manipulateForm.cluePhone
+          }
         })
       },
 

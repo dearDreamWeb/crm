@@ -160,4 +160,10 @@ public class ClueServiceImpl implements ClueService {
         return ResultUtils.response(batchEditClueType);
     }
 
+    @Override
+    public ResultVo listCompany() {
+        List<ClueResp> clueResps = clueMapper.listCompany();
+        return ResultUtils.response(clueResps);
+    }
+
 }

@@ -155,4 +155,13 @@
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
     </select>
+
+    <insert id="addCustomerAndContacts" parameterType="com.example.entity.request.CustomerReq"
+            useGeneratedKeys="true" keyProperty="cusId">
+        <selectKey keyColumn="cus_id" keyProperty="cusId" resultType="Integer" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        INSERT INTO customer(cus_name,abbreviation,cus_remark,cus_dict_source,emp_id)
+        VALUES (#{cusName},#{abbreviation},#{cusRemark},#{cusDictSource},#{empId})
+    </insert>
 </mapper>

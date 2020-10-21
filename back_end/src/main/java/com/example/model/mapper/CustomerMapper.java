@@ -18,4 +18,5 @@ public interface CustomerMapper {
     int editCustomer(CustomerReq customerReq);
     CustomerResp getCustomer(Integer cusId);
     List<CustomerResp> listCustomer(CustomerReq customerReq);
+    int addCustomerAndContacts(CustomerReq customerReq);
 }

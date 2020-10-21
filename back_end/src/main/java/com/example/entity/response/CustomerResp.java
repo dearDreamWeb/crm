@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerResp {
-    private Integer cudsId;
+    private Integer cusId;
     private String cusName;
     private Integer lifeCycle;
     private Date firstSigningTime;

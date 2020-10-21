@@ -63,5 +63,14 @@ export const dictHttp = {
       }
     }
     return get(params)
+  },
+  tree_dict_byId:function (dictId) {
+    let params = {
+      url:'/dict/tree_get',
+      data:{
+        'dictId':dictId
+      }
+    }
+    return get(params)
   }
 }

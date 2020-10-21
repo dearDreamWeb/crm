@@ -207,4 +207,10 @@
             #{item}
         </foreach>
     </update>
+
+    <select id="listCompany" resultMap="ClueResult">
+        SELECT clue_id,clue_name,clue_phone,clue_status,clue_type,handle_result,handle_person,remark,activity_id,emp_id
+        FROM clue
+        WHERE clue_type = 1
+    </select>
 </mapper>

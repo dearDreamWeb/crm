@@ -16,4 +16,5 @@ public interface ClueService {
     ResultVo listClue(ClueReq clueReq,String empName);
     ResultVo getClueDetail(Integer clueId);
     ResultVo batchEditClueType(ClueReq clueReq);
+    ResultVo listCompany();
 }

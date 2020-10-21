@@ -77,4 +77,9 @@ public class ClueController {
     public ResultVo batchEditClueType(@RequestBody ClueReq clueReq) {
         return clueService.batchEditClueType(clueReq);
     }
+
+    @GetMapping("/list_company")
+    public ResultVo listCompany() {
+        return clueService.listCompany();
+    }
 }

@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerReq {
-    private Integer cudsId;
+    private Integer cusId;
     private String cusName;
     private Integer lifeCycle;
     private Date firstSigningTime;
@@ -41,4 +41,11 @@ public class CustomerReq {
     private String endDate;
     private Integer pageNum;
     private Integer pageSize;
+
+    public CustomerReq(String cusName, String abbreviation, String cusRemark, String cusDictSource) {
+        this.cusName = cusName;
+        this.abbreviation = abbreviation;
+        this.cusRemark = cusRemark;
+        this.cusDictSource = cusDictSource;
+    }
 }

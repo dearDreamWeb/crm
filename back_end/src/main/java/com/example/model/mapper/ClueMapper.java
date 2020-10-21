@@ -22,4 +22,5 @@ public interface ClueMapper {
     List<ClueResp> listClueByEmpId(@Param("clueReq")ClueReq clueReq,
                                    @Param("empName")String empName);
     int batchEditClueType(ClueReq clueReq);
+    List<ClueResp> listCompany();
 }

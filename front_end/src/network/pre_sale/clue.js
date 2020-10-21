@@ -106,5 +106,11 @@ export const clueHttp = {
       }
     }
     return postJson(params)
+  },
+  listCompany:function () {
+    let params = {
+      url:'/clue/list_company',
+    }
+    return get(params)
   }
 }
