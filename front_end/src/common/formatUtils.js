@@ -49,6 +49,13 @@ export function ordStateFormat(ordState) {
     return '执行中'
   }
 }
+export function delStateFormat(delState) {
+  if (delState === 1){
+    return '已发货'
+  } else {
+    return '未发货'
+  }
+}
 
 export function clueHandleResultFormat(handleResult) {
   if (handleResult === 1) {

@@ -47,7 +47,8 @@
 
 <!--全部-->
     <select id="listszDeliver" resultMap="szDeliverResult">
-        SELECT del_id, del_wuliuid, del_company, del_people, del_delivertime, del_state, del_createtime, del_delete
+        SELECT del_id, del_wuliuid, del_company, del_people, del_delivertime, del_state, del_createtime,
+         del_delete,ord_id
         FROM sz_deliver
         <where>
             <if test="delWuliuid != null and delWuliuid != ''">
@@ -64,6 +65,9 @@
             </if>
             <if test="delState != null">
                 AND del_state = #{delState}
+            </if>
+            <if test="ordId != null">
+                AND ord_id = #{ordId}
             </if>
             <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
                 AND date_format(del_createtime,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
@@ -88,13 +92,13 @@
         <selectKey keyColumn="del_id" keyProperty="delId" resultType="Integer" order="AFTER">
             select last_insert_id();
         </selectKey>
-        insert into sz_deliver(del_wuliuid, del_company, del_people, del_delivertime,  del_state)
+        insert into sz_deliver(del_wuliuid, del_company, del_people, del_delivertime,del_state)
         values (#{delWuliuid},#{delCompany},#{delPeople},#{delDelivertime},#{delState})
     </insert>
 <!--删-->
     <update id="delszDeliver" parameterType="Integer">
-        UPDATE emp SET is_delete = 1
-        WHERE emp_id = #{empId}
+        UPDATE sz_deliver SET del_delete = 1
+        WHERE del_id = #{delId}
     </update>
 <!--改-->
     <update id="editszDeliver" parameterType="com.example.entity.request.SzDeliver">

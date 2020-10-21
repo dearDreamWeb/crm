@@ -97,6 +97,11 @@
         </el-table-column>
         <!--<el-table-column prop="ordState" label="订单状态" sortable></el-table-column>-->
         <el-table-column prop="ordHead" label="负责人" sortable></el-table-column>
+        <el-table-column label="操作" sortable>
+          <template slot-scope="scope">
+            <el-button type="text" @click="chakan(scope.row.ordId)">查看详情</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination background
                      @current-change="handleCurrentChange"
@@ -105,6 +110,15 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-card>
+
+    <el-dialog title="订单详情" :visible.sync="dialogTableVisible">
+      <el-table :data="szorder">
+        <el-table-column property="odetId" label="详情编号" width="150"></el-table-column>
+        <el-table-column property="productId" label="产品编号" width="200"></el-table-column>
+        <el-table-column property="odetBuynum" label="购买数量" width="200"></el-table-column>
+        <el-table-column property="odetBuymoney" label="购买价格"></el-table-column>
+      </el-table>
+    </el-dialog>
 
     <el-dialog title="订单添加" :visible.sync="addDialog" @close="addHandleClose">
       <el-form :model="addForm" label-width="100px" ref="addFormRef"
@@ -268,6 +282,8 @@
         addOrderButtonLoading:false,
         editDialog:false,
         editOrderButtonLoading:false,
+        dialogTableVisible:false,
+        szorder:[]
       }
     },
     methods: {
@@ -334,6 +350,14 @@
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
+        })
+      },
+      chakan(val){
+        this.dialogTableVisible = true;
+        alert(val);
+        orderHttp.szxiangq(val).then(res=>{
+          console.log(res);
+          this.szorder=res;
         })
       },
       getOrderDetail() {
@@ -421,5 +445,27 @@
 </script>
 
 <style scoped>
-
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+  .el-form-item__label {
+    text-align: right;
+    vertical-align: middle;
+    float: left;
+    font-size: 14px;
+    color: #99a9bf;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
 </style>

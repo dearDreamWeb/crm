@@ -27,13 +27,14 @@ Vue.prototype.$urlUtil = urlUtils
 /*格式化*/
 import {
   sexFormat,dateFormat,clueStatusFormat,
-  ordStateFormat,dateTimeFormat,
+  ordStateFormat,delStateFormat,dateTimeFormat,
   clueHandleResultFormat
 } from "./common/formatUtils";
 Vue.filter('dateFormat',dateFormat)
 Vue.filter('sexFormat',sexFormat)
 Vue.filter('clueStatusFormat',clueStatusFormat)
 Vue.filter('ordStateFormat',ordStateFormat)
+Vue.filter('delStateFormat',delStateFormat)
 Vue.filter('dateTimeFormat',dateTimeFormat)
 Vue.filter('clueHandleResultFormat',clueHandleResultFormat)
 
