@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * @author: yangqianqian
@@ -47,5 +48,9 @@ public class SzOrderController {
     @GetMapping("list_all")//查全部
     public ResultVo listszOrder(SzOrder szorder){
         return szorderService.listszOrder(szorder);
+    }
+    @GetMapping("/and_all")
+    public List<SzOrder> OrdANDDel() {
+        return szorderService.OrdANDDel();
     }
 }

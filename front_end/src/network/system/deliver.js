@@ -1,10 +1,35 @@
 import {postJson,get} from "../request";
 
 export const deliverHttp = {
+  addANDord:function(deliver) {
+    let params = {
+      url:'/deliver/addANDord',
+      data:{
+        'ordId':deliver.ordId,
+        'delWuliuid':deliver.delWuliuid,
+        'delCompany':deliver.delCompany,
+        'delPeople':deliver.delPeople
+      }
+    }
+    return postJson(params)
+  },
+  andall:function () {
+    let params = {
+      url:'/order/and_all',
+      data:{
+
+      }
+    }
+    return get(params)
+  },
   addszDeliver:function(deliver) {
     let params = {
       url:'/deliver/add',
       data:{
+        'odetId':deliver.odetId,
+        'delWuliuid':deliver.delWuliuid,
+        'delCompany':deliver.delCompany,
+        'delPeople':deliver.delPeople
 
       }
     }

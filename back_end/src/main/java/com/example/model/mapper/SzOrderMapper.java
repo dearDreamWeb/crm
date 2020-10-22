@@ -13,4 +13,5 @@ public interface SzOrderMapper {
     int editszOrder(SzOrder szorder);//改
     SzOrder getszOrder(Integer ordId);//单条
     List<SzOrder> listszOrder(SzOrder szorder);//全部
+    List<SzOrder> OrdANDDel();
 }

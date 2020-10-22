@@ -87,4 +87,8 @@
         </if>
         where ord_id = #{ordId}
     </update>
+
+    <select id="OrdANDDel" resultMap="szOrderResult">
+        select * from sz_order where ord_state=1
+    </select>
 </mapper>

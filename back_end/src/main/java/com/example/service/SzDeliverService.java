@@ -14,4 +14,5 @@ public interface SzDeliverService {
     ResultVo editszDeliver(SzDeliver szdeliver);
     ResultVo getszDeliver(Integer delId);
     ResultVo listszDeliver(SzDeliver szdeliver);
+    int addDelANDOrd(SzDeliver szDeliver);//发货单和订单新增
 }
