@@ -10,6 +10,7 @@ export const customerHttp = {
     let params = {
       url:'/customer/add_cus_con',
       data:{
+        'clueId':cusCon.clueId,
         'cusName':cusCon.cusName,
         'abbreviation':cusCon.abbreviation,
         'cusDictSource':cusCon.cusDictSource,
@@ -34,5 +35,11 @@ export const customerHttp = {
       }
     }
     return postJson(params)
-  }
+  },
+  listAll:function () {
+    let params = {
+      url:'/customer/list_all',
+    }
+    return get(params)
+  },
 }

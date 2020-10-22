@@ -34,11 +34,4 @@ public class ContactsReq {
     private String endDate;
     private Integer pageNum;
     private Integer pageSize;
-
-    public ContactsReq(String contactsName, String contactsPhone, String wechat, String qq) {
-        this.contactsName = contactsName;
-        this.contactsPhone = contactsPhone;
-        this.wechat = wechat;
-        this.qq = qq;
-    }
 }

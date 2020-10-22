@@ -112,5 +112,15 @@ export const clueHttp = {
       url:'/clue/list_company',
     }
     return get(params)
+  },
+  transferCustomer:function (clue) {
+    let params = {
+      url:'/clue/transfer',
+      data:{
+        'clueId':clue.clueId,
+        'empId':clue.empId
+      }
+    }
+    return postJson(params)
   }
 }

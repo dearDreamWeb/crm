@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CusConReq {
+    private Integer clueId;
     private String cusName;
     private String abbreviation;
     private String cusDictSource;

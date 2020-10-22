@@ -41,11 +41,4 @@ public class CustomerReq {
     private String endDate;
     private Integer pageNum;
     private Integer pageSize;
-
-    public CustomerReq(String cusName, String abbreviation, String cusRemark, String cusDictSource) {
-        this.cusName = cusName;
-        this.abbreviation = abbreviation;
-        this.cusRemark = cusRemark;
-        this.cusDictSource = cusDictSource;
-    }
 }

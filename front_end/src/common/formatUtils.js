@@ -60,7 +60,9 @@ export function delStateFormat(delState) {
 export function clueHandleResultFormat(handleResult) {
   if (handleResult === 1) {
     return '有效'
-  } else {
+  } else if (handleResult === 0) {
     return '无效'
+  } else if (handleResult == null) {
+    return '暂未处理'
   }
 }
