@@ -80,6 +80,10 @@ const routes = [
       {
         path: '/syslog',
         component: () => import('../views/syslog/Syslog')
+      },
+      {
+        path: '/cus_kf',
+        component: () => import('../views/customer/Customerkf')
       }
     ]
   }

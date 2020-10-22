@@ -68,8 +68,8 @@ public class CareServicelmpl implements CareService {
             pageSize = 10;
         }
         PageHelper.startPage(pageNum,pageSize);
-        List<Care> empResps = careMapper.listCare(care);
-        PageInfo<Care> list = new PageInfo<>(empResps);
+        List<Care> cares = careMapper.listCare(care);
+        PageInfo<Care> list = new PageInfo<>(cares);
         return ResultUtils.response(list);
     }
 
@@ -86,8 +86,6 @@ public class CareServicelmpl implements CareService {
             throw new SysException(ResultEnum.DICT_NOT_EXIST.getCode(),
                     ResultEnum.DICT_NOT_EXIST.getMessage());
         }
-//        care.setCarelxrcontacts(care.getCarelxrcontacts());
-//        care.setCareData(DateUtils.getDate());
         int updateCare = careMapper.updateCare(careReq);
         if (updateCare != 1) {
             throw new SysException(ResultEnum.DICT_UPDATE_FAIL.getCode(),

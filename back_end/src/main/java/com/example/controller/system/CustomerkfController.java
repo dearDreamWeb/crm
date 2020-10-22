@@ -18,24 +18,28 @@ public class CustomerkfController {
     @Autowired
     private CustomerkfService customerkfService;
 
-    @SysLog("添加关怀")
+    @SysLog("添加")
     @PostMapping("/add")
     public ResultVo addDict(@RequestBody Customerkf customerkf) {
         return customerkfService.addCustomerkf(customerkf);
     }
 
-    @SysLog("删除关怀")
+    @SysLog("删除")
     @PostMapping("/del")
     public ResultVo delDict(@RequestBody Customerkf customerkf) {
         return customerkfService.deleteCustomerkf(customerkf.getCustomerId());
     }
 
-    @SysLog("修改关怀")
+    @SysLog("修改")
     @PostMapping("/update")
     public ResultVo editDict(@RequestBody Customerkf customerkf) {
         return customerkfService.updateCustomerkf(customerkf);
     }
 
+    @GetMapping
+    public ResultVo getDict(@RequestParam("customerId")Integer customerId) {
+        return customerkfService.getCustomerkf(customerId);
+    }
     @GetMapping("/list")
     public ResultVo listDict(Customerkf customerkf) {
         return customerkfService.listCustomerkf(customerkf);

@@ -1,4 +1,5 @@
 package com.example.entity.request;
+import com.example.entity.response.CustomerResp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,4 +27,5 @@ public class Care {
     private String endDate;
     private Integer pageNum;
     private Integer pageSize;
+    private CustomerResp customerResp;
 }

@@ -47,7 +47,7 @@ public class CareController {
 
 
     @GetMapping("/list")
-    public ResultVo listDict(Care care) {
+    public ResultVo listDict(@RequestBody Care care) {
         return careService.listCare(care);
     }
 

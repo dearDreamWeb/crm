@@ -8,7 +8,7 @@
           </el-input>
         </el-col>
         <el-col :span="10">
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="addDialog = true">新增</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAdd">新增</el-button>
           <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
           <el-button type="primary" size="mini" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
@@ -31,46 +31,39 @@
             </el-row>
             <el-row :gutter="20">
               <el-col :span="8">
-                <el-form-item prop="careZt" label="昵称">
-                  <el-input v-model="searchForm.careZt" size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item prop="carelxrcontacts" label="联系人">
-                  <el-input v-model="searchForm.carelxrcontacts" size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item prop="cusId" label="客户">
+                <el-form-item prop="cusId" label="对应客户">
                   <el-input v-model="searchForm.cusId" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item prop="customerTheme" label="主题">
+                  <el-input v-model="searchForm.customerTheme" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item prop="customerExecutor" label="执行人">
+                  <el-input v-model="searchForm.customerExecutor" size="mini" placeholder="请输入" clearable></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
-              <el-col :span="10">
-                <el-form-item label="日期">
-                  <el-date-picker v-model="searchForm.startDate" format="yyyy-MM-dd"
-                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
-                                  placeholder="请输入"></el-date-picker>
-                  <span>-</span>
-                  <el-date-picker v-model="searchForm.endDate" format="yyyy-MM-dd"
-                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
-                                  placeholder="请输入"></el-date-picker>
+              <el-col :span="6">
+                <el-form-item prop="customerServicefs" label="服务方式">
+                  <el-select v-model="searchForm.customerServicefs" placeholder="请选择">
+                    <el-option label="电话" value="电话"></el-option>
+                    <el-option label="上门" value="上门"></el-option>
+                    <el-option label="其他" value="其他"></el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item prop="careexecutor" label="执行人">
-                  <el-input v-model="searchForm.careexecutor" size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item prop="carenr" label="内容">
-                  <el-input v-model="searchForm.carenr" size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item prop="carecustomerfk" label="反馈内容">
-                  <el-input v-model="searchForm.carecustomerfk" size="mini" placeholder="请输入" clearable></el-input>
+              <el-col :span="6">
+                <el-form-item prop="customerState" label="处理状态">
+                  <el-select v-model="searchForm.customerState" placeholder="请选择">
+                    <el-option label="无需处理" value="无需处理"></el-option>
+                    <el-option label="未处理" value="未处理"></el-option>
+                    <el-option label="处理中" value="处理中"></el-option>
+                    <el-option label="处理完成" value="处理完成"></el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
@@ -88,15 +81,17 @@
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="40"></el-table-column>
-        <el-table-column prop="careZt" label="关怀主题" sortable></el-table-column>
-        <el-table-column prop="carelxrcontacts" label="联系人"></el-table-column>
-        <el-table-column prop="cusId" label="客户"></el-table-column>
-        <el-table-column prop="careData" label="时间">
+        <el-table-column prop="customerTheme" label="主题" sortable></el-table-column>
+        <el-table-column prop="cusId" label="对应客户"></el-table-column>
+        <el-table-column prop="customerServicelx" label="服务类型"></el-table-column>
+        <el-table-column prop="customerData" label="日期">
           <template slot-scope="scope">
-            {{scope.row.careData | dateFormat}}
+            {{scope.row.customerData | dateFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="careexecutor" label="执行人"></el-table-column>
+        <el-table-column prop="customerServicefs" label="服务方式"></el-table-column>
+        <el-table-column prop="customerExecutor" label="执行人"></el-table-column>
+        <el-table-column prop="customerState" label="处理状态"></el-table-column>
       </el-table>
 
       <el-pagination background
@@ -108,83 +103,20 @@
     </el-card>
 
     <el-dialog
-      title="新增关怀"
+      title="客服"
       :visible.sync="addDialog"
       width="50%"
       @close="handleClose">
       <el-form ref="addform" :model="addform" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="关怀主题" prop="careZt">
-              <el-input v-model="addform.careZt"></el-input>
+            <el-form-item label="主题" prop="customerTheme">
+              <el-input v-model="addform.customerTheme"></el-input>
             </el-form-item>
           </el-col >
           <el-col :span="8">
-            <el-form-item label="联系人">
-              <el-input v-model="addform.carelxrcontacts"></el-input>
-            </el-form-item>
-          </el-col>
-
-        </el-row>
-
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="客户">
-              <el-input
-                placeholder="请输入内容"
-                v-model="addform.cusId"
-                :disabled="true">
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="日期">
-              <el-date-picker type="date" placeholder="选择日期" v-model="addform.careData" style="width: 100%;"></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="执行人">
-              <el-input v-model="addform.careexecutor"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="关怀内容">
-              <el-input type="textarea" v-model="addform.carenr"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="客户反馈">
-              <el-input type="textarea" v-model="addform.carecustomerfk"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <div style="text-align: center;">
-        <el-button @click="addDialog = false">取 消</el-button>
-        <el-button type="primary" @click="addClick"
-                   :loading="addDictButtonLoading">确 定</el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog
-      title="修改关怀"
-      :visible.sync="editDialog"
-      width="50%"
-      @close="editHandleClose">
-      <el-form ref="updateform" :model="updateform" :rules="rules" label-width="80px">
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="关怀主题" prop="careZt">
-              <el-input v-model="updateform.careZt"></el-input>
-            </el-form-item>
-          </el-col >
-          <el-col :span="8">
-            <el-form-item label="联系人">
-              <el-input v-model="updateform.carelxrcontacts"></el-input>
+            <el-form-item label="执行人" prop="customerExecutor">
+              <el-input v-model="addform.customerExecutor"></el-input>
             </el-form-item>
           </el-col>
 
@@ -202,29 +134,153 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="日期">
-              <el-date-picker type="date" placeholder="选择日期" v-model="updateform.careData" style="width: 100%;"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期" v-model="addform.customerData" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="执行人">
-              <el-input v-model="updateform.careexecutor"></el-input>
+            <el-form-item label="服务类型">
+              <el-select v-model="addform.customerServicelx" placeholder="请选择">
+                <el-option label="答疑" value="答疑"></el-option>
+                <el-option label="故障排除" value="故障排除"></el-option>
+                <el-option label="其他" value="其他"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="关怀内容">
-              <el-input type="textarea" v-model="updateform.carenr"></el-input>
+            <el-form-item label="服务方式">
+              <el-select v-model="addform.customerServicefs" placeholder="请选择">
+                <el-option label="电话" value="电话"></el-option>
+                <el-option label="上门" value="上门"></el-option>
+                <el-option label="其他" value="其他"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="8">
+            <el-form-item label="处理状态">
+              <el-select v-model="addform.customerState" placeholder="请选择">
+                <el-option label="无需处理" value="无需处理"></el-option>
+                <el-option label="未处理" value="未处理"></el-option>
+                <el-option label="处理中" value="处理中"></el-option>
+                <el-option label="处理完成" value="处理完成"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="联系人">
+              <el-input v-model="addform.customerKhcontacts"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="服务内容">
+              <el-input v-model="addform.customerServicenr"></el-input>
+            </el-form-item>
+          </el-col>
           <el-col :span="8">
             <el-form-item label="客户反馈">
-              <el-input type="textarea" v-model="updateform.carecustomerfk"></el-input>
+              <el-input type="textarea" v-model="addform.customerCustomerfk"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
+      </el-form>
+      <div style="text-align: center;">
+        <el-button @click="addDialog = false">取 消</el-button>
+        <el-button type="primary" @click="addClick"
+                   :loading="addDictButtonLoading">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      title="修改投诉"
+      :visible.sync="editDialog"
+      width="50%"
+      @close="editHandleClose">
+      <el-form ref="updateform" :model="updateform" :rules="rules" label-width="80px">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="主题" prop="customerTheme">
+              <el-input v-model="updateform.customerTheme"></el-input>
+            </el-form-item>
+          </el-col >
+          <el-col :span="8">
+            <el-form-item label="执行人" prop="customerExecutor">
+              <el-input v-model="updateform.customerExecutor"></el-input>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="客户">
+              <el-input
+                placeholder="请输入内容"
+                v-model="input"
+                :disabled="true">
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="日期">
+              <el-date-picker type="date" placeholder="选择日期" v-model="updateform.customerData" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="服务类型">
+              <el-select v-model="updateform.customerServicelx" placeholder="请选择">
+                <el-option label="答疑" value="答疑"></el-option>
+                <el-option label="故障排除" value="故障排除"></el-option>
+                <el-option label="其他" value="其他"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="服务方式">
+              <el-select v-model="updateform.customerServicefs" placeholder="请选择">
+                <el-option label="电话" value="电话"></el-option>
+                <el-option label="上门" value="上门"></el-option>
+                <el-option label="其他" value="其他"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="处理状态">
+              <el-select v-model="updateform.customerState" placeholder="请选择">
+                <el-option label="无需处理" value="无需处理"></el-option>
+                <el-option label="未处理" value="未处理"></el-option>
+                <el-option label="处理中" value="处理中"></el-option>
+                <el-option label="处理完成" value="处理完成"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="联系人">
+              <el-input v-model="updateform.customerKhcontacts"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="服务内容">
+              <el-input v-model="updateform.customerServicenr"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="客户反馈">
+              <el-input type="textarea" v-model="updateform.customerCustomerfk"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
       </el-form>
       <div style="text-align: center;">
         <el-button @click="editDialog = false">取 消</el-button>
@@ -236,8 +292,7 @@
 
 </template>
 <script>
-  import {careHttp} from "../../network/system/care";
-
+  import {customerkfHttp} from "../../network/system/customerkf";
 
 
   export default {
@@ -245,15 +300,18 @@
       return {
         rowCareId:0,
         addform:{
-          careZt:'',
+          customerTheme:'',
           cusId: '',
-          carelxrcontacts:'',
-          careexecutor:'',
-          carecustomerfk:'',
-          carenr:'',
-          region: '',
-          date1: '',
-          careData: '',
+          date1:'',
+          customerServicelx:'',
+          customerServicefs:'',
+          customerData:'',
+          customerKhcontacts:'',
+          customerState: '',
+          customerExecutor: '',
+          customerServicenr: '',
+          customerCustomerfk:'',
+          date:'',
           delivery: false,
           type: [],
           resource: '',
@@ -261,19 +319,20 @@
         },
 
         searchForm:{
-          careZt:'',
+          customerTheme:'',
           cusId: '',
-          carelxrcontacts:'',
-          careexecutor:'',
-          startDate:'',
-          endDate:'',
-          carecustomerfk:'',
-          carenr:'',
-          region: '',
-          date1: '',
-
+          date1:'',
+          customerServicelx:'',
+          customerServicefs:'',
+          customerData:'',
+          customerKhcontacts:'',
+          customerState: '',
+          customerExecutor: '',
+          customerServicenr: '',
+          customerCustomerfk:'',
           delivery: false,
           type: [],
+          date:'',
           resource: '',
           desc: ''
         },
@@ -285,10 +344,9 @@
         editDictButtonLoading:false,
         editDialog:false,
         searchInput:'',
-        careZt:'',
-
-        careData:'',
-
+        date1:'',
+        customerData:'',
+        date:'',
         listForm:[],
         tableLoading:'',
         total:0,
@@ -299,15 +357,18 @@
 
         tableData: [],
         form: {
-          careZt:'',
+          customerTheme:'',
           cusId: '',
-          carelxrcontacts:'',
-          careexecutor:'',
-          carecustomerfk:'',
-          carenr:'',
-          region: '',
-          date1: '',
-          careData: '',
+          date1:'',
+          customerServicelx:'',
+          customerServicefs:'',
+          customerData:'',
+          customerKhcontacts:'',
+          customerState: '',
+          customerExecutor: '',
+          customerServicenr: '',
+          customerCustomerfk:'',
+          date:'',
           delivery: false,
           type: [],
           resource: '',
@@ -315,9 +376,9 @@
         },
         num: 1,
         rules:{
-          careZt:[
+          complaintZt:[
             {required: true, message: '请输入活动名称', trigger: 'blur'},
-            { min: 4, max: 8, message: '长度在 4 到 8个字符', trigger: 'blur' }
+
           ]
 
         }
@@ -329,7 +390,7 @@
         this.$refs["addform"].validate(valid => {
           if (!valid) return
           this.addDictButtonLoading = true
-          careHttp.add(this.addform).then(res => {
+          customerkfHttp.add(this.addform).then(res => {
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.initList()
@@ -353,7 +414,7 @@
         this.buttonDisabled = true
       },
       advancedQueryClick(){
-        careHttp.queryEmp(this.searchForm).then(res => {
+        customerkfHttp.queryEmp(this.searchForm).then(res => {
           if (res.code === 20000) {
             this.listForm = res.data.list
             this.total = res.data.total
@@ -363,8 +424,8 @@
       },
       editCareClick(){
         this.editDictButtonLoading = true
-        this.updateform.careId = this.rowCareId
-        careHttp.update(this.updateform).then(res => {
+        this.updateform.customerId = this.rowCareId
+        customerkfHttp.update(this.updateform).then(res => {
           if (res.code === 20000) {
             this.$message.success(res.message)
             this.initList()
@@ -384,7 +445,7 @@
         this.getEmpDetail()
       },
       getEmpDetail(){
-        careHttp.get(this.rowCareId).then(res =>{
+        customerkfHttp.get(this.rowCareId).then(res =>{
           console.log("编辑获得的数据",res.data);
           this.updateform = res.data;
         })
@@ -395,7 +456,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          careHttp.del(this.rowCareId).then(res => {
+          customerkfHttp.del(this.rowCareId).then(res => {
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.initList()
@@ -417,8 +478,8 @@
       },
 
       searchInputClick(){
-        this.listForm.careZt = this.searchInput
-        careHttp.list(this.listForm).then(res => {
+        this.listForm.customerTheme = this.searchInput
+        customerkfHttp.list(this.listForm).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
@@ -430,8 +491,8 @@
         this.$refs["addform"].resetFields()
       },
       handleRowClick(row,event,column) {
-        this.rowCareId = row.careId
-        if (this.careId != 0) {
+        this.rowCareId = row.customerId
+        if (this.customerId != 0) {
           this.buttonDisabled = false
         }
       },
@@ -444,19 +505,25 @@
       handleCurrentChange(pageIndex){
         this.searchForm.pageNum = pageIndex
         this.searchForm.pageSize = this.pageSize
-        careHttp.queryEmp(this.searchForm).then(res => {
+        customerkfHttp.queryEmp(this.searchForm).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
       },
       initList() {
-        careHttp.listPage(this.pageNum, this.pageSize).then(res => {
+        customerkfHttp.listPage(this.pageNum, this.pageSize).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
       },
+      //打开新增的窗口
+      openAdd(){
+        this.addDialog=true;//显示新增的对话框
+        //重置新增的表单中的内容
+        this.addform={};
+      }
     },
     created() {
       this.initList()

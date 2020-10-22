@@ -87,8 +87,6 @@ public class CustomerkfServicelmpl implements CustomerkfService {
             throw new SysException(ResultEnum.DICT_NOT_EXIST.getCode(),
                     ResultEnum.DICT_NOT_EXIST.getMessage());
         }
-//        customerkf.setCustomerCustomerfk(customerkf.getCustomerCustomerfk());
-//        customerkf.setCustomerData(DateUtils.getDate());
         int updateCustomerkf = customerkfMapper.updateCustomerkf(customerkfReq);
         if (updateCustomerkf != 1) {
             throw new SysException(ResultEnum.DICT_UPDATE_FAIL.getCode(),
