@@ -17,4 +17,5 @@ public interface SzDeliverMapper {
     int editszDeliver(SzDeliver szdeliver);//改
     SzDeliver getszDeliver(Integer delId);//单条
     List<SzDeliver> listszDeliver(SzDeliver szdeliver);
+    int addDelANDOrd(SzDeliver szDeliver);//发货单和订单新增
 }

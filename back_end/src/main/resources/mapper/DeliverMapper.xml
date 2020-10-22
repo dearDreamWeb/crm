@@ -11,6 +11,7 @@
         <result property="delState" column="del_state"/>
         <result property="delCreatetime" column="del_createtime"/>
         <result property="delDelete" column="del_delete"/>
+        <result property="ordId" column="ord_id"/>
     </resultMap>
 
     <resultMap id="szDeliverDetailResult" type="com.example.entity.request.SzDeliver">
@@ -45,10 +46,10 @@
         <result property="ordDelete" column="ord_delete"/>
     </resultMap>
 
-<!--全部-->
+    <!--全部-->
     <select id="listszDeliver" resultMap="szDeliverResult">
         SELECT del_id, del_wuliuid, del_company, del_people, del_delivertime, del_state, del_createtime,
-         del_delete,ord_id
+        del_delete,ord_id
         FROM sz_deliver
         <where>
             <if test="delWuliuid != null and delWuliuid != ''">
@@ -75,10 +76,11 @@
             <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
                 AND date_format(del_createtime,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
+            AND del_state = 1
         </where>
         ORDER BY del_createtime DESC
     </select>
-<!--单条-->
+    <!--单条-->
     <select id="getszDeliver" resultMap="szDeliverDetailResult" parameterType="Integer">
         SELECT d.del_id,d.del_wuliuid,d.del_company,d.del_people,
             d.del_delivertime,d.del_state
@@ -87,7 +89,7 @@
             left join sz_order o on o.ord_id=d.ord_id
             where d.del_id = #{delId}
     </select>
-<!--增-->
+    <!--增-->
     <insert id="addszDeliver" parameterType="com.example.entity.request.SzDeliver">
         <selectKey keyColumn="del_id" keyProperty="delId" resultType="Integer" order="AFTER">
             select last_insert_id();
@@ -95,12 +97,12 @@
         insert into sz_deliver(del_wuliuid, del_company, del_people, del_delivertime,del_state)
         values (#{delWuliuid},#{delCompany},#{delPeople},#{delDelivertime},#{delState})
     </insert>
-<!--删-->
+    <!--删-->
     <update id="delszDeliver" parameterType="Integer">
         UPDATE sz_deliver SET del_delete = 1
         WHERE del_id = #{delId}
     </update>
-<!--改-->
+    <!--改-->
     <update id="editszDeliver" parameterType="com.example.entity.request.SzDeliver">
         UPDATE sz_deliver SET del_createtime = #{delCreatetime}
         <if test="delWuliuid != null and delWuliuid != ''">
@@ -121,6 +123,21 @@
         <if test="delState != null">
             ,del_state = #{delState}
         </if>
-            WHERE del_id = #{delId}
+        WHERE del_id = #{delId}
     </update>
+
+    <!--发货单和订单-->
+    <!--<select id="listDeliverANDOrd" resultMap="szDeliverResult">
+        SELECT d.del_id,d.del_state,d.ord_id,o.ord_head,o.ord_theme
+        FROM sz_deliver d
+        INNER JOIN sz_order o ON o.ord_id= d.ord_id AND d.del_state=0
+    </select>-->
+    <!--发货单和订单新增-->
+    <insert id="addDelANDOrd">
+        <selectKey keyColumn="del_id" keyProperty="delId" resultType="Integer" order="AFTER">
+            select select last_insert_id();
+        </selectKey>
+        insert into sz_deliver(del_wuliuid, del_company, del_people, del_delivertime,del_state,ord_id)
+        values (#{delWuliuid},#{delCompany},#{delPeople},#{delDelivertime},#{delState},{ordId})
+    </insert>
 </mapper>

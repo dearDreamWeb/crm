@@ -88,4 +88,9 @@ public class SzOrderServicelmpl implements SzOrderService {
         PageInfo<SzOrder> list = new PageInfo<>(deptResps);
         return ResultUtils.response(list);
     }
+
+    @Override
+    public List<SzOrder> OrdANDDel() {
+        return szorderMapper.OrdANDDel();
+    }
 }

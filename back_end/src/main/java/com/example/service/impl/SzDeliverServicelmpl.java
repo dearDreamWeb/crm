@@ -86,4 +86,9 @@ public class SzDeliverServicelmpl implements SzDeliverService {
         PageInfo<SzDeliver> list = new PageInfo<>(deptResps);
         return ResultUtils.response(list);
     }
+
+    @Override
+    public int addDelANDOrd(SzDeliver szDeliver) {
+        return szdeliverMapper.addDelANDOrd(szDeliver);
+    }
 }

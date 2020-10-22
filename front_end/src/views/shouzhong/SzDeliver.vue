@@ -31,7 +31,7 @@
         </el-table-column>
         <el-table-column prop="delWuliuid" label="发货单号" sortable></el-table-column>
         <el-table-column prop="szOrder.ordHead" label="订单" sortable>
-      </el-table-column>
+        </el-table-column>
         <el-table-column prop="delPeople" label="发货人" sortable></el-table-column>
         <el-table-column prop="delState" label="发货状态" sortable>
           <template slot-scope="scope">
@@ -46,11 +46,61 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-card>
+
+    <el-dialog title="添加发货" :visible.sync="addDialog" >
+      <el-table
+        ref="multipleTable"
+        :data="szorder"
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="handleSelectionChange">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+          <el-table-column property="ordId" label="订单编号" width="180"></el-table-column>
+          <el-table-column property="ordTheme" label="订单主题" width="200"></el-table-column>
+          <el-table-column property="ordHead" label="负责人" width="160"></el-table-column>
+        </el-table>
+
+      <el-form :model="addForm" label-width="100px" ref="addFormRef"
+               label-position="right" :rules="formRules">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="发货单号" prop="delWuliuid">
+              <el-input v-model="addForm.delWuliuid" size="mini" placeholder="请输入发货单号" clearable/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="物流公司" prop="delCompany" >
+              <el-select v-model="addForm.delCompany" clearable>
+                <el-option label="中通快递" value="中通"></el-option>
+                <el-option label="韵达快递" value="1"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="发货人" prop="delPeople">
+              <el-input v-model="addForm.delPeople" size="mini" clearable/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="addDialog = false">取消</el-button>
+        <el-button type="primary" @click="addDeliverClick"
+                   :loading="addDeliverButtonLoading">确定</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
   import {deliverHttp} from "../../network/system/deliver";
+  import {orderHttp} from "../../network/system/order";
 
   export default {
     name: "SzDeliver",
@@ -69,12 +119,26 @@
         pageNum:1,
         pageSize:5,
         total:1,
+        addForm:{
+          delWuliuid:"",
+          delPeople:"",
+          delCompany:""
+        },
+        addFormOrd:{
+          delWuliuid:"",
+          delPeople:"",
+          delCompany:"",
+          ordId:""
+        },
         formRules:{
           /* ordHead:[
              {required:true,message:'请输入订单名称',trigger:'blur'},
            ]*/
         },
         editDialog:false,
+        addDeliverButtonLoading:false,
+        szorder:[],
+        multipleSelection: []
       }
     },
     methods: {
@@ -85,9 +149,16 @@
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
-      },
+      },      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      }
+,
       openAddDialog(){
+        this.addDialog = true;
+        deliverHttp.andall().then(res=>{
+          this.szorder=res;
 
+        })
       },
       resetForm() {
         this.$refs.advancedSearchFormRef.resetFields()
@@ -100,7 +171,7 @@
         this.$refs.editFormRef.resetFields()
       },
       addHandleClose(){
-        /*添加*/
+
       },
       openEditDeliver(){
         /*修改*/
@@ -118,13 +189,22 @@
           this.pageNum = res.data.pageNum
         })
       },
-     /* openAddDialog() {
-        this.addDialog = true
-      },*/
       handleRowClick(row,event,column) {
         this.rowdelId= row.delId
         if (this.rowDelId != 0) {
           this.buttonDisabled = false
+        }
+      },
+      addDeliverClick(){
+        for (let i = 0; i <this.multipleSelection.length ; i++) {
+         /* alert(this.multipleSelection[i].ordId);*/
+          this.addFormOrd.ordId=this.multipleSelection[i].ordId;
+          this.addFormOrd.delCompany=this.addForm.delCompany;
+          this.addFormOrd.delPeople=this.addForm.delPeople;
+          this.addFormOrd.delWuliuid=this.addForm.delWuliuid;
+          deliverHttp.addANDord(this.addFormOrd).then(res=>{
+
+          })
         }
       },
       iHeaderRowStyle:function({row,rowIndex}){
