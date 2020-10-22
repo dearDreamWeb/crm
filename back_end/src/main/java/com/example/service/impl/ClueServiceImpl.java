@@ -166,4 +166,27 @@ public class ClueServiceImpl implements ClueService {
         return ResultUtils.response(clueResps);
     }
 
+    @Override
+    public ResultVo transferCustomer(ClueReq clueReq,String token) {
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        if (clueReq.getEmpId() == empByToken.getEmpId()) {
+            throw new SysException(ResultEnum.CLUE_TRANSFER_NOT_OWN.getCode(),
+                    ResultEnum.CLUE_TRANSFER_NOT_OWN.getMessage());
+        }
+        Integer clueId = clueReq.getClueId();
+        ClueResp clue = clueMapper.getClue(clueId);
+        if (clueId == null || clue == null) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+        clueReq.setVersion(clue.getVersion());
+        clueReq.setUpdateTime(DateUtils.getDate());
+        int editClue = clueMapper.editClue(clueReq);
+        if (editClue != 1) {
+            throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
+                    ResultEnum.DATA_UPDATE_FAIL.getMessage());
+        }
+        return ResultUtils.response(editClue);
+    }
+
 }

@@ -156,12 +156,26 @@
         FROM customer
     </select>
 
-    <insert id="addCustomerAndContacts" parameterType="com.example.entity.request.CustomerReq"
-            useGeneratedKeys="true" keyProperty="cusId">
+    <insert id="addCustomerAndContacts" parameterType="com.example.entity.request.CustomerReq">
         <selectKey keyColumn="cus_id" keyProperty="cusId" resultType="Integer" order="AFTER">
-            select last_insert_id();
+            SELECT LAST_INSERT_ID()
         </selectKey>
         INSERT INTO customer(cus_name,abbreviation,cus_remark,cus_dict_source,emp_id)
         VALUES (#{cusName},#{abbreviation},#{cusRemark},#{cusDictSource},#{empId})
     </insert>
+
+    <select id="getCustomerByName" resultMap="CustomerResult">
+        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
+            company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
+            qualitative_id,grading_id,ration_id,emp_id
+        FROM customer
+        WHERE cus_name = #{cusName}
+    </select>
+
+    <select id="listAll" resultMap="CustomerResult">
+        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
+            company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
+            qualitative_id,grading_id,ration_id,emp_id
+        FROM customer
+    </select>
 </mapper>

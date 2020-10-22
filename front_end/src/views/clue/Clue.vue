@@ -58,8 +58,8 @@
               <el-col :span="8">
                 <el-form-item label="处理结果">
                   <el-select v-model="searchForm.handleResult" clearable size="mini">
-                    <el-option label="有效" value="1"></el-option>
-                    <el-option label="无效" value="0"></el-option>
+                    <el-option label="有效" :value="1"></el-option>
+                    <el-option label="无效" :value="0"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -77,8 +77,8 @@
               <el-col :span="8">
                 <el-form-item label="线索状态">
                   <el-select v-model="searchForm.clueStatus" clearable size="mini">
-                    <el-option label="未处理" value="1"></el-option>
-                    <el-option label="已处理" value="0"></el-option>
+                    <el-option label="已处理" :value="1"></el-option>
+                    <el-option label="未处理" :value="0"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -127,7 +127,11 @@
             {{scope.row.clueStatus | clueStatusFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="handleResult" label="处理结果" width="120px"></el-table-column>
+        <el-table-column prop="handleResult" label="处理结果" width="120px">
+          <template slot-scope="scope">
+            {{scope.row.handleResult | clueHandleResultFormat}}
+          </template>
+        </el-table-column>
         <el-table-column prop="handlePerson" label="处理人" width="120px"></el-table-column>
         <el-table-column prop="createTime" label="提交时间" width="120px">
           <template slot-scope="scope">
@@ -138,7 +142,8 @@
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="处理" placement="top">
               <el-button type="text" icon="el-icon-thumb" size="medium"
-                         @click="manipulateClueClick(scope.row.clueId)"></el-button>
+                         @click="manipulateClueClick(scope.row.clueId)">
+              </el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -263,7 +268,7 @@
     </el-dialog>
 
     <el-dialog title="采集信息" center :visible.sync="clueManipulateDialog"
-               width="30%" top="55px">
+               width="30%" top="55px" @close="manipulateFormClose">
       <el-form :model="manipulateForm" label-width="100px" label-position="right">
         <el-row :gutter="20">
           <el-col :span="12">
@@ -275,7 +280,8 @@
             <el-button type="text" icon="el-icon-share">共享</el-button>
           </el-col>
           <el-col :span="6">
-            <el-button type="text" icon="el-icon-s-promotion">转移</el-button>
+            <el-button type="text" icon="el-icon-s-promotion"
+                       @click="openTransferDialog">转移</el-button>
           </el-col>
         </el-row>
         <el-form-item label="来源">
@@ -306,7 +312,8 @@
           <el-col :span="6">
             <el-tooltip class="item" effect="dark" content="转为客户" placement="top">
               <el-button type="warning" icon="el-icon-s-custom" circle
-                         @click="openCustomerDialog"></el-button>
+                         @click="openCustomerDialog"
+                         :disabled="this.manipulateForm.clueStatus === 1"></el-button>
             </el-tooltip>
           </el-col>
           <el-col :span="6">
@@ -321,7 +328,9 @@
           </el-col>
           <el-col :span="6">
             <el-tooltip class="item" effect="dark" content="设为无效" placement="top">
-              <el-button type="danger" icon="el-icon-error" circle></el-button>
+              <el-button type="danger" icon="el-icon-error" circle
+                         :disabled="this.manipulateForm.handleResult != null">
+              </el-button>
             </el-tooltip>
           </el-col>
         </el-row>
@@ -352,7 +361,8 @@
             <el-form-item label="公司名称" prop="cusName">
               <el-select v-model="addCusAndConForm.cusName" style="width: 550px" filterable allow-create>
                 <el-option v-for="item in companyList" :key="item.clueId"
-                           :label="item.clueName" :value="item.clueName"></el-option>
+                           :label="item.clueName" :value="item.clueName">
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -411,6 +421,27 @@
                    @click="clueTurnCustomerClick">确定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="转移客户" :visible.sync="transferCustomerDialog" width="25%"
+               @close="transferDialogClose">
+      <el-card>
+        <el-form :model="transferCustomerForm" ref="transferCustomerRef">
+          <el-form-item label="转移给：" prop="empId">
+            <el-select v-model="transferCustomerForm.empId"
+                       clearable placeholder="请选择">
+              <el-option v-for="item in empList" :key="item.empId"
+                         :label="item.empName" :value="item.empId">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </el-card>
+      <span slot="footer">
+        <el-button @click="transferCustomerDialog = false">取消</el-button>
+        <el-button type="primary" :loading="transferLoading"
+                   @click="transferCustomerClick">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -432,12 +463,20 @@
         cb(new Error('请输入合法的手机号'))
       }
       return {
+        transferLoading:false,
+        transferCustomerForm:{
+          clueId:'',
+          empId:''
+        },
+        transferCustomerDialog:false,
+
         clueTurnCustomerClickLoading:false,
         dictList:[],
 
         companyList:[],
         clueTurnCustomerDialog:false,
         addCusAndConForm:{
+          clueId:'',
           empId:'',
           cusName:'',
           abbreviation:'',
@@ -523,8 +562,40 @@
       }
     },
     methods: {
+      openTransferDialog() {
+        this.transferCustomerDialog = true
+      },
+      transferCustomerClick() {
+        this.$confirm('请再三考虑是否执行此操作','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          this.transferCustomerForm.clueId = this.manipulateForm.clueId
+          this.transferLoading = true
+          clueHttp.transferCustomer(this.transferCustomerForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.transferCustomerDialog = false
+              this.transferLoading = false
+              this.initList()
+            } else {
+              this.$message({
+                message:res.message,
+                type:'error'
+              })
+              this.transferLoading = false
+            }
+          })
+        })
+      },
+      transferDialogClose() {
+        this.$refs.transferCustomerRef.resetFields()
+      },
+
       clueTurnCustomerClick() {
         this.clueTurnCustomerClickLoading = true
+        this.addCusAndConForm.clueId = this.manipulateForm.clueId
         customerHttp.addCusAndCon(this.addCusAndConForm).then(res => {
           if (res.code === 20000) {
             this.$message.success(res.message)
@@ -548,6 +619,9 @@
         clueHttp.listCompany().then(res => {
           this.companyList = res.data
         })
+        /*customerHttp.listAll().then(res => {
+          this.companyList = res.data
+        })*/
       },
       openCustomerDialog() {
         this.clueTurnCustomerDialog = true
@@ -557,6 +631,12 @@
       addCusAndConFormClose() {
         this.$refs.addCusAndConFormRef.resetFields()
         this.clueTurnCustomerClickLoading = false
+        this.addCusAndConForm.cusName = ''
+        this.addCusAndConForm.contactsName = ''
+        this.addCusAndConForm.contactsPhone = ''
+      },
+      manipulateFormClose() {
+        this.initList()
       },
 
       checkSelectTable(row,index) {
@@ -573,6 +653,7 @@
             this.multipleClueIdList.push(val[i].clueId)
           }
         }
+        console.log(this.multipleClueIdList)
       },
       editClueTypeClick() {
         if (this.multipleClueIdList.length > 0) {
@@ -605,7 +686,7 @@
           this.manipulateForm.empName = res.data.empResp.empName
           this.manipulateForm.activityTitle = res.data.activityResp.activityTitle
           this.addCusAndConForm.empId = this.manipulateForm.empId
-          if (this.manipulateForm.clueType === 0 && this.manipulateForm.clueType == null) {
+          if (this.manipulateForm.clueType == 0 || this.manipulateForm.clueType == null) {
             this.addCusAndConForm.contactsName = this.manipulateForm.clueName
             this.addCusAndConForm.contactsPhone = this.manipulateForm.cluePhone
           }

@@ -19,4 +19,6 @@ public interface CustomerMapper {
     CustomerResp getCustomer(Integer cusId);
     List<CustomerResp> listCustomer(CustomerReq customerReq);
     int addCustomerAndContacts(CustomerReq customerReq);
+    CustomerResp getCustomerByName(String cusName);
+    List<CustomerResp> listAll();
 }

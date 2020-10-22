@@ -82,4 +82,11 @@ public class ClueController {
     public ResultVo listCompany() {
         return clueService.listCompany();
     }
+
+    @PostMapping("/transfer")
+    public ResultVo transferCustomer(@RequestBody ClueReq clueReq,
+                                     HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return clueService.transferCustomer(clueReq,token);
+    }
 }

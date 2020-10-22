@@ -3,10 +3,13 @@ package com.example.controller.system;
 import com.example.anno.SysLog;
 import com.example.entity.CusConReq;
 import com.example.entity.ResultVo;
+import com.example.entity.request.ClueReq;
 import com.example.entity.request.CustomerReq;
 import com.example.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author: pengjia
@@ -48,7 +51,13 @@ public class CustomerController {
     }
 
     @PostMapping("/add_cus_con")
-    public ResultVo addCusAndCon(@RequestBody CusConReq cusConReq) {
-        return customerService.addCusAndCon(cusConReq);
+    public ResultVo addCusAndCon(@RequestBody CusConReq cusConReq, HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return customerService.addCusAndCon(cusConReq,token);
+    }
+
+    @GetMapping("/list_all")
+    public ResultVo listAll() {
+        return customerService.listAll();
     }
 }

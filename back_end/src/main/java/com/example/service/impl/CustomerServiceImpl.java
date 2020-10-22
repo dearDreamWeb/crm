@@ -4,11 +4,16 @@ import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.CusConReq;
 import com.example.entity.ResultVo;
+import com.example.entity.request.ClueReq;
 import com.example.entity.request.ContactsReq;
 import com.example.entity.request.CustomerReq;
+import com.example.entity.response.ClueResp;
 import com.example.entity.response.CustomerResp;
+import com.example.entity.response.EmpResp;
+import com.example.model.mapper.ClueMapper;
 import com.example.model.mapper.ContactsMapper;
 import com.example.model.mapper.CustomerMapper;
+import com.example.model.mapper.EmpMapper;
 import com.example.service.CustomerService;
 import com.example.util.CheckUtils;
 import com.example.util.DateUtils;
@@ -34,6 +39,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private ContactsMapper contactsMapper;
+
+    @Autowired
+    private ClueMapper clueMapper;
+
+    @Autowired
+    private EmpMapper empMapper;
 
     @Override
     public ResultVo addCustomer(CustomerReq customerReq) {
@@ -103,32 +114,63 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResultVo addCusAndCon(CusConReq cusConReq) {
-        CustomerReq customerReq = new CustomerReq();
+    public ResultVo addCusAndCon(CusConReq cusConReq,String token) {
         ContactsReq contactsReq = new ContactsReq();
+        CustomerReq customerReq = new CustomerReq();
+        EmpResp empByToken = empMapper.getEmpByToken(token);
 
-        customerReq.setCusName(cusConReq.getCusName());
-        customerReq.setAbbreviation(cusConReq.getAbbreviation());
-        customerReq.setCusDictSource(cusConReq.getCusDictSource());
-        customerReq.setCusRemark(cusConReq.getCusRemark());
-        customerReq.setEmpId(cusConReq.getEmpId());
+        ClueReq clueReq = new ClueReq();
+        clueReq.setClueId(cusConReq.getClueId());
+        ClueResp clue = clueMapper.getClue(cusConReq.getClueId());
+        clueReq.setHandlePerson(empByToken.getEmpName());
+        clueReq.setClueStatus(1);
+        clueReq.setUpdateTime(DateUtils.getDate());
+        clueReq.setVersion(clue.getVersion());
+        clueReq.setHandleResult(1);
 
+        int editClue = clueMapper.editClue(clueReq);
+        if (editClue != 1) {
+            throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
+                    ResultEnum.DATA_UPDATE_FAIL.getMessage());
+        }
+
+        CustomerResp customerByName = customerMapper.getCustomerByName(cusConReq.getCusName());
+        if (customerByName == null || "".equals(customerByName)) {
+            customerReq.setCusName(cusConReq.getCusName());
+            customerReq.setAbbreviation(cusConReq.getAbbreviation());
+            customerReq.setCusDictSource(cusConReq.getCusDictSource());
+            customerReq.setCusRemark(cusConReq.getCusRemark());
+            customerReq.setEmpId(cusConReq.getEmpId());
+
+            int addCustomer = customerMapper.addCustomerAndContacts(customerReq);
+            if (addCustomer != 1) {
+                throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                        ResultEnum.DATA_ADD_FAIL.getMessage());
+            }
+            System.err.println("新增后主键："+customerReq.getCusId());
+        }
         contactsReq.setContactsName(cusConReq.getContactsName());
         contactsReq.setContactsPhone(cusConReq.getContactsPhone());
         contactsReq.setQq(cusConReq.getQq());
         contactsReq.setWechat(cusConReq.getWechat());
-        int addCustomer = customerMapper.addCustomerAndContacts(customerReq);
-        if (addCustomer != 1) {
-            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
-                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        contactsReq.setRemark(cusConReq.getCusRemark());
+        if (customerByName == null || "".equals(customerByName)) {
+            contactsReq.setCusId(customerReq.getCusId());
+        } else {
+            contactsReq.setCusId(customerByName.getCusId());
         }
-        contactsReq.setCusId(customerReq.getCusId());
         int addContacts = contactsMapper.addContactsAndCustomer(contactsReq);
         if (addContacts != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
         return ResultUtils.response("新增成功");
+    }
+
+    @Override
+    public ResultVo listAll() {
+        List<CustomerResp> customerResps = customerMapper.listAll();
+        return ResultUtils.response(customerResps);
     }
 
 }

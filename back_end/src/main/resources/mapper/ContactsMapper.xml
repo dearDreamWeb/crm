@@ -127,7 +127,7 @@
     </select>
 
     <insert id="addContactsAndCustomer" parameterType="com.example.entity.request.ContactsReq">
-        INSERT INTO contacts(contacts_name,contacts_phone,qq,wechat) VALUES
-        (#{contactsName},#{contactsPhone},#{qq},#{wechat})
+        INSERT INTO contacts(contacts_name,contacts_phone,qq,wechat,remark,cus_id) VALUES
+        (#{contactsName},#{contactsPhone},#{qq},#{wechat},#{remark},#{cusId})
     </insert>
 </mapper>
