@@ -6,6 +6,7 @@ import com.example.entity.ResultVo;
 import com.example.entity.request.SzDeliver;
 import com.example.model.mapper.SzDeliverMapper;
 import com.example.service.SzDeliverService;
+import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -88,7 +89,10 @@ public class SzDeliverServicelmpl implements SzDeliverService {
     }
 
     @Override
-    public int addDelANDOrd(SzDeliver szDeliver) {
-        return szdeliverMapper.addDelANDOrd(szDeliver);
+    public ResultVo addDelANDOrd(SzDeliver szDeliver) {
+        szDeliver.setDelDelivertime(DateUtils.getDate());
+        szDeliver.setDelState(1);
+        int addDelANDOrd = szdeliverMapper.addDelANDOrd(szDeliver);
+        return  ResultUtils.response(addDelANDOrd);
     }
 }
