@@ -20,7 +20,7 @@
         <result property="careexecutor" column="care_executor"/>
         <result property="carenr" column="care_carenr"/>
         <result property="carecustomerfk" column="care_customerfk"/>
-        <association property="customerReq" resultMap="CustomerResult"/>
+        <association property="customerResp" resultMap="CustomerResult"/>
     </resultMap>
 
     <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
