@@ -178,20 +178,36 @@
 
       </el-col>
     </el-row>
+
+<!--    <area-select v-model="selected" :data="pca" @change="areaSelectChange"></area-select>-->
+<!--    <area-cascader v-model="selected2" :data="pca" @change="areaCascaderChange"></area-cascader>-->
+
+<!--    <area-select type='all' :level='2' v-model="selected" :data="pcaa" @change="areaSelectChange"></area-select>-->
+    <area-cascader type='text' v-model="selected2" :level='1' :data="pcaa" @change="areaCascaderChange"></area-cascader>
   </div>
 </template>
 
 <script>
+  import {pca,pcaa} from 'area-data'
   export default {
     name: "Dashboard",
     data(){
       return{
         icon:'',
         shopId:'',
+        selected:[],
+        selected2:['湖南省','邵阳市','新邵县'],
+        pca:pca,
+        pcaa:pcaa
       }
     },
     methods:{
-
+      areaSelectChange() {
+        console.log(this.selected)
+      },
+      areaCascaderChange() {
+        console.log(this.selected2)
+      }
     },
   }
 </script>

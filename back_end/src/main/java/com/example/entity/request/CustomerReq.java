@@ -20,7 +20,7 @@ public class CustomerReq {
     private Integer lifeCycle;
     private Date firstSigningTime;
     private String abbreviation;
-    private String credit;
+    private String creditId;
     private Integer settlement;
     private String companyAccount;
     private Integer province;

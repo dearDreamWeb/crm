@@ -8,7 +8,7 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input placeholder="请输入" clearable size="mini">
+          <el-input placeholder="请输入客户名称" clearable size="mini">
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
@@ -28,40 +28,82 @@
         <el-card v-show="advancedSearch" class="advanced_search" style="margin-top: 10px">
           <el-form size="mini" label-position="right" label-width="80px">
             <el-row>
-              <el-col>
+              <el-col :span="4">
                 <el-form-item label="高级搜索"></el-form-item>
               </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="占位符">
-                  <el-input size="mini" clearable placeholder="请输入"></el-input>
+              <el-col :span="10">
+                <el-form-item label="简称" prop="abbreviation">
+                  <el-input clearable size="mini"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="占位符">
-                  <el-input size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="占位符">
-                  <el-input size="mini" placeholder="请输入" clearable></el-input>
+              <el-col :span="10">
+                <el-form-item label="生命周期" prop="lifeCycle">
+                  <el-input clearable size="mini"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :span="8">
-                <el-form-item label="占位符">
+                <el-form-item label="信用等级">
+                  <el-select size="mini" placeholder="请选择" clearable>
+                    <el-option></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="客户来源">
+                  <el-select size="mini" placeholder="请选择" clearable>
+                    <el-option></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="客户阶段">
+                  <el-select size="mini" placeholder="请选择" clearable>
+                    <el-option></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item label="首次签约">
+                  <el-date-picker format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                  placeholder="请输入"></el-date-picker>
+                  <span>-</span>
+                  <el-date-picker format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                  placeholder="请输入"></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="创建时间">
+                  <el-date-picker format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                  placeholder="请输入"></el-date-picker>
+                  <span>-</span>
+                  <el-date-picker format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                  placeholder="请输入"></el-date-picker>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <el-form-item label="结款方式">
+                  <el-select size="mini" placeholder="请选择" clearable>
+                    <el-option></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="负责人">
                   <el-input size="mini" placeholder="请输入" clearable></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="占位符">
-                  <el-input size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="占位符">
+                <el-form-item>
                   <el-button size="mini" icon="el-icon-zoom-out"
                              @click="advancedSearch = !advancedSearch"></el-button>
                   <el-button type="primary" size="mini" icon="el-icon-search"></el-button>
@@ -76,12 +118,12 @@
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row v-loading="tableLoading" @row-click="handleRowClick">
         <el-table-column type="selection" width="50px"></el-table-column>
-        <el-table-column prop="cusName" label="客户名称" sortable></el-table-column>
-        <el-table-column prop="abbreviation" label="简称" sortable></el-table-column>
-        <el-table-column prop="lifeCycle" label="生命周期" sortable></el-table-column>
-        <el-table-column prop="credit" label="信用等级" sortable></el-table-column>
-        <el-table-column prop="cusDictSource" label="来源" sortable></el-table-column>
-        <el-table-column prop="cusRemark" label="备注" sortable></el-table-column>
+        <el-table-column prop="cusName" label="客户名称"></el-table-column>
+        <el-table-column prop="abbreviation" label="简称"></el-table-column>
+        <el-table-column prop="lifeCycle" label="生命周期"></el-table-column>
+        <el-table-column prop="creditId" label="信用等级"></el-table-column>
+        <el-table-column prop="cusDictSource" label="来源"></el-table-column>
+        <el-table-column prop="cusRemark" label="备注"></el-table-column>
       </el-table>
 
       <el-pagination @current-change="handleCurrentChange"
