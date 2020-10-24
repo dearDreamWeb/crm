@@ -42,7 +42,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item prop="cusId" label="客户">
-                  <el-input v-model="searchForm.cusId" size="mini" placeholder="请输入" clearable></el-input>
+                  <el-input v-model="searchForm.cusName" size="mini" placeholder="请输入" clearable></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -132,14 +132,14 @@
             <el-form-item label="客户">
               <el-input
                 placeholder="请输入内容"
-                v-model="addform.cusId"
+                v-model="addform.cusName"
                 :disabled="true">
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item>
-              <el-select v-model="addform.cusId">
+              <el-select v-model="addform.cusName">
                 <el-option v-for="item in empList" :key="item.cusId"
                            :label="item.cusName" :value="item.cusId">
                 </el-option>
@@ -246,7 +246,8 @@
 </template>
 <script>
   import {careHttp} from "../../network/system/care";
-  import {userHttp} from "../../network/system/user";
+
+  import {customerHttp} from "../../network/pre_sale/customer";
 
 
 
@@ -341,7 +342,7 @@
         this.initEmpList()
       },
       initEmpList() {
-        userHttp.list().then(res => {
+        customerHttp.list().then(res => {
           this.empList = res.data.list
         })
       },
