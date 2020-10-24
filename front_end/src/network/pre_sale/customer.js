@@ -42,4 +42,14 @@ export const customerHttp = {
     }
     return get(params)
   },
+  listPage:function (pageNum,pageSize) {
+    let params = {
+      url:'/customer/list',
+      data:{
+        'pageNum':pageNum,
+        'pageSize':pageSize
+      }
+    }
+    return get(params)
+  }
 }

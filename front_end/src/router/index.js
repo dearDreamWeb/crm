@@ -84,6 +84,14 @@ const routes = [
       {
         path: '/cus_kf',
         component: () => import('../views/customer/Customerkf')
+      },
+      {
+        path: '/customer',
+        component: () => import('../views/customer/Customer')
+      },
+      {
+        path: '/baojia',
+        component: () => import('../views/customer/BaoJia')
       }
     ]
   }

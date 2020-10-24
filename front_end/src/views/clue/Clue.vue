@@ -355,7 +355,7 @@
     <el-dialog title="新建客户" :visible.sync="clueTurnCustomerDialog"
                top="30px" @close="addCusAndConFormClose">
       <el-form :model="addCusAndConForm" label-width="80px" label-position="right"
-               ref="addCusAndConFormRef">
+               ref="addCusAndConFormRef" :rules="addCusAndConFormRules">
         <el-row>
           <el-col :span="24">
             <el-form-item label="公司名称" prop="cusName">
@@ -462,6 +462,20 @@
         }
         cb(new Error('请输入合法的手机号'))
       }
+      let checkQQ = (rule,value,cb) => {
+        const regQQ = /^[1-9][0-9]{4,11}$/
+        if (regQQ.test(value)) {
+          return cb()
+        }
+        cb(new Error('请输入合法的QQ号'))
+      }
+      let checkWeChat = (rule,value,cb) => {
+        const regWeChat = /^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/
+        if (regWeChat.test(value)) {
+          return cb()
+        }
+        cb(new Error('请输入合法的微信号'))
+      }
       return {
         transferLoading:false,
         transferCustomerForm:{
@@ -486,6 +500,23 @@
           contactsPhone:'',
           qq:'',
           wechat:''
+        },
+        addCusAndConFormRules:{
+          contactsName:[
+            {required:true,message:'请输入名称',trigger:'blur'}
+          ],
+          contactsPhone:[
+            {required:true,message:'请输入手机号',trigger:'blur'},
+            {validator:checkMobile}
+          ],
+          qq:[
+            {required:true,message:'请输入QQ号',trigger:'blur'},
+            {validator:checkQQ}
+          ],
+          wechat:[
+            {required:true,message:'请输入微信号',trigger:'blur'},
+            {validator:checkWeChat}
+          ]
         },
 
         batchEditTypeLoading:false,

@@ -142,7 +142,7 @@
     </update>
 
     <select id="getCustomer" resultMap="CustomerResult">
-        SELECT cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
+        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
@@ -150,10 +150,33 @@
     </select>
 
     <select id="listCustomer" resultMap="CustomerResult">
-        SELECT cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
+        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
+        <where>
+            <if test="cusName != null and cusName != ''">
+                AND cus_name LIKE CONCAT('%',#{cusName},'%')
+            </if>
+            <if test="lifeCycle != null and lifeCycle != ''">
+                AND life_cycle LIKE CONCAT('%',#{lifeCycle},'%')
+            </if>
+            <if test="abbreviation != null and abbreviation != ''">
+                AND abbreviation LIKE CONCAT('%',#{abbreviation},'%')
+            </if>
+            <if test="credit != null and credit != ''">
+                AND credit LIKE CONCAT('%',#{credit},'%')
+            </if>
+            <if test="settlement != null">
+                AND settlement = #{settlement}
+            </if>
+            <if test="companyAccount != null and companyAccount != ''">
+                AND company_account LIKE CONCAT('%',#{companyAccount},'%')
+            </if>
+            <if test="empId != null">
+                AND empId = #{empId}
+            </if>
+        </where>
     </select>
 
     <insert id="addCustomerAndContacts" parameterType="com.example.entity.request.CustomerReq">
@@ -177,5 +200,38 @@
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
+    </select>
+
+    <select id="listCustomerByEmpId" resultMap="CustomerResult">
+        SELECT cu.cus_id,cu.cus_name,cu.life_cycle,cu.first_signing_time,cu.abbreviation,cu.credit,cu.settlement,
+            cu.company_account,cu.province,cu.city,cu.detail_address,cu.cus_remark,cu.cus_dict_source,cu.cus_dict_stage,
+            cu.qualitative_id,cu.grading_id,cu.ration_id,cu.emp_id,cu.create_time
+        FROM customer cu
+        INNER JOIN emp e ON e.emp_id = cu.emp_id
+        <where>
+            <if test="cusName != null and cusName != ''">
+                AND cu.cus_name LIKE CONCAT('%',#{cusName},'%')
+            </if>
+            <if test="lifeCycle != null and lifeCycle != ''">
+                AND cu.life_cycle LIKE CONCAT('%',#{lifeCycle},'%')
+            </if>
+            <if test="abbreviation != null and abbreviation != ''">
+                AND cu.abbreviation LIKE CONCAT('%',#{abbreviation},'%')
+            </if>
+            <if test="credit != null and credit != ''">
+                AND cu.credit LIKE CONCAT('%',#{credit},'%')
+            </if>
+            <if test="settlement != null">
+                AND cu.settlement = #{settlement}
+            </if>
+            <if test="companyAccount != null and companyAccount != ''">
+                AND cu.company_account LIKE CONCAT('%',#{companyAccount},'%')
+            </if>
+            <if test="empId != null">
+                AND cu.empId = #{empId}
+            </if>
+            AND cu.is_delete = 0 AND e.emp_name = #{empName}
+        </where>
+        ORDER BY create_time DESC
     </select>
 </mapper>

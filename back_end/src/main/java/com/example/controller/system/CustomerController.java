@@ -6,6 +6,7 @@ import com.example.entity.ResultVo;
 import com.example.entity.request.ClueReq;
 import com.example.entity.request.CustomerReq;
 import com.example.service.CustomerService;
+import com.example.service.EmpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private EmpService empService;
 
     @SysLog("客户添加")
     @PostMapping("/add")
@@ -46,8 +50,10 @@ public class CustomerController {
     }
 
     @GetMapping("/list")
-    public ResultVo listCustomer(@RequestBody CustomerReq customerReq) {
-        return customerService.listCustomer(customerReq);
+    public ResultVo listCustomer(CustomerReq customerReq,
+                                 HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return customerService.listCustomer(customerReq,token);
     }
 
     @PostMapping("/add_cus_con")
