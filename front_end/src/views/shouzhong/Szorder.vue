@@ -120,18 +120,26 @@
       </el-table>
     </el-dialog>
 
-    <el-dialog title="订单添加" :visible.sync="addDialog" @close="addHandleClose">
-      <el-form :model="addForm" label-width="100px" ref="addFormRef"
+    <el-dialog title="订单添加" width="65%" :visible.sync="addDialog" @close="addHandleClose">
+      <el-form :model="addForm" label-width="80px" ref="addFormRef"
                label-position="right" :rules="formRules">
         <el-row>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="主题" prop="ordTheme">
               <el-input v-model="addForm.ordTheme" size="mini" placeholder="请输入主题" clearable/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="8" >
+            <el-form-item label="客户" prop="ordHead">
+              <el-input  v-model="addForm.ordHead" size="mini" clearable style="margin-top: 6px">
+                <el-button slot="append" icon="el-icon-search" size="mini"></el-button>
+              </el-input>
+            </el-form-item>
+
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="负责人" prop="ordHead">
-              <el-input v-model="addForm.ordHead" size="mini" placeholder="请输入负责人" clearable/>
+              <el-input v-model="addForm.ordHead" size="mini" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -149,7 +157,9 @@
               </el-select>
             </el-form-item>
           </el-col>
-         <!-- <el-col :span="8">
+          </el-row>
+          <el-row>
+          <el-col :span="8">
             <el-form-item label="省" prop="ordProvince">
               <el-input v-model="addForm.ordProvince" size="mini" placeholder="省" clearable/>
             </el-form-item>
@@ -164,20 +174,23 @@
               <el-input v-model="addForm.ordCountry" size="mini" placeholder="区/县" clearable/>
             </el-form-item>
           </el-col>
+          </el-row>
+        <el-row>
           <el-col :span="24">
             <el-form-item label="详细地址" prop="ordDetail">
               <el-input v-model="addForm.ordDetail" size="mini" placeholder="详细地址" clearable/>
             </el-form-item>
-          </el-col>-->
+          </el-col>
+
         </el-row>
-        <el-row>
+       <!-- <el-row>
           <el-col :span="12">
             <el-form-item label="开始时间">
               <el-date-picker type="date" placeholder="选择日期" v-model="addForm.ordStarttime" style="width: 100%;">
               </el-date-picker>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row>-->
       </el-form>
       <span slot="footer">
         <el-button @click="addDialog = false">取消</el-button>
@@ -266,6 +279,10 @@
         total:1,
         addForm: {
           ordTheme:'',
+          ordProvince:'',
+          ordCity:'',
+          ordCountry:'',
+          ordDetail:'',
           ordTotalmoney:'',
           ordStarttime:'',
           ordDealtime:'',
@@ -276,7 +293,7 @@
         },
         formRules:{
           ordHead:[
-            {required:true,message:'请输入订单名称',trigger:'blur'},
+            {required:true,message:'请填写完整',trigger:'blur'},
           ]
         },
         addOrderButtonLoading:false,
@@ -444,8 +461,9 @@
   }
 </script>
 
-<style scoped>
-  .demo-table-expand {
+<style>
+
+/*  .demo-table-expand {
     font-size: 0;
   }
   .demo-table-expand label {
@@ -467,5 +485,5 @@
     padding: 0 12px 0 0;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-  }
+  }*/
 </style>
