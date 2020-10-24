@@ -8,7 +8,7 @@
           </el-input>
         </el-col>
         <el-col :span="10">
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="addDialog = true">新增</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">新增</el-button>
           <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
           <el-button type="primary" size="mini" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
@@ -138,6 +138,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
+            <el-form-item>
+              <el-select v-model="addform.cusId">
+                <el-option v-for="item in empList" :key="item.cusId"
+                           :label="item.cusName" :value="item.cusId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="日期">
               <el-date-picker type="date" placeholder="选择日期" v-model="addform.careData" style="width: 100%;"></el-date-picker>
             </el-form-item>
@@ -237,12 +246,15 @@
 </template>
 <script>
   import {careHttp} from "../../network/system/care";
+  import {userHttp} from "../../network/system/user";
 
 
 
   export default {
     data() {
       return {
+        empList:[],
+
         rowCareId:0,
         addform:{
           careZt:'',
@@ -324,6 +336,16 @@
       }
     },
     methods:{
+      openAddDialog() {
+        this.addDialog = true
+        this.initEmpList()
+      },
+      initEmpList() {
+        userHttp.list().then(res => {
+          this.empList = res.data.list
+        })
+      },
+
       addClick(){
         console.log(this.$refs)
         this.$refs["addform"].validate(valid => {
