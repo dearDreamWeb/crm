@@ -51,5 +51,24 @@ export const customerHttp = {
       }
     }
     return get(params)
+  },
+  list:function (customer) {
+    let params = {
+      url:'/customer/list',
+      data:{
+        'abbreviation':customer.abbreviation,
+        'lifeCycle':customer.lifeCycle,
+        'creditId':customer.creditId,
+        'cusDictSource':customer.cusDictSource,
+        'cusDictStage':customer.cusDictStage,
+        'starSigningDate':customer.starSigningDate,
+        'endSigningDate':customer.endSigningDate,
+        'startDate':customer.startDate,
+        'endDate':customer.endDate,
+        'settlement':customer.settlement,
+        'empId':customer.empId
+      }
+    }
+    return get(params)
   }
 }

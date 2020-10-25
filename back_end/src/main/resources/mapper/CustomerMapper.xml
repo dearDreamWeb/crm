@@ -158,14 +158,14 @@
             <if test="cusName != null and cusName != ''">
                 AND cus_name LIKE CONCAT('%',#{cusName},'%')
             </if>
-            <if test="lifeCycle != null and lifeCycle != ''">
-                AND life_cycle LIKE CONCAT('%',#{lifeCycle},'%')
+            <if test="lifeCycle != null">
+                AND life_cycle = #{lifeCycle}
             </if>
             <if test="abbreviation != null and abbreviation != ''">
                 AND abbreviation LIKE CONCAT('%',#{abbreviation},'%')
             </if>
-            <if test="creditId != null and creditId != ''">
-                AND credit_id LIKE CONCAT('%',#{creditId},'%')
+            <if test="creditId != null">
+                AND credit_id = #{creditId}
             </if>
             <if test="settlement != null">
                 AND settlement = #{settlement}
@@ -174,9 +174,29 @@
                 AND company_account LIKE CONCAT('%',#{companyAccount},'%')
             </if>
             <if test="empId != null">
-                AND empId = #{empId}
+                AND emp_id = #{empId}
             </if>
+            <if test="cusDictSource != null">
+                AND cus_dict_source = #{cusDictSource}
+            </if>
+            <if test="cusDictStage != null">
+                AND cus_dict_stage = #{cusDictStage}
+            </if>
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+            <if test="starSigningDate != null and starSigningDate != ''">
+                AND date_format(first_signing_time,'%y%m%d') &gt;= date_format(#{starSigningDate},'%y%m%d')
+            </if>
+            <if test="endSigningDate != null and endSigningDate != ''">
+                AND date_format(first_signing_time,'%y%m%d') &lt;= date_format(#{endSigningDate},'%y%m%d')
+            </if>
+            AND is_delete = 0
         </where>
+        ORDER BY update_time DESC
     </select>
 
     <insert id="addCustomerAndContacts" parameterType="com.example.entity.request.CustomerReq">
@@ -212,14 +232,14 @@
             <if test="cusName != null and cusName != ''">
                 AND cu.cus_name LIKE CONCAT('%',#{cusName},'%')
             </if>
-            <if test="lifeCycle != null and lifeCycle != ''">
-                AND cu.life_cycle LIKE CONCAT('%',#{lifeCycle},'%')
+            <if test="lifeCycle != null">
+                AND cu.life_cycle = #{lifeCycle}
             </if>
             <if test="abbreviation != null and abbreviation != ''">
                 AND cu.abbreviation LIKE CONCAT('%',#{abbreviation},'%')
             </if>
-            <if test="creditId != null and creditId != ''">
-                AND cu.credit_id LIKE CONCAT('%',#{creditId},'%')
+            <if test="creditId != null">
+                AND cu.credit_id = #{creditId}
             </if>
             <if test="settlement != null">
                 AND cu.settlement = #{settlement}
@@ -228,10 +248,28 @@
                 AND cu.company_account LIKE CONCAT('%',#{companyAccount},'%')
             </if>
             <if test="empId != null">
-                AND cu.empId = #{empId}
+                AND cu.emp_id = #{empId}
+            </if>
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(cu.create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(cu.create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+            <if test="starSigningDate != null and starSigningDate != ''">
+                AND date_format(cu.first_signing_time,'%y%m%d') &gt;= date_format(#{starSigningDate},'%y%m%d')
+            </if>
+            <if test="endSigningDate != null and endSigningDate != ''">
+                AND date_format(cu.first_signing_time,'%y%m%d') &lt;= date_format(#{endSigningDate},'%y%m%d')
+            </if>
+            <if test="cusDictSource != null">
+                AND cu.cus_dict_source = #{cusDictSource}
+            </if>
+            <if test="cusDictStage != null">
+                AND cu.cus_dict_stage = #{cusDictStage}
             </if>
             AND cu.is_delete = 0 AND e.emp_name = #{empName}
         </where>
-        ORDER BY create_time DESC
+        ORDER BY cu.update_time DESC
     </select>
 </mapper>

@@ -20,7 +20,7 @@ public class CustomerReq {
     private Integer lifeCycle;
     private Date firstSigningTime;
     private String abbreviation;
-    private String creditId;
+    private Integer creditId;
     private Integer settlement;
     private String companyAccount;
     private Integer province;
@@ -31,8 +31,8 @@ public class CustomerReq {
     private Date createTime;
     private Date updateTime;
     private Integer isDelete;
-    private String cusDictSource;
-    private String cusDictStage;
+    private Integer cusDictSource;
+    private Integer cusDictStage;
     private Integer qualitativeId;
     private Integer gradingId;
     private Integer rationId;
@@ -41,4 +41,6 @@ public class CustomerReq {
     private String endDate;
     private Integer pageNum;
     private Integer pageSize;
+    private String starSigningDate;
+    private String endSigningDate;
 }
