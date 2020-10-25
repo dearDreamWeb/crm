@@ -129,36 +129,34 @@
               <el-input v-model="addForm.ordTheme" size="mini" placeholder="请输入主题" clearable/>
             </el-form-item>
           </el-col>
-          <el-col :span="8" >
+          <el-col :span="16" >
             <el-form-item label="客户" prop="ordHead">
-              <el-input  v-model="addForm.ordHead" size="mini" clearable style="margin-top: 6px">
-                <el-button slot="append" icon="el-icon-search" size="mini"></el-button>
-              </el-input>
-            </el-form-item>
-
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="负责人" prop="ordHead">
-              <el-input v-model="addForm.ordHead" size="mini" clearable/>
+              <el-select v-model="addForm.cusIdList" placeholder="请选择客户">
+                <el-option v-for="item in cusList" :key="item.cusId"
+                           :label="item.cusName" :value="item.cusId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="总金额" prop="ordTotalmoney">
-              <el-input v-model="addForm.ordTotalmoney" size="mini" placeholder="总金额" clearable/>
+              <el-input v-model="addForm.ordTotalmoney" size="mini" placeholder="请输入总金额" clearable/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="订单状态" prop="ordState" >
-              <el-select v-model="addForm.ordState" clearable>
-                <el-option label="执行中" value="0"></el-option>
-                <el-option label="已完成" value="1"></el-option>
-              </el-select>
+          <el-col :span="8">
+            <el-form-item label="收货人" prop="ordConsignee">
+              <el-input v-model="addForm.ordConsignee" size="mini" placeholder="请填写收货人姓名" clearable/>
             </el-form-item>
           </el-col>
-          </el-row>
-          <el-row>
+          <el-col :span="8">
+            <el-form-item label="手机号" prop="ordPhone">
+              <el-input v-model="addForm.ordPhone" size="mini" placeholder="请填写收货人电话" clearable/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="省" prop="ordProvince">
               <el-input v-model="addForm.ordProvince" size="mini" placeholder="省" clearable/>
@@ -178,19 +176,10 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="详细地址" prop="ordDetail">
-              <el-input v-model="addForm.ordDetail" size="mini" placeholder="详细地址" clearable/>
+              <el-input v-model="addForm.ordDetail" size="mini" placeholder="请完善详细地址" clearable/>
             </el-form-item>
           </el-col>
-
         </el-row>
-       <!-- <el-row>
-          <el-col :span="12">
-            <el-form-item label="开始时间">
-              <el-date-picker type="date" placeholder="选择日期" v-model="addForm.ordStarttime" style="width: 100%;">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row>-->
       </el-form>
       <span slot="footer">
         <el-button @click="addDialog = false">取消</el-button>
@@ -252,7 +241,15 @@
   export default {
     name: "Order",
     data() {
+      let checkMobile = (rule,value,cb) => {
+        const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+        if (regMobile.test(value)) {
+          return cb()
+        }
+        cb(new Error('请输入合法的手机号'))
+      }
       return {
+        input: '',
         searchInput:'',
         editForm:{
 
@@ -279,28 +276,44 @@
         total:1,
         addForm: {
           ordTheme:'',
+          ordHead:'',
+          ordTotalmoney:'',
+          ordConsignee:'',
+          ordPhone:'',
           ordProvince:'',
           ordCity:'',
           ordCountry:'',
           ordDetail:'',
-          ordTotalmoney:'',
           ordStarttime:'',
-          ordDealtime:'',
-          ordState:'',
-          ordHead:'',
-          pageNum:1,
-          pageSize:5
+          cusIdList:[]
         },
         formRules:{
+          ordTheme:[
+            {required:true,message:'请输入主题',trigger:'blur'},
+            {min:3,max:12,message:'长度在3~12个字符之间'}
+          ],
           ordHead:[
-            {required:true,message:'请填写完整',trigger:'blur'},
+            {required:true,message:'请选择客户,还没改ordHead',trigger:'blur'}
+          ],
+          ordConsignee:[
+            {required:true,message:'请输入收货人姓名',trigger:'blur'},
+            {min:1,max:20,message:'请输入有效名字'}
+          ],
+          ordPhone:[
+            {required:true,message:'请输入手机号',trigger:'blur'},
+            {validator:checkMobile}
+          ],
+          ordDetail:[
+            {required:true,message:'请填写详细地址',trigger:'blur'},
+            {min:1,max:20,message:'请将详细地址填写完成'}
           ]
         },
         addOrderButtonLoading:false,
         editDialog:false,
         editOrderButtonLoading:false,
         dialogTableVisible:false,
-        szorder:[]
+        szorder:[],
+        cusList:[]
       }
     },
     methods: {
