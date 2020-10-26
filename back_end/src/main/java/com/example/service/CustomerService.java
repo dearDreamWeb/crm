@@ -14,7 +14,7 @@ public interface CustomerService {
     ResultVo delCustomer(CustomerReq customerReq);
     ResultVo editCustomer(CustomerReq customerReq);
     ResultVo getCustomer(Integer cusId);
-    ResultVo listCustomer(CustomerReq customerReq);
+    ResultVo listCustomer(CustomerReq customerReq,String token);
     ResultVo addCusAndCon(CusConReq cusConReq,String token);
     ResultVo listAll();
 }

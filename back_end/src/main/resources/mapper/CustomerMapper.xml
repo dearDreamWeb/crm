@@ -8,7 +8,7 @@
         <result column="life_cycle" property="lifeCycle"/>
         <result column="first_signing_time" property="firstSigningTime"/>
         <result column="abbreviation" property="abbreviation"/>
-        <result column="credit" property="credit"/>
+        <result column="credit_id" property="creditId"/>
         <result column="settlement" property="settlement"/>
         <result column="company_account" property="companyAccount"/>
         <result column="province" property="province"/>
@@ -33,7 +33,7 @@
         <result column="life_cycle" property="lifeCycle"/>
         <result column="first_signing_time" property="firstSigningTime"/>
         <result column="abbreviation" property="abbreviation"/>
-        <result column="credit" property="credit"/>
+        <result column="credit_id" property="creditId"/>
         <result column="settlement" property="settlement"/>
         <result column="company_account" property="companyAccount"/>
         <result column="province" property="province"/>
@@ -74,10 +74,10 @@
         <selectKey keyColumn="cus_id" keyProperty="cusId" resultType="Integer" order="AFTER">
             select last_insert_id();
         </selectKey>
-        INSERT INTO customer(cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
+        INSERT INTO customer(cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id) VALUES
-        (#{cusName},#{lifeCycle},#{firstSigningTime},#{abbreviation},#{credit},#{settlement},#{companyAccount},#{province},
+        (#{cusName},#{lifeCycle},#{firstSigningTime},#{abbreviation},#{creditId},#{settlement},#{companyAccount},#{province},
         #{city},#{detailAddress},#{cusRemark},#{cusDictSource},#{cusDictStage},#{qualitativeId},#{gradingId},#{rationId},#{empId})
     </insert>
 
@@ -99,8 +99,8 @@
         <if test="abbreviation != null and abbreviation != ''">
             ,abbreviation = #{abbreviation}
         </if>
-        <if test="credit != null and credit != ''">
-            ,credit = #{credit}
+        <if test="creditId != null and creditId != ''">
+            ,credit_id = #{creditId}
         </if>
         <if test="settlement != null">
             ,settlement != #{settlement}
@@ -142,7 +142,7 @@
     </update>
 
     <select id="getCustomer" resultMap="CustomerResult">
-        SELECT cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
+        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
@@ -150,10 +150,53 @@
     </select>
 
     <select id="listCustomer" resultMap="CustomerResult">
-        SELECT cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
+        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
+        <where>
+            <if test="cusName != null and cusName != ''">
+                AND cus_name LIKE CONCAT('%',#{cusName},'%')
+            </if>
+            <if test="lifeCycle != null">
+                AND life_cycle = #{lifeCycle}
+            </if>
+            <if test="abbreviation != null and abbreviation != ''">
+                AND abbreviation LIKE CONCAT('%',#{abbreviation},'%')
+            </if>
+            <if test="creditId != null">
+                AND credit_id = #{creditId}
+            </if>
+            <if test="settlement != null">
+                AND settlement = #{settlement}
+            </if>
+            <if test="companyAccount != null and companyAccount != ''">
+                AND company_account LIKE CONCAT('%',#{companyAccount},'%')
+            </if>
+            <if test="empId != null">
+                AND emp_id = #{empId}
+            </if>
+            <if test="cusDictSource != null">
+                AND cus_dict_source = #{cusDictSource}
+            </if>
+            <if test="cusDictStage != null">
+                AND cus_dict_stage = #{cusDictStage}
+            </if>
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+            <if test="starSigningDate != null and starSigningDate != ''">
+                AND date_format(first_signing_time,'%y%m%d') &gt;= date_format(#{starSigningDate},'%y%m%d')
+            </if>
+            <if test="endSigningDate != null and endSigningDate != ''">
+                AND date_format(first_signing_time,'%y%m%d') &lt;= date_format(#{endSigningDate},'%y%m%d')
+            </if>
+            AND is_delete = 0
+        </where>
+        ORDER BY update_time DESC
     </select>
 
     <insert id="addCustomerAndContacts" parameterType="com.example.entity.request.CustomerReq">
@@ -165,7 +208,7 @@
     </insert>
 
     <select id="getCustomerByName" resultMap="CustomerResult">
-        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
+        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
@@ -173,9 +216,60 @@
     </select>
 
     <select id="listAll" resultMap="CustomerResult">
-        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit,settlement,
+        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
+    </select>
+
+    <select id="listCustomerByEmpId" resultMap="CustomerResult">
+        SELECT cu.cus_id,cu.cus_name,cu.life_cycle,cu.first_signing_time,cu.abbreviation,cu.credit_id,cu.settlement,
+            cu.company_account,cu.province,cu.city,cu.detail_address,cu.cus_remark,cu.cus_dict_source,cu.cus_dict_stage,
+            cu.qualitative_id,cu.grading_id,cu.ration_id,cu.emp_id,cu.create_time
+        FROM customer cu
+        INNER JOIN emp e ON e.emp_id = cu.emp_id
+        <where>
+            <if test="cusName != null and cusName != ''">
+                AND cu.cus_name LIKE CONCAT('%',#{cusName},'%')
+            </if>
+            <if test="lifeCycle != null">
+                AND cu.life_cycle = #{lifeCycle}
+            </if>
+            <if test="abbreviation != null and abbreviation != ''">
+                AND cu.abbreviation LIKE CONCAT('%',#{abbreviation},'%')
+            </if>
+            <if test="creditId != null">
+                AND cu.credit_id = #{creditId}
+            </if>
+            <if test="settlement != null">
+                AND cu.settlement = #{settlement}
+            </if>
+            <if test="companyAccount != null and companyAccount != ''">
+                AND cu.company_account LIKE CONCAT('%',#{companyAccount},'%')
+            </if>
+            <if test="empId != null">
+                AND cu.emp_id = #{empId}
+            </if>
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(cu.create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(cu.create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+            <if test="starSigningDate != null and starSigningDate != ''">
+                AND date_format(cu.first_signing_time,'%y%m%d') &gt;= date_format(#{starSigningDate},'%y%m%d')
+            </if>
+            <if test="endSigningDate != null and endSigningDate != ''">
+                AND date_format(cu.first_signing_time,'%y%m%d') &lt;= date_format(#{endSigningDate},'%y%m%d')
+            </if>
+            <if test="cusDictSource != null">
+                AND cu.cus_dict_source = #{cusDictSource}
+            </if>
+            <if test="cusDictStage != null">
+                AND cu.cus_dict_stage = #{cusDictStage}
+            </if>
+            AND cu.is_delete = 0 AND e.emp_name = #{empName}
+        </where>
+        ORDER BY cu.update_time DESC
     </select>
 </mapper>

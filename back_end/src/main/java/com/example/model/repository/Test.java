@@ -1,4 +1,4 @@
-package com.example.model.resposity;
+package com.example.model.repository;
 
 /**
  * @author: pengjia

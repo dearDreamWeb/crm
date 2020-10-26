@@ -120,16 +120,17 @@
         pageSize:5,
         total:1,
         addForm:{
+          ordId:"",
           delWuliuid:"",
           delPeople:"",
           delCompany:""
         },
-        addFormOrd:{
+        /*addFormOrd:{
           delWuliuid:"",
           delPeople:"",
           delCompany:"",
           ordId:""
-        },
+        },*/
         formRules:{
           /* ordHead:[
              {required:true,message:'请输入订单名称',trigger:'blur'},
@@ -178,6 +179,13 @@
       },
       delDeliver(){
         /*删除*/
+        deliverHttp.getszDeliver(this.rowdelId).then(res=>{
+          var deldeiver =res.data;
+          if (deldeiver.delState==1){
+            alert("发货订单不允许删除");
+            return;
+          }
+        })
       },
 
       handleCurrentChange(pageIndex) {
@@ -197,7 +205,29 @@
       },
       addDeliverClick(){
         for (let i = 0; i <this.multipleSelection.length ; i++) {
-         /* alert(this.multipleSelection[i].ordId);*/
+           alert(this.multipleSelection[i].ordId);
+          this.addForm.ordId=this.multipleSelection[i].ordId;
+        }
+        this.$refs.addFormRef.validate(valid => {
+          if (!valid) return
+          this.addDeliverButtonLoading = true
+          deliverHttp.addANDord(this.addForm).then(res =>{
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+              this.addDeliverButtonLoading = false
+              this.addDialog = false
+            } else {
+              this.addDeliverButtonLoading = false
+              this.$message({
+                message:res.message,
+                type:"error"
+              })
+            }
+          })
+        })
+        /*for (let i = 0; i <this.multipleSelection.length ; i++) {
+         /!* alert(this.multipleSelection[i].ordId);*!/
           this.addFormOrd.ordId=this.multipleSelection[i].ordId;
           this.addFormOrd.delCompany=this.addForm.delCompany;
           this.addFormOrd.delPeople=this.addForm.delPeople;
@@ -205,7 +235,7 @@
           deliverHttp.addANDord(this.addFormOrd).then(res=>{
 
           })
-        }
+        }*/
       },
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'

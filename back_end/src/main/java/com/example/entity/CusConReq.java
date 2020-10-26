@@ -16,7 +16,7 @@ public class CusConReq {
     private Integer clueId;
     private String cusName;
     private String abbreviation;
-    private String cusDictSource;
+    private Integer cusDictSource;
     private String cusRemark;
     private Integer empId;
     private String contactsName;

@@ -21,4 +21,6 @@ public interface CustomerMapper {
     int addCustomerAndContacts(CustomerReq customerReq);
     CustomerResp getCustomerByName(String cusName);
     List<CustomerResp> listAll();
+    List<CustomerResp> listCustomerByEmpId(CustomerReq customerReq,
+                                           String empName);
 }

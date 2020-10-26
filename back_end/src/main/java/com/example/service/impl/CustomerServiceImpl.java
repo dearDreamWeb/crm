@@ -98,7 +98,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResultVo listCustomer(CustomerReq customerReq) {
+    public ResultVo listCustomer(CustomerReq customerReq,String token) {
         Integer pageNum = customerReq.getPageNum();
         Integer pageSize = customerReq.getPageSize();
         if (pageNum == null) {
@@ -108,7 +108,13 @@ public class CustomerServiceImpl implements CustomerService {
             pageSize = 10;
         }
         PageHelper.startPage(pageNum,pageSize);
-        List<CustomerResp> customerResps = customerMapper.listCustomer(customerReq);
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        List<CustomerResp> customerResps;
+        if (empByToken.getEmpName().equals("admin")) {
+            customerResps = customerMapper.listCustomer(customerReq);
+        } else {
+            customerResps = customerMapper.listCustomerByEmpId(customerReq,empByToken.getEmpName());
+        }
         PageInfo<CustomerResp> list = new PageInfo<>(customerResps);
         return ResultUtils.response(list);
     }
