@@ -10,7 +10,6 @@ import urlUtils from "./common/urlUtils";
 import "@/style/app.scss"
 import VueAreaLinkage from 'vue-area-linkage'
 import 'vue-area-linkage/dist/index.css'
-
 import iconPicker from 'e-icon-picker'
 import 'e-icon-picker/dist/index.css'
 import 'e-icon-picker/dist/main.css'

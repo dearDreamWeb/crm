@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.FollowLogMapper">
+    <resultMap id="FollowLogResult" type="com.example.entity.response.FollowLogResp">
+        <id column="follow_id" property="followId"/>
+        <result column="follow_title" property="followTitle"/>
+        <result column="follow_content" property="followContent"/>
+        <result column="follow_time" property="followTime"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="emp_id" property="empId"/>
+        <result column="cus_id" property="cusId"/>
+    </resultMap>
+
+    <insert id="addFollow" parameterType="com.example.entity.request.FollowLogReq">
+        <selectKey keyColumn="follow_id" keyProperty="followId" resultType="Integer" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO follow_log(follow_title,follow_content,follow_time,emp_id,cus_id)
+        VALUES (#{followTitle},#{followContent},#{followTime},#{empId},#{cusId})
+    </insert>
+
+    <update id="delFollow" parameterType="Integer">
+        UPDATE follow_log SET is_delete = 1 WHERE follow_id = #{followId}
+    </update>
+
+    <update id="editFollow" parameterType="com.example.entity.request.FollowLogReq">
+        UPDATE follow_log SET update_time = #{updateTime},version = version+1
+        <if test="followTitle != null and followTitle != ''">
+            ,follow_title = #{followTitle}
+        </if>
+        <if test="followContent != null and followContent != ''">
+            ,follow_content = #{followContent}
+        </if>
+        <if test="empId != null">
+            ,emp_id = #{empId}
+        </if>
+        <if test="cusId != null">
+            ,cus_id = #{cusId}
+        </if>
+        WHERE follow_id = #{followId}
+    </update>
+
+    <select id="getFollow" resultMap="FollowLogResult">
+        SELECT follow_id,follow_title,follow_content,follow_time,
+            version,create_time,update_time,is_delete,emp_id,cus_id
+        FROM follow_log
+        WHERE follow_id = #{followId}
+    </select>
+
+    <select id="listFollow" resultMap="FollowLogResult" parameterType="com.example.entity.request.FollowLogReq">
+        SELECT follow_id,follow_title,follow_content,follow_time,
+            version,create_time,update_time,is_delete,emp_id,cus_id
+        FROM follow_log
+        <where>
+            <if test="followTitle != null and followTitle != ''">
+                AND follow_title LIKE CONCAT('%',#{followTitle},'%')
+            </if>
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(follow_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(follow_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+            <if test="empId != null">
+                AND emp_id = #{empId}
+            </if>
+            <if test="cusId != null">
+                AND cus_id = #{cusId}
+            </if>
+            AND is_delete = 0
+        </where>
+        ORDER BY create_time DESC
+    </select>
+</mapper>

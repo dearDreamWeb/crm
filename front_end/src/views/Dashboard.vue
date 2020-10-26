@@ -184,39 +184,90 @@
 
 <!--    <area-select type='all' :level='2' v-model="selected" :data="pcaa" @change="areaSelectChange"></area-select>-->
     <area-cascader type='text' v-model="selected2" :level='1' :data="pcaa" @change="areaCascaderChange"></area-cascader>
+    <hr>
+    <el-calendar v-model="value">
+    </el-calendar>
+    <hr>
+    <el-select v-model="brand" @change="brandChange">
+      <el-option v-for="item in productBrandList" :key="item.label"
+                 :label="item.value" :value="item.value">
+      </el-option>
+    </el-select>
+    <!--<el-calendar v-model="value">
+      <template slot="dateCell" slot-scope="{date, data}">
+        <el-row>
+          <el-col :span="12">
+            <p :class="data.isSelected ? 'is-selected' : ''">
+              {{ data.day.split('-').slice(1).join('-') }}
+            </p>
+            <el-button size="mini" v-if="data.isSelected ? 'is-selected' : ''"
+                       type="danger" icon="el-icon-delete" @click="testButton">
+            </el-button>
+          </el-col>
+          <el-col :span="12" v-if="data.isSelected ? 'is-selected' : ''">
+            <el-row style="margin-top: 5px">
+              <el-col>
+                <el-button size="mini" type="primary" icon="el-icon-search"></el-button>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-button size="mini" type="success" icon="el-icon-plus"></el-button>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </template>
+    </el-calendar>-->
   </div>
 </template>
 
 <script>
+  import productBrand from '../common/data/product_date'
   import {pca,pcaa} from 'area-data'
   export default {
     name: "Dashboard",
     data(){
       return{
+        brand:'',
         icon:'',
         shopId:'',
         selected:[],
         selected2:['湖南省','邵阳市','新邵县'],
         pca:pca,
-        pcaa:pcaa
+        pcaa:pcaa,
+        value: new Date(),
+        productBrandList:productBrand.productBrand
       }
     },
     methods:{
-      areaSelectChange() {
-        console.log(this.selected)
+      brandChange() {
+        console.log("====",this.brand)
       },
       areaCascaderChange() {
         console.log(this.selected2)
       }
     },
+    created() {
+      console.log(this.productBrandList)
+    }
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
  .el-row{
    margin-bottom: 20px;
    /*&:last-child{
      margin-bottom: 0;
    }*/
  }
+  .el-calendar-day{
+    height: 35px !important;
+  }
+  .el-calendar{
+    width: 35% !important;
+  }
+ .el-calendar-table td.is-selected{
+    background-color: brown !important;
+  }
 </style>

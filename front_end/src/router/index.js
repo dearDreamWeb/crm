@@ -92,6 +92,14 @@ const routes = [
       {
         path: '/baojia',
         component: () => import('../views/customer/BaoJia')
+      },
+      {
+        path: '/follow_up',
+        component: () => import('../views/customer/FollowUp')
+      },
+      {
+        path: '/product',
+        component: () => import('../views/product/Product')
       }
     ]
   }
