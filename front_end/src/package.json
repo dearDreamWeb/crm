@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "area-data": "^5.0.6",
+    "vue-area-linkage": "^5.1.0"
+  }
+}

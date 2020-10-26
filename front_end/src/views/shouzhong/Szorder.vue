@@ -109,6 +109,7 @@
                      :page-size="pageSize" :total="total"
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
+      <el-button  @click="anniu">按钮</el-button>
     </el-card>
 
     <el-dialog title="订单详情" :visible.sync="dialogTableVisible">
@@ -120,36 +121,51 @@
       </el-table>
     </el-dialog>
 
-    <el-dialog title="订单添加" :visible.sync="addDialog" @close="addHandleClose">
-      <el-form :model="addForm" label-width="100px" ref="addFormRef"
+    <el-dialog title="订单添加" width="65%" top="20px" :visible.sync="addDialog" @close="addHandleClose">
+      <el-form :model="addForm" label-width="80px" ref="addFormRef"
                label-position="right" :rules="formRules">
         <el-row>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="主题" prop="ordTheme">
               <el-input v-model="addForm.ordTheme" size="mini" placeholder="请输入主题" clearable/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="负责人" prop="ordHead">
-              <el-input v-model="addForm.ordHead" size="mini" placeholder="请输入负责人" clearable/>
+          <el-col :span="8" width="600px">
+            <el-form-item label="客户">
+              <el-select v-model="addForm.cusIdList" placeholder="请选择客户" >
+                <el-option v-for="item in cusList" :key="item.cusId"
+                           :label="item.cusName" :value="item.cusId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="总金额" prop="ordTotalmoney">
+              <el-input v-model="addForm.ordTotalmoney" size="mini" placeholder="请输入总金额" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="总金额" prop="ordTotalmoney">
-              <el-input v-model="addForm.ordTotalmoney" size="mini" placeholder="总金额" clearable/>
+
+          <el-col :span="8">
+            <el-form-item label="收货人" prop="ordConsignee">
+              <el-input v-model="addForm.ordConsignee" size="mini" placeholder="请填写收货人姓名" clearable/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="订单状态" prop="ordState" >
-              <el-select v-model="addForm.ordState" clearable>
-                <el-option label="执行中" value="0"></el-option>
-                <el-option label="已完成" value="1"></el-option>
-              </el-select>
+          <el-col :span="8">
+            <el-form-item label="手机号" prop="ordPhone">
+              <el-input v-model="addForm.ordPhone" size="mini" placeholder="请填写收货人电话" clearable/>
             </el-form-item>
           </el-col>
-         <!-- <el-col :span="8">
+          <el-col :span="8">
+            <el-form-item label="地址">
+              <area-cascader type='text' v-model="selected2" :level='1' :data="pcaa" @change="areaCascaderChange"></area-cascader>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <!--<el-row>
+          <el-col :span="8">
             <el-form-item label="省" prop="ordProvince">
               <el-input v-model="addForm.ordProvince" size="mini" placeholder="省" clearable/>
             </el-form-item>
@@ -164,21 +180,40 @@
               <el-input v-model="addForm.ordCountry" size="mini" placeholder="区/县" clearable/>
             </el-form-item>
           </el-col>
+          </el-row>-->
+        <el-row>
           <el-col :span="24">
             <el-form-item label="详细地址" prop="ordDetail">
-              <el-input v-model="addForm.ordDetail" size="mini" placeholder="详细地址" clearable/>
-            </el-form-item>
-          </el-col>-->
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="开始时间">
-              <el-date-picker type="date" placeholder="选择日期" v-model="addForm.ordStarttime" style="width: 100%;">
-              </el-date-picker>
+              <el-input v-model="addForm.ordDetail" size="mini" placeholder="请完善详细地址" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
+      <el-popover
+        placement="right"
+        width="800"
+        trigger="click">
+        <el-table :data="gridData">
+          <el-table-column property="date" label="产品编号"></el-table-column>
+          <el-table-column  property="name" label="产品名称"></el-table-column>
+          <el-table-column  property="address" label="产品型号"></el-table-column>
+          <el-table-column  property="address" label="产品库存"></el-table-column>
+          <el-table-column property="address" label="产品价格"></el-table-column>
+          <el-table-column property="address" label="操作"></el-table-column>
+        </el-table>
+        <el-button slot="reference" icon="el-icon-plus" type="primary">选择产品</el-button>
+      </el-popover>
+      <h3>购物车</h3>
+      <el-table :data="szorder">
+        <el-table-column property="odetId" label="产品编号"></el-table-column>
+        <el-table-column property="productId" label="产品名称" ></el-table-column>
+        <el-table-column property="productId" label="产品型号" ></el-table-column>
+        <el-table-column property="odetBuynum" label="购买数量" ></el-table-column>
+        <el-table-column property="odetBuymoney" label="购买价格" ></el-table-column>
+        <el-table-column property="odetBuymoney" label="操作" >
+          <el-button type="text">查看详情</el-button>
+        </el-table-column>
+      </el-table>
       <span slot="footer">
         <el-button @click="addDialog = false">取消</el-button>
         <el-button type="primary" @click="addOrderClick"
@@ -235,12 +270,27 @@
 
 <script>
   import {orderHttp} from "../../network/system/order";
+  import {pca,pcaa} from 'area-data'
+  import {customerHttp} from "../../network/pre_sale/customer";
 
   export default {
     name: "Order",
+
     data() {
+      let checkMobile = (rule,value,cb) => {
+        const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+        if (regMobile.test(value)) {
+          return cb()
+        }
+        cb(new Error('请输入合法的手机号'))
+      }
       return {
+        input: '',
         searchInput:'',
+        selected2:['湖南省','株洲市','荷塘区'],
+        pca:pca,
+        pcaa:pcaa,
+        gridData:[],
         editForm:{
 
         },
@@ -253,7 +303,7 @@
           startDate:'',
           endDate:'',
           pageNum:1,
-          pageSize:5
+          pageSize:10
         },
         addDialog:false,
         rowordId: 0,
@@ -262,32 +312,61 @@
         advancedSearch:false,
         listForm:[],
         pageNum:1,
-        pageSize:5,
+        pageSize:10,
         total:1,
         addForm: {
           ordTheme:'',
-          ordTotalmoney:'',
-          ordStarttime:'',
-          ordDealtime:'',
-          ordState:'',
           ordHead:'',
-          pageNum:1,
-          pageSize:5
+          ordTotalmoney:'',
+          ordConsignee:'',
+          ordPhone:'',
+          /*ordProvince:'',
+          ordCity:'',
+          ordCountry:'',*/
+          ordDetail:'',
+          /*ordStarttime:'',*/
+          selected2:'',
+          cusIdList:[]
         },
         formRules:{
+          ordTheme:[
+            {required:true,message:'请输入主题',trigger:'blur'},
+            {min:3,max:12,message:'长度在3~12个字符之间'}
+          ],
           ordHead:[
-            {required:true,message:'请输入订单名称',trigger:'blur'},
+            {required:true,message:'请选择客户,还没改ordHead',trigger:'blur'}
+          ],
+          ordConsignee:[
+            {required:true,message:'请输入收货人姓名',trigger:'blur'},
+            {min:1,max:20,message:'请输入有效名字'}
+          ],
+          ordPhone:[
+            {required:true,message:'请输入手机号',trigger:'blur'},
+            {validator:checkMobile}
+          ],
+          ordDetail:[
+            {required:true,message:'请填写详细地址',trigger:'blur'},
+            {min:1,max:20,message:'请将详细地址填写完成'}
           ]
         },
         addOrderButtonLoading:false,
         editDialog:false,
         editOrderButtonLoading:false,
         dialogTableVisible:false,
-        szorder:[]
+        addOrdButtonLoading:false,
+        szorder:[],
+        cusList:[]
       }
     },
     methods: {
+      anniu(){
+        alert(this.$store.state.empName)
+      },
+      areaCascaderChange() {
+        console.log(this.selected2)
+      },
       advancedQueryClick() {
+        
         orderHttp.list(this.searchForm).then(res => {
           if (res.code === 20000) {
             this.listForm = res.data.list
@@ -317,6 +396,9 @@
       },
       addHandleClose(){
         /*添加订单*/
+        this.$refs.addFormRef.resetFields()
+        this.addForm.cusIdList = []
+        this.addOrderButtonLoading = false
       },
       openEditOrder(){
         /*修改订单*/
@@ -430,6 +512,11 @@
         }
         )
       },
+      initCusList() {
+        customerHttp.listAll().then(res => {
+          this.cusList = res.data
+        })
+      },
       initList() {
         orderHttp.listPage(this.pageNum,this.pageSize).then(res => {
           this.listForm = res.data.list
@@ -440,32 +527,25 @@
     },
     created() {
       this.initList()
+      this.initCusList()
     }
   }
 </script>
 
-<style scoped>
-  .demo-table-expand {
-    font-size: 0;
+<style>
+  .area-selected-trigger {
+    line-height: 15px !important;
   }
-  .demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
+  .area-select.large {
+    height: 28px;
+    margin: 5px 0px;
   }
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
+  .el-select .el-input__inner{
+    height: 29px;
+    font-size: 12px;
+    width: 200px;
   }
-  .el-form-item__label {
-    text-align: right;
-    vertical-align: middle;
-    float: left;
-    font-size: 14px;
-    color: #99a9bf;
-    line-height: 40px;
-    padding: 0 12px 0 0;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+  .el-select-dropdown .el-popper{
+    min-width: 400px;
   }
 </style>

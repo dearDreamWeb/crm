@@ -29,8 +29,10 @@ public class SzOrderServicelmpl implements SzOrderService {
 
     @Override
     public ResultVo addszOrder(SzOrder szorder) {
-        System.out.println("【订单】新增新增");
-        szorder.setOrdDelete(0);/*新增时该字段默认为0*/
+        szorder.setOrdState(0);/*执行中0*/
+        szorder.setOrdDelete(0);/*(删除)否0*/
+        szorder.setOrdStarttime(DateUtils.getDate());/*当前时间*/
+        szorder.setOrdCreatetime(DateUtils.getDate());
         int addszOrder=szorderMapper.addszOrder(szorder);
         if (addszOrder!=1){
             throw new SysException(ResultEnum.ORDER_ADD_FAIL.getCode(),ResultEnum.ORDER_ADD_FAIL.getMessage());

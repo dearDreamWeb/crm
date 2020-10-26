@@ -8,7 +8,13 @@ export const orderHttp = {
         'ordTheme':order.ordTheme,
         'ordHead':order.ordHead,
         'ordTotalmoney':order.ordTotalmoney,
-        'ordStarttime':order.ordStarttime,/*ordCreatetime*/
+        'ordConsignee':order.ordConsignee,
+        'ordPhone':order.ordPhone,
+        'ordProvince':order.ordProvince,
+        'ordCity':order.ordCity,
+        'ordCountry':order.ordCountry,
+        'ordDetail':order.ordDetail,
+        'ordStarttime':order.ordStarttime,
         'ordState':order.ordState
       }
     }
