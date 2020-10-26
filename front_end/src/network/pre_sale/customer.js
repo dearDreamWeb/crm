@@ -36,12 +36,6 @@ export const customerHttp = {
     }
     return postJson(params)
   },
-  list:function () {
-    let params = {
-      url:'/customer/list'
-    }
-    return get(params)
-  },
   listAll:function () {
     let params = {
       url:'/customer/list_all',

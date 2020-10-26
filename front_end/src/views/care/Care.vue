@@ -41,8 +41,12 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item prop="cusId" label="客户">
-                  <el-input v-model="searchForm.cusName" size="mini" placeholder="请输入" clearable></el-input>
+                <el-form-item label="客户">
+                  <el-select v-model="searchForm.cusId">
+                    <el-option v-for="item in empList" :key="item.cusId"
+                               :label="item.cusName" :value="item.cusId">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -63,16 +67,6 @@
                   <el-input v-model="searchForm.careexecutor" size="mini" placeholder="请输入" clearable></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item prop="carenr" label="内容">
-                  <el-input v-model="searchForm.carenr" size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item prop="carecustomerfk" label="反馈内容">
-                  <el-input v-model="searchForm.carecustomerfk" size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
               <el-col :span="4">
                 <el-form-item>
                   <el-button size="mini" @click="advancedQueryClick"
@@ -90,7 +84,7 @@
         <el-table-column type="index" width="40"></el-table-column>
         <el-table-column prop="careZt" label="关怀主题" sortable></el-table-column>
         <el-table-column prop="carelxrcontacts" label="联系人"></el-table-column>
-        <el-table-column prop="cusId" label="客户"></el-table-column>
+        <el-table-column prop="customerResp.cusName" label="客户"></el-table-column>
         <el-table-column prop="careData" label="时间">
           <template slot-scope="scope">
             {{scope.row.careData | dateFormat}}
@@ -130,22 +124,14 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="客户">
-              <el-input
-                placeholder="请输入内容"
-                v-model="addform.cusName"
-                :disabled="true">
-              </el-input>
-            </el-form-item>
+            <el-select v-model="addform.cusId">
+              <el-option v-for="item in empList" :key="item.cusId"
+                         :label="item.cusName" :value="item.cusId">
+              </el-option>
+            </el-select>
+          </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item>
-              <el-select v-model="addform.cusName">
-                <el-option v-for="item in empList" :key="item.cusId"
-                           :label="item.cusName" :value="item.cusId">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
+
           <el-col :span="8">
             <el-form-item label="日期">
               <el-date-picker type="date" placeholder="选择日期" v-model="addform.careData" style="width: 100%;"></el-date-picker>
@@ -204,7 +190,7 @@
             <el-form-item label="客户">
               <el-input
                 placeholder="请输入内容"
-                v-model="input"
+                v-model="updateform.cusName"
                 :disabled="true">
               </el-input>
             </el-form-item>
@@ -342,8 +328,8 @@
         this.initEmpList()
       },
       initEmpList() {
-        customerHttp.list().then(res => {
-          this.empList = res.data.list
+        customerHttp.listAll().then(res => {
+          this.empList = res.data
         })
       },
 
@@ -410,6 +396,7 @@
         careHttp.get(this.rowCareId).then(res =>{
           console.log("编辑获得的数据",res.data);
           this.updateform = res.data;
+          this.updateform.cusName = res.data.customerResp.cusName
         })
       },
       deleteCare() {
@@ -483,7 +470,7 @@
     },
     created() {
       this.initList()
-
+      this.initEmpList()
     }
   }
 </script>

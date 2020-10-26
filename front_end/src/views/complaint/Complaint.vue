@@ -8,8 +8,8 @@
           </el-input>
         </el-col>
         <el-col :span="10">
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="addDialog = true">新增</el-button>
-          <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">新增</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
           <el-button type="primary" size="mini" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
         <el-col :span="8">
@@ -31,8 +31,12 @@
             </el-row>
             <el-row :gutter="20">
               <el-col :span="8">
-                <el-form-item prop="cusId" label="对应客户">
-                  <el-input v-model="searchForm.cusId" size="mini" placeholder="请输入" clearable></el-input>
+                <el-form-item label="客户">
+                  <el-select v-model="searchForm.cusId">
+                    <el-option v-for="item in empList" :key="item.cusId"
+                               :label="item.cusName" :value="item.cusId">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -75,7 +79,7 @@
         <el-table-column type="index" width="40"></el-table-column>
         <el-table-column prop="complaintZt" label="投诉主题" sortable></el-table-column>
         <el-table-column prop="complaintClassification" label="分类"></el-table-column>
-        <el-table-column prop="cusId" label="客户"></el-table-column>
+        <el-table-column prop="customerResp.cusName" label="客户"></el-table-column>
         <el-table-column prop="complaintData" label="时间">
           <template slot-scope="scope">
             {{scope.row.complaintData | dateFormat}}
@@ -118,11 +122,11 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="客户">
-              <el-input
-                placeholder="请输入内容"
-                v-model="input"
-                :disabled="true">
-              </el-input>
+              <el-select v-model="addform.cusId">
+                <el-option v-for="item in empList" :key="item.cusId"
+                           :label="item.cusName" :value="item.cusId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -225,7 +229,7 @@
             <el-form-item label="客户">
               <el-input
                 placeholder="请输入内容"
-                v-model="input"
+                v-model="updateform.cusName"
                 :disabled="true">
               </el-input>
             </el-form-item>
@@ -302,11 +306,13 @@
 </template>
 <script>
   import {complaintHttp} from "../../network/system/complaint";
+  import {customerHttp} from "../../network/pre_sale/customer";
 
 
   export default {
     data() {
       return {
+        empList:[],
         rowCareId:0,
         addform:{
           complaintZt:'',
@@ -399,6 +405,15 @@
       }
     },
     methods:{
+      openAddDialog() {
+        this.addDialog = true
+        this.initEmpList()
+      },
+      initEmpList() {
+        customerHttp.listAll().then(res => {
+          this.empList = res.data
+        })
+      },
       addClick(){
         console.log(this.$refs)
         this.$refs["addform"].validate(valid => {
@@ -462,6 +477,7 @@
         complaintHttp.get(this.rowCareId).then(res =>{
           console.log("编辑获得的数据",res.data);
           this.updateform = res.data;
+          this.updateform.cusName = res.data.customerResp.cusName
         })
       },
       deleteCare() {
@@ -535,7 +551,7 @@
     },
     created() {
       this.initList()
-
+      this.initEmpList()
     }
   }
 </script>

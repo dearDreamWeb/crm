@@ -1,4 +1,5 @@
 package com.example.entity.request;
+import com.example.entity.response.CustomerResp;
 import lombok.AllArgsConstructor;
 
 import lombok.Data;
@@ -27,4 +28,5 @@ public class Complaint {
     private String cusId;//客户id
     private Integer pageNum;
     private Integer pageSize;
+    private CustomerResp customerResp;
 }

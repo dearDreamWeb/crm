@@ -15,13 +15,56 @@
         <result property="complaintHandlegc" column="complaint_handlegc"/>
         <result property="complaintCustomerfk" column="complaint_customerfk"/>
         <result property="complaintHfvisit" column="complaint_hfvisit"/>
+        <result property="cusId" column="cus_id"/>
     </resultMap>
+
+    <resultMap id="ComplaintDetailResult" type="com.example.entity.request.Complaint">
+        <id property="complaintId" column="complaint_id"/>
+        <result property="complaintZt" column="complaint_complaintzt"/>
+        <result property="complaintReceptionist" column="complaint_receptionist"/>
+        <result property="complaintClassification" column="complaint_classification"/>
+        <result property="complaintDescribe" column="complaint_describe"/>
+        <result property="complaintData" column="complaint_data"/>
+        <result property="complaintComplainants" column="complaint_complainants"/>
+        <result property="complaintUrgent" column="complaint_urgent"/>
+        <result property="complaintHandle" column="complaint_handle"/>
+        <result property="complaintHandlegc" column="complaint_handlegc"/>
+        <result property="complaintCustomerfk" column="complaint_customerfk"/>
+        <result property="complaintHfvisit" column="complaint_hfvisit"/>
+        <association property="customerResp" resultMap="CustomerResult"/>
+    </resultMap>
+
+    <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
+        <id column="cus_id" property="cusId"/>
+        <result column="cus_name" property="cusName"/>
+        <result column="life_cycle" property="lifeCycle"/>
+        <result column="first_signing_time" property="firstSigningTime"/>
+        <result column="abbreviation" property="abbreviation"/>
+        <result column="credit" property="credit"/>
+        <result column="settlement" property="settlement"/>
+        <result column="company_account" property="companyAccount"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="detail_address" property="detailAddress"/>
+        <result column="cus_remark" property="cusRemark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="cus_dict_source" property="cusDictSource"/>
+        <result column="cus_dict_stage" property="cusDictStage"/>
+        <result column="qualitative_id" property="qualitativeId"/>
+        <result column="grading_id" property="gradingId"/>
+        <result column="ration_id" property="rationId"/>
+        <result column="emp_id" property="empId"/>
+    </resultMap>
+
     <insert id="addComplaint" parameterType="com.example.entity.request.Complaint">
         <selectKey keyProperty="complaintId" keyColumn="complaint_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
         </selectKey>
-        insert into complaint(complaint_complaintzt,complaint_receptionist,complaint_classification,complaint_describe,complaint_data,complaint_complainants,complaint_urgent,complaint_handle,complaint_handlegc,complaint_customerfk,complaint_hfvisit) VALUES
-        (#{complaintZt},#{complaintReceptionist},#{complaintClassification},#{complaintDescribe},#{complaintData},#{complaintComplainants},#{complaintUrgent},#{complaintHandle},#{complaintHandlegc},#{complaintCustomerfk},#{complaintHfvisit})
+        insert into complaint(complaint_complaintzt,complaint_receptionist,complaint_classification,complaint_describe,complaint_data,complaint_complainants,complaint_urgent,complaint_handle,complaint_handlegc,complaint_customerfk,complaint_hfvisit,cus_id) VALUES
+        (#{complaintZt},#{complaintReceptionist},#{complaintClassification},#{complaintDescribe},#{complaintData},#{complaintComplainants},#{complaintUrgent},#{complaintHandle},#{complaintHandlegc},#{complaintCustomerfk},#{complaintHfvisit},#{cusId})
     </insert>
 
     <update id="updateComplaint" parameterType="com.example.entity.request.Complaint">
@@ -62,30 +105,37 @@
     <delete id="deleteComplaint" parameterType="Integer">
         DELETE FROM complaint WHERE complaint_id = #{complaintId}
     </delete>
-    <select id="listComplaint" resultMap="ComplaintResult">
-        SELECT complaint_id,complaint_complaintzt,complaint_receptionist,complaint_classification,complaint_describe,complaint_data,complaint_complainants,complaint_urgent,complaint_handle,complaint_handlegc,complaint_customerfk,complaint_hfvisit
-        FROM complaint
+    <select id="listComplaint" resultMap="ComplaintDetailResult" parameterType="com.example.entity.request.Complaint">
+        SELECT s.complaint_complaintzt,complaint_receptionist,complaint_classification,complaint_describe,complaint_data,complaint_complainants,complaint_urgent,complaint_handle,complaint_handlegc,complaint_customerfk,complaint_hfvisit,
+        cu.*
+        FROM complaint s
+        left join customer cu on s.cus_id = cu.cus_id
         <where>
             <if test="complaintZt != null and complaintZt != ''">
                 AND complaint_complaintzt LIKE CONCAT('%',#{complaintZt},'%')
             </if>
             <if test="complaintReceptionist != null and complaintReceptionist != ''">
-                AND complaint_receptionist LIKE CONCAT('%',#{complaintReceptionist},'%')
+                AND s.complaint_receptionist LIKE CONCAT('%',#{complaintReceptionist},'%')
             </if>
             <if test="complaintClassification != null and complaintClassification != ''">
-                AND complaint_classification LIKE CONCAT('%',#{complaintClassification},'%')
+                AND s.complaint_classification LIKE CONCAT('%',#{complaintClassification},'%')
             </if>
             <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
-                AND date_format(complaint_data,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+                AND date_format(s.complaint_data,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
             </if>
             <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
-                AND date_format(complaint_data,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+                AND date_format(s.complaint_data,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
-
+            <if test="cusId != null">
+                and s.cus_id=#{cusId}
+            </if>
         </where>
-        ORDER BY complaint_data DESC
+        ORDER BY s.complaint_data DESC
     </select>
-    <select id="getComplaint" resultMap="ComplaintResult">
-        SELECT * FROM complaint WHERE complaint_id = #{complaintId}
+    <select id="getComplaint" resultMap="ComplaintDetailResult">
+        SELECT s.*,cu.*
+        FROM complaint s
+        LEFT JOIN customer cu ON cu.cus_id = s.cus_id
+        WHERE s.complaint_id = #{complaintId}
     </select>
 </mapper>

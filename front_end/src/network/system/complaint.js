@@ -14,7 +14,8 @@ export const complaintHttp = {
         'complaintUrgent':complaint.complaintUrgent,
         'complaintHandle':complaint.complaintHandle,
         'complaintHandlegc':complaint.complaintHandlegc,
-        'complaintCustomerfk':complaint.complaintCustomerfk
+        'complaintCustomerfk':complaint.complaintCustomerfk,
+        'cusId':complaint.cusId
       }
     }
     return postJson(params)
@@ -42,7 +43,8 @@ export const complaintHttp = {
         'complaintUrgent':complaint.complaintUrgent,
         'complaintHandle':complaint.complaintHandle,
         'complaintHandlegc':complaint.complaintHandlegc,
-        'complaintCustomerfk':complaint.complaintCustomerfk
+        'complaintCustomerfk':complaint.complaintCustomerfk,
+        'cusId':complaint.cusId,
       }
     }
     return postJson(params)
@@ -69,7 +71,8 @@ export const complaintHttp = {
         'complaintUrgent':complaint.complaintUrgent,
         'complaintHandle':complaint.complaintHandle,
         'complaintHandlegc':complaint.complaintHandlegc,
-        'complaintCustomerfk':complaint.complaintCustomerfk
+        'complaintCustomerfk':complaint.complaintCustomerfk,
+        'cusId':complaint.cusId,
       }
     }
     return get(params)
@@ -82,7 +85,7 @@ export const complaintHttp = {
         'complaintReceptionist':complaint.complaintReceptionist,
         'complaintClassification':complaint.complaintClassification,
         'complaintDescribe':complaint.complaintDescribe,
-
+        'cusId':complaint.cusId,
         'complaintComplainants':complaint.complaintComplainants,
         'complaintUrgent':complaint.complaintUrgent,
         'complaintHandle':complaint.complaintHandle,
