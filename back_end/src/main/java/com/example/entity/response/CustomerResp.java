@@ -20,7 +20,7 @@ public class CustomerResp {
     private Integer lifeCycle;
     private Date firstSigningTime;
     private String abbreviation;
-    private String credit;
+    private Integer creditId;
     private Integer settlement;
     private String companyAccount;
     private Integer province;

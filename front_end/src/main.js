@@ -8,6 +8,8 @@ import ElementUI from 'element-ui'
 import TreeTable from 'vue-table-with-tree-grid'
 import urlUtils from "./common/urlUtils";
 import "@/style/app.scss"
+import VueAreaLinkage from 'vue-area-linkage'
+import 'vue-area-linkage/dist/index.css'
 
 import iconPicker from 'e-icon-picker'
 import 'e-icon-picker/dist/index.css'
@@ -21,6 +23,7 @@ Vue.use(iconPicker,{
   eIcon: true,
   eIconSymbol: true
 })
+Vue.use(VueAreaLinkage)
 Vue.component('tree-table', TreeTable)
 Vue.prototype.$urlUtil = urlUtils
 
