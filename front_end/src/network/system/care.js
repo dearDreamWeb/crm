@@ -10,7 +10,8 @@ export const careHttp = {
         'careData':care.careData,
         'careexecutor':care.careexecutor,
         'carenr':care.carenr,
-        'carecustomerfk':care.carecustomerfk
+        'carecustomerfk':care.carecustomerfk,
+        'cusId':care.cusId
       }
     }
     return postJson(params)
@@ -34,7 +35,8 @@ export const careHttp = {
         'careData':care.careData,
         'careexecutor':care.careexecutor,
         'carenr':care.carenr,
-        'carecustomerfk':care.carecustomerfk
+        'carecustomerfk':care.carecustomerfk,
+        'cusId':care.cusId,
       }
     }
     return postJson(params)
@@ -57,7 +59,9 @@ export const careHttp = {
         'careData':care.careData,
         'careexecutor':care.careexecutor,
         'carenr':care.carenr,
-        'carecustomerfk':care.carecustomerfk
+        'carecustomerfk':care.carecustomerfk,
+        'cusId':care.cusId,
+
       }
     }
     return get(params)
@@ -68,7 +72,7 @@ export const careHttp = {
       data:{
         'careZt':care.careZt,
         'carelxrcontacts':care.carelxrcontacts,
-
+        'cusId':care.cusId,
         'empStatus':care.empStatus,
         'startDate':care.startDate,
         'endDate':care.endDate,

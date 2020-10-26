@@ -9,19 +9,20 @@
     <result property="careData" column="care_date"/>
     <result property="careexecutor" column="care_executor"/>
     <result property="carenr" column="care_carenr"/>
+    <result property="cusId" column="cus_id"/>
     <result property="carecustomerfk" column="care_customerfk"/>
 </resultMap>
 
     <resultMap id="CareDetailResult" type="com.example.entity.request.Care">
-        <id property="careId" column="care_id"/>
-        <result property="careZt" column="care_carezt"/>
-        <result property="carelxrcontacts" column="care_lxrcontacts"/>
-        <result property="careData" column="care_date"/>
-        <result property="careexecutor" column="care_executor"/>
-        <result property="carenr" column="care_carenr"/>
-        <result property="carecustomerfk" column="care_customerfk"/>
-        <association property="customerResp" resultMap="CustomerResult"/>
-    </resultMap>
+    <id property="careId" column="care_id"/>
+    <result property="careZt" column="care_carezt"/>
+    <result property="carelxrcontacts" column="care_lxrcontacts"/>
+    <result property="careData" column="care_date"/>
+    <result property="careexecutor" column="care_executor"/>
+    <result property="carenr" column="care_carenr"/>
+    <result property="carecustomerfk" column="care_customerfk"/>
+    <association property="customerResp" resultMap="CustomerResult"/>
+</resultMap>
 
     <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
         <id column="cus_id" property="cusId"/>
@@ -51,8 +52,8 @@
     <selectKey keyProperty="careId" keyColumn="care_id" resultType="Integer" order="AFTER">
         SELECT last_insert_id();
     </selectKey>
-    insert into care(care_carezt,care_lxrcontacts,care_date,care_executor,care_carenr,care_customerfk) VALUES
-    (#{careZt},#{carelxrcontacts},#{careData},#{careexecutor},#{carenr},#{carecustomerfk})
+    insert into care(care_carezt,care_lxrcontacts,care_date,care_executor,care_carenr,care_customerfk,cus_id) VALUES
+    (#{careZt},#{carelxrcontacts},#{careData},#{careexecutor},#{carenr},#{carecustomerfk},#{cusId})
 </insert>
 
 <update id="updateCare" parameterType="com.example.entity.request.Care">
@@ -79,9 +80,9 @@
     </delete>
 <select id="listCare" resultMap="CareDetailResult" parameterType="com.example.entity.request.Care">
     SELECT s.care_id,s.care_carezt,s.care_lxrcontacts,s.care_date,s.care_executor,s.care_carenr,s.care_customerfk,
-    c.*
+    cu.*
     FROM care s
-    left join customer c on s.cus_id = c.cus_id
+    left join customer cu on s.cus_id = cu.cus_id
     <where>
         <if test="careZt != null and careZt != ''">
             AND s.care_carezt LIKE CONCAT('%',#{careZt},'%')
@@ -98,11 +99,17 @@
         <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
             AND date_format(s.care_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
         </if>
+        <if test="cusId != null">
+            and s.cus_id=#{cusId}
+        </if>
     </where>
     ORDER BY s.care_date DESC
 </select>
 
-    <select id="getCare" resultMap="CareResult">
-        SELECT * FROM care WHERE care_id = #{careId}
+    <select id="getCare" resultMap="CareDetailResult">
+        SELECT s.*,cu.*
+        FROM care s
+        LEFT JOIN customer cu ON cu.cus_id = s.cus_id
+        WHERE s.care_id = #{careId}
     </select>
 </mapper>
