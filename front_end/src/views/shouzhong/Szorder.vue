@@ -13,10 +13,8 @@
           <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
         <el-col :span="6">
-         <!-- <template>-->
           <el-button type="warning" size="mini" icon="el-icon-edit"
                      :disabled="buttonDisabled" @click="openEditOrder">修改订单</el-button>
-          <!--</template>-->
           <el-button type="danger" size="mini" icon="el-icon-delete"
                      :disabled="buttonDisabled" @click="delOrder">删除订单</el-button>
         </el-col>
@@ -132,7 +130,7 @@
           </el-col>
           <el-col :span="8" width="600px">
             <el-form-item label="客户">
-              <el-select v-model="addForm.cusIdList" placeholder="请选择客户" >
+              <el-select v-model="addForm.cusId" placeholder="请选择客户" >
                 <el-option v-for="item in cusList" :key="item.cusId"
                            :label="item.cusName" :value="item.cusId">
                 </el-option>
@@ -191,7 +189,7 @@
       </el-form>
       <el-popover
         placement="right"
-        width="800"
+        width="700"
         trigger="click">
         <el-table :data="gridData">
           <el-table-column property="date" label="产品编号"></el-table-column>
@@ -204,7 +202,8 @@
         <el-button slot="reference" icon="el-icon-plus" type="primary">选择产品</el-button>
       </el-popover>
       <h3>购物车</h3>
-      <el-table :data="szorder">
+      <!--<el-table :data="szorder">-->
+      <el-table>
         <el-table-column property="odetId" label="产品编号"></el-table-column>
         <el-table-column property="productId" label="产品名称" ></el-table-column>
         <el-table-column property="productId" label="产品型号" ></el-table-column>
@@ -222,42 +221,75 @@
     </el-dialog>
 
     <el-dialog title="订单修改" :visible.sync="editDialog" @close="editHandleClose">
-      <el-form :model="editForm" label-width="100px" :rules="formRules"
+      <el-form :model="editForm" label-width="100px" :rules="editformRules"
                label-position="right" ref="editFormRef">
-        <el-row :gutter="20">
+        <el-row >
           <el-col :span="12">
             <el-form-item label="主题" prop="ordTheme">
               <el-input v-model="editForm.ordTheme" size="mini"/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!--<el-col :span="12">
             <el-form-item label="负责人" prop="ordHead">
               <el-input v-model="editForm.ordHead" size="mini"/>
             </el-form-item>
+          </el-col>-->
+          <el-col :span="12">
+            <el-form-item label="客户">
+              <el-select v-model="editForm.cusId" :disabled="true">
+                <el-option style="width:215px" v-for="item in cusList" :key="item.cusId"
+                           :label="item.cusName" :value="item.cusId">
+                </el-option>
+              </el-select>
+            </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <el-row>
           <el-col :span="12">
             <el-form-item label="总金额" prop="ordTotalmoney">
-              <el-input v-model="editForm.ordTotalmoney" size="mini"/>
+              <el-input v-model="editForm.ordTotalmoney" size="mini" :disabled="true" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="订单状态" prop="ordState">
-              <el-radio-group v-model="editForm.ordState">
+              <el-radio-group v-model="editForm.ordState" :disabled="true" >
                 <el-radio :label=0>执行中</el-radio>
                 <el-radio :label=1>已完成</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="24">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="收货人" prop="ordConsignee">
+              <el-input v-model="editForm.ordConsignee" size="mini" placeholder="请填写收货人姓名" clearable/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="手机号" prop="ordPhone">
+              <el-input v-model="editForm.ordPhone" size="mini" placeholder="请填写收货人电话" clearable/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="地址">
+              <area-cascader type='text' v-model="selected2" :level='1' :data="pcaa" @change="areaCascaderChange"></area-cascader>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="详细地址" prop="ordDetail">
+              <el-input v-model="editForm.ordDetail" size="mini" clearable/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!--<el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="开始时间" prop="ordStarttime">
               <el-date-picker v-model="editForm.ordStarttime" size="mini"></el-date-picker>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row>-->
       </el-form>
       <span slot="footer">
         <el-button @click="editDialog = false">取消</el-button>
@@ -287,7 +319,7 @@
       return {
         input: '',
         searchInput:'',
-        selected2:['湖南省','株洲市','荷塘区'],
+        selected2:[],
         pca:pca,
         pcaa:pcaa,
         gridData:[],
@@ -298,10 +330,11 @@
           ordTheme:'',
           ordHead:'',
           ordStarttime:'',
-          ordDealtime:'',
           ordState:'',
-          startDate:'',
-          endDate:'',
+          ordProvince:'',
+          ordCity:'',
+          ordCountry:'',
+          ordDetail:'',
           pageNum:1,
           pageSize:10
         },
@@ -320,12 +353,11 @@
           ordTotalmoney:'',
           ordConsignee:'',
           ordPhone:'',
-          /*ordProvince:'',
+          ordProvince:'',
           ordCity:'',
-          ordCountry:'',*/
+          ordCountry:'',
           ordDetail:'',
-          /*ordStarttime:'',*/
-          selected2:'',
+          cusId: '',
           cusIdList:[]
         },
         formRules:{
@@ -349,6 +381,9 @@
             {min:1,max:20,message:'请将详细地址填写完成'}
           ]
         },
+        editformRules:{
+
+        },
         addOrderButtonLoading:false,
         editDialog:false,
         editOrderButtonLoading:false,
@@ -359,14 +394,12 @@
       }
     },
     methods: {
-      anniu(){
-        alert(this.$store.state.empName)
-      },
       areaCascaderChange() {
-        console.log(this.selected2)
+
+        console.log("di",this.selected2)
       },
       advancedQueryClick() {
-        
+
         orderHttp.list(this.searchForm).then(res => {
           if (res.code === 20000) {
             this.listForm = res.data.list
@@ -469,11 +502,22 @@
       iHeaderCellStyle:function({row,column,rowIndex,columnIndex}){
         return 'padding:5px'
       },
+      anniu(){
+        alert(this.$store.state.empName)
+      },
       addOrderClick(){
+        this.addForm.ordProvince=this.selected2[0];
+        this.addForm.ordCity = this.selected2[1];
+        this.addForm.ordCountry=this.selected2[2];
+        /*console.log("1:"+this.addForm.cusId);*/
+        console.log(this.addForm.ordHead)
+        let s = this.addForm.cusId;
         this.$refs.addFormRef.validate(valid => {
+         /* console.log("2:"+s);*/
           if (!valid) return
           this.addOrderButtonLoading = true
           orderHttp.addOrder(this.addForm).then(res =>{
+
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.initList()
@@ -489,8 +533,11 @@
           })
         })
       },
-
       editOrderClick(){
+        this.editForm.ordProvince=this.selected2[0];
+        this.editForm.ordCity = this.selected2[1];
+        this.editForm.ordCountry=this.selected2[2];
+        console.log("1"+this.selected2)
         this.editOrderButtonLoading = true
         this.editForm.ordId = this.rowordId
         window.console.log(this.editForm)
