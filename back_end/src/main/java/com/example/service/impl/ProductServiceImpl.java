@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,12 +33,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResultVo addProduct(ProductReq productReq) {
         CheckUtils.validate(productReq);
-        int addProduct = productMapper.addProduct(productReq);
+        List<ProductReq> list = new ArrayList<>(productReq.getProductCount());
+        list.add(productReq);
+        productMapper.batchAddProduct(list);
+        /*int addProduct = productMapper.addProduct(productReq);
         if (addProduct != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
-        }
-        return ResultUtils.response(addProduct);
+        }*/
+        return ResultUtils.response("新增成功");
     }
 
     @Override

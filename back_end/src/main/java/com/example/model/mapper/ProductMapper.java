@@ -18,4 +18,5 @@ public interface ProductMapper {
     int editProduct(ProductReq productReq);
     ProductResp getProduct(Integer productId);
     List<ProductResp> listProduct(ProductReq productReq);
+    void batchAddProduct(List<ProductReq> list);
 }

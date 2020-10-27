@@ -36,4 +36,5 @@ public class ProductReq {
     private Integer pageSize;
     private String startDate;
     private String endDate;
+    private Integer productCount;
 }

@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping("/qiniu")
-public class TestQiNiuController {
+public class QiNiuController {
     @RequestMapping(value = "/upload",method = RequestMethod.POST)
     public ResultVo uploadFile(@RequestParam("file")MultipartFile file) {
         String url = QiNiuUtils.uploadFile(file);

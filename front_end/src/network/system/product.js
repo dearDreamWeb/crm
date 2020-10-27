@@ -28,7 +28,7 @@ export const productHttp = {
         'productStock':product.productStock,
         'productSize':product.productSize,
         'productCost':product.productCost,
-        'productBarCode':product.productBarCode,
+        'productCount':product.productCount,
         'remark':product.remark
       }
     }
