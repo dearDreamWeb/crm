@@ -171,18 +171,9 @@
 </template>
 <script>
   import {qaHttp} from "../../network/system/qa";
-  import {
-    quillEditor
-  } from 'vue-quill-editor'
-  import 'quill/dist/quill.core.css'
-  import 'quill/dist/quill.snow.css'
-  import 'quill/dist/quill.bubble.css'
 
   export default {
     name: 'FuncFormsEdit',
-    components: {
-      quillEditor
-    },
     data() {
       return {
         content: null,
