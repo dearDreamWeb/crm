@@ -106,7 +106,7 @@
         DELETE FROM complaint WHERE complaint_id = #{complaintId}
     </delete>
     <select id="listComplaint" resultMap="ComplaintDetailResult" parameterType="com.example.entity.request.Complaint">
-        SELECT s.complaint_complaintzt,complaint_receptionist,complaint_classification,complaint_describe,complaint_data,complaint_complainants,complaint_urgent,complaint_handle,complaint_handlegc,complaint_customerfk,complaint_hfvisit,
+        SELECT s.complaint_id,s.complaint_complaintzt,complaint_receptionist,complaint_classification,complaint_describe,complaint_data,complaint_complainants,complaint_urgent,complaint_handle,complaint_handlegc,complaint_customerfk,complaint_hfvisit,
         cu.*
         FROM complaint s
         left join customer cu on s.cus_id = cu.cus_id

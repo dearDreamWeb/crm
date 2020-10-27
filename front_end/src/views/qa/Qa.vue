@@ -37,7 +37,9 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item prop="qaJjsolve" label="答案">
-                  <el-input v-model="searchForm.qaJjsolve" size="mini" placeholder="请输入" clearable></el-input>
+<!--                  <el-input v-model="searchForm.qaJjsolve" size="mini" placeholder="请输入" clearable></el-input>-->
+                  <quill-editor v-model="searchForm.qaJjsolve" ref="myQuillEditor" style="height: 500px;" :options="editorOption">
+                  </quill-editor>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -87,14 +89,14 @@
       :visible.sync="addDialog"
       width="50%"
       @close="handleClose">
-      <el-form ref="addform" :model="addform" :rules="rules" label-width="80px">
+      <el-form ref="addform" :model="addform" :rules="rules" label-width="80px"style="height: 300px">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="标题" prop="qaWtproblem">
               <el-input v-model="addform.qaWtproblem"></el-input>
             </el-form-item>
           </el-col >
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="录入人">
               <el-input v-model="addform.qaCustomerfk"></el-input>
             </el-form-item>
@@ -103,16 +105,17 @@
         </el-row>
 
         <el-row>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="答案">
-              <el-input type="textarea" v-model="addform.qaJjsolve"></el-input>
+              <quill-editor v-model="addform.qaJjsolve" ref="myQuillEditor" style="width: 800px;height: 100px" :options="editorOption">
+              </quill-editor>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+         <!-- <el-col :span="8">
             <el-form-item label="录入日期">
               <el-date-picker type="date" placeholder="选择日期" v-model="addform.qaData" style="width: 100%;"></el-date-picker>
             </el-form-item>
-          </el-col>
+          </el-col>-->
         </el-row>
       </el-form>
       <div style="text-align: center;">
@@ -127,7 +130,7 @@
       :visible.sync="editDialog"
       width="50%"
       @close="editHandleClose">
-      <el-form ref="updateform" :model="updateform" :rules="rules" label-width="80px">
+      <el-form ref="updateform" :model="updateform" :rules="rules" label-width="80px" style="height: 300px">
         <el-row>
           <el-col :span="8">
             <el-form-item label="标题" prop="qaWtproblem">
@@ -139,20 +142,22 @@
               <el-input v-model="updateform.qaCustomerfk"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="8">
+            <el-form-item label="录入日期">
+              <el-date-picker type="date" placeholder="选择日期" v-model="updateform.qaData" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
 
         </el-row>
 
         <el-row>
           <el-col :span="8">
             <el-form-item label="答案">
-              <el-input type="textarea" v-model="updateform.qaJjsolve"></el-input>
+              <quill-editor v-model="updateform.qaJjsolve" ref="myQuillEditor" style="width: 800px;height: 100px" :options="editorOption">
+              </quill-editor>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="录入日期">
-              <el-date-picker type="date" placeholder="选择日期" v-model="updateform.qaData" style="width: 100%;"></el-date-picker>
-            </el-form-item>
-          </el-col>
+
         </el-row>
       </el-form>
       <div style="text-align: center;">
@@ -166,12 +171,22 @@
 </template>
 <script>
   import {qaHttp} from "../../network/system/qa";
-
-
+  import {
+    quillEditor
+  } from 'vue-quill-editor'
+  import 'quill/dist/quill.core.css'
+  import 'quill/dist/quill.snow.css'
+  import 'quill/dist/quill.bubble.css'
 
   export default {
+    name: 'FuncFormsEdit',
+    components: {
+      quillEditor
+    },
     data() {
       return {
+        content: null,
+        editorOption: {},
         rowCareId:0,
         addform:{
           qaWtproblem:'',

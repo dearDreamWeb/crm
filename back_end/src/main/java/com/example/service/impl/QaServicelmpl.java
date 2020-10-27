@@ -7,6 +7,7 @@ import com.example.entity.request.Qa;
 import com.example.model.mapper.QaMapper;
 import com.example.service.QaService;
 import com.example.util.CheckUtils;
+import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -30,7 +31,9 @@ public class QaServicelmpl implements QaService {
     @Override
     public ResultVo addQa(Qa qa) {
         CheckUtils.validate(qa);
+        qa.setQaData(DateUtils.getDate());
         int addQa = qaMapper.addQa(qa);
+
         if (addQa != 1) {
             throw new SysException(ResultEnum.DICT_ADD_FAIL.getCode(),
                     ResultEnum.DICT_ADD_FAIL.getMessage());

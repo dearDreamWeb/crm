@@ -414,6 +414,12 @@
           this.empList = res.data
         })
       },
+      // //打开新增的窗口
+      // openAddDialog(){
+      //   this.addDialog=true;//显示新增的对话框
+      //   //重置新增的表单中的内容
+      //   this.addform={};
+      // },
       addClick(){
         console.log(this.$refs)
         this.$refs["addform"].validate(valid => {
@@ -516,7 +522,6 @@
         })
       },
 
-
       handleClose(){
         this.$refs["addform"].resetFields()
       },
@@ -549,6 +554,7 @@
         })
       },
     },
+
     created() {
       this.initList()
       this.initEmpList()

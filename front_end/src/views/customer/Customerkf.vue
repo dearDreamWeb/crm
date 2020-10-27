@@ -8,7 +8,7 @@
           </el-input>
         </el-col>
         <el-col :span="10">
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAdd">新增</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">新增</el-button>
           <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
           <el-button type="primary" size="mini" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
@@ -31,8 +31,12 @@
             </el-row>
             <el-row :gutter="20">
               <el-col :span="8">
-                <el-form-item prop="cusId" label="对应客户">
-                  <el-input v-model="searchForm.cusId" size="mini" placeholder="请输入" clearable></el-input>
+                <el-form-item label="客户">
+                  <el-select v-model="searchForm.cusId">
+                    <el-option v-for="item in empList" :key="item.cusId"
+                               :label="item.cusName" :value="item.cusId">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -82,7 +86,7 @@
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="40"></el-table-column>
         <el-table-column prop="customerTheme" label="主题" sortable></el-table-column>
-        <el-table-column prop="cusId" label="对应客户"></el-table-column>
+        <el-table-column prop="customerResp.cusName" label="对应客户"></el-table-column>
         <el-table-column prop="customerServicelx" label="服务类型"></el-table-column>
         <el-table-column prop="customerData" label="日期">
           <template slot-scope="scope">
@@ -125,11 +129,11 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="客户">
-              <el-input
-                placeholder="请输入内容"
-                v-model="input"
-                :disabled="true">
-              </el-input>
+              <el-select v-model="addform.cusId">
+                <el-option v-for="item in empList" :key="item.cusId"
+                           :label="item.cusName" :value="item.cusId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -220,7 +224,7 @@
             <el-form-item label="客户">
               <el-input
                 placeholder="请输入内容"
-                v-model="input"
+                v-model="updateform.cusName"
                 :disabled="true">
               </el-input>
             </el-form-item>
@@ -293,11 +297,14 @@
 </template>
 <script>
   import {customerkfHttp} from "../../network/system/customerkf";
+  import {customerHttp} from "../../network/pre_sale/customer";
+
 
 
   export default {
     data() {
       return {
+        empList:[],
         rowCareId:0,
         addform:{
           customerTheme:'',
@@ -385,6 +392,16 @@
       }
     },
     methods:{
+      openAddDialog() {
+        this.addDialog = true
+        this.initEmpList()
+      },
+      initEmpList() {
+        customerHttp.listAll().then(res => {
+          this.empList = res.data
+        })
+      },
+
       addClick(){
         console.log(this.$refs)
         this.$refs["addform"].validate(valid => {
@@ -448,6 +465,7 @@
         customerkfHttp.get(this.rowCareId).then(res =>{
           console.log("编辑获得的数据",res.data);
           this.updateform = res.data;
+          this.updateform.cusName = res.data.customerResp.cusName
         })
       },
       deleteCare() {
@@ -518,16 +536,10 @@
           this.pageNum = res.data.pageNum
         })
       },
-      //打开新增的窗口
-      openAdd(){
-        this.addDialog=true;//显示新增的对话框
-        //重置新增的表单中的内容
-        this.addform={};
-      }
     },
     created() {
       this.initList()
-
+      this.initEmpList()
     }
   }
 </script>
