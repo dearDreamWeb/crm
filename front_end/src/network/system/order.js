@@ -14,8 +14,7 @@ export const orderHttp = {
         'ordCity':order.ordCity,
         'ordCountry':order.ordCountry,
         'ordDetail':order.ordDetail,
-        'ordStarttime':order.ordStarttime,
-        'ordState':order.ordState
+        "cusId":order.cusId
       }
     }
     return postJson(params)
@@ -44,10 +43,12 @@ export const orderHttp = {
       data:{
         'ordId':order.ordId,
         'ordTheme':order.ordTheme,
-        'ordHead':order.ordHead,
-        'ordTotalmoney':order.ordTotalmoney,
-        'ordState':order.ordState,
-        'ordStarttime':order.ordStarttime
+        'ordConsignee':order.ordConsignee,
+        'ordPhone':order.ordPhone,
+        'ordProvince':order.ordProvince,
+        'ordCity':order.ordCity,
+        'ordCountry':order.ordCountry,
+        'ordDetail':order.ordDetail,
       }
     }
     return postJson(params)
