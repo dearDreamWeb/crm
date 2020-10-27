@@ -1,6 +1,7 @@
 package com.example.model.mapper;
 
 import com.example.entity.request.Customerkf;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

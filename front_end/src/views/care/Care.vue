@@ -64,7 +64,11 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item prop="careexecutor" label="执行人">
-                  <el-input v-model="searchForm.careexecutor" size="mini" placeholder="请输入" clearable></el-input>
+                  <el-select v-model="searchForm.empId">
+                    <el-option v-for="it in edpList" :key="it.empId"
+                               :label="it.empName" :value="it.empId">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
@@ -90,7 +94,7 @@
             {{scope.row.careData | dateFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="careexecutor" label="执行人"></el-table-column>
+        <el-table-column prop="empResp.empName" label="执行人"></el-table-column>
       </el-table>
 
       <el-pagination background
@@ -141,7 +145,11 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="执行人">
-              <el-input v-model="addform.careexecutor"></el-input>
+              <el-select v-model="addform.empId">
+                <el-option v-for="it in edpList" :key="it.empId"
+                           :label="it.empName" :value="it.empId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -204,7 +212,11 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="执行人">
-              <el-input v-model="updateform.careexecutor"></el-input>
+              <el-select v-model="updateform.empId">
+                <el-option v-for="it in edpList" :key="it.empId"
+                           :label="it.empName" :value="it.empId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -234,6 +246,7 @@
   import {careHttp} from "../../network/system/care";
 
   import {customerHttp} from "../../network/pre_sale/customer";
+  import {userHttp} from "../../network/system/user";
 
 
 
@@ -241,6 +254,7 @@
     data() {
       return {
         empList:[],
+        edpList:[],
 
         rowCareId:0,
         addform:{
@@ -326,6 +340,12 @@
       openAddDialog() {
         this.addDialog = true
         this.initEmpList()
+        this.initEdpList()
+      },
+      initEdpList(){
+        userHttp.list().then(res =>{
+          this.edpList = res.data
+        })
       },
       initEmpList() {
         customerHttp.listAll().then(res => {
@@ -397,6 +417,7 @@
           console.log("编辑获得的数据",res.data);
           this.updateform = res.data;
           this.updateform.cusName = res.data.customerResp.cusName
+          this.updateform.empName = res.data.empResp.empName
         })
       },
       deleteCare() {
@@ -471,6 +492,7 @@
     created() {
       this.initList()
       this.initEmpList()
+     this.initEdpList()
     }
   }
 </script>
