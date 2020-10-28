@@ -68,26 +68,30 @@
         <result column="emp_id" property="empId"/>
     </resultMap>
     <!--查全部-->
-    <select id="listszOrder" resultMap="szOrderResult">
-        SELECT ord_id,ord_theme,ord_state,ord_head,ord_totalmoney,ord_starttime,ord_dealtime,ord_fahuotime
-        ,ord_huikuanmoney,ord_consignee,ord_province,ord_city,ord_country,ord_detail,ord_phone,ord_createtime,ord_delete FROM sz_order
+    <select id="listszOrder" resultMap="szOrderDetailResult">
+        SELECT s.*,cl.*
+        FROM sz_order s
+        left join customer cl on s.cus_id = cl.cus_id
         <where>
             <if test="ordTheme != null and ordTheme != ''">
-                AND ord_theme LIKE CONCAT('%',#{ordTheme},'%')
+                AND s.ord_theme LIKE CONCAT('%',#{ordTheme},'%')
             </if>
             <if test="ordHead != null and ordHead != ''">
-                AND ord_head LIKE CONCAT('%',#{ordHead},'%')
+                AND s.ord_head LIKE CONCAT('%',#{ordHead},'%')
             </if>
 
             <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
-                AND date_format(ord_starttime,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+                AND date_format(s.ord_starttime,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
             </if>
             <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
-                AND date_format(ord_starttime,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+                AND date_format(s.ord_starttime,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
 
             <if test="ordState != null">
-                AND ord_state = #{ordState}
+                AND s.ord_state = #{ordState}
+            </if>
+            <if test="cusId != null">
+                and s.cus_id=#{cusId}
             </if>
             and  ord_delete = 0
         </where>

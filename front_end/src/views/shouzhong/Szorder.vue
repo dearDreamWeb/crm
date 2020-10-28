@@ -88,6 +88,7 @@
             {{scope.row.ordDealtime | dateFormat}}
           </template>
         </el-table-column>
+        <el-table-column prop="customerResp.cusName" label="客户"></el-table-column>
         <el-table-column prop="ordState" label="订单状态" sortable>
           <template slot-scope="scope">
             {{scope.row.ordState | ordStateFormat}}
