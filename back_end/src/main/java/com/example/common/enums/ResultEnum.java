@@ -61,18 +61,25 @@ public enum ResultEnum {
     ACTIVITY_NOT_EXIST(80027,"活动不存在"),
 
     //订单
-    ORDER_ADD_FAIL(80028,"订单添加失败"),
-    ORDER_EXIST(80029,"订单已存在"),
-    ORDER_DEL_FAIL(80030,"订单删除失败"),
-    ORDER_UPDATE_FAIL(80031,"订单更新失败"),
-    ORDER_NOT_EXIST(80032,"订单不存在"),
+    ORDER_ADD_FAIL(40001,"订单添加失败"),
+    ORDER_EXIST(40001,"订单已存在"),
+    ORDER_DEL_FAIL(40003,"订单删除失败"),
+    ORDER_UPDATE_FAIL(40004,"订单更新失败"),
+    ORDER_NOT_EXIST(40005,"订单不存在"),
 
     //发货单
-    Deliver_ADD_FAIL(80033,"发货单添加失败"),
-    Deliver_EXIST(80034,"发货单已存在"),
-    Deliver_DEL_FAIL(80035,"发货单删除失败"),
-    Deliver_UPDATE_FAIL(80036,"发货单更新失败"),
-    Deliver_NOT_EXIST(80037,"发货单不存在"),
+    Deliver_ADD_FAIL(40006,"发货单添加失败"),
+    Deliver_EXIST(40007,"发货单已存在"),
+    Deliver_DEL_FAIL(40008,"发货单删除失败"),
+    Deliver_UPDATE_FAIL(40009,"发货单更新失败"),
+    Deliver_NOT_EXIST(40010,"发货单不存在"),
+
+    //计划回款
+    ReceivablePlan_ADD_FAIL(40011,"计划回款添加失败"),
+    ReceivablePlan_EXIST(40012,"计划回款已存在"),
+    ReceivablePlan_DEL_FAIL(40013,"计划回款删除失败"),
+    ReceivablePlan_UPDATE_FAIL(40014,"计划回款更新失败"),
+    ReceivablePlan_NOT_EXIST(40015,"计划回款不存在"),
 
     CLUE_NOT_BE_EDIT(80033,"您不能修改此条线索"),
     CLUE_NOT_BE_DEL(80034,"您不能删除此条线索"),

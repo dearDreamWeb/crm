@@ -72,7 +72,8 @@ export const orderHttp = {
         /*'ordStarttime':order.ordStarttime,*/
         'ordState':order.ordState,
         'startDate':order.startDate,
-        'endDate':order.endDate
+        'endDate':order.endDate,
+        'cusId':order.cusId
       }
     }
     return get(params)
