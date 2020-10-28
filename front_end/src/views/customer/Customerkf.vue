@@ -46,7 +46,11 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item prop="customerExecutor" label="执行人">
-                  <el-input v-model="searchForm.customerExecutor" size="mini" placeholder="请输入" clearable></el-input>
+                  <el-select v-model="searchForm.empId">
+                    <el-option v-for="item in edpList" :key="item.empId"
+                               :label="item.empName" :value="item.empId">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -94,7 +98,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="customerServicefs" label="服务方式"></el-table-column>
-        <el-table-column prop="customerExecutor" label="执行人"></el-table-column>
+        <el-table-column prop="empResp.empName" label="执行人"></el-table-column>
         <el-table-column prop="customerState" label="处理状态"></el-table-column>
       </el-table>
 
@@ -120,7 +124,11 @@
           </el-col >
           <el-col :span="8">
             <el-form-item label="执行人" prop="customerExecutor">
-              <el-input v-model="addform.customerExecutor"></el-input>
+              <el-select v-model="addform.empId">
+                <el-option v-for="item in edpList" :key="item.empId"
+                           :label="item.empName" :value="item.empId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
 
@@ -213,7 +221,11 @@
           </el-col >
           <el-col :span="8">
             <el-form-item label="执行人" prop="customerExecutor">
-              <el-input v-model="updateform.customerExecutor"></el-input>
+              <el-select v-model="updateform.empId">
+                <el-option v-for="item in edpList" :key="item.empId"
+                           :label="item.empName" :value="item.empId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
 
@@ -298,6 +310,7 @@
 <script>
   import {customerkfHttp} from "../../network/system/customerkf";
   import {customerHttp} from "../../network/pre_sale/customer";
+  import {userHttp} from "../../network/system/user";
 
 
 
@@ -305,10 +318,12 @@
     data() {
       return {
         empList:[],
+        edpList:[],
         rowCareId:0,
         addform:{
           customerTheme:'',
           cusId: '',
+          empId:'',
           date1:'',
           customerServicelx:'',
           customerServicefs:'',
@@ -328,6 +343,7 @@
         searchForm:{
           customerTheme:'',
           cusId: '',
+          empId:'',
           date1:'',
           customerServicelx:'',
           customerServicefs:'',
@@ -366,6 +382,7 @@
         form: {
           customerTheme:'',
           cusId: '',
+          empId:'',
           date1:'',
           customerServicelx:'',
           customerServicefs:'',
@@ -383,8 +400,8 @@
         },
         num: 1,
         rules:{
-          complaintZt:[
-            {required: true, message: '请输入活动名称', trigger: 'blur'},
+          customerTheme:[
+            {required: true, message: '请输入主题名称', trigger: 'blur'},
 
           ]
 
@@ -395,6 +412,12 @@
       openAddDialog() {
         this.addDialog = true
         this.initEmpList()
+        this.initEdpList()
+      },
+      initEdpList(){
+        userHttp.list().then(res =>{
+          this.edpList = res.data.list
+        })
       },
       initEmpList() {
         customerHttp.listAll().then(res => {
@@ -466,6 +489,7 @@
           console.log("编辑获得的数据",res.data);
           this.updateform = res.data;
           this.updateform.cusName = res.data.customerResp.cusName
+          this.updateform.empName = res.data.empResp.empName
         })
       },
       deleteCare() {
@@ -540,6 +564,7 @@
     created() {
       this.initList()
       this.initEmpList()
+      this.initEdpList()
     }
   }
 </script>

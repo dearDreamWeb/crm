@@ -14,7 +14,8 @@ export const customerkfHttp = {
         'customerExecutor':customerkf.customerExecutor,
         'customerServicenr':customerkf.customerServicenr,
         'customerCustomerfk':customerkf.customerCustomerfk,
-        'cusId':customerkf.cusId
+        'cusId':customerkf.cusId,
+        'empId':customerkf.empId
       }
     }
     return postJson(params)
@@ -42,7 +43,8 @@ export const customerkfHttp = {
         'customerExecutor':customerkf.customerExecutor,
         'customerServicenr':customerkf.customerServicenr,
         'customerCustomerfk':customerkf.customerCustomerfk,
-        'cusId':customerkf.cusId
+        'cusId':customerkf.cusId,
+        'empId':customerkf.empId
       }
     }
     return postJson(params)
@@ -69,7 +71,8 @@ export const customerkfHttp = {
         'customerExecutor':customerkf.customerExecutor,
         'customerServicenr':customerkf.customerServicenr,
         'customerCustomerfk':customerkf.customerCustomerfk,
-        'cusId':customerkf.cusId
+        'cusId':customerkf.cusId,
+        'empId':customerkf.empId
       }
     }
     return get(params)
@@ -82,6 +85,7 @@ export const customerkfHttp = {
         'customerServicelx':customerkf.customerServicelx,
         'customerServicefs':customerkf.customerServicefs,
         'cusId':customerkf.cusId,
+        'empId':customerkf.empId,
         'customerKhcontacts':customerkf.customerKhcontacts,
         'customerState':customerkf.customerState,
         'customerExecutor':customerkf.customerExecutor,

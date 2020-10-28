@@ -65,8 +65,8 @@
               <el-col :span="8">
                 <el-form-item prop="careexecutor" label="执行人">
                   <el-select v-model="searchForm.empId">
-                    <el-option v-for="it in edpList" :key="it.empId"
-                               :label="it.empName" :value="it.empId">
+                    <el-option v-for="item in edpList" :key="item.empId"
+                               :label="item.empName" :value="item.empId">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -146,8 +146,8 @@
           <el-col :span="8">
             <el-form-item label="执行人">
               <el-select v-model="addform.empId">
-                <el-option v-for="it in edpList" :key="it.empId"
-                           :label="it.empName" :value="it.empId">
+                <el-option v-for="item in edpList" :key="item.empId"
+                           :label="item.empName" :value="item.empId">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -213,8 +213,8 @@
           <el-col :span="8">
             <el-form-item label="执行人">
               <el-select v-model="updateform.empId">
-                <el-option v-for="it in edpList" :key="it.empId"
-                           :label="it.empName" :value="it.empId">
+                <el-option v-for="item in edpList" :key="item.empId"
+                           :label="item.empName" :value="item.empId">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -260,6 +260,7 @@
         addform:{
           careZt:'',
           cusId: '',
+          empId:'',
           carelxrcontacts:'',
           careexecutor:'',
           carecustomerfk:'',
@@ -276,6 +277,7 @@
         searchForm:{
           careZt:'',
           cusId: '',
+          empId:'',
           carelxrcontacts:'',
           careexecutor:'',
           startDate:'',
@@ -314,6 +316,7 @@
         form: {
           careZt:'',
           cusId: '',
+          empId:'',
           carelxrcontacts:'',
           careexecutor:'',
           carecustomerfk:'',
@@ -344,7 +347,7 @@
       },
       initEdpList(){
         userHttp.list().then(res =>{
-          this.edpList = res.data
+          this.edpList = res.data.list
         })
       },
       initEmpList() {

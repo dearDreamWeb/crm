@@ -1,6 +1,7 @@
 package com.example.entity.request;
 
 import com.example.entity.response.CustomerResp;
+import com.example.entity.response.EmpResp;
 import lombok.AllArgsConstructor;
 
 import lombok.Data;
@@ -29,7 +30,9 @@ public class Customerkf {
     private String customerServicenr;//服务内容
     private String customerCustomerfk;//客户反馈
     private Integer cusId;
+    private Integer empId;
     private Integer pageNum;
     private Integer pageSize;
     private CustomerResp customerResp;
+    private EmpResp empResp;
 }

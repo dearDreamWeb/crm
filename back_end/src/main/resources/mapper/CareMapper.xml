@@ -22,6 +22,8 @@
     <result property="careexecutor" column="care_executor"/>
     <result property="carenr" column="care_carenr"/>
     <result property="carecustomerfk" column="care_customerfk"/>
+        <result property="empId" column="emp_id"/>
+        <result property="cusId" column="cus_id"/>
     <association property="customerResp" resultMap="CustomerResult"/>
         <association property="empResp" resultMap="EmpResult"/>
 </resultMap>
@@ -91,6 +93,9 @@
     </if>
     <if test="carecustomerfk !=null and carecustomerfk != ''">
         ,care_customerfk = #{carecustomerfk}
+    </if>
+    <if test="empId !=null ">
+        ,emp_id = #{empId}
     </if>
     where care_id = #{careId}
 </update>
