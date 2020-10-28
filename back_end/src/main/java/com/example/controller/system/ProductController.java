@@ -45,4 +45,9 @@ public class ProductController {
     public ResultVo listProduct(ProductReq productReq) {
         return productService.listProduct(productReq);
     }
+
+    @GetMapping("/get_by_name")
+    public ResultVo getByName(@RequestParam("productName")String productName) {
+        return productService.getProductByName(productName);
+    }
 }

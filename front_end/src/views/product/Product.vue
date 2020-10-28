@@ -64,12 +64,18 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="名称" prop="productName">
-              <el-input v-model="addForm.productName" size="mini" placeholder="请输入" clearable></el-input>
+<!--              <el-input v-model="addForm.productName" size="mini" placeholder="请输入" clearable></el-input>-->
+              <el-autocomplete class="inline-input" @blur="productNameBlur"
+                               v-model="addForm.productName" placeholder="请输入产品名称"
+                               :fetch-suggestions="querySearch" :trigger-on-focus="false"
+                               @select="productNameHandleSelect">
+              </el-autocomplete>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="型号" prop="productModel">
-              <el-select v-model="addForm.productModel" size="mini" placeholder="请选择" clearable>
+              <el-select v-model="addForm.productModel" :disabled="productDisabled"
+                         size="mini" placeholder="请选择" clearable>
                 <el-option v-for="item in productModelList" :key="item.label"
                            :label="item.value" :value="item.value">
                 </el-option>
@@ -80,7 +86,8 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="品牌" prop="productBrand">
-              <el-select v-model="addForm.productBrand" size="mini" placeholder="请选择" clearable>
+              <el-select v-model="addForm.productBrand" :disabled="productDisabled"
+                         size="mini" placeholder="请选择" clearable>
                 <el-option v-for="item in productBrandList" :key="item.label"
                            :label="item.value" :value="item.value">
                 </el-option>
@@ -89,7 +96,8 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="尺寸" prop="productSize">
-              <el-select v-model="addForm.productSize" size="mini" placeholder="请选择" clearable>
+              <el-select v-model="addForm.productSize" :disabled="productDisabled"
+                         size="mini" placeholder="请选择" clearable>
                 <el-option v-for="item in productSizeList" :key="item.label"
                            :label="item.value" :value="item.value">
                 </el-option>
@@ -108,12 +116,14 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="成本" prop="productCost">
-              <el-input-number v-model="addForm.productCost" :precision="2" size="mini"></el-input-number>
+              <el-input-number v-model="addForm.productCost" :disabled="productDisabled"
+                               :precision="2" size="mini"></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="价格" prop="productPrice">
-              <el-input-number v-model="addForm.productPrice" :precision="2" size="mini"></el-input-number>
+              <el-input-number v-model="addForm.productPrice" :disabled="productDisabled"
+                               :precision="2" size="mini"></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -130,7 +140,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col>
+          <el-col :span="14">
             <el-form-item label="图片" prop="productImage">
               <el-upload ref="upload"
                 action="http://localhost:8099/qiniu/upload"
@@ -157,9 +167,18 @@
               </el-dialog>
             </el-form-item>
           </el-col>
+          <!--<el-col :span="10">
+            <transition name="el-zoom-in-top">
+              <el-card style="width: 148px;height: 148px" v-show="productImageIsShow">
+                <el-image :src="addForm.productImage" alt=""></el-image>
+              </el-card>
+            </transition>
+          </el-col>-->
         </el-row>
       </el-form>
       <span slot="footer">
+<!--        <el-button v-show="productImageIsShow" type="warning"-->
+<!--                   icon="el-icon-delete" @click="updateProductImg"></el-button>-->
         <el-button @click="addDialog = false">取消</el-button>
         <el-button type="primary" @click="addProductClick"
                    :loading="addProductButtonLoading">确定</el-button>
@@ -176,6 +195,7 @@
     name: "Product",
     data() {
       return {
+        // productImageIsShow:false,
         dialogImageUrl: '',
         dialogVisible: false,
         disabled: false,
@@ -185,7 +205,10 @@
         productSizeList:productSize,
         productModelList:productModel,
 
+        productDisabled:false,
+        restaurants:[],
         addForm:{
+          productId:'',
           productName:'',
           productModel:'',
           productImage:'',
@@ -222,6 +245,47 @@
       }
     },
     methods:{
+      productNameBlur() {
+        productHttp.getProductByName(this.addForm.productName).then(res => {
+          if (res.data === "数据库暂无") {
+            this.$message.success(res.data)
+          } else {
+            this.productDisabled = true
+          }
+        })
+      },
+      /*updateProductImg() {
+        fileHttp.delFile(this.fileName).then(res => {
+          if (res.code === 20000) {
+            this.$message({
+              message:'移除照片成功',
+              type:'success'
+            })
+          }
+        })
+      },*/
+      productNameHandleSelect(item) {
+        console.log(item.value);
+        productHttp.getProduct(item.id).then(res => {
+          this.addForm = res.data
+          this.productDisabled = true
+          // this.productImageIsShow = true
+          // const file1 = res.data.productImage.split(".")
+          // const file2 = file1[2].split("/")
+          // this.fileName = file2[1]+'.jpg'
+        })
+      },
+      querySearch(queryString,cb) {
+        const restaurants = this.restaurants
+        const results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        cb(results)
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+        }
+      },
+
       handleSuccess(res) {
         const file1 = res.data.split(".")
         const file2 = file1[2].split("/")
@@ -272,8 +336,22 @@
       openAddDialog() {
         this.addDialog = true
       },
-      handleCurrentChange() {
-
+      handleCurrentChange(pageIndex) {
+        this.pageNum = pageIndex
+        this.tableLoading = true
+        productHttp.listPage(this.pageNum,this.pageSize).then(res => {
+          if (res.code === 20000) {
+            this.listForm = res.data.list
+            this.pageNum = res.data.pageNum
+            this.total = res.data.total
+            this.tableLoading = false
+          } else {
+            this.$message({
+              message:res.message,
+              type:'error'
+            })
+          }
+        })
       },
       handleRowClick() {
 
@@ -286,6 +364,12 @@
             this.pageNum = res.data.pageNum
             this.total = res.data.total
             this.tableLoading = false
+            for (let item of this.listForm) {
+              this.restaurants.push({
+                value:item.productName,
+                id:item.productId
+              })
+            }
           } else {
             this.$message({
               message:res.message,
@@ -303,6 +387,9 @@
     },
     created() {
       this.initList()
+    },
+    mounted() {
+      this.restaurants = this.listForm
     }
   }
 </script>

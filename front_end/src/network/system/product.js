@@ -20,6 +20,7 @@ export const productHttp = {
     let params = {
       url:'/product/add',
       data:{
+        'productId':product.productId,
         'productName':product.productName,
         'productImage':product.productImage,
         'productModel':product.productModel,
@@ -46,6 +47,15 @@ export const productHttp = {
   listAll:function () {
     let params = {
       url:'/product/list'
+    }
+    return get(params)
+  },
+  getProductByName:function (productName) {
+    let params = {
+      url:'/product/get_by_name',
+      data:{
+        'productName':productName
+      }
     }
     return get(params)
   }

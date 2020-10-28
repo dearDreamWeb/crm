@@ -41,25 +41,27 @@ public class ProductServiceImpl implements ProductService {
         CheckUtils.validate(productReq);
         Integer count = productReq.getProductCount();
         List<ProductDetail> list = new ArrayList<>(count);
-        productReq.setProductStock(count);
-        productReq.setProductStatus(0);
 
-        String productName = productReq.getProductName();
-        ProductResp productByName = productMapper.getProductByName(productName);
-        if (productByName != null) {
-            productReq.setProductStock();
+        if (productReq.getProductId() != null) {
+            productReq.setProductStock(productReq.getProductCount()+productReq.getProductStock());
+            int editProduct = productMapper.editProduct(productReq);
+            if (editProduct != 1) {
+                throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                        ResultEnum.DATA_ADD_FAIL.getMessage());
+            }
+        } else {
+            productReq.setProductStock(count);
+            productReq.setProductStatus(0);
+            productMapper.addProduct(productReq);
+            Integer productId = productReq.getProductId();
+            for (int i=0;i<count;i++) {
+                ProductDetail productDetail = new ProductDetail();
+                productDetail.setProductId(productId);
+                productDetail.setProductBarCode(MyUtils.getUUID());
+                list.add(i,productDetail);
+            }
+            detailMapper.batchAddProductDetail(list);
         }
-
-        productMapper.addProduct(productReq);
-        Integer productId = productReq.getProductId();
-        for (int i=0;i<count;i++) {
-            ProductDetail productDetail = new ProductDetail();
-            productDetail.setProductId(productId);
-            productDetail.setProductBarCode(MyUtils.getUUID());
-            list.add(i,productDetail);
-        }
-        detailMapper.batchAddProductDetail(list);
-
         return ResultUtils.response("新增成功");
     }
 
@@ -121,5 +123,14 @@ public class ProductServiceImpl implements ProductService {
         List<ProductResp> productResps = productMapper.listProduct(productReq);
         PageInfo<ProductResp> list = new PageInfo<>(productResps);
         return ResultUtils.response(list);
+    }
+
+    @Override
+    public ResultVo getProductByName(String productName) {
+        ProductResp productByName = productMapper.getProductByName(productName);
+        if (productByName != null) {
+            return ResultUtils.response(productByName);
+        }
+        return ResultUtils.response("数据库暂无");
     }
 }

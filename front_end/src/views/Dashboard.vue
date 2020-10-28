@@ -219,16 +219,31 @@
         </el-row>
       </template>
     </el-calendar>-->
+
+    <div>
+      <h3>wangEditor with vue</h3>
+      <div id="demo1"></div>
+      <el-button class="btn" @click="getEditorData">获取当前内容</el-button>
+    </div>
   </div>
 </template>
 
 <script>
+  import E from 'wangeditor'
   import productBrand from '../common/data/product_date'
   import {pca,pcaa} from 'area-data'
   export default {
     name: "Dashboard",
+    mounted() {
+      const editor = new E('#demo1')
+      editor.create()
+      this.editor = editor
+    },
     data(){
       return{
+        isClear:false,
+        detail:'',
+
         brand:'',
         icon:'',
         shopId:'',
@@ -246,10 +261,15 @@
       },
       areaCascaderChange() {
         console.log(this.selected2)
+      },
+      getEditorData() {
+        // 通过代码获取编辑器内容
+        let data = this.editor.txt.text()
+        alert(data)
       }
     },
     created() {
-      console.log(this.productBrandList)
+
     }
   }
 </script>

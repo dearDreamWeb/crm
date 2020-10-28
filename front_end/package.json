@@ -20,7 +20,8 @@
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.1",
     "vue-table-with-tree-grid": "^0.2.4",
-    "vuex": "^3.5.1"
+    "vuex": "^3.5.1",
+    "wangeditor": "^4.0.8"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

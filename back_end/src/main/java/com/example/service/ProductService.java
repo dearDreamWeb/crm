@@ -14,4 +14,5 @@ public interface ProductService {
     ResultVo editProduct(ProductReq productReq);
     ResultVo getProduct(Integer productId);
     ResultVo listProduct(ProductReq productReq);
+    ResultVo getProductByName(String productName);
 }

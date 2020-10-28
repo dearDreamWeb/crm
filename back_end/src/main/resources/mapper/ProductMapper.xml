@@ -48,6 +48,9 @@
         <if test="productPrice != null">
             ,product_price = #{productPrice}
         </if>
+        <if test="productModel != null and productModel != ''">
+            ,product_model = #{productModel}
+        </if>
         <if test="productStock != null">
             ,product_stock = #{productStock}
         </if>
@@ -57,15 +60,13 @@
         <if test="productCost != null">
             ,product_cost = #{productCost}
         </if>
-        <if test="productBarCode != null and productBarCode != ''">
-            ,product_bar_code = #{productBarCode}
-        </if>
         <if test="productStatus != null">
             ,product_status = #{productStatus}
         </if>
         <if test="remark != null and remark != ''">
             ,remark = #{remark}
         </if>
+        WHERE product_id = #{productId}
     </update>
 
     <select id="getProduct" resultMap="ProductResult">
@@ -124,7 +125,7 @@
         </foreach>
     </insert>
 
-    <select id="getProductByName" parameterType="String">
+    <select id="getProductByName" resultMap="ProductResult">
         SELECT product_id,product_name,product_image,product_model,product_price,product_brand,
                 product_stock,product_size,product_cost,product_status,remark,
                 version,create_time,update_time,is_delete
