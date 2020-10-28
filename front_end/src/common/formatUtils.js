@@ -66,3 +66,11 @@ export function clueHandleResultFormat(handleResult) {
     return '暂未处理'
   }
 }
+
+export function productStatusFormat(productStatus) {
+  if (productStatus === 0) {
+    return '上架'
+  } else {
+    return '已售完'
+  }
+}

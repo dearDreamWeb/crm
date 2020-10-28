@@ -25,7 +25,6 @@ public class ProductResp {
     private Integer productStock;
     private String productSize;
     private BigDecimal productCost;
-    private String productBarCode;
     private Integer productStatus;
     private String remark;
     private Integer version;

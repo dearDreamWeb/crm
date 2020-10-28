@@ -579,7 +579,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .area-selected-trigger {
     line-height: 15px !important;
   }

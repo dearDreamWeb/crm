@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.example.entity.response.ProductResp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,4 +17,5 @@ public class ProductDetail {
     private Integer productDetailId;
     private Integer productId;
     private String productBarCode;
+    private ProductResp productResp;
 }

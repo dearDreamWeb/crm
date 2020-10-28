@@ -30,7 +30,7 @@ Vue.prototype.$urlUtil = urlUtils
 import {
   sexFormat,dateFormat,clueStatusFormat,
   ordStateFormat,delStateFormat,dateTimeFormat,
-  clueHandleResultFormat
+  clueHandleResultFormat,productStatusFormat
 } from "./common/formatUtils";
 Vue.filter('dateFormat',dateFormat)
 Vue.filter('sexFormat',sexFormat)
@@ -39,6 +39,7 @@ Vue.filter('ordStateFormat',ordStateFormat)
 Vue.filter('delStateFormat',delStateFormat)
 Vue.filter('dateTimeFormat',dateTimeFormat)
 Vue.filter('clueHandleResultFormat',clueHandleResultFormat)
+Vue.filter('productStatusFormat',productStatusFormat)
 
 /* eslint-disable no-new */
 new Vue({

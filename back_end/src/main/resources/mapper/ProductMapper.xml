@@ -12,7 +12,6 @@
         <result column="product_stock" property="productStock"/>
         <result column="product_size" property="productSize"/>
         <result column="product_cost" property="productCost"/>
-        <result column="product_bar_code" property="productBarCode"/>
         <result column="product_status" property="productStatus"/>
         <result column="remark" property="remark"/>
         <result column="version" property="version"/>
@@ -26,9 +25,9 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         INSERT INTO product(product_name,product_image,product_model,product_price,product_brand,
-                product_stock,product_size,product_cost,product_bar_code,product_status,remark,)
+                product_stock,product_size,product_cost,product_status,remark)
         VALUES (#{productName},#{productImage},#{productModel},#{productPrice},#{productBrand},
-            #{productStock},#{productSize},#{productCost},#{productBarCode},#{productStatus},#{remark})
+            #{productStock},#{productSize},#{productCost},#{productStatus},#{remark})
     </insert>
 
     <update id="delProduct">
@@ -48,9 +47,6 @@
         </if>
         <if test="productPrice != null">
             ,product_price = #{productPrice}
-        </if>
-        <if test="productBrand != null and productBrand != ''">
-            ,product_brand = #{productBrand}
         </if>
         <if test="productStock != null">
             ,product_stock = #{productStock}
@@ -74,14 +70,14 @@
 
     <select id="getProduct" resultMap="ProductResult">
         SELECT product_id,product_name,product_image,product_model,product_price,product_brand,
-                product_stock,product_size,product_cost,product_bar_code,product_status,remark,
+                product_stock,product_size,product_cost,product_status,remark,
                 version,create_time,update_time,is_delete
         FROM product WHERE product_id = #{productId}
     </select>
 
     <select id="listProduct" resultMap="ProductResult">
         SELECT product_id,product_name,product_image,product_model,product_price,product_brand,
-                product_stock,product_size,product_cost,product_bar_code,product_status,remark,
+                product_stock,product_size,product_cost,product_status,remark,
                 version,create_time,update_time,is_delete
         FROM product
         <where>
@@ -109,14 +105,29 @@
             <if test="productCost != null">
                 AND product_cost = #{productCost}
             </if>
-            <if test="productBarCode != null and productBarCode != ''">
-                AND product_bar_code LIKE CONCAT('%',#{productBarCode},'%')
-            </if>
             <if test="productStatus != null">
                 AND product_status = #{productStatus}
             </if>
             AND is_delete = 0
         </where>
         ORDER BY create_time DESC
+    </select>
+
+    <insert id="batchAddProduct" parameterType="java.util.List">
+        INSERT INTO product(product_name,product_image,product_model,product_price,product_brand,
+                product_stock,product_size,product_cost,product_status,remark)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.productName},#{item.productImage},#{item.productModel},#{item.productPrice},
+            #{item.productBrand},#{item.productStock},#{item.productSize},#{item.productCost},
+            #{item.productStatus},#{item.remark})
+        </foreach>
+    </insert>
+
+    <select id="getProductByName" parameterType="String">
+        SELECT product_id,product_name,product_image,product_model,product_price,product_brand,
+                product_stock,product_size,product_cost,product_status,remark,
+                version,create_time,update_time,is_delete
+        FROM product WHERE product_name = #{productName}
     </select>
 </mapper>

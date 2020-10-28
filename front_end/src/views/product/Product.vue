@@ -27,14 +27,27 @@
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column label="占位符"></el-table-column>
-        <el-table-column label="占位符"></el-table-column>
-        <el-table-column label="占位符"></el-table-column>
-        <el-table-column label="占位符"></el-table-column>
-        <el-table-column label="占位符"></el-table-column>
-        <el-table-column label="占位符"></el-table-column>
-        <el-table-column label="占位符"></el-table-column>
-        <el-table-column label="占位符"></el-table-column>
+        <el-table-column prop="productName" label="名称" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="productImage" label="产品图片">
+          <template slot-scope="scope">
+            <el-popover placement="top-start" trigger="click">
+              <!--trigger属性值：hover、click、focus 和 manual-->
+              <a :href="scope.row.productImage" target="_blank" title="查看最大化图片"><img :src="scope.row.productImage" style="width: 300px;height: 300px" /></a>
+              <el-image slot="reference" :src="scope.row.productImage" style="width: 50px;height: 50px; cursor:pointer" />
+            </el-popover>
+          </template>
+        </el-table-column>
+        <el-table-column prop="productBrand" label="品牌"></el-table-column>
+        <el-table-column prop="productModel" label="型号"></el-table-column>
+        <el-table-column prop="productSize" label="尺寸"></el-table-column>
+        <el-table-column prop="productCost" label="成本"></el-table-column>
+        <el-table-column prop="productPrice" label="价格"></el-table-column>
+        <el-table-column prop="productStatus" label="状态">
+          <template slot-scope="scope">
+            {{scope.row.productStatus | productStatusFormat}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="productStock" label="库存"></el-table-column>
       </el-table>
 
       <el-pagination background :page-size="pageSize" :total="total"
@@ -45,9 +58,9 @@
     </el-card>
 
     <el-dialog title="产品新增" :visible.sync="addDialog" @close="addHandleClose"
-               top="15px" width="56%">
+               top="20px" width="56%">
       <el-form :model="addForm" ref="addFormRef" label-width="80px"
-               label-position="right" :rules="addFormRules">
+               label-position="right" :rules="addFormRules" size="mini">
         <el-row>
           <el-col :span="12">
             <el-form-item label="名称" prop="productName">
@@ -112,7 +125,7 @@
         <el-row>
           <el-col>
             <el-form-item label="备注" prop="remark">
-              <el-input type="textarea" size="mini" clearable></el-input>
+              <el-input v-model="addForm.remark" type="textarea" size="mini" clearable></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -205,7 +218,7 @@
         pageNum:1,
         pageSize:10,
         total:1,
-        tableLoading:false
+        tableLoading:false,
       }
     },
     methods:{
@@ -238,9 +251,9 @@
           productHttp.addProduct(this.addForm).then(res => {
             if (res.code === 20000) {
               this.$message.success(res.message)
-              this.initList()
               this.addProductButtonLoading = false
               this.addDialog = false
+              this.initList()
             } else {
               this.$message({
                 message:res.message,
@@ -253,6 +266,8 @@
       },
       addHandleClose() {
         this.$refs.addFormRef.resetFields()
+        this.addProductButtonLoading = false
+        this.$refs.upload.clearFiles()
       },
       openAddDialog() {
         this.addDialog = true
@@ -263,6 +278,22 @@
       handleRowClick() {
 
       },
+      initList() {
+        this.tableLoading = true
+        productHttp.listPage(this.pageNum,this.pageSize).then(res => {
+          if (res.code === 20000) {
+            this.listForm = res.data.list
+            this.pageNum = res.data.pageNum
+            this.total = res.data.total
+            this.tableLoading = false
+          } else {
+            this.$message({
+              message:res.message,
+              type:'error'
+            })
+          }
+        })
+      },
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'
       },
@@ -271,13 +302,12 @@
       }
     },
     created() {
-      console.log(this.productBrandList)
-      console.log(this.productSizeList)
+      this.initList()
     }
   }
 </script>
 
-<style>
+<style scoped>
   .el-dialog__body{
     padding: 10px 20px !important;
   }

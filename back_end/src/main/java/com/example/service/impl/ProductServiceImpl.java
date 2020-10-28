@@ -2,13 +2,16 @@ package com.example.service.impl;
 
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
+import com.example.entity.ProductDetail;
 import com.example.entity.ResultVo;
 import com.example.entity.request.ProductReq;
 import com.example.entity.response.ProductResp;
+import com.example.model.mapper.ProductDetailMapper;
 import com.example.model.mapper.ProductMapper;
 import com.example.service.ProductService;
 import com.example.util.CheckUtils;
 import com.example.util.DateUtils;
+import com.example.util.MyUtils;
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -30,17 +33,33 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    private ProductDetailMapper detailMapper;
+
     @Override
     public ResultVo addProduct(ProductReq productReq) {
         CheckUtils.validate(productReq);
-        List<ProductReq> list = new ArrayList<>(productReq.getProductCount());
-        list.add(productReq);
-        productMapper.batchAddProduct(list);
-        /*int addProduct = productMapper.addProduct(productReq);
-        if (addProduct != 1) {
-            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
-                    ResultEnum.DATA_ADD_FAIL.getMessage());
-        }*/
+        Integer count = productReq.getProductCount();
+        List<ProductDetail> list = new ArrayList<>(count);
+        productReq.setProductStock(count);
+        productReq.setProductStatus(0);
+
+        String productName = productReq.getProductName();
+        ProductResp productByName = productMapper.getProductByName(productName);
+        if (productByName != null) {
+            productReq.setProductStock();
+        }
+
+        productMapper.addProduct(productReq);
+        Integer productId = productReq.getProductId();
+        for (int i=0;i<count;i++) {
+            ProductDetail productDetail = new ProductDetail();
+            productDetail.setProductId(productId);
+            productDetail.setProductBarCode(MyUtils.getUUID());
+            list.add(i,productDetail);
+        }
+        detailMapper.batchAddProductDetail(list);
+
         return ResultUtils.response("新增成功");
     }
 
