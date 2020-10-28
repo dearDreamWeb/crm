@@ -1,3 +1,4 @@
+<!-- 组件代码如下 -->
 <template>
   <div>
     <script id="editor" type="text/plain"></script>

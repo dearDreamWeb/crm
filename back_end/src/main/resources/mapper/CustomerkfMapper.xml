@@ -8,6 +8,7 @@
         <result property="customerServicelx" column="customer_servicelx"/>
         <result property="customerServicefs" column="customer_servicefs"/>
         <result property="cusId" column="cus_id"/>
+        <result property="empId" column="emp_id"/>
         <result property="customerData" column="customer_data"/>
         <result property="customerKhcontacts" column="customer_khcontacts"/>
         <result property="customerState" column="customer_state"/>
@@ -27,7 +28,27 @@
         <result property="customerExecutor" column="customer_executor"/>
         <result property="customerServicenr" column="customer_servicenr"/>
         <result property="customerCustomerfk" column="customer_customerfk"/>
+        <result property="empId" column="emp_id"/>
+        <result property="cusId" column="cus_id"/>
         <association property="customerResp" resultMap="CustomerResult"/>
+        <association property="empResp" resultMap="EmpResult"/>
+    </resultMap>
+
+    <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
+        <id property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="sex" column="sex"/>
+        <result property="passWord" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="empStatus" column="emp_status"/>
+        <result property="token" column="token"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
     </resultMap>
 
     <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
@@ -59,8 +80,8 @@
         <selectKey keyProperty="customerId" keyColumn="customer_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
         </selectKey>
-        insert into customer_service(customer_theme,customer_servicelx,customer_servicefs,customer_data,customer_khcontacts,customer_state,customer_executor,customer_servicenr,customer_customerfk,cus_id) VALUES
-        (#{customerTheme},#{customerServicelx},#{customerServicefs},#{customerData},#{customerKhcontacts},#{customerState},#{customerExecutor},#{customerServicenr},#{customerCustomerfk},#{cusId})
+        insert into customer_service(customer_theme,customer_servicelx,customer_servicefs,customer_data,customer_khcontacts,customer_state,customer_executor,customer_servicenr,customer_customerfk,cus_id,emp_id) VALUES
+        (#{customerTheme},#{customerServicelx},#{customerServicefs},#{customerData},#{customerKhcontacts},#{customerState},#{customerExecutor},#{customerServicenr},#{customerCustomerfk},#{cusId},#{empId})
     </insert>
 
     <update id="updateCustomerkf" parameterType="com.example.entity.request.Customerkf">
@@ -90,6 +111,9 @@
         <if test="customerCustomerfk !=null and customerCustomerfk != ''">
             ,customer_customerfk = #{customerCustomerfk}
         </if>
+        <if test="empId !=null ">
+            ,emp_id = #{empId}
+        </if>
         where customer_id = #{customerId}
     </update>
     <delete id="deleteCustomerkf" parameterType="Integer">
@@ -97,9 +121,11 @@
     </delete>
     <select id="listCustomerkf" resultMap="CustomerkfDetailResult" parameterType="com.example.entity.request.Customerkf">
         SELECT s.customer_id,s.customer_theme,s.customer_servicelx,s.customer_servicefs,s.customer_data,s.customer_khcontacts,s.customer_state,s.customer_executor,s.customer_servicenr,s.customer_customerfk,
-        cu.*
+        cu.*,
+        e.*
         FROM customer_service s
         left join customer cu on s.cus_id = cu.cus_id
+        left join emp e on s.emp_id = e.emp_id
         <where>
             <if test="customerTheme != null and customerTheme != ''">
                 AND s.customer_theme LIKE CONCAT('%',#{customerTheme},'%')
@@ -116,13 +142,17 @@
             <if test="cusId != null">
                 and s.cus_id=#{cusId}
             </if>
+            <if test="empId != null">
+                and s.emp_id=#{empId}
+            </if>
         </where>
         ORDER BY customer_data DESC
     </select>
     <select id="getCustomerkf" resultMap="CustomerkfDetailResult">
-         SELECT s.*,cu.*
+         SELECT s.*,cu.*,e.*
         FROM customer_service s
         LEFT JOIN customer cu ON cu.cus_id = s.cus_id
+         LEFT JOIN emp e ON e.emp_id = s.emp_id
         WHERE s.customer_id = #{customerId}
     </select>
 </mapper>

@@ -37,9 +37,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item prop="qaJjsolve" label="答案">
-<!--                  <el-input v-model="searchForm.qaJjsolve" size="mini" placeholder="请输入" clearable></el-input>-->
-                  <quill-editor v-model="searchForm.qaJjsolve" ref="myQuillEditor" style="height: 500px;" :options="editorOption">
-                  </quill-editor>
+                  <el-input v-model="searchForm.qaJjsolve" size="mini" placeholder="请输入" clearable></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -89,7 +87,7 @@
       :visible.sync="addDialog"
       width="50%"
       @close="handleClose">
-      <el-form ref="addform" :model="addform" :rules="rules" label-width="80px"style="height: 300px">
+      <el-form ref="addform" :model="addform" :rules="rules" label-width="80px" style="height: 450px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="标题" prop="qaWtproblem">
@@ -104,25 +102,21 @@
 
         </el-row>
 
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="答案">
-              <quill-editor v-model="addform.qaJjsolve" ref="myQuillEditor" style="width: 800px;height: 100px" :options="editorOption">
-              </quill-editor>
-            </el-form-item>
-          </el-col>
+        <el-form-item label="答案">
+          <quill-editor v-model="addform.qaJjsolve" ref="myQuillEditor" style="height: 300px;" :options="editorOption">
+          </quill-editor>
+        </el-form-item>
          <!-- <el-col :span="8">
             <el-form-item label="录入日期">
               <el-date-picker type="date" placeholder="选择日期" v-model="addform.qaData" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>-->
-        </el-row>
       </el-form>
-      <div style="text-align: center;">
+      <span slot="footer" style="text-align: center;">
         <el-button @click="addDialog = false">取 消</el-button>
         <el-button type="primary" @click="addClick"
                    :loading="addDictButtonLoading">确 定</el-button>
-      </div>
+      </span>
     </el-dialog>
 
     <el-dialog
@@ -130,7 +124,7 @@
       :visible.sync="editDialog"
       width="50%"
       @close="editHandleClose">
-      <el-form ref="updateform" :model="updateform" :rules="rules" label-width="80px" style="height: 300px">
+      <el-form ref="updateform" :model="updateform" :rules="rules" label-width="80px" style="height: 450px">
         <el-row>
           <el-col :span="8">
             <el-form-item label="标题" prop="qaWtproblem">
@@ -150,20 +144,15 @@
 
         </el-row>
 
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="答案">
-              <quill-editor v-model="updateform.qaJjsolve" ref="myQuillEditor" style="width: 800px;height: 100px" :options="editorOption">
-              </quill-editor>
-            </el-form-item>
-          </el-col>
-
-        </el-row>
+        <el-form-item label="答案">
+          <quill-editor v-model="updateform.qaJjsolve" ref="myQuillEditor" style="height: 300px;" :options="editorOption">
+          </quill-editor>
+        </el-form-item>
       </el-form>
-      <div style="text-align: center;">
+      <span slot="footer">
         <el-button @click="editDialog = false">取 消</el-button>
         <el-button type="warning" @click="editCareClick" :loading="editDictButtonLoading">确 定</el-button>
-      </div>
+      </span>
     </el-dialog>
   </div>
 
@@ -171,20 +160,23 @@
 </template>
 <script>
   import {qaHttp} from "../../network/system/qa";
-  /*import {
+
+  import {
     quillEditor
   } from 'vue-quill-editor'
+
   import 'quill/dist/quill.core.css'
   import 'quill/dist/quill.snow.css'
-  import 'quill/dist/quill.bubble.css'*/
+  // import 'quill/dist/quill.bubble.css'
 
   export default {
     name: 'FuncFormsEdit',
     components: {
-      /*quillEditor*/
+      quillEditor
     },
     data() {
       return {
+
         content: null,
         editorOption: {},
         rowCareId:0,
@@ -405,6 +397,6 @@
   }
 </script>
 
-<style>
+<style scoped>
 
 </style>

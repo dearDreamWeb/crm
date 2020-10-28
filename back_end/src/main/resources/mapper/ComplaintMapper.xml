@@ -16,6 +16,7 @@
         <result property="complaintCustomerfk" column="complaint_customerfk"/>
         <result property="complaintHfvisit" column="complaint_hfvisit"/>
         <result property="cusId" column="cus_id"/>
+        <result property="empId" column="emp_id"/>
     </resultMap>
 
     <resultMap id="ComplaintDetailResult" type="com.example.entity.request.Complaint">
@@ -31,7 +32,27 @@
         <result property="complaintHandlegc" column="complaint_handlegc"/>
         <result property="complaintCustomerfk" column="complaint_customerfk"/>
         <result property="complaintHfvisit" column="complaint_hfvisit"/>
+        <result property="empId" column="emp_id"/>
+        <result property="cusId" column="cus_id"/>
         <association property="customerResp" resultMap="CustomerResult"/>
+        <association property="empResp" resultMap="EmpResult"/>
+    </resultMap>
+
+    <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
+        <id property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="sex" column="sex"/>
+        <result property="passWord" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="empStatus" column="emp_status"/>
+        <result property="token" column="token"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
     </resultMap>
 
     <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
@@ -63,8 +84,8 @@
         <selectKey keyProperty="complaintId" keyColumn="complaint_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
         </selectKey>
-        insert into complaint(complaint_complaintzt,complaint_receptionist,complaint_classification,complaint_describe,complaint_data,complaint_complainants,complaint_urgent,complaint_handle,complaint_handlegc,complaint_customerfk,complaint_hfvisit,cus_id) VALUES
-        (#{complaintZt},#{complaintReceptionist},#{complaintClassification},#{complaintDescribe},#{complaintData},#{complaintComplainants},#{complaintUrgent},#{complaintHandle},#{complaintHandlegc},#{complaintCustomerfk},#{complaintHfvisit},#{cusId})
+        insert into complaint(complaint_complaintzt,complaint_receptionist,complaint_classification,complaint_describe,complaint_data,complaint_complainants,complaint_urgent,complaint_handle,complaint_handlegc,complaint_customerfk,complaint_hfvisit,cus_id,emp_id) VALUES
+        (#{complaintZt},#{complaintReceptionist},#{complaintClassification},#{complaintDescribe},#{complaintData},#{complaintComplainants},#{complaintUrgent},#{complaintHandle},#{complaintHandlegc},#{complaintCustomerfk},#{complaintHfvisit},#{cusId},#{empId})
     </insert>
 
     <update id="updateComplaint" parameterType="com.example.entity.request.Complaint">
@@ -100,6 +121,9 @@
         <if test="complaintHfvisit !=null and complaintHfvisit != ''">
             ,complaint_hfvisit = #{complaintHfvisit}
         </if>
+        <if test="empId !=null ">
+            ,emp_id = #{empId}
+        </if>
         where complaint_id = #{complaintId}
     </update>
     <delete id="deleteComplaint" parameterType="Integer">
@@ -107,9 +131,11 @@
     </delete>
     <select id="listComplaint" resultMap="ComplaintDetailResult" parameterType="com.example.entity.request.Complaint">
         SELECT s.complaint_id,s.complaint_complaintzt,complaint_receptionist,complaint_classification,complaint_describe,complaint_data,complaint_complainants,complaint_urgent,complaint_handle,complaint_handlegc,complaint_customerfk,complaint_hfvisit,
-        cu.*
+        cu.*,
+        e.*
         FROM complaint s
         left join customer cu on s.cus_id = cu.cus_id
+        left join emp e on s.emp_id = e.emp_id
         <where>
             <if test="complaintZt != null and complaintZt != ''">
                 AND complaint_complaintzt LIKE CONCAT('%',#{complaintZt},'%')
@@ -129,13 +155,17 @@
             <if test="cusId != null">
                 and s.cus_id=#{cusId}
             </if>
+            <if test="empId != null">
+                and s.emp_id=#{empId}
+            </if>
         </where>
         ORDER BY s.complaint_data DESC
     </select>
     <select id="getComplaint" resultMap="ComplaintDetailResult">
-        SELECT s.*,cu.*
+        SELECT s.*,cu.*,e.*
         FROM complaint s
         LEFT JOIN customer cu ON cu.cus_id = s.cus_id
+        LEFT JOIN emp e ON e.emp_id = s.emp_id
         WHERE s.complaint_id = #{complaintId}
     </select>
 </mapper>

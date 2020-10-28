@@ -15,7 +15,8 @@ export const complaintHttp = {
         'complaintHandle':complaint.complaintHandle,
         'complaintHandlegc':complaint.complaintHandlegc,
         'complaintCustomerfk':complaint.complaintCustomerfk,
-        'cusId':complaint.cusId
+        'cusId':complaint.cusId,
+        'empId':complaint.empId
       }
     }
     return postJson(params)
@@ -45,6 +46,7 @@ export const complaintHttp = {
         'complaintHandlegc':complaint.complaintHandlegc,
         'complaintCustomerfk':complaint.complaintCustomerfk,
         'cusId':complaint.cusId,
+        'empId':complaint.empId
       }
     }
     return postJson(params)
@@ -73,6 +75,7 @@ export const complaintHttp = {
         'complaintHandlegc':complaint.complaintHandlegc,
         'complaintCustomerfk':complaint.complaintCustomerfk,
         'cusId':complaint.cusId,
+        'empId':complaint.empId
       }
     }
     return get(params)
@@ -86,13 +89,12 @@ export const complaintHttp = {
         'complaintClassification':complaint.complaintClassification,
         'complaintDescribe':complaint.complaintDescribe,
         'cusId':complaint.cusId,
+        'empId':complaint.empId,
         'complaintComplainants':complaint.complaintComplainants,
         'complaintUrgent':complaint.complaintUrgent,
         'complaintHandle':complaint.complaintHandle,
         'complaintHandlegc':complaint.complaintHandlegc,
         'complaintCustomerfk':complaint.complaintCustomerfk,
-        'startDate':complaint.startDate,
-        'endDate':complaint.endDate,
         'pageNum':complaint.pageNum,
         'pageSize':complaint.pageSize
       }
