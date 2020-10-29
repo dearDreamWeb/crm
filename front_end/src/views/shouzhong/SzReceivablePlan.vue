@@ -90,6 +90,7 @@
 <script>
   import {planHttp} from "../../network/system/plan";
   import {orderHttp} from "../../network/system/order";
+  import {clueHttp} from "../../network/pre_sale/clue";
 
   export default {
     name: "SzReceivavlePlan",
@@ -157,8 +158,25 @@
       },
       openEditPlan(){
       },
-      delPlan(){
-
+      delPlan(planId){
+        this.$confirm('确定删除此订单吗','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          planId = this.rowplanId
+          planHttp.delPlan(planId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+            } else {
+              this.$message({
+                message:res.message,
+                type:'error'
+              })
+            }
+          })
+        })
       },
       handleCurrentChange(pageIndex) {
         this.pageNum = pageIndex
@@ -171,7 +189,7 @@
       },
       handleRowClick(row,event,column) {
         this.rowplanId= row.planId
-        if (this.rowPlanId != 0) {
+        if (this.rowplanId != 0) {
           this.buttonDisabled = false
         }
       },
