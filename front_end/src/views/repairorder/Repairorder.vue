@@ -2,239 +2,109 @@
   <div>
     <el-card>
       <el-row :gutter="20">
-        <el-col :span="3"><el-select class="ssk" v-model="value" filterable placeholder="全部数据">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="6"><el-input class="ssk2"
-                                    placeholder="请输入工单主题/流水号"
-                                    v-model="input"
-                                    clearable>
-        </el-input><div class="grid-content bg-purple-light"></div></el-col>
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        <el-col :span="6">
+          <el-input v-model="searchInput" size="mini" placeholder="请输入主题内容查询" clearable>
+            <el-button @click="searchInputClick" slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </el-col>
+        <el-col :span="10">
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">新增</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-refresh" @click="resetForm"></el-button>
+        </el-col>
+        <el-col :span="8">
+          <el-button type="warning" size="mini" icon="el-icon-edit"
+                     :disabled="buttonDisabled" @click="openEditCare">修改</el-button>
+          <el-button type="danger" size="mini" icon="el-icon-delete"
+                     :disabled="buttonDisabled" @click="deleteCare">删除</el-button>
+        </el-col>
       </el-row>
-      <el-row>
-        <el-col :span="7">维修工单<div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="12"><div class="grid-content bg-purple-light"></div></el-col>
-        <el-col :span="2"> <el-button type="success" @click="addBtn" icon="el-icon-circle-plus-outline" circle>新建维修工单</el-button><div class="grid-content bg-purple"></div></el-col>
-        <el-dialog
-          title="维修工单"
-          :visible.sync="dialogVisible"
-          width="50%"
-          :before-close="handleClose">
-          <el-form ref="form" :model="form" label-width="80px">
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="工单编号">
-                  <el-input v-model="form.gdbh"></el-input>
-                </el-form-item>
-              </el-col >
-              <el-col :span="12">
-                <el-form-item label="接单人">
-                  <el-input v-model="form.khname"></el-input>
-                </el-form-item>
-              </el-col>
 
-            </el-row>
+      <transition name="el-zoom-in-top">
+        <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px;">
+          <el-form :model="searchForm" ref="advancedSearchFormRef"
+                   size="mini" label-position="right" label-width="80px">
             <el-row>
-              <el-col :span="12">
-                <el-form-item label="客户名">
-                  <el-input
-                    placeholder="请输入内容"
-                    v-model="input"
-                    :disabled="true">
-                  </el-input>
+              <el-col>
+                <el-form-item label="高级搜索"></el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <el-form-item label="客户">
+                  <el-select v-model="searchForm.cusId">
+                    <el-option v-for="item in empList" :key="item.cusId"
+                               :label="item.cusName" :value="item.cusId">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="8">
+                <el-form-item prop="complaintZt" label="投诉主题">
+                  <el-input v-model="searchForm.complaintZt" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item prop="complaintReceptionist" label="接待人">
+                  <el-select v-model="searchForm.empId">
+                    <el-option v-for="item in edpList" :key="item.empId"
+                               :label="item.empName" :value="item.empId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+
+              <el-col :span="6">
+                <el-form-item prop="complaintClassification" label="分类">
+                  <el-select v-model="searchForm.complaintClassification" placeholder="请选择分类">
+                    <el-option label="产品投诉" value="产品投诉"></el-option>
+                    <el-option label="服务投诉" value="服务投诉"></el-option>
+                    <el-option label="客户意见" value="客户意见"></el-option>
+                    <el-option label="其他" value="其他"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
                 <el-form-item>
-                  <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
-
-                    <el-button slot="append" icon="el-icon-search"></el-button>
-                  </el-input>
+                  <el-button size="mini" @click="advancedQueryClick"
+                             type="primary" icon="el-icon-search"></el-button>
                 </el-form-item>
               </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="订单编号">
-                  <el-input v-model="form.ddbh"></el-input>
-                </el-form-item>
-              </el-col >
-              <el-col :span="12">
-                <el-form-item label="产品编号">
-                  <el-input v-model="form.cpbh"></el-input>
-                </el-form-item>
-              </el-col>
-
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="接单时间">
-                  <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="序列号">
-                  <el-input v-model="form.xlh"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="问题描述">
-
-                  <el-input type="textarea" v-model="form.desc"></el-input>
-
-                </el-form-item>
-
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="维修人">
-                  <el-input v-model="form.xlh"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-
-
-              <el-col :span="12">
-                <el-form-item label="上门时间">
-                  <el-date-picker type="date" placeholder="选择日期" v-model="form.date2" style="width: 100%;"></el-date-picker>
-                </el-form-item>
-              </el-col>
-
-              <el-col :span="12">
-                <el-form-item label="故障描述">
-                  <el-input v-model="form.gzms"></el-input>
-                </el-form-item>
-              </el-col >
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="是否回访">
-                  <el-switch v-model="form.hf"></el-switch>
-                </el-form-item>
-              </el-col >
-              <el-col :span="8">
-                <el-form-item label="费用">
-                  <el-input-number v-model="num" :precision="2" :step="0.1" :max="100000"></el-input-number>
-                </el-form-item>
-              </el-col >
-
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="是否在保">
-                  <el-switch v-model="form.zb"></el-switch>
-                </el-form-item>
-              </el-col >
             </el-row>
           </el-form>
-          <div style="text-align: center;">
+        </el-card>
+      </transition>
 
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-          </div>
+      <el-table :data="listForm" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
+                :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
+                highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
+        <el-table-column type="index" width="40"></el-table-column>
+        <el-table-column prop="complaintZt" label="主题" sortable></el-table-column>
+        <el-table-column prop="complaintClassification" label="对应客户"></el-table-column>
+        <el-table-column prop="customerResp.cusName" label="费用"></el-table-column>
+        <el-table-column prop="complaintUrgent" label="状态"></el-table-column>
+        <el-table-column prop="empResp.empName" label="承接部门"></el-table-column>
+        <el-table-column prop="complaintHandlegc" label="接单人"></el-table-column>
+      </el-table>
 
-        </el-dialog>
-        <el-button><i class="el-icon-s-grid"></i></el-button>
-        <el-button><i class="el-icon-s-tools"></i></el-button>
-      </el-row>
-      <el-row>
-        <el-col :span="0"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="20"><el-table
-          ref="multipleTable"
-          :data="tableData"
-          tooltip-effect="dark"
-          style="width: 100%">
-          <el-table-column
-            type="selection"
-            width="55">
-          </el-table-column>
-          <el-table-column
-            label="ID"
-            width="120">
-            <template slot-scope="scope">{{ scope.row.date }}</template>
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="主题"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="对应客户"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="费用"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="状态"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="接单人"
-            show-overflow-tooltip>
-          </el-table-column>
-        </el-table><div class="grid-content bg-purple-light"></div></el-col>
-        <el-col :span="0"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="0"><div class="grid-content bg-purple-light"></div></el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="1"><el-button><i class="el-icon-delete"></i></el-button><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="1"><el-button><i class="el-icon-edit"></i></el-button><div class="grid-content bg-purple-light"></div></el-col>
-        <el-col :span="0"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="6"><div class="grid-content bg-purple-light"></div></el-col>
-        <el-col :span="0"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="4"><div class="block">
-
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage4"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="10"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="40">
-          </el-pagination>
-        </div><div class="grid-content bg-purple-light"></div></el-col>
-      </el-row>
+      <el-pagination background
+                     @current-change="handleCurrentChange"
+                     :current-page="pageNum" :page-sizes="[1,2,5,10]"
+                     :page-size="pageSize" :total="total"
+                     layout="prev, pager, next, jumper, total">
+      </el-pagination>
     </el-card>
+
+
+
   </div>
 </template>
 <script>
   export default {
     data() {
       return {
-        options: [{
-          value: '选项1',
-          label: '接件'
-        }, {
-          value: '选项2',
-          label: '待维修'
-        }, {
-          value: '选项3',
-          label: '维修中'
-        }, {
-          value: '选项4',
-          label: '待支付'
-        }, {
-          value: '选项5',
-          label: '已支付'
-        }, {
-          value: '选项6',
-          label: '全部数据'
-        }],
         value: '',
         input: '',
         dialogVisible: false,
@@ -282,31 +152,4 @@
 </script>
 
 <style>
-  .el-row {
-    margin-bottom: 20px;
-  }
-  :last-child {
-    margin-bottom: 0;
-  }
-
-  .el-col {
-    border-radius: 4px;
-  }
-  .bg-purple-dark {
-    background: white;
-  }
-  .bg-purple {
-    background: white;
-  }
-  .bg-purple-light {
-    background: white;
-  }
-  .grid-content {
-    border-radius: 4px;
-    min-height: 10px;
-  }
-  .row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
-  }
 </style>
