@@ -162,24 +162,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-
-        <!--<el-row>
-          <el-col :span="8">
-            <el-form-item label="省" prop="ordProvince">
-              <el-input v-model="addForm.ordProvince" size="mini" placeholder="省" clearable/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="市" prop="ordCity">
-              <el-input v-model="addForm.ordCity" size="mini" placeholder="市" clearable/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="区/县" prop="ordCountry">
-              <el-input v-model="addForm.ordCountry" size="mini" placeholder="区/县" clearable/>
-            </el-form-item>
-          </el-col>
-          </el-row>-->
         <el-row>
           <el-col :span="24">
             <el-form-item label="详细地址" prop="ordDetail">
@@ -190,17 +172,19 @@
       </el-form>
       <el-popover
         placement="right"
-        width="700"
-        trigger="click">
+        width="850"
+        trigger="click" >
         <el-table :data="gridData">
-          <el-table-column property="date" label="产品编号"></el-table-column>
-          <el-table-column  property="name" label="产品名称"></el-table-column>
-          <el-table-column  property="address" label="产品型号"></el-table-column>
-          <el-table-column  property="address" label="产品库存"></el-table-column>
-          <el-table-column property="address" label="产品价格"></el-table-column>
-          <el-table-column property="address" label="操作"></el-table-column>
+          <el-table-column property="productBrand" label="产品品牌"></el-table-column>
+          <el-table-column width="250px" property="productName" label="产品名称"></el-table-column>
+          <el-table-column property="productModel" label="产品型号"></el-table-column>
+          <el-table-column property="productStock" label="产品库存"></el-table-column>
+          <el-table-column property="productPrice" label="产品价格"></el-table-column>
+          <el-table-column label="操作">
+            <el-button type="text" size="small" icon="el-icon-plus" @click="addpro"></el-button>
+          </el-table-column>
         </el-table>
-        <el-button slot="reference" icon="el-icon-plus" type="primary">选择产品</el-button>
+        <el-button slot="reference" icon="el-icon-plus" type="primary" @click="choosepro">选择产品</el-button>
       </el-popover>
       <h3>购物车</h3>
       <!--<el-table :data="szorder">-->
@@ -305,6 +289,7 @@
   import {orderHttp} from "../../network/system/order";
   import {pca,pcaa} from 'area-data'
   import {customerHttp} from "../../network/pre_sale/customer";
+  import {productHttp} from "../../network/system/product";
 
   export default {
     name: "Order",
@@ -400,7 +385,6 @@
         console.log("di",this.selected2)
       },
       advancedQueryClick() {
-
         orderHttp.list(this.searchForm).then(res => {
           if (res.code === 20000) {
             this.listForm = res.data.list
@@ -433,6 +417,16 @@
         this.$refs.addFormRef.resetFields()
         this.addForm.cusIdList = []
         this.addOrderButtonLoading = false
+      },
+      choosepro(){
+        productHttp.listAll(this.gridData).then(res=>{
+          this.gridData = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
+      },
+      addpro(){
+        console.log("+++")
       },
       openEditOrder(){
         /*修改订单*/
@@ -566,6 +560,7 @@
         })
       },
       initList() {
+
         orderHttp.listPage(this.pageNum,this.pageSize).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total

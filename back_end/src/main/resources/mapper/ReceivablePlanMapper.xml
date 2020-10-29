@@ -50,4 +50,5 @@
             insert into sz_receivable_plan(plan_money, plan_time, plan_period, plan_caozuopeople, plan_caozuotime, plan_invoice, ord_id) values
             (#{planMoney},#{planTime},#{planPeriod},#{planCaozuopeople},#{planCaozuotime},#{planInvoice},#{ordId})
     </insert>
+
 </mapper>
