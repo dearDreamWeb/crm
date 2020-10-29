@@ -6,7 +6,6 @@
         <id property="planId" column="plan_id"/>
         <result property="planMoney" column="plan_money"/>
         <result property="planTime" column="plan_time"/>
-        <result property="planMoney" column="plan_money"/>
         <result property="planPeriod" column="plan_period"/>
         <result property="planCaozuopeople" column="plan_caozuopeople"/>
         <result property="planCaozuotime" column="plan_caozuotime"/>
@@ -36,4 +35,16 @@
         </where>
         ORDER BY plan_money DESC
     </select>
+
+    <select id="getszPlan" resultMap="szPlanResult">
+        SELECT * FROM sz_receivable_plan WHERE plan_id = #{planId}
+    </select>
+
+    <insert id="addPlan" parameterType="com.example.entity.request.SzReceivablePlan">
+        <selectKey keyProperty="planId" keyColumn="plan_id" resultType="Integer" order="AFTER">
+            SELECT last_insert_id();
+        </selectKey>
+            insert into sz_receivable_plan(plan_money, plan_time, plan_period, plan_caozuopeople, plan_caozuotime, plan_invoice, ord_id) values
+            (#{planMoney},#{})
+    </insert>
 </mapper>
