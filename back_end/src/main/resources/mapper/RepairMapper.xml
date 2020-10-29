@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.RepairMapper">
+    <resultMap id="RepairResult" type="com.example.entity.request.Repair">
+        <id property="repairId" column="care_id"/>
+        <result property="empId" column="care_carezt"/>
+        <result property="repairDate" column="care_lxrcontacts"/>
+        <result property="repairProblem" column="care_date"/>
+        <result property="repairPersonnel" column="care_executor"/>
+        <result property="repairAppointment" column="care_carenr"/>
+        <result property="repairActual" column="cus_id"/>
+        <result property="repairGdstae" column="emp_id"/>
+        <result property="repairFault" column="care_customerfk"/>
+        <result property="repairHfjl" column="care_customerfk"/>
+        <result property="repairWxfy" column="care_customerfk"/>
+        <result property="repairSfzb" column="care_customerfk"/>
+        <result property="cusId" column="care_customerfk"/>
+        <result property="productId" column="care_customerfk"/>
+        <result property="orderId" column="care_customerfk"/>
+    </resultMap>
+    <select id="getRepair" resultMap="RepairResult">
+        SELECT r.*
+        FROM repair_order r
+        WHERE r.repair_id = #{repairId}
+    </select>
+</mapper>
