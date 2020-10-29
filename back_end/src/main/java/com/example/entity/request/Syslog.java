@@ -24,5 +24,6 @@ public class Syslog {
     private String logIp;//
     private String logUri;//
     private Date createTime;//时间
-    private EmpResp emp;
+    private String startDate;
+    private String endDate;
 }

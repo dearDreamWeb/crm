@@ -1,37 +1,16 @@
 import {postJson,get} from "../request";
 
 export const syslogHttp = {
-  login:function (syslog) {
-    let params = {
-      url:'/syslog/login',
-      data:{
-
-      }
-    }
-    return postJson(params)
-  },
-  getEmp:function (logId) {
-    let params = {
-      url:'/syslog',
-      data:{
-        'logId':logId
-      }
-    }
-    return get(params)
-  },
-
-  queryEmp:function (syslog) {
+  search:function (syslog) {
     let params = {
       url:'/syslog/list',
       data:{
         'logTitle':syslog.logTitle,
-        'empId':syslog.empId,
         'userId':syslog.userId,
         'logMethod':syslog.logMethod,
         'logContent':syslog.logContent,
-        'logIp':syslog.logIp,
-        'logUri':syslog.logUri,
-        'createTime':syslog.createTime,
+        'startDate':syslog.startDate,
+        'endDate':syslog.endDate
       }
     }
     return get(params)

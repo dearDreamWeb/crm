@@ -27,20 +27,7 @@ public class SyslogServicelmpl implements SyslogService {
     private SyslogMapper syslogMapper;
 
     @Override
-    public ResultVo getSyslog(Integer logId) {
-        Syslog syslog = syslogMapper.getSyslog(logId);
-        EmpResp emp = syslog.getEmp();
-        Integer empId = emp.getEmpId();
-        syslog.setUserId(empId);
-        //服务器向客户端发送JSON：测试
-        Gson gson = new Gson();
-        String json = gson.toJson(syslog);
-
-        return ResultUtils.response(syslog);
-    }
-    @Override
     public ResultVo listSyslog(Syslog syslog) {
-
         List<Syslog> list = syslogMapper.listSyslog(syslog);
         return ResultUtils.response(list);
     }

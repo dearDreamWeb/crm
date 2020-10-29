@@ -20,11 +20,6 @@ public class SyslogController {
     @Autowired
     private SyslogService syslogService;
 
-    @GetMapping
-    public ResultVo getSyslog(@RequestParam("logId")Integer logId) {
-        return syslogService.getSyslog(logId);
-    }
-
     @GetMapping("/list")
     public ResultVo listDict(Syslog syslog) {
         return syslogService.listSyslog(syslog);

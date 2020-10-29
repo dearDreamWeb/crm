@@ -10,5 +10,4 @@ import com.example.entity.request.Syslog;
  */
 public interface SyslogService {
     ResultVo listSyslog(Syslog syslog);
-    ResultVo getSyslog(Integer logId);
 }

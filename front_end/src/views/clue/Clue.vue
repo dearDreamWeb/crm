@@ -225,9 +225,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="处理结果">
-              <el-tag v-if="clueDetail.handleResult === 1">有效</el-tag>
-              <el-tag v-if="clueDetail.handleResult == null">暂未处理</el-tag>
-              <el-tag v-else>无效</el-tag>
+<!--              <el-tag v-if="clueDetail.handleResult === 1">有效</el-tag>-->
+<!--              <el-tag v-if="clueDetail.handleResult == null">暂未处理</el-tag>-->
+<!--              <el-tag v-else>无效</el-tag>-->
+              <el-tag>{{clueDetail.handleResult | clueHandleResultFormat}}</el-tag>
             </el-form-item>
           </el-col>
           <el-col :span="8">

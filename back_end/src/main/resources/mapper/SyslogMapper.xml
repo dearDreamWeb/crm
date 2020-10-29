@@ -11,32 +11,7 @@
         <result property="logIp" column="ip"/>
         <result property="logUri" column="uri"/>
         <result property="createTime" column="create_time"/>
-        <association property="emp" resultMap="EmpResult"/>
     </resultMap>
-
-    <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
-        <id property="empId" column="emp_id"/>
-        <result property="empName" column="emp_name"/>
-        <result property="nickName" column="nick_name"/>
-        <result property="email" column="email"/>
-        <result property="sex" column="sex"/>
-        <result property="passWord" column="password"/>
-        <result property="phone" column="phone"/>
-        <result property="empStatus" column="emp_status"/>
-        <result property="token" column="token"/>
-        <result property="remark" column="remark"/>
-        <result property="version" column="version"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="isDelete" column="is_delete"/>
-    </resultMap>
-
-    <select id="getSyslog" resultMap="SyslogResult" parameterType="Integer">
-        select
-        from sys_log s
-        inner join emp e on s.user_id = e.emp_id
-        where e.emp_id = #{empId}
-    </select>
 
     <select id="listSyslog" resultMap="SyslogResult">
         SELECT log_id,log_title,user_id,method,content,ip,uri,create_time
@@ -45,23 +20,14 @@
             <if test="logTitle != null and logTitle != ''">
                 AND log_title LIKE CONCAT('%',#{logTitle},'%')
             </if>
-            <if test="userId != null and userId != ''">
-                AND user_id LIKE CONCAT('%',#{userId},'%')
+            <if test="userId != null">
+                AND user_id = #{userId}
             </if>
-            <if test="logMethod != null and logMethod != ''">
-                AND method LIKE CONCAT('%',#{logMethod},'%')
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
             </if>
-            <if test="logContent != null and logContent != ''">
-                AND content LIKE CONCAT('%',#{logContent},'%')
-            </if>
-            <if test="logIp != null and logIp != ''">
-                AND ip LIKE CONCAT('%',#{logIp},'%')
-            </if>
-            <if test="logUri != null and logUri != ''">
-                AND uri LIKE CONCAT('%',#{logUri},'%')
-            </if>
-            <if test="createTime != null and createTime != ''">
-                AND create_time LIKE CONCAT('%',#{logMethod},'%')
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
         </where>
     </select>

@@ -1,94 +1,114 @@
 <template>
   <div>
-    <el-card>
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <el-form :v-model="searchForm">
-            <el-form-item label="名称">
-              <el-select v-model="searchForm.userId" size="mini" placeholder="请选择名称">
-                <el-option v-for="item in empList" :key="item.empId" :label="item.empName" :value="item.empId"></el-option>
-
+    <el-row :gutter="20">
+      <el-col :span="10">
+        <el-card>
+          <el-form :v-model="searchForm" size="mini" label-width="80px" label-position="right">
+            <el-form-item label="操作人" prop="userId">
+              <el-select v-model="searchForm.userId" clearable>
+                <el-option v-for="item in empList" :key="item.empId"
+                           :label="item.empName" :value="item.empId">
+                </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item prop="logTitle" label="标题">
-              <el-input v-model="searchForm.logTitle" placeholder="请输入标题"></el-input>
+            <el-form-item label="标题" prop="logTitle">
+              <el-input v-model="searchForm.logTitle" placeholder="请输入标题"
+                        clearable style="width: 60%"></el-input>
             </el-form-item>
-            <el-form-item prop="logId" label="id">
-              <el-input v-model="searchForm.logId" placeholder="请输入id"></el-input>
+            <el-form-item label="开始时间" prop="startDate">
+              <el-date-picker v-model="searchForm.startDate" format="yyyy-MM-dd"
+                              value-format="yyyy-MM-dd" type="date"
+                              placeholder="请输入"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="结束时间" prop="endDate">
+              <el-date-picker v-model="searchForm.endDate" format="yyyy-MM-dd"
+                              value-format="yyyy-MM-dd" type="date"
+                              placeholder="请输入"></el-date-picker>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="advancedQueryClick">查询</el-button>
+              <el-button icon="el-icon-search" type="primary" @click="searchClick"></el-button>
             </el-form-item>
           </el-form>
-        </el-col>
+        </el-card>
+      </el-col>
 
-          <el-col :span="18">
-            <el-timeline size="mini" :model="listForm" @row-click="handleRowClick" v-loading="tableLoading">
-              <el-timeline-item timestamp="" placement="top">
-                <el-card>
-                  <p type="index" width="50"></p>
-                  <p v-model="listForm.logTitle" label="标题"></p>
-                  <p v-model="listForm.userId" label="操作人id"></p>
-                  <p v-model="listForm.logMethod" label="方法"></p>
-                  <p v-model="listForm.logContent" label="操作内容"></p>
-                  <p v-model="listForm.logIp" label="ip"></p>
-                  <p v-model="listForm.logUri" label="uri"></p>
-                  <p v-model="listForm.createTime" label="时间"></p>
-                </el-card>
-              </el-timeline-item>
-            </el-timeline>
-          </el-col>
-      </el-row>
-
-    </el-card>
+      <el-col :span="14">
+        <el-card>
+          <div class="radio">
+            排序：
+            <el-radio-group v-model="reverse">
+              <el-radio :label="true">倒序</el-radio>
+              <el-radio :label="false">正序</el-radio>
+            </el-radio-group>
+            时间格式化有误
+          </div>
+          <hr>
+          <el-timeline :reverse="reverse">
+            <el-timeline-item v-for="item in listForm" :key="item.logId"
+                              icon="el-icon-more" type="primary" size="large"
+                              :timestamp="item.createTime" :hide-timestamp="true">
+              日志标题：<el-tag class="timeLineTag" type="success">{{item.logTitle}}</el-tag>
+              <br>
+              调用方法：<el-tag class="timeLineTag" type="warning">{{item.logMethod}}</el-tag>
+              <br>
+              操作时间：<el-tag class="timeLineTag" type="info">{{item.createTime | dateTimeFormat}}</el-tag>
+              <hr>
+            </el-timeline-item>
+          </el-timeline>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-    import {syslogHttp} from "../../network/system/syslog";
-    import {userHttp} from "../../network/system/user";
+import {syslogHttp} from "../../network/system/syslog";
+import {userHttp} from "../../network/system/user";
 
-    export default {
-      data(){
-        return{
-          empList:[],
-            searchForm:{
-              userId:'',
-              logTitle:'',
-              logId:'',
+export default {
+  data(){
+    return{
+      listForm:[],
+      reverse:true,
 
-            },
-          logTitle:'',
-          listForm:[],
-          tableLoading:false,
-        }
+      searchForm:{
+        userId:'',
+        logTitle:'',
+        startDate:'',
+        endDate:''
       },
-      methods:{
-        initEdpList(){
-          userHttp.list().then(res =>{
-            this.empList = res.data.list
-          })
-        },
-        advancedQueryClick(){
-          syslogHttp.queryEmp(this.searchForm).then(res =>{
-            if (res.code ===20000){
-              this.listForm = res.data.list
-            }
-          })
-        },
-        handleRowClick(row,event,column) {
-          this.rowEmpId = row.logId
-          if (this.rowEmpId != 0) {
-            this.buttonDisabled = false
-          }
-        },
-        created(){
-          this.initEdpList()
-        }
-      }
+      empList:[],
+
+      count: 10,
+      loading: false
     }
+  },
+  methods:{
+    searchClick() {
+      syslogHttp.search(this.searchForm).then(res => {
+        this.listForm = res.data
+      })
+    },
+    initLogList() {
+      syslogHttp.list().then(res => {
+        this.listForm = res.data
+      })
+    },
+    initEmpList() {
+      userHttp.list().then(res => {
+        this.empList = res.data.list
+      })
+    }
+  },
+  created(){
+    this.initLogList()
+    this.initEmpList()
+  }
+}
 </script>
 
 <style scoped>
-
+.timeLineTag{
+  margin-bottom: 10px;
+}
 </style>

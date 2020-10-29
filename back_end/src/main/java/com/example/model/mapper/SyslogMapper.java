@@ -13,5 +13,4 @@ import java.util.List;
 @Repository
 public interface SyslogMapper {
     List<Syslog> listSyslog(Syslog syslog);
-    Syslog getSyslog(Integer logId);
 }
