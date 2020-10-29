@@ -24,8 +24,11 @@
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
+        <!--<el-table-column prop="customerResp.cusName" label="客户"></el-table-column>-->
+        <el-table-column prop="order.ordTheme" label="订单主题" sortable></el-table-column>
 
         <el-table-column prop="planMoney" label="回款金额" sortable></el-table-column>
+
         <el-table-column prop="planTime" label="计划回款时间" sortable>
           <template slot-scope="scope">
             {{scope.row.planTime | dateFormat}}
@@ -58,14 +61,11 @@
                label-position="right" :rules="formRules">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="主题" prop="ordTheme">
+            <el-form-item label="1" prop="ordTheme">
               <el-input v-model="addForm.ordTheme" size="mini" placeholder="请输入主题" clearable/>
             </el-form-item>
           </el-col>
-          <el-col :span="8" width="600px">
-            <el-form-item label="客户">
-            </el-form-item>
-          </el-col>
+
           <el-col :span="8">
             <el-form-item label="总金额" prop="ordTotalmoney">
               <el-input v-model="addForm.ordTotalmoney" size="mini" placeholder="请输入总金额" clearable/>

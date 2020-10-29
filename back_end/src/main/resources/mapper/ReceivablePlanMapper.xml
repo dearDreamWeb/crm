@@ -13,25 +13,28 @@
         <result property="ordId" column="ord_id"/>
     </resultMap>
     <select id="listszPlan" resultMap="szPlanResult">
-        SELECT plan_id, plan_money, plan_time, plan_period, plan_caozuopeople, plan_caozuotime, plan_invoice, ord_id
-        FROM sz_receivable_plan
+        SELECT p.*,s.*
+        FROM sz_receivable_plan p
+        left join sz_order s on p.ord_id=s.ord_id
         <where>
             <if test="planTime != null and planTime !='' ">
-                AND plan_time LIKE CONCAT('%',#{planTime})
+                AND p.plan_time LIKE CONCAT('%',#{planTime})
             </if>
             <if test="planMoney != null and planMoney !='' ">
-                AND plan_money LIKE CONCAT('%',#{planMoney})
+                AND p.plan_money LIKE CONCAT('%',#{planMoney})
             </if>
             <if test="planPeriod != null and planPeriod !='' ">
-                AND plan_period LIKE CONCAT('%',#{planPeriod})
+                AND p.plan_period LIKE CONCAT('%',#{planPeriod})
             </if>
             <if test="planCaozuopeople != null and planCaozuopeople !='' ">
-                AND plan_caozuopeople LIKE CONCAT('%',#{planCaozuopeople})
+                AND p.plan_caozuopeople LIKE CONCAT('%',#{planCaozuopeople})
             </if>
             <if test="planInvoice != null">
-                AND plan_invoice = #{planInvoice})
+                AND p.plan_invoice = #{planInvoice})
             </if>
-
+            <if test="ordId != null">
+                and p.ord_id=#{ordId}
+            </if>
         </where>
         ORDER BY plan_money DESC
     </select>
@@ -45,6 +48,6 @@
             SELECT last_insert_id();
         </selectKey>
             insert into sz_receivable_plan(plan_money, plan_time, plan_period, plan_caozuopeople, plan_caozuotime, plan_invoice, ord_id) values
-            (#{planMoney},#{})
+            (#{planMoney},#{planTime},#{planPeriod},#{planCaozuopeople},#{planCaozuotime},#{planInvoice},#{ordId})
     </insert>
 </mapper>
