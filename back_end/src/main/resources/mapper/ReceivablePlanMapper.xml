@@ -10,6 +10,7 @@
         <result property="planCaozuopeople" column="plan_caozuopeople"/>
         <result property="planCaozuotime" column="plan_caozuotime"/>
         <result property="planInvoice" column="plan_invoice"/>
+        <result property="planDel" column="plan_del"/>
         <result property="ordId" column="ord_id"/>
     </resultMap>
     <select id="listszPlan" resultMap="szPlanResult">
@@ -35,6 +36,7 @@
             <if test="ordId != null">
                 and p.ord_id=#{ordId}
             </if>
+            AND p.plan_del = 0
         </where>
         ORDER BY plan_money DESC
     </select>
@@ -50,4 +52,30 @@
             insert into sz_receivable_plan(plan_money, plan_time, plan_period, plan_caozuopeople, plan_caozuotime, plan_invoice, ord_id) values
             (#{planMoney},#{planTime},#{planPeriod},#{planCaozuopeople},#{planCaozuotime},#{planInvoice},#{ordId})
     </insert>
+
+    <update id="delszPlan" parameterType="Integer">
+        UPDATE sz_receivable_plan SET plan_del = 1
+        WHERE plan_id = #{planId}
+    </update>
+
+    <update id="editszPlan" parameterType="SzReceivablePlan">
+        update sz_receivable_plan set plan_caozuotime = #{planCaozuotime}
+        <if test="planMoney !=null and planMoney != ''">
+            ,plan_money = #{planMoney}
+        </if>
+        <if test="planTime !=null and planTime != ''">
+            ,plan_time = #{planTime}
+        </if>
+        <if test="planPeriod !=null and planPeriod != ''">
+            ,plan_period = #{planPeriod}
+        </if>
+        <if test="planCaozuopeople !=null and planCaozuopeople != ''">
+            ,plan_caozuopeople = #{planCaozuopeople}
+        </if>
+        <if test="planInvoice !=null and planInvoice != ''">
+            ,plan_invoice = #{planInvoice}
+        </if>
+        where plan_id = #{planId}
+    </update>
+
 </mapper>

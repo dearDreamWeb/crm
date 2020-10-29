@@ -1,6 +1,17 @@
 import {postJson,get} from "../request";
 
 export const planHttp = {
+
+  delPlan:function(planId) {
+    let params = {
+      url:'/plan/del',
+      data:{
+        'planId':planId
+      }
+    }
+    return postJson(params)
+  },
+
   list:function (plan) {
     let params = {
       url:'/plan/list_all',
