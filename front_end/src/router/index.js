@@ -104,6 +104,10 @@ const routes = [
       {
         path: '/plan',
         component: () => import('../views/shouzhong/SzReceivablePlan')
+      },
+      {
+        path: '/repairorder',
+        component: () => import('../views/repairorder/Repairorder')
       }
     ]
   }

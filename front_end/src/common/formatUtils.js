@@ -56,6 +56,13 @@ export function delStateFormat(delState) {
     return '未发货'
   }
 }
+export function planInvoiceFormat(planInvoice) {
+  if (planInvoice === 1){
+    return '已开票'
+  } else {
+    return '未开票'
+  }
+}
 
 export function clueHandleResultFormat(handleResult) {
   if (handleResult === 1) {
