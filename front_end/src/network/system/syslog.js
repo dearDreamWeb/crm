@@ -25,6 +25,7 @@ export const syslogHttp = {
       url:'/syslog/list',
       data:{
         'logTitle':syslog.logTitle,
+        'empId':syslog.empId,
         'userId':syslog.userId,
         'logMethod':syslog.logMethod,
         'logContent':syslog.logContent,
