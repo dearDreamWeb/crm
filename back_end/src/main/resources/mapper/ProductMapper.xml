@@ -85,14 +85,17 @@
             <if test="productName != null and productName != ''">
                 AND product_name LIKE CONCAT('%',#{productName},'%')
             </if>
-            <if test="productImage != null and productImage != ''">
-                AND product_image LIKE CONCAT('%',#{productImage},'%')
-            </if>
             <if test="productModel != null and productModel != ''">
                 AND product_model LIKE CONCAT('%',#{productModel},'%')
             </if>
-            <if test="productPrice != null">
+            <!--<if test="productPrice != null">
                 AND product_price = #{productPrice}
+            </if>-->
+            <if test="productStartPrice != null and productStartPrice != 0">
+                AND product_price <![CDATA[>=]]> #{productStartPrice}
+            </if>
+            <if test="productEndPrice != null and productEndPrice != 0">
+                AND product_price <![CDATA[<=]]> #{productEndPrice}
             </if>
             <if test="productBrand != null and productBrand != ''">
                 AND product_brand LIKE CONCAT('%',#{productBrand},'%')
@@ -103,11 +106,23 @@
             <if test="productSize != null and productSize != ''">
                 AND product_size LIKE CONCAT('%',#{productSize},'%')
             </if>
-            <if test="productCost != null">
+            <!--<if test="productCost != null">
                 AND product_cost = #{productCost}
+            </if>-->
+            <if test="productStartCost != null and productStartCost != 0">
+                AND product_cost <![CDATA[>=]]> #{productStartCost}
+            </if>
+            <if test="productEndCost != null and productEndCost != 0">
+                AND product_cost <![CDATA[<=]]> #{productEndCost}
             </if>
             <if test="productStatus != null">
                 AND product_status = #{productStatus}
+            </if>
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
             AND is_delete = 0
         </where>

@@ -43,12 +43,20 @@ public class ProductServiceImpl implements ProductService {
         List<ProductDetail> list = new ArrayList<>(count);
 
         if (productReq.getProductId() != null) {
-            productReq.setProductStock(productReq.getProductCount()+productReq.getProductStock());
+            ProductResp product = productMapper.getProduct(productReq.getProductId());
+            productReq.setProductStock(productReq.getProductCount()+product.getProductStock());
             int editProduct = productMapper.editProduct(productReq);
             if (editProduct != 1) {
                 throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                         ResultEnum.DATA_ADD_FAIL.getMessage());
             }
+            for (int i=0;i<count;i++) {
+                ProductDetail productDetail = new ProductDetail();
+                productDetail.setProductId(productReq.getProductId());
+                productDetail.setProductBarCode(MyUtils.getUUID());
+                list.add(i,productDetail);
+            }
+            detailMapper.batchAddProductDetail(list);
         } else {
             productReq.setProductStock(count);
             productReq.setProductStatus(0);

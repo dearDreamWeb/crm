@@ -36,4 +36,8 @@ public class ProductReq {
     private String startDate;
     private String endDate;
     private Integer productCount;
+    private BigDecimal productStartCost;
+    private BigDecimal productEndCost;
+    private BigDecimal productStartPrice;
+    private BigDecimal productEndPrice;
 }

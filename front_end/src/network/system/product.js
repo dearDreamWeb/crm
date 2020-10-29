@@ -58,5 +58,50 @@ export const productHttp = {
       }
     }
     return get(params)
+  },
+  list:function (product) {
+    let params = {
+      url:'/product/list',
+      data:{
+        'productName':product.productName,
+        'productBrand':product.productBrand,
+        'productModel':product.productModel,
+        'productSize':product.productSize,
+        'productStartCost':product.productStartCost,
+        'productEndCost':product.productEndCost,
+        'productStartPrice':product.productStartPrice,
+        'productEndPrice':product.productEndPrice,
+        'productStatus':product.productStatus,
+        'startDate':product.startDate,
+        'endDate':product.endDate
+      }
+    }
+    return get(params)
+  },
+  edit:function (product) {
+    let params = {
+      url:'/product/edit',
+      data:{
+        'productId':product.productId,
+        'productName':product.productName,
+        'productBrand':product.productBrand,
+        'productModel':product.productModel,
+        'productSize':product.productSize,
+        'productPrice':product.productPrice,
+        'productCost':product.productCost,
+        'productStatus':product.productStatus,
+        'remark':product.remark
+      }
+    }
+    return postJson(params)
+  },
+  del:function (productId) {
+    let params = {
+      url:'/product/del',
+      data:{
+        'productId':productId
+      }
+    }
+    return postJson(params)
   }
 }
