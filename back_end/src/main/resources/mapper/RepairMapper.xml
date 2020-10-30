@@ -3,22 +3,42 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.model.mapper.RepairMapper">
     <resultMap id="RepairResult" type="com.example.entity.request.Repair">
-        <id property="repairId" column="care_id"/>
-        <result property="empId" column="care_carezt"/>
-        <result property="repairDate" column="care_lxrcontacts"/>
-        <result property="repairProblem" column="care_date"/>
-        <result property="repairPersonnel" column="care_executor"/>
-        <result property="repairAppointment" column="care_carenr"/>
-        <result property="repairActual" column="cus_id"/>
-        <result property="repairGdstae" column="emp_id"/>
-        <result property="repairFault" column="care_customerfk"/>
-        <result property="repairHfjl" column="care_customerfk"/>
-        <result property="repairWxfy" column="care_customerfk"/>
-        <result property="repairSfzb" column="care_customerfk"/>
-        <result property="cusId" column="care_customerfk"/>
-        <result property="productId" column="care_customerfk"/>
-        <result property="orderId" column="care_customerfk"/>
+        <id property="repairId" column="repair_id"/>
+        <result property="empId" column="repair_person"/>
+        <result property="repairDate" column="repair_receiving_time"/>
+        <result property="repairProblem" column="repair_problem"/>
+        <result property="repairPersonnel" column="repair_personnel"/>
+        <result property="repairAppointment" column="repair_appointment"/>
+        <result property="repairActual" column="repair_actual"/>
+        <result property="repairGdstae" column="repair_gdstate"/>
+        <result property="repairFault" column="repair_fault"/>
+        <result property="repairHfjl" column="repair_hfjl"/>
+        <result property="repairWxfy" column="repair_wxfy"/>
+        <result property="repairSfzb" column="repair_sfzb"/>
+        <result property="cusId" column="cus_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="orderId" column="order_id"/>
     </resultMap>
+    <select id="listRepair" resultMap="RepairResult">
+        SELECT repair_id,repair_person,repair_receiving_time,repair_problem,repair_personnel,repair_appointment,repair_actual,repair_gdstate,repair_fault,repair_hfjl,repair_wxfy,repair_sfzb
+        FROM repair_order
+        <where>
+            <if test="repairProblem != null and repairProblem != ''">
+                AND repair_problem LIKE CONCAT('%',#{repairProblem},'%')
+            </if>
+            <if test="repairGdstae != null and repairGdstae != ''">
+                AND repair_gdstate LIKE CONCAT('%',#{repairGdstae},'%')
+            </if>
+            <if test="repairWxfy != null">
+                AND repair_wxfy = #{repairWxfy}
+            </if>
+            <if test="repairSfzb != null and repairSfzb != ''">
+                AND repair_sfzb LIKE CONCAT('%',#{repairSfzb},'%')
+            </if>
+        </where>
+        ORDER BY repair_receiving_time DESC
+    </select>
+
     <select id="getRepair" resultMap="RepairResult">
         SELECT r.*
         FROM repair_order r

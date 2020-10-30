@@ -1,6 +1,7 @@
 package com.example.controller.system;
 
 import com.example.entity.ResultVo;
+import com.example.entity.request.Repair;
 import com.example.service.RepairService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,5 +24,10 @@ public class RepairController {
     @GetMapping
     public ResultVo getDict(@RequestParam("repairId")Integer repairId) {
         return repairService.getRepair(repairId);
+    }
+
+    @GetMapping("/list")
+    public ResultVo listDict( Repair repair) {
+        return repairService.listRepair(repair);
     }
 }

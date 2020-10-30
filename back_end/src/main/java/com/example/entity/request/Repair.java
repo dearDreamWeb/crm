@@ -31,4 +31,6 @@ public class Repair {
     private Integer productId;
     private Integer orderId;
     private Integer dictId;
+    private Integer pageNum;
+    private Integer pageSize;
 }
