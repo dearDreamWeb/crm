@@ -24,4 +24,9 @@ public class SzOrderDetailsServiceLmpl implements SzOrderDetailsService {
     public List<SzOrderDetails> listOrderANDOrderDet(Integer odetId) {
         return szorderDetailsMapper.listOrderANDOrderDet(odetId);
     }
+
+    @Override
+    public List<SzOrderDetails> addOrderANDOrderDet() {
+        return szorderDetailsMapper.addOrderANDOrderDet();
+    }
 }

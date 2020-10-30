@@ -19,4 +19,6 @@ public class SzOrderDetails {
     private BigDecimal odetBuymoney;//购买价格
     private Integer ordId;//订单编号
     private Integer productId;//产品编号
+
+    private SzOrder szOrder;
 }

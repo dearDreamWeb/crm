@@ -1,8 +1,10 @@
 package com.example.controller.system;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.SzOrder;
+import com.example.entity.request.SzOrderDetails;
 import com.example.service.SzOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -52,5 +54,16 @@ public class SzOrderController {
     @GetMapping("/and_all")
     public List<SzOrder> OrdANDDel() {
         return szorderService.OrdANDDel();
+    }
+
+    @RequestMapping("/add_deta")
+    public void addOrderANDOrderDet(String product) {
+        //JSONObject obj=(JSONObject)JSONObject.parse(product);
+        //List products = obj.getObject("pur",List.class);
+        System.out.println("product"+product);
+       // System.out.println("products"+products);
+
+
+        //return szOrderServicelmpl.addOrderANDOrderDet();
     }
 }

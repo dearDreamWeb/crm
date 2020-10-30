@@ -15,4 +15,5 @@ import java.util.List;
 @Repository
 public interface SzOrderDetailsMapper {
     List<SzOrderDetails> listOrderANDOrderDet(Integer odetId);
+    List<SzOrderDetails> addOrderANDOrderDet();
 }

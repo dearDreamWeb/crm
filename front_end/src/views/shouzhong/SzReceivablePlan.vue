@@ -25,7 +25,9 @@
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
 
+        <!--<el-table-column prop="customerResp.cusName" label="客户"></el-table-column>-->
         <el-table-column prop="order.ordTheme" label="订单主题" sortable></el-table-column>
+
         <el-table-column prop="planMoney" label="回款金额" sortable></el-table-column>
         <el-table-column prop="planTime" label="计划回款时间" sortable>
           <template slot-scope="scope">
@@ -59,20 +61,39 @@
                label-position="right" :rules="formRules">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="选择订单" prop="ordTheme">
-              <el-input v-model="addForm.ordTheme" size="mini" placeholder="请选择订单" clearable/>
+            <el-form-item label="选择订单" >
+              <el-select v-model="addForm.ordId" placeholder="请选择订单" size="small" @change="oidChange">
+                <el-option v-for="item in ordList" :key="item.ordId"
+                           :label="item.ordTheme" :value="item.ordId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="总金额" prop="ordTotalmoney" >
-              <el-input v-model="addForm.ordTotalmoney" size="mini"  clearable :disabled="true"/>
+            <el-form-item label="总金额" size="small">  <!--clearable :disabled="true"-->
+              <el-input v-model="addForm.planMoney" size="mini" >
+                <el-option v-for="item in ordList" :key="item.ordId"
+                           :label="item.ordTotalmoney" :value="item.ordId">
+                </el-option>
+                </el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="回款日期">
-              <el-date-picker type="date" placeholder="选择计划回款日期"  style="width: 100%;"></el-date-picker>
+              <el-date-picker v-model="addForm.planTime" format="yyyy-MM-dd"
+                              value-format="yyyy-MM-dd" type="date"
+                              placeholder="请选择计划回款日期" size="small"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="操作人">
+              <el-select v-model="addForm.empId" size="small">
+                <el-option v-for="item in empList" :key="item.empId"
+                           :label="item.empName" :value="item.empId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -91,14 +112,18 @@
   import {planHttp} from "../../network/system/plan";
   import {orderHttp} from "../../network/system/order";
   import {clueHttp} from "../../network/pre_sale/clue";
+  import {userHttp} from "../../network/system/user";
+  import {careHttp} from "../../network/system/care";
 
   export default {
     name: "SzReceivavlePlan",
     data() {
       return {
         searchInput:'',
-
         addForm:{
+          ordId:'',
+          empId:'',
+          planMoney:'',
         },
         editForm:{
         },
@@ -111,6 +136,8 @@
         addDialog:false,
         addPlanButtonLoading:false,
         listForm:[],
+        ordList:[],
+        empList:[],
         pageNum:1,
         pageSize:2,
         total:1,
@@ -119,6 +146,16 @@
       }
     },
     methods: {
+      oidChange(val) {
+        console.log(val)
+        this.addForm.planMoney = val.ordTotalmoney
+        orderHttp.getOrder(val).then(res=> {
+          console.log("oidchange");
+          this.addDialog =true;
+          this.addForm = res.data
+        })
+      },
+
       searchInputClick() {
         this.listForm.planCaozuopeople = this.searchInput
         planHttp.list(this.listForm).then(res => {
@@ -131,10 +168,40 @@
       }
       ,
       openAddDialog() {
-        this.addDialog = true
+        this.addDialog = true,
+        this.initOrderList(),
+        this.initEmpList()
+      },
+      initEmpList(){
+        userHttp.list().then(res =>{
+          this.empList = res.data.list
+        })
+      },
+      initOrderList(){
+        orderHttp.list().then(res=>{
+          this.ordList=res.data.list
+        })
       },
       addPlanClick(){
-
+        console.log(this.$refs)
+        this.$refs["addform"].validate(valid => {
+          if (!valid) return
+          this.addDictButtonLoading = true
+          planHttp.add(this.addform).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+              this.addDialog = false
+              this.addDictButtonLoading = false
+            } else {
+              this.$message({
+                message:res.message,
+                type:"error"
+              })
+              this.addDictButtonLoading = false
+            }
+          })
+        })
       },
       resetForm() {
         this.$refs.advancedSearchFormRef.resetFields()
@@ -213,7 +280,9 @@
       },
     },
     created() {
-      this.initList()
+      this.initList(),
+      this.initOrderList(),
+      this.initEmpList()
     }
   }
 </script>
