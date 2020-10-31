@@ -5,9 +5,13 @@ import com.example.entity.request.Repair;
 import com.example.model.mapper.RepairMapper;
 import com.example.service.RepairService;
 import com.example.util.ResultUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author: liuleimin
@@ -22,9 +26,19 @@ public class RepairServicelmpl implements RepairService {
 
     @Override
     public ResultVo listRepair(Repair repair) {
-        return null;
+        Integer pageNum = repair.getPageNum();
+        Integer pageSize = repair.getPageSize();
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+        PageHelper.startPage(pageNum,pageSize);
+        List<Repair> repairs = repairMapper.listRepair(repair);
+        PageInfo<Repair> list = new PageInfo<>(repairs);
+        return ResultUtils.response(list);
     }
-
     @Override
     public ResultVo getRepair(Integer repairId) {
         Repair repair = repairMapper.getRepair(repairId);
