@@ -130,7 +130,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8" width="600px">
-            <el-form-item label="客户">
+            <el-form-item label="客户" size="mini">
               <el-select v-model="addForm.cusId" placeholder="请选择客户" >
                 <el-option v-for="item in cusList" :key="item.cusId"
                            :label="item.cusName" :value="item.cusId">
@@ -157,7 +157,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="地址">
+            <el-form-item label="地址" size="mini">
               <area-cascader type='text' v-model="selected2" :level='1' :data="pcaa" @change="areaCascaderChange"></area-cascader>
             </el-form-item>
           </el-col>
@@ -172,32 +172,48 @@
       </el-form>
       <el-popover
         placement="right"
-        width="850"
+        width="650" heigth="350px"
         trigger="click" >
+
+        <el-input v-model="searchInputpro" size="mini" placeholder="请根据产品名称进行查询" clearable>
+          <el-button @click="searchInputClickpro" slot="append" icon="el-icon-search"></el-button>
+        </el-input>
+
         <el-table :data="gridData">
-          <el-table-column property="productBrand" label="产品品牌"></el-table-column>
-          <el-table-column width="250px" property="productName" label="产品名称"></el-table-column>
-          <el-table-column property="productModel" label="产品型号"></el-table-column>
-          <el-table-column property="productStock" label="产品库存"></el-table-column>
-          <el-table-column property="productPrice" label="产品价格"></el-table-column>
-          <el-table-column label="操作">
-            <el-button type="text" size="small" icon="el-icon-plus" @click="addpro"></el-button>
+          <el-table-column width="80" property="productBrand" label="品牌"></el-table-column>
+          <el-table-column width="210" property="productName" label="产品名称" ></el-table-column>
+          <el-table-column property="productModel" label="型号"></el-table-column>
+          <el-table-column property="productStock" label="库存"></el-table-column>
+          <el-table-column property="productPrice" label="价格"></el-table-column>
+          <el-table-column width="80" label="操作" >
+            <template slot-scope="scope">
+              <el-button type="text" size="small" icon="el-icon-plus" @click="addpro(scope.row)" :disabled="isDisable"></el-button>
+            </template>
           </el-table-column>
         </el-table>
+        <el-pagination background
+                       @current-change="AddProPage"
+                       :current-page="pageNum" :page-sizes="[1,2,5,10]"
+                       :page-size="pageSize" :total="total"
+                       layout="prev, pager, next, jumper, total">
+        </el-pagination>
         <el-button slot="reference" icon="el-icon-plus" type="primary" @click="choosepro">选择产品</el-button>
       </el-popover>
       <h3>购物车</h3>
       <!--<el-table :data="szorder">-->
-      <el-table>
-        <el-table-column property="odetId" label="产品编号"></el-table-column>
-        <el-table-column property="productId" label="产品名称" ></el-table-column>
-        <el-table-column property="productId" label="产品型号" ></el-table-column>
-        <el-table-column property="odetBuynum" label="购买数量" ></el-table-column>
-        <el-table-column property="odetBuymoney" label="购买价格" ></el-table-column>
+      <el-table :data="addproplus" >
+        <el-table-column property="productBrand" label="产品品牌"></el-table-column>
+        <el-table-column property="productName" label="产品名称" ></el-table-column>
+        <el-table-column property="productModel" label="产品型号"></el-table-column>
+        <el-table-column label="数量">
+          <el-input-number size="mini" v-model="numpro" :step="1" ></el-input-number>
+        </el-table-column>
+        <el-table-column property="productPrice" label="产品价格"></el-table-column>
         <el-table-column property="odetBuymoney" label="操作" >
-          <el-button type="text">查看详情</el-button>
+          <el-button type="text" @click="delpro">删除</el-button>
         </el-table-column>
       </el-table>
+      <span>总金额:</span>
       <span slot="footer">
         <el-button @click="addDialog = false">取消</el-button>
         <el-button type="primary" @click="addOrderClick"
@@ -309,6 +325,8 @@
         pca:pca,
         pcaa:pcaa,
         gridData:[],
+        isDisable:false,
+        searchInputpro:'',
         editForm:{
 
         },
@@ -330,6 +348,7 @@
         buttonDisabled:true,
         advancedSearch:false,
         listForm:[],
+        numpro:1,
         pageNum:1,
         pageSize:10,
         total:1,
@@ -376,7 +395,8 @@
         dialogTableVisible:false,
         addOrdButtonLoading:false,
         szorder:[],
-        cusList:[]
+        cusList:[],
+        addproplus:[]
       }
     },
     methods: {
@@ -397,6 +417,14 @@
         this.listForm.ordTheme = this.searchInput
         orderHttp.list(this.listForm).then(res => {
           this.listForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
+      },
+      searchInputClickpro() {
+        this.gridData.productName=this.searchInputpro
+        productHttp.list(this.gridData).then(res => {
+          this.gridData = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
@@ -425,8 +453,32 @@
           this.pageNum = res.data.pageNum
         })
       },
-      addpro(){
-        console.log("+++")
+      delpro(){
+
+      },
+      addpro(val){
+       /* this.isDisable=true;*/
+        this.addDialog=true;
+          if(this.addproplus.find(item => item.productName === val.productName)){
+            //已存在商品  修改数量
+            alert("改产品已添加")
+        }else{
+            this.addproplus.push(val);
+        }
+
+        // orderHttp.addpro(val).then(res=>{
+        //   console.log(res);
+        //   this.gridData=res;
+        // })
+      },
+      AddProPage(pageIndex){
+        this.pageNum = pageIndex
+        this.pageSize = this.pageSize
+        productHttp.listPage(this.pageNum,this.pageSize).then(res => {
+          this.listForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
       },
       openEditOrder(){
         /*修改订单*/
@@ -479,7 +531,6 @@
           }
           this.editDialog = true;
           this.editForm = res.data
-          window.console.log(1111)
         })
       },
       openAddDialog() {
@@ -504,15 +555,15 @@
         this.addForm.ordProvince=this.selected2[0];
         this.addForm.ordCity = this.selected2[1];
         this.addForm.ordCountry=this.selected2[2];
-        /*console.log("1:"+this.addForm.cusId);*/
         console.log(this.addForm.ordHead)
         let s = this.addForm.cusId;
+        var product=JSON.stringify({pur:this.addproplus,prod:this.addForm})
+        console.log("pro:"+product);
         this.$refs.addFormRef.validate(valid => {
-         /* console.log("2:"+s);*/
+
           if (!valid) return
           this.addOrderButtonLoading = true
-          orderHttp.addOrder(this.addForm).then(res =>{
-
+          orderHttp.addOrder(product).then(res =>{
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.initList()

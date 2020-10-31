@@ -1,5 +1,7 @@
 package com.example.controller.system;
 
+import com.alibaba.fastjson.JSONObject;
+import com.example.entity.request.SzOrder;
 import com.example.entity.request.SzOrderDetails;
 import com.example.service.impl.SzOrderDetailsServiceLmpl;
 import com.example.service.impl.SzOrderServicelmpl;
@@ -26,5 +28,16 @@ public class SzOrderDetailsController {
         System.out.println(odetId);
         return szOrderServicelmpl.listOrderANDOrderDet(odetId);
     }
+
+//    @RequestMapping("/add")
+//    public List<SzOrderDetails> addOrderANDOrderDet(String product) {
+//        JSONObject obj=(JSONObject)JSONObject.parse(product);
+//        List products = obj.getObject("pur",List.class);
+//        System.out.println("product"+product);
+//        System.out.println("products"+products);
+//
+//
+//        return szOrderServicelmpl.addOrderANDOrderDet();
+//    }
 
 }

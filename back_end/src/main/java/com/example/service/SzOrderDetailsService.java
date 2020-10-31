@@ -13,4 +13,5 @@ import java.util.List;
 
 public interface SzOrderDetailsService {
     List<SzOrderDetails> listOrderANDOrderDet(Integer odetId);
+    List<SzOrderDetails> addOrderANDOrderDet();
 }

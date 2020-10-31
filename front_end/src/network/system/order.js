@@ -1,20 +1,22 @@
 import {postJson,get} from "../request";
 
 export const orderHttp = {
-  addOrder:function(order) {
+  addOrder:function(product) {
+    console.log(product);
     let params = {
-      url:'/order/add',
+      url:'/order/add_deta',
       data:{
-        'ordTheme':order.ordTheme,
-        'ordHead':order.ordHead,
-        'ordTotalmoney':order.ordTotalmoney,
-        'ordConsignee':order.ordConsignee,
-        'ordPhone':order.ordPhone,
-        'ordProvince':order.ordProvince,
-        'ordCity':order.ordCity,
-        'ordCountry':order.ordCountry,
-        'ordDetail':order.ordDetail,
-        "cusId":order.cusId
+        'product':product,
+        /*'ordTheme':product.prod.ordTheme,
+        'ordHead':product.prod.ordHead,
+        'ordTotalmoney':product.prod.ordTotalmoney,
+        'ordConsignee':product.prod.ordConsignee,
+        'ordPhone':product.prod.ordPhone,
+        'ordProvince':product.prod.ordProvince,
+        'ordCity':product.prod.ordCity,
+        'ordCountry':product.prod.ordCountry,
+        'ordDetail':product.prod.ordDetail,
+        "cusId":product.prod.cusId*/
       }
     }
     return postJson(params)
@@ -27,15 +29,6 @@ export const orderHttp = {
       }
     }
     return postJson(params)
-  },
-  szxiangq:function (id) {
-    let params = {
-      url:'/details/all',
-      data:{
-        'odetId':id
-      }
-    }
-    return get(params)
   },
   editOrder:function (order) {
     let params = {
@@ -78,7 +71,6 @@ export const orderHttp = {
     }
     return get(params)
   },
-
   listPage:function (pageNum,pageSize) {
     let params = {
       url:'/order/list_all',
@@ -88,5 +80,22 @@ export const orderHttp = {
       }
     }
     return get(params)
+  },
+  szxiangq:function (id) {
+    let params = {
+      url:'/details/all',
+      data:{
+        'odetId':id
+      }
+    }
+    return get(params)
+  },
+  addpro:function (id) {
+    let params={
+      url:'/product/all',
+      data:{
+        'productId':id
+      }
+    }
   }
 }
