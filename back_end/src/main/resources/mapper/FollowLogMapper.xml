@@ -5,22 +5,31 @@
     <resultMap id="FollowLogResult" type="com.example.entity.response.FollowLogResp">
         <id column="follow_id" property="followId"/>
         <result column="follow_title" property="followTitle"/>
+        <result column="follow_category" property="followCategory"/>
         <result column="follow_content" property="followContent"/>
-        <result column="follow_time" property="followTime"/>
+        <result column="follow_start_time" property="followStartTime"/>
+        <result column="follow_end_time" property="followEndTime"/>
+        <result column="follow_type" property="followType"/>
+        <result column="intention" property="intention"/>
+        <result column="follow_handle_result" property="followHandleResult"/>
         <result column="version" property="version"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="is_delete" property="isDelete"/>
         <result column="emp_id" property="empId"/>
         <result column="cus_id" property="cusId"/>
+        <result column="repair_id" property="repairId"/>
+        <result column="follow_pid" property="followPid"/>
     </resultMap>
 
     <insert id="addFollow" parameterType="com.example.entity.request.FollowLogReq">
         <selectKey keyColumn="follow_id" keyProperty="followId" resultType="Integer" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO follow_log(follow_title,follow_content,follow_time,emp_id,cus_id)
-        VALUES (#{followTitle},#{followContent},#{followTime},#{empId},#{cusId})
+        INSERT INTO follow_log(follow_title,follow_category,follow_content,follow_start_time,follow_end_time,
+            follow_type,intention,follow_handle_result,emp_id,cus_id,repair_id,follow_pid)
+        VALUES (#{followTitle},#{followCategory},#{followContent},#{followStartTime},#{followEndTime},#{followType},
+            #{intention},#{followHandleResult},#{empId},#{cusId},#{repairId},#{followPid})
     </insert>
 
     <update id="delFollow" parameterType="Integer">
@@ -45,15 +54,17 @@
     </update>
 
     <select id="getFollow" resultMap="FollowLogResult">
-        SELECT follow_id,follow_title,follow_content,follow_time,
-            version,create_time,update_time,is_delete,emp_id,cus_id
+        SELECT follow_id,follow_title,follow_category,follow_content,follow_start_time,follow_end_time,
+            follow_type,intention,follow_handle_result,emp_id,cus_id,repair_id,follow_pid,version,create_time,
+            update_time,is_delete
         FROM follow_log
         WHERE follow_id = #{followId}
     </select>
 
     <select id="listFollow" resultMap="FollowLogResult" parameterType="com.example.entity.request.FollowLogReq">
-        SELECT follow_id,follow_title,follow_content,follow_time,
-            version,create_time,update_time,is_delete,emp_id,cus_id
+        SELECT  follow_id,follow_title,follow_category,follow_content,follow_start_time,follow_end_time,
+                follow_type,intention,follow_handle_result,emp_id,cus_id,repair_id,follow_pid,version,create_time,
+                update_time,is_delete
         FROM follow_log
         <where>
             <if test="followTitle != null and followTitle != ''">
@@ -74,5 +85,11 @@
             AND is_delete = 0
         </where>
         ORDER BY create_time DESC
+    </select>
+
+    <select id="listPidFollow" resultMap="FollowLogResult">
+        SELECT  follow_id,follow_title
+        FROM follow_log
+        WHERE follow_pid = 0
     </select>
 </mapper>

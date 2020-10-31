@@ -108,6 +108,10 @@ const routes = [
       {
         path: '/repairorder',
         component: () => import('../views/repairorder/Repairorder')
+      },
+      {
+        path: '/vuetify',
+        component: () => import('../views/vuetify/VuetifyTest')
       }
     ]
   }

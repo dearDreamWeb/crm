@@ -32,6 +32,12 @@ public class FollowLogServiceImpl implements FollowLogService {
     @Override
     public ResultVo addFollow(FollowLogReq followLogReq) {
         CheckUtils.validate(followLogReq);
+        if (followLogReq.getFollowPid() == null) {
+            followLogReq.setFollowPid(0);
+        }
+        if (followLogReq.getFollowPid() == null) {
+            followLogReq.setFollowPid(0);
+        }
         int addFollow = logMapper.addFollow(followLogReq);
         if (addFollow != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
@@ -98,5 +104,11 @@ public class FollowLogServiceImpl implements FollowLogService {
         List<FollowLogResp> followLogResps = logMapper.listFollow(followLogReq);
         PageInfo<FollowLogResp> list = new PageInfo<>(followLogResps);
         return ResultUtils.response(list);
+    }
+
+    @Override
+    public ResultVo listPidFollow() {
+        List<FollowLogResp> followLogResps = logMapper.listPidFollow();
+        return ResultUtils.response(followLogResps);
     }
 }
