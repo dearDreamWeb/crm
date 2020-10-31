@@ -14,4 +14,7 @@ import java.util.List;
 public interface RepairMapper {
     List<Repair> listRepair(Repair repair);
     Repair getRepair(Integer repairId);
+    int addRepair(Repair repair);
+    int updateRepair(Repair repair);
+    int deleteRepair(Integer repairId);
 }

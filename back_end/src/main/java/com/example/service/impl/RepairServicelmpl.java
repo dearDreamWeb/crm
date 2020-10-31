@@ -1,9 +1,12 @@
 package com.example.service.impl;
 
+import com.example.common.enums.ResultEnum;
+import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
 import com.example.entity.request.Repair;
 import com.example.model.mapper.RepairMapper;
 import com.example.service.RepairService;
+import com.example.util.CheckUtils;
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -23,6 +26,47 @@ import java.util.List;
 public class RepairServicelmpl implements RepairService {
     @Autowired
     private RepairMapper repairMapper;
+
+    @Override
+    public ResultVo addRepair(Repair repair) {
+        CheckUtils.validate(repair);
+        int addRepair = repairMapper.addRepair(repair);
+        if (addRepair != 1) {
+            throw new SysException(ResultEnum.DICT_ADD_FAIL.getCode(),
+                    ResultEnum.DICT_ADD_FAIL.getMessage());
+        }
+        return ResultUtils.response(addRepair);
+    }
+
+    @Override
+    public ResultVo deleteRepair(Integer repairId) {
+        Repair repair = repairMapper.getRepair(repairId);
+        if (repair == null) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+        int deleteRepair = repairMapper.deleteRepair(repairId);
+        if (deleteRepair != 1) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+        return ResultUtils.response(deleteRepair);
+    }
+
+    @Override
+    public ResultVo updateRepair(Repair repairReq) {
+        Repair repair = repairMapper.getRepair(repairReq.getRepairId());
+        if (repair == null) {
+            throw new SysException(ResultEnum.DICT_NOT_EXIST.getCode(),
+                    ResultEnum.DICT_NOT_EXIST.getMessage());
+        }
+        int updateRepair = repairMapper.updateRepair(repairReq);
+        if (updateRepair != 1) {
+            throw new SysException(ResultEnum.DICT_UPDATE_FAIL.getCode(),
+                    ResultEnum.DICT_UPDATE_FAIL.getMessage());
+        }
+        return ResultUtils.response(updateRepair);
+    }
 
     @Override
     public ResultVo listRepair(Repair repair) {
