@@ -14,4 +14,5 @@ public interface FollowLogService {
     ResultVo editFollow(FollowLogReq followLogReq);
     ResultVo getFollow(Integer followId);
     ResultVo listFollow(FollowLogReq followLogReq);
+    ResultVo listPidFollow();
 }

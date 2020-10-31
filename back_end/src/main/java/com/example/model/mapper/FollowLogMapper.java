@@ -18,4 +18,5 @@ public interface FollowLogMapper {
     int editFollow(FollowLogReq followLogReq);
     FollowLogResp getFollow(Integer followId);
     List<FollowLogResp> listFollow(FollowLogReq followLogReq);
+    List<FollowLogResp> listPidFollow();
 }

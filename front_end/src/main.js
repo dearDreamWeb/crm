@@ -12,7 +12,8 @@ import VueAreaLinkage from 'vue-area-linkage'
 import 'vue-area-linkage/dist/index.css'
 import iconPicker from 'e-icon-picker'
 import 'e-icon-picker/dist/index.css'
-import 'e-icon-picker/dist/main.css'
+import 'font-awesome/css/font-awesome.min.css'
+import 'element-ui/lib/theme-chalk/icon.css'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)

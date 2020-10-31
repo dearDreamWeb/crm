@@ -45,4 +45,9 @@ public class FollowLogController {
     public ResultVo listFollow(FollowLogReq followLogReq) {
         return logService.listFollow(followLogReq);
     }
+
+    @GetMapping("/list_pid")
+    public ResultVo listPidFollow() {
+        return logService.listPidFollow();
+    }
 }

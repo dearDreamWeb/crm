@@ -185,8 +185,8 @@
 <!--    <area-select type='all' :level='2' v-model="selected" :data="pcaa" @change="areaSelectChange"></area-select>-->
     <area-cascader type='text' v-model="selected2" :level='1' :data="pcaa" @change="areaCascaderChange"></area-cascader>
     <hr>
-    <el-calendar v-model="value">
-    </el-calendar>
+    <!--<el-calendar v-model="value">
+    </el-calendar>-->
     <hr>
     <el-select v-model="brand" @change="brandChange">
       <el-option v-for="item in productBrandList" :key="item.label"
@@ -225,6 +225,7 @@
       <div id="demo1"></div>
       <el-button class="btn" @click="getEditorData">获取当前内容</el-button>
     </div>
+    <v-btn large color="primary" @click="getEditorData">Primary</v-btn>
   </div>
 </template>
 
@@ -232,6 +233,7 @@
   import E from 'wangeditor'
   import productBrand from '../common/data/product_date'
   import {pca,pcaa} from 'area-data'
+
   export default {
     name: "Dashboard",
     mounted() {
@@ -274,20 +276,20 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
  .el-row{
    margin-bottom: 20px;
    /*&:last-child{
      margin-bottom: 0;
    }*/
  }
-  .el-calendar-day{
-    height: 35px !important;
-  }
-  .el-calendar{
-    width: 35% !important;
-  }
- .el-calendar-table td.is-selected{
-    background-color: brown !important;
-  }
+ /* .el-calendar-day{*/
+ /*   height: 35px !important;*/
+ /* }*/
+ /* .el-calendar{*/
+ /*   width: 35% !important;*/
+ /* }*/
+ /*.el-calendar-table td.is-selected{*/
+ /*   background-color: brown !important;*/
+ /* }*/
 </style>
