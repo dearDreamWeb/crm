@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.entity.ResultVo;
+import com.example.entity.request.SzOrder;
 import com.example.entity.request.SzOrderDetails;
 
 import java.util.List;
@@ -13,5 +14,5 @@ import java.util.List;
 
 public interface SzOrderDetailsService {
     List<SzOrderDetails> listOrderANDOrderDet(Integer odetId);
-    List<SzOrderDetails> addOrderANDOrderDet();
+    void addOrderANDOrderDet(List products, SzOrder szOrder);
 }

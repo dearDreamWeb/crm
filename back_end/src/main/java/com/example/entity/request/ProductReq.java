@@ -40,4 +40,5 @@ public class ProductReq {
     private BigDecimal productEndCost;
     private BigDecimal productStartPrice;
     private BigDecimal productEndPrice;
+    private Integer productNumber;
 }

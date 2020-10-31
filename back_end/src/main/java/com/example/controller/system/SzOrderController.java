@@ -5,6 +5,7 @@ import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.SzOrder;
 import com.example.entity.request.SzOrderDetails;
+import com.example.service.SzOrderDetailsService;
 import com.example.service.SzOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,9 @@ import java.util.List;
 public class SzOrderController {
     @Autowired
     private SzOrderService szorderService;
+    @Autowired
+    private SzOrderDetailsService szOrderDetailsService;
+
     //@SysLog 日志
     @SysLog("添加订单")
     @PostMapping("/add")
@@ -57,13 +61,14 @@ public class SzOrderController {
     }
 
     @RequestMapping("/add_deta")
-    public void addOrderANDOrderDet(String product) {
-        //JSONObject obj=(JSONObject)JSONObject.parse(product);
-        //List products = obj.getObject("pur",List.class);
-        System.out.println("product"+product);
+    public void addOrderANDOrderDet(@RequestBody String product) {
+        JSONObject obj=(JSONObject)JSONObject.parse(product);
+        Object products = obj.getObject("product",Object.class);
+        SzOrder szOrder=obj.getObject("prod",SzOrder.class);
+        System.out.println("product"+products);
+        System.out.println(szOrder);
        // System.out.println("products"+products);
 
-
-        //return szOrderServicelmpl.addOrderANDOrderDet();
+        //szOrderDetailsService.addOrderANDOrderDet(products,szOrder);
     }
 }

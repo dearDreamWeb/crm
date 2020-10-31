@@ -45,4 +45,5 @@ public class SzOrder {
     private String endDate;
     private Integer pageNum;
     private Integer pageSize;
+    private List<ProductReq> addproplus;
 }

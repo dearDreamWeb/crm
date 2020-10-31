@@ -45,7 +45,7 @@
           </el-card>
         </el-col>
         <el-col :span="8">
-          <el-card>
+          <!--<el-card>
             查看今日跟进列表：<el-button size="mini" @click="getIsSelect" icon="el-icon-plus"></el-button>
             <hr>
             <el-collapse v-model="activeNames" @change="handleChange">
@@ -57,7 +57,7 @@
                 <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
               </el-collapse-item>
             </el-collapse>
-          </el-card>
+          </el-card>-->
         </el-col>
       </el-row>
 
