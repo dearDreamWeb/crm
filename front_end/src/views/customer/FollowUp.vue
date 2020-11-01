@@ -24,7 +24,7 @@
           <el-button type="warning" size="mini" icon="el-icon-edit"
                      @click="openEditDialog" :disabled="buttonDisabled">修改</el-button>
           <el-button type="danger" size="mini" icon="el-icon-edit"
-                     :disabled="buttonDisabled">删除</el-button>
+                     :disabled="buttonDisabled" @click="delFollow">删除</el-button>
           <el-button type="primary" size="mini" icon="el-icon-circle-plus-outline"></el-button>
         </el-col>
       </el-row>
@@ -128,7 +128,7 @@
                 <div>{{item.followContent}}</div>
               </el-collapse-item>
             </el-collapse>
-          </el-card>-->
+          </el-card>
         </el-col>
       </el-row>
 
@@ -494,6 +494,23 @@
       }
     },
     methods:{
+      delFollow() {
+        this.$confirm('将删除该跟进计划，请谨慎操作','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          followHttp.del(this.rowFollowId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+            }
+          })
+        })
+      },
+
       resetForm() {
         this.$refs.searchFormRef.resetFields()
         this.searchInput = ''

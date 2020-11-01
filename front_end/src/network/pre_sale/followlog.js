@@ -104,5 +104,14 @@ export const followHttp = {
       }
     }
     return get(params)
+  },
+  del:function (followId) {
+    let params = {
+      url:'/follow/del',
+      data:{
+        'followId':followId
+      }
+    }
+    return postJson(params)
   }
 }
