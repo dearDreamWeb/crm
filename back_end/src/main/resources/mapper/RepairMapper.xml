@@ -19,6 +19,66 @@
         <result property="productId" column="product_id"/>
         <result property="orderId" column="order_id"/>
     </resultMap>
+    <insert id="addRepair" parameterType="com.example.entity.request.Repair">
+        <selectKey keyProperty="repairId" keyColumn="repair_id" resultType="Integer" order="AFTER">
+            SELECT last_insert_id();
+        </selectKey>
+        insert into repair_order(repair_person,repair_receiving_time,repair_problem,repair_personnel,repair_appointment,repair_actual,cus_id,repair_gdstate,repair_fault,repair_hfjl,repair_wxfy,repair_sfzb,product_id,order_id,dict_id) VALUES
+        (#{empId},#{repairDate},#{repairProblem},#{repairPersonnel},#{repairAppointment},#{repairActual},#{cusId},#{repairGdstae},#{repairFault},#{repairHfjl},#{repairWxfy},#{repairSfzb},#{productId},#{orderId})
+    </insert>
+
+    <update id="updateRepair" parameterType="com.example.entity.request.Repair">
+        update repair_order set repair_receiving_time = #{repairDate}
+        <if test="empId !=null and empId != ''">
+            ,repair_person = #{empId}
+        </if>
+        <if test="repairProblem !=null and repairProblem != ''">
+            ,repair_problem = #{repairProblem}
+        </if>
+        <if test="repairPersonnel !=null and repairPersonnel != ''">
+            ,repair_personnel = #{repairPersonnel}
+        </if>
+        <if test="repairAppointment !=null and repairAppointment != ''">
+            ,repair_appointment = #{repairAppointment}
+        </if>
+        <if test="repairActual !=null and repairActual != ''">
+            ,repair_actual = #{repairActual}
+        </if>
+        <if test="repairGdstae !=null and repairGdstae != ''">
+            ,repair_gdstate = #{repairGdstae}
+        </if>
+        <if test="repairFault !=null and repairFault != ''">
+            ,repair_fault = #{repairFault}
+        </if>
+        <if test="repairHfjl !=null and repairHfjl != ''">
+            ,repair_hfjl = #{repairHfjl}
+        </if>
+        <if test="repairHfjl !=null and repairHfjl != ''">
+            ,repair_hfjl = #{repairHfjl}
+        </if>
+        <if test="repairHfjl !=null and repairHfjl != ''">
+            ,repair_hfjl = #{repairHfjl}
+        </if>
+        <if test="repairWxfy !=null and repairWxfy != ''">
+            ,repair_wxfy = #{repairWxfy}
+        </if>
+        <if test="repairSfzb !=null and repairSfzb != ''">
+            ,repair_sfzb = #{repairSfzb}
+        </if>
+        <if test="empId !=null ">
+            ,emp_id = #{empId}
+        </if>
+        <if test="productId !=null ">
+            ,product_id = #{productId}
+        </if>
+        <if test="orderId !=null ">
+            ,order_id = #{orderId}
+        </if>
+        where repair_id = #{repairId}
+    </update>
+    <delete id="deleteCare" parameterType="Integer">
+        DELETE FROM repair_order WHERE repair_id = #{repairId}
+    </delete>
     <select id="listRepair" resultMap="RepairResult">
         SELECT repair_id,repair_person,repair_receiving_time,repair_problem,repair_personnel,repair_appointment,repair_actual,repair_gdstate,repair_fault,repair_hfjl,repair_wxfy,repair_sfzb
         FROM repair_order

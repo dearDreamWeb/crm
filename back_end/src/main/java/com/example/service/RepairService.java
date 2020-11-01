@@ -9,6 +9,9 @@ import com.example.entity.request.Repair;
  * @description:
  */
 public interface RepairService {
+    ResultVo addRepair(Repair repair);
+    ResultVo updateRepair(Repair repairReq);
+    ResultVo deleteRepair(Integer repairId);
     ResultVo listRepair (Repair repair );
     ResultVo getRepair (Integer repairId);
 }
