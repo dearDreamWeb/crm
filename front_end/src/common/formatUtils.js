@@ -107,3 +107,11 @@ export function productStatusFormat(productStatus) {
     return '已售完'
   }
 }
+
+export function followCategoryFormat(followCategory) {
+  if (followCategory === 1) {
+    return 'el-icon-date'
+  } else {
+    return 'el-icon-document'
+  }
+}

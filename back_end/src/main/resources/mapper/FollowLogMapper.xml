@@ -10,6 +10,7 @@
         <result column="follow_start_time" property="followStartTime"/>
         <result column="follow_end_time" property="followEndTime"/>
         <result column="follow_type" property="followType"/>
+        <result column="follow_type_icon" property="followTypeIcon"/>
         <result column="intention" property="intention"/>
         <result column="follow_handle_result" property="followHandleResult"/>
         <result column="version" property="version"/>
@@ -22,14 +23,79 @@
         <result column="follow_pid" property="followPid"/>
     </resultMap>
 
+    <resultMap id="FollowDetailResult" type="com.example.entity.response.FollowLogResp">
+        <id column="follow_id" property="followId"/>
+        <result column="follow_title" property="followTitle"/>
+        <result column="follow_category" property="followCategory"/>
+        <result column="follow_content" property="followContent"/>
+        <result column="follow_start_time" property="followStartTime"/>
+        <result column="follow_end_time" property="followEndTime"/>
+        <result column="follow_type" property="followType"/>
+        <result column="follow_type_icon" property="followTypeIcon"/>
+        <result column="intention" property="intention"/>
+        <result column="follow_handle_result" property="followHandleResult"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="emp_id" property="empId"/>
+        <result column="cus_id" property="cusId"/>
+        <result column="repair_id" property="repairId"/>
+        <result column="follow_pid" property="followPid"/>
+        <association property="empResp" resultMap="EmpResult"/>
+        <association property="customerResp" resultMap="CustomerResult"/>
+    </resultMap>
+
+    <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
+        <id property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="sex" column="sex"/>
+        <result property="passWord" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="empStatus" column="emp_status"/>
+        <result property="token" column="token"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
+        <id column="cus_id" property="cusId"/>
+        <result column="cus_name" property="cusName"/>
+        <result column="life_cycle" property="lifeCycle"/>
+        <result column="first_signing_time" property="firstSigningTime"/>
+        <result column="abbreviation" property="abbreviation"/>
+        <result column="credit_id" property="creditId"/>
+        <result column="settlement" property="settlement"/>
+        <result column="company_account" property="companyAccount"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="detail_address" property="detailAddress"/>
+        <result column="cus_remark" property="cusRemark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="cus_dict_source" property="cusDictSource"/>
+        <result column="cus_dict_stage" property="cusDictStage"/>
+        <result column="qualitative_id" property="qualitativeId"/>
+        <result column="grading_id" property="gradingId"/>
+        <result column="ration_id" property="rationId"/>
+        <result column="emp_id" property="empId"/>
+    </resultMap>
+
     <insert id="addFollow" parameterType="com.example.entity.request.FollowLogReq">
         <selectKey keyColumn="follow_id" keyProperty="followId" resultType="Integer" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
         INSERT INTO follow_log(follow_title,follow_category,follow_content,follow_start_time,follow_end_time,
-            follow_type,intention,follow_handle_result,emp_id,cus_id,repair_id,follow_pid)
+            follow_type,follow_type_icon,intention,follow_handle_result,emp_id,cus_id,repair_id,follow_pid)
         VALUES (#{followTitle},#{followCategory},#{followContent},#{followStartTime},#{followEndTime},#{followType},
-            #{intention},#{followHandleResult},#{empId},#{cusId},#{repairId},#{followPid})
+            #{followTypeIcon},#{intention},#{followHandleResult},#{empId},#{cusId},#{repairId},#{followPid})
     </insert>
 
     <update id="delFollow" parameterType="Integer">
@@ -41,8 +107,29 @@
         <if test="followTitle != null and followTitle != ''">
             ,follow_title = #{followTitle}
         </if>
+        <if test="followCategory != null">
+            ,follow_category = #{followCategory}
+        </if>
+        <if test="followStartTime != null and followStartTime != ''">
+            ,follow_start_time = #{followStartTime}
+        </if>
+        <if test="followEndTime != null and followEndTime != ''">
+            ,follow_end_time = #{followEndTime}
+        </if>
+        <if test="followType != null and followType != ''">
+            ,follow_type = #{followType}
+        </if>
+        <if test="followTypeIcon != null and followTypeIcon != ''">
+            ,follow_type_icon = #{followTypeIcon}
+        </if>
         <if test="followContent != null and followContent != ''">
             ,follow_content = #{followContent}
+        </if>
+        <if test="followHandleResult != '' and followHandleResult != ''">
+            ,follow_handle_result = #{followHandleResult}
+        </if>
+        <if test="intention != null and intention != ''">
+            ,intention = #{intention}
         </if>
         <if test="empId != null">
             ,emp_id = #{empId}
@@ -50,41 +137,52 @@
         <if test="cusId != null">
             ,cus_id = #{cusId}
         </if>
-        WHERE follow_id = #{followId}
+        <if test="repairId != null">
+            ,repair_id = #{repairId}
+        </if>
+        <if test="followPid != null">
+            ,follow_pid = #{followPid}
+        </if>
+        WHERE follow_id = #{followId} AND version = #{version}
     </update>
 
     <select id="getFollow" resultMap="FollowLogResult">
         SELECT follow_id,follow_title,follow_category,follow_content,follow_start_time,follow_end_time,
-            follow_type,intention,follow_handle_result,emp_id,cus_id,repair_id,follow_pid,version,create_time,
-            update_time,is_delete
+            follow_type,follow_type_icon,intention,follow_handle_result,emp_id,cus_id,repair_id,follow_pid,
+            version,create_time,update_time,is_delete
         FROM follow_log
         WHERE follow_id = #{followId}
     </select>
 
-    <select id="listFollow" resultMap="FollowLogResult" parameterType="com.example.entity.request.FollowLogReq">
-        SELECT  follow_id,follow_title,follow_category,follow_content,follow_start_time,follow_end_time,
-                follow_type,intention,follow_handle_result,emp_id,cus_id,repair_id,follow_pid,version,create_time,
-                update_time,is_delete
-        FROM follow_log
+    <select id="listFollow" resultMap="FollowDetailResult">
+        SELECT  fl.follow_id,fl.follow_title,fl.follow_category,fl.follow_content,fl.follow_start_time,fl.follow_end_time,
+                fl.follow_type,fl.follow_type_icon,fl.intention,fl.follow_handle_result,fl.version,fl.create_time,fl.update_time,fl.is_delete,
+                fl.emp_id,fl.cus_id,fl.repair_id,fl.follow_pid,e.emp_id,e.emp_name,cu.cus_id,cu.cus_name
+        FROM follow_log fl
+        INNER JOIN emp e ON e.emp_id = fl.emp_id
+        INNER JOIN customer cu ON cu.cus_id = fl.cus_id
         <where>
             <if test="followTitle != null and followTitle != ''">
-                AND follow_title LIKE CONCAT('%',#{followTitle},'%')
+                AND fl.follow_title LIKE CONCAT('%',#{followTitle},'%')
             </if>
             <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
-                AND date_format(follow_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+                AND date_format(fl.follow_start_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
             </if>
             <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
-                AND date_format(follow_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+                AND date_format(fl.follow_start_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+            <if test="followStartTime != null and followStartTime != ''">
+                AND fl.follow_start_time = #{followStartTime}
             </if>
             <if test="empId != null">
-                AND emp_id = #{empId}
+                AND fl.emp_id = #{empId}
             </if>
             <if test="cusId != null">
-                AND cus_id = #{cusId}
+                AND fl.cus_id = #{cusId}
             </if>
-            AND is_delete = 0
+            AND fl.is_delete = 0
         </where>
-        ORDER BY create_time DESC
+        ORDER BY fl.create_time DESC
     </select>
 
     <select id="listPidFollow" resultMap="FollowLogResult">

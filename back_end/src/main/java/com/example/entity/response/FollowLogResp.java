@@ -19,9 +19,10 @@ public class FollowLogResp {
     private String followTitle;
     private Integer followCategory;
     private String followContent;
-    private Date followStartTime;
-    private Date followEndTime;
+    private String followStartTime;
+    private String followEndTime;
     private String followType;
+    private String followTypeIcon;
     private String intention;
     private String followHandleResult;
     private Integer version;
@@ -32,4 +33,6 @@ public class FollowLogResp {
     private Integer cusId;
     private Integer repairId;
     private Integer followPid;
+    private EmpResp empResp;
+    private CustomerResp customerResp;
 }

@@ -26,7 +26,7 @@
         </el-col>
       </el-row>
 
-      <transition name="el-zoom-in-top">
+      <transition name="el-zoom-in:top">
         <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px;">
           <el-form :model="searchForm" ref="advancedSearchFormRef"
                    size="mini" label-position="right" label-width="70px">
