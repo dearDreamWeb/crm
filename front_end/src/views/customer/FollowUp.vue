@@ -128,7 +128,7 @@
                 <div>{{item.followContent}}</div>
               </el-collapse-item>
             </el-collapse>
-          </el-card>
+          </el-card>-->
         </el-col>
       </el-row>
 

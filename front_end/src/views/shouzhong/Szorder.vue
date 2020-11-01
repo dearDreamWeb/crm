@@ -205,8 +205,15 @@
         <el-table-column property="productBrand" label="产品品牌"></el-table-column>
         <el-table-column property="productName" label="产品名称" ></el-table-column>
         <el-table-column property="productModel" label="产品型号"></el-table-column>
-        <el-table-column label="数量">
-          <el-input-number size="mini" v-model="numpro" :step="1" ></el-input-number>
+        <el-table-column property="productNumber" label="数量">
+          <template slot-scope="scope">
+          <el-input-number
+            size="mini"
+            v-model.number="scope.row.productNumber"
+            :max="99"
+            :min="1"
+            :step="1" ></el-input-number>
+          </template>
         </el-table-column>
         <el-table-column property="productPrice" label="产品价格"></el-table-column>
         <el-table-column property="odetBuymoney" label="操作" >
@@ -352,7 +359,7 @@
         pageNum:1,
         pageSize:10,
         total:1,
-        addForm: {
+        /*addForm: {
           ordTheme:'',
           ordHead:'',
           ordTotalmoney:'',
@@ -364,6 +371,19 @@
           ordDetail:'',
           cusId: '',
           cusIdList:[]
+        },*/
+        addForm: {
+          ordTheme:'',
+          ordHead:'',
+          ordTotalmoney:'',
+          ordConsignee:'',
+          ordPhone:'',
+          ordProvince:'',
+          ordCity:'',
+          ordCountry:'',
+          ordDetail:'',
+          cusId: '',
+          addproplus:[]
         },
         formRules:{
           ordTheme:[
@@ -396,7 +416,8 @@
         addOrdButtonLoading:false,
         szorder:[],
         cusList:[],
-        addproplus:[]
+        addproplus:[],
+        productNumber:''
       }
     },
     methods: {
@@ -463,7 +484,17 @@
             //已存在商品  修改数量
             alert("改产品已添加")
         }else{
+            //this.addproplus.pro
+            // this.$refs.forEach((pro,i)=> {
+            //   this.$set(pro, 'purNumber', 1);
+            //   pro.productId = pro.producttId;
+            //   pro.productName = pro.product.productName;
+            //   pro.purPrice = pro.producttPrice;
+            //   pro.productSize = pro.chanpincongbiaoShuxinzhi;
+            //   this.purList.splice(i, 0, pro);
             this.addproplus.push(val);
+
+           // });
         }
 
         // orderHttp.addpro(val).then(res=>{
@@ -551,7 +582,7 @@
       anniu(){
         alert(this.$store.state.empName)
       },
-      addOrderClick(){
+      /*addOrderClick(){
         this.addForm.ordProvince=this.selected2[0];
         this.addForm.ordCity = this.selected2[1];
         this.addForm.ordCountry=this.selected2[2];
@@ -560,7 +591,6 @@
         var product=JSON.stringify({pur:this.addproplus,prod:this.addForm})
         console.log("pro:"+product);
         this.$refs.addFormRef.validate(valid => {
-
           if (!valid) return
           this.addOrderButtonLoading = true
           orderHttp.addOrder(product).then(res =>{
@@ -576,6 +606,15 @@
                 type:"error"
               })
             }
+          })
+        })
+      },*/
+      addOrderClick() {
+        this.$refs.addFormRef.validate(valid =>{
+          if (!valid) return
+          this.addForm.addproplus = this.addproplus
+          orderHttp.addOrder(this.addForm).then(res => {
+
           })
         })
       },

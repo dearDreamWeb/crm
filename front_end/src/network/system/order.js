@@ -1,13 +1,13 @@
 import {postJson,get} from "../request";
 
 export const orderHttp = {
-  addOrder:function(product) {
-    console.log(product);
+  /*addOrder:function(product) {
     let params = {
       url:'/order/add_deta',
       data:{
-        'product':product,
-        /*'ordTheme':product.prod.ordTheme,
+        product,
+
+        /!*'ordTheme':product.prod.ordTheme,
         'ordHead':product.prod.ordHead,
         'ordTotalmoney':product.prod.ordTotalmoney,
         'ordConsignee':product.prod.ordConsignee,
@@ -16,7 +16,26 @@ export const orderHttp = {
         'ordCity':product.prod.ordCity,
         'ordCountry':product.prod.ordCountry,
         'ordDetail':product.prod.ordDetail,
-        "cusId":product.prod.cusId*/
+        "cusId":product.prod.cusId*!/
+      }
+    }
+    return postJson(params)
+  },*/
+  addOrder:function(order){
+    let params = {
+      url:'/order/add',
+      data:{
+        'ordTheme':order.ordTheme,
+        'ordHead':order.ordHead,
+        'ordTotalmoney':order.ordTotalmoney,
+        'ordConsignee':order.ordConsignee,
+        'ordPhone':order.ordPhone,
+        'ordProvince':order.ordProvince,
+        'ordCity':order.ordCity,
+        'ordCountry':order.ordCountry,
+        'ordDetail':order.ordDetail,
+        'cusId':order.cusId,
+        'addproplus':order.addproplus
       }
     }
     return postJson(params)
