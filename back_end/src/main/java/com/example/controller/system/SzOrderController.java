@@ -2,6 +2,7 @@ package com.example.controller.system;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.anno.SysLog;
+import com.example.common.config.addproplusVo;
 import com.example.entity.ResultVo;
 import com.example.entity.request.SzOrder;
 import com.example.entity.request.SzOrderDetails;
@@ -27,10 +28,31 @@ public class SzOrderController {
     private SzOrderDetailsService szOrderDetailsService;
 
     //@SysLog 日志
+   /* @SysLog("添加订单")
+    @PostMapping("/add")
+    public ResultVo addszOrder(@RequestBody SzOrder szorder){
+        *//*szorder.setOrdCreatetime(new Timestamp(System.currentTimeMillis()));*//*
+        System.out.println("订单详情："+szorder.getSzOrderDetails());
+        return szorderService.addszOrder(szorder);
+    }*/
+
+    /*  @SysLog("添加订单")
+      @PostMapping("/add")
+      public Integer addszOrder(@RequestBody addproplusVo avo){
+          System.out.println("订单："+avo);
+          for (SzOrderDetails sz1 : avo.getSzOrderDetails()) {
+              System.out.println("订单详情："+sz1);
+          }
+          return 1;
+      }*/
     @SysLog("添加订单")
     @PostMapping("/add")
     public ResultVo addszOrder(@RequestBody SzOrder szorder){
-        /*szorder.setOrdCreatetime(new Timestamp(System.currentTimeMillis()));*/
+        System.out.println("1订单详情："+szorder.getSzOrderDetails());
+        System.out.println("订单："+szorder);
+        for (SzOrderDetails sz1 : szorder.getSzOrderDetails()) {
+            System.out.println("2订单详情："+sz1);
+        }
         return szorderService.addszOrder(szorder);
     }
 
@@ -67,7 +89,7 @@ public class SzOrderController {
         SzOrder szOrder=obj.getObject("prod",SzOrder.class);
         System.out.println("product"+products);
         System.out.println(szOrder);
-       // System.out.println("products"+products);
+        // System.out.println("products"+products);
 
         //szOrderDetailsService.addOrderANDOrderDet(products,szOrder);
     }

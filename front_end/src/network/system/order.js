@@ -24,19 +24,7 @@ export const orderHttp = {
   addOrder:function(order){
     let params = {
       url:'/order/add',
-      data:{
-        'ordTheme':order.ordTheme,
-        'ordHead':order.ordHead,
-        'ordTotalmoney':order.ordTotalmoney,
-        'ordConsignee':order.ordConsignee,
-        'ordPhone':order.ordPhone,
-        'ordProvince':order.ordProvince,
-        'ordCity':order.ordCity,
-        'ordCountry':order.ordCountry,
-        'ordDetail':order.ordDetail,
-        'cusId':order.cusId,
-        'addproplus':order.addproplus
-      }
+      data:order
     }
     return postJson(params)
   },

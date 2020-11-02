@@ -37,8 +37,14 @@ public class SzOrderDetailsServiceLmpl implements SzOrderDetailsService {
     public void addOrderANDOrderDet(List products, SzOrder szOrder) {
         List<ProductReq> addproplus = szOrder.getAddproplus();
 //先遍历再得
-
-        JSONArray json = JSONArray.parseArray(String.valueOf(products));
+        for (int i =0;i<addproplus.size();i++){
+            ProductReq productReq=new ProductReq();
+            productReq.setProductId(szOrder.getOrdId());
+            productReq.setProductNumber(addproplus.size());
+            addproplus.add(i,productReq);
+        }
+//        szorderDetailsMapper.addOrderANDOrderDet();
+        /*JSONArray json = JSONArray.parseArray(String.valueOf(products));
         //int orderId = szOrderMapper.addszOrder(szOrder);
         SzOrderDetails szOrderDetails = null;
         JSONObject ob = null;
@@ -53,6 +59,6 @@ public class SzOrderDetailsServiceLmpl implements SzOrderDetailsService {
             szOrderDetails.setProductId(productId);
             szOrderDetails.setOdetBuymoney(odetBuymoney);
             //szorderDetailsMapper.addOrderANDOrderDet(szOrderDetails);
-            }
+            }*/
     }
 }

@@ -39,7 +39,7 @@ public class SzOrder {
     private Integer offerId;//报价编号
 
     private CustomerResp customerResp;//客户
-    List<SzOrderDetails> SzOrderDetails;
+    private List<SzOrderDetails> SzOrderDetails;
 
     private String startDate;
     private String endDate;

@@ -492,8 +492,11 @@
             //   pro.purPrice = pro.producttPrice;
             //   pro.productSize = pro.chanpincongbiaoShuxinzhi;
             //   this.purList.splice(i, 0, pro);
-            this.addproplus.push(val);
 
+            this.addproplus.push(val);
+            for(var i=0,n=this.addproplus.length;i<n;i++){
+              console.log("addproplus啦啦啦啦啦",this.addproplus)
+            }
            // });
         }
 
@@ -610,12 +613,47 @@
         })
       },*/
       addOrderClick() {
-        this.$refs.addFormRef.validate(valid =>{
-          if (!valid) return
-          this.addForm.addproplus = this.addproplus
-          orderHttp.addOrder(this.addForm).then(res => {
+       /* this.addForm.ordProvince=this.selected2[0];
+        this.addForm.ordCity = this.selected2[1];
+        this.addForm.ordCountry=this.selected2[2];*/
+       console.log("this.addproplu:",this.addproplus)
 
-          })
+        for(var i=0,n=this.addproplus.length;i<n;i++){
+          console.log("addproplus中价格:",this.addproplus[i].productPrice)
+          var json={
+            productId:this.addproplus[i].productId,
+            odetBuynum:this.addproplus[i].productNumber,
+            odetBuymoney:this.addproplus[i].productPrice,
+          }
+        }
+        this.addproplus.push(json)
+        console.log("addproplus:",this.addproplus)
+
+        let ppp={
+          ordTheme:this.addForm.ordTheme,
+          ordHead:this.$store.state.empName,
+          ordTotalmoney:this.addForm.ordTotalmoney,
+          ordConsignee:this.addForm.ordConsignee,
+          ordProvince:this.selected2[0],
+          ordCity:this.selected2[1],
+          ordCountry:this.selected2[2],
+          ordDetail:this.addForm.ordDetail,
+          ordPhone:this.addForm.ordPhone,
+          cusId:this.addForm.cusId,
+         /* szOrderDetails:[{
+              odetBuynum:this.addproplus.productNumber,
+              odetBuymoney:this.addproplus.productPrice,
+              productId:this.addproplus.productId
+          }]*/
+          szOrderDetails:this.addproplus
+        }
+        /*for (let i=0;i<ppp.szOrderDetails.length;i++) {
+          if (ppp.szOrderDetails[i].productName == null) {
+            ppp.szOrderDetails.splice(i,1);
+          }
+        }*/
+        orderHttp.addOrder(ppp).then(res => {
+
         })
       },
       editOrderClick(){

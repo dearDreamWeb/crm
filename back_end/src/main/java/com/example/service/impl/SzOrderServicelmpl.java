@@ -4,6 +4,8 @@ import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
 import com.example.entity.request.SzOrder;
+import com.example.entity.request.SzOrderDetails;
+import com.example.model.mapper.SzOrderDetailsMapper;
 import com.example.model.mapper.SzOrderMapper;
 import com.example.service.SzOrderService;
 import com.example.util.DateUtils;
@@ -26,19 +28,42 @@ import java.util.List;
 public class SzOrderServicelmpl implements SzOrderService {
     @Autowired
     private SzOrderMapper szorderMapper;
+    @Autowired
+    private SzOrderDetailsMapper detailsMapper;
+    
 
+    //一次性新增多个详情
     @Override
-    public ResultVo addszOrder(SzOrder szorder) {
-        szorder.setOrdState(0);/*执行中0*/
-        szorder.setOrdDelete(0);/*(删除)否0*/
-        szorder.setOrdStarttime(DateUtils.getDate());/*当前时间*/
-        szorder.setOrdCreatetime(DateUtils.getDate());
-        int addszOrder=szorderMapper.addszOrder(szorder);
-        if (addszOrder!=1){
-            throw new SysException(ResultEnum.ORDER_ADD_FAIL.getCode(),ResultEnum.ORDER_ADD_FAIL.getMessage());
+    public ResultVo addszOrder(SzOrder order){
+        int i =1;
+        //第一步:获取所有的详情信息
+        List<SzOrderDetails> details = order.getSzOrderDetails();
+        //第二步：调用Mapper方法，新增单条订单
+        szorderMapper.addszOrder(order);
+        //第三步：获取新增的订单编号
+        Integer oid = order.getOrdId();
+        System.out.println("主键编号是："+oid);
+        //第四步：逐条新增订单详情
+        for (SzOrderDetails detail : details) {
+            detail.setOrdId(oid);
+            //第五步：调用详细的新增方法
+            detailsMapper.addOrderANDOrderDet(detail);
         }
-        return ResultUtils.response(addszOrder);
+        return ResultUtils.response(1);
     }
+
+
+//    public ResultVo addszOrder(SzOrder szorder) {
+//        szorder.setOrdState(0);/*执行中0*/
+//        szorder.setOrdDelete(0);/*(删除)否0*/
+//        szorder.setOrdStarttime(DateUtils.getDate());/*当前时间*/
+//        szorder.setOrdCreatetime(DateUtils.getDate());
+//        int addszOrder=szorderMapper.addszOrder(szorder);
+//        if (addszOrder!=1){
+//            throw new SysException(ResultEnum.ORDER_ADD_FAIL.getCode(),ResultEnum.ORDER_ADD_FAIL.getMessage());
+//        }
+//        return ResultUtils.response(addszOrder);
+//    }
 
     @Override
     public ResultVo delszOrder(SzOrder szorder) {
