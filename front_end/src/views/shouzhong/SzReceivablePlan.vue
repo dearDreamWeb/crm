@@ -25,8 +25,8 @@
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
 
-        <!--<el-table-column prop="customerResp.cusName" label="客户"></el-table-column>-->
-        <el-table-column prop="order.ordTheme" label="订单主题" sortable></el-table-column>
+        <!--<el-table-column prop="customerResp.cusName" label="客户"></el-table-column> prop="order.ordTheme"-->
+        <el-table-column  label="订单主题" sortable></el-table-column>
 
         <el-table-column prop="planMoney" label="回款金额" sortable></el-table-column>
         <el-table-column prop="planTime" label="计划回款时间" sortable>
@@ -121,9 +121,10 @@
       return {
         searchInput:'',
         addForm:{
+          planTime:'',
           ordId:'',
           empId:'',
-          planMoney:'',
+          planMoney:''
         },
         editForm:{
         },
@@ -184,21 +185,21 @@
       },
       addPlanClick(){
         console.log(this.$refs)
-        this.$refs["addform"].validate(valid => {
+        this.$refs.addFormRef.validate(valid =>{
           if (!valid) return
-          this.addDictButtonLoading = true
-          planHttp.add(this.addform).then(res => {
+          this.addPlanButtonLoading = true
+          planHttp.addPlan(this.addform).then(res => {
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.initList()
               this.addDialog = false
-              this.addDictButtonLoading = false
+              this.addPlanButtonLoading = false
             } else {
               this.$message({
                 message:res.message,
                 type:"error"
               })
-              this.addDictButtonLoading = false
+              this.addPlanButtonLoading = false
             }
           })
         })

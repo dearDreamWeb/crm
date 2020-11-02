@@ -5,7 +5,7 @@ export const planHttp = {
     let params = {
       url:'/plan/add',
       data:{
-        'careData':plan.careData,
+        'planTime':plan.planTime,
         'planMoney':plan.planMoney,
         'ordId':plan.ordId,
         'empId':plan.empId
