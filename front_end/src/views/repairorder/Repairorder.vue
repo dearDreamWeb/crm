@@ -20,6 +20,68 @@
         </el-col>
       </el-row>
 
+      <transition name="el-zoom-in-top">
+        <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px;">
+          <el-form :model="searchForm" ref="advancedSearchFormRef"
+                   size="mini" label-position="right" label-width="80px">
+            <el-row>
+              <el-col>
+                <el-form-item label="高级搜索"></el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <el-form-item prop="careZt" label="昵称">
+                  <el-input v-model="searchForm.careZt" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item prop="carelxrcontacts" label="联系人">
+                  <el-input v-model="searchForm.carelxrcontacts" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="客户">
+                  <el-select v-model="searchForm.cusId">
+                    <el-option v-for="item in empList" :key="item.cusId"
+                               :label="item.cusName" :value="item.cusId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="10">
+                <el-form-item label="日期">
+                  <el-date-picker v-model="searchForm.startDate" format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                  placeholder="请输入"></el-date-picker>
+                  <span>-</span>
+                  <el-date-picker v-model="searchForm.endDate" format="yyyy-MM-dd"
+                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                  placeholder="请输入"></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item prop="careexecutor" label="执行人">
+                  <el-select v-model="searchForm.empId">
+                    <el-option v-for="item in edpList" :key="item.empId"
+                               :label="item.empName" :value="item.empId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item>
+                  <el-button size="mini" @click="advancedQueryClick"
+                             type="primary" icon="el-icon-search"></el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </el-card>
+      </transition>
+
       <el-table :data="listForm" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
@@ -40,55 +102,176 @@
       </el-pagination>
     </el-card>
 
-
-
   </div>
 </template>
 <script>
-  import {careHttp} from "../../network/system/care";
+import {repairHttp} from "../../network/system/repair";
+import {userHttp} from "../../network/system/user";
+  import {customerHttp} from "../../network/pre_sale/customer";
 
   export default {
     data() {
       return {
-        value: '',
-        input: '',
-        listForm:[],
+
         rowCareId:0,
-        dialogVisible: false,
-        tableData: [],
-        form: {
-          gdbh:'',
-          khname: '',
-          jdr:'',
-          wtms:'',
-          cpbh:'',
-          ddbh:'',
-          xlh:'',
-          wxr:'',
-          gzms:'',
-          hf:'',
-          zb:'',
+        searchForm:{
+          empId:'',
+          repairDate: '',
+          repairProblem:'',
+          repairPersonnel:'',
+          repairAppointment:'',
+          repairActual:'',
+          repairGdstae:'',
           region: '',
           date1: '',
-          date2: '',
+          repairFault: '',
+          repairHfjl:'',
+          repairWxfy:'',
+          repairSfzb:'',
+          cusId:'',
+          productId:'',
+          orderId:'',
+          region: '',
+          date1: '',
+
           delivery: false,
           type: [],
           resource: '',
           desc: ''
         },
-        num: 1
+        advancedSearch:false,
+        updateform:{},
+        addDialog:false,
+        buttonDisabled:true,
+        addDictButtonLoading:false,
+        editDictButtonLoading:false,
+        editDialog:false,
+        searchInput:'',
+        careZt:'',
+
+        careData:'',
+
+        listForm:[],
+        tableLoading:'',
+        total:0,
+        pageNum:1,
+        pageSize:3,
+        value: '',
+        input: '',
+
+        tableData: [],
+        form: {
+          empId:'',
+          repairDate: '',
+          repairProblem:'',
+          repairPersonnel:'',
+          repairAppointment:'',
+          repairActual:'',
+          repairGdstae:'',
+          region: '',
+          date1: '',
+          repairFault: '',
+          repairHfjl:'',
+          repairWxfy:'',
+          repairSfzb:'',
+          cusId:'',
+          productId:'',
+          orderId:'',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        num: 1,
+        rules:{
+          careZt:[
+            {required: true, message: '请输入活动名称', trigger: 'blur'},
+            { min: 4, max: 8, message: '长度在 4 到 8个字符', trigger: 'blur' }
+          ]
+
+        }
       }
     },
     methods:{
-      addBtn(){
-        this.dialogVisible = true;
-        console.log(123)
+      openAddDialog() {
+        this.addDialog = true
+        this.initEmpList()
+        this.initEdpList()
+      },
+      initEdpList(){
+        userHttp.list().then(res =>{
+          this.edpList = res.data.list
+        })
+      },
+      initEmpList() {
+        customerHttp.listAll().then(res => {
+          this.empList = res.data
+        })
+      },
+
+
+      resetForm(){
+        this.$refs["advancedSearchFormRef"].resetFields()
+        this.searchInput = ''
+        this.initList()
+        this.rowCareId = 0
+        this.buttonDisabled = true
+      },
+      advancedQueryClick(){
+        repairHttp.queryEmp(this.searchForm).then(res => {
+          if (res.code === 20000) {
+            this.listForm = res.data.list
+            this.total = res.data.total
+            this.pageNum = res.data.pageNum
+          }
+        })
+      },
+
+      openEditCare(){
+        this.editDialog = true;
+        this.getEmpDetail()
+      },
+
+      editHandleClose() {
+        this.$refs["updateform"].resetFields()
+        this.editDictButtonLoading = false
+      },
+
+      addHandleClose() {
+        this.$refs["addform"].resetFields()
+      },
+
+      searchInputClick(){
+        this.listForm.repairProblem = this.searchInput
+        repairHttp.list(this.listForm).then(res => {
+          this.listForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
+      },
+      handleClose(){
+        this.$refs["addform"].resetFields()
       },
       handleRowClick(row,event,column) {
         this.rowCareId = row.repairId
         if (this.repairId != 0) {
           this.buttonDisabled = false
         }
+      },
+      iHeaderCellStyle(){
+
+      },
+      iHeaderRowStyle(){
+
+      },
+      handleCurrentChange(pageIndex){
+        this.searchForm.pageNum = pageIndex
+        this.searchForm.pageSize = this.pageSize
+        repairHttp.queryEmp(this.searchForm).then(res => {
+          this.listForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
       },
       initList() {
         repairHttp.listPage(this.pageNum, this.pageSize).then(res => {
@@ -97,20 +280,11 @@
           this.pageNum = res.data.pageNum
         })
       },
-      handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
-      },
-      onSubmit() {
-        console.log('submit!');
-      }
     },
     created() {
       this.initList()
-
+      this.initEmpList()
+      this.initEdpList()
     }
   }
 </script>
