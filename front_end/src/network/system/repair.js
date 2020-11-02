@@ -58,7 +58,22 @@ export const repairHttp = {
     let params = {
       url:'/repair/list',
       data:{
-
+        'empId':repair.empId,
+        'repairProblem':repair.repairProblem,
+        'repairPersonnel':repair.repairPersonnel,
+        'repairAppointment':repair.repairAppointment,
+        'repairActual':repair.repairActual,
+        'repairGdstae':repair.repairGdstae,
+        'repairFault':repair.repairFault,
+        'repairHfjl':repair.repairHfjl,
+        'repairWxfy':repair.repairWxfy,
+        'repairSfzb':repair.repairSfzb,
+        'cusId':repair.cusId,
+        'productId':repair.productId,
+        'orderId':repair.orderId,
+        'dictId':repair.dictId,
+        'pageNum':repair.pageNum,
+        'pageSize':repair.pageSize
       }
     }
     return get(params)

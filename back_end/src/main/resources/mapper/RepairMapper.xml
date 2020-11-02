@@ -65,9 +65,6 @@
         <if test="repairSfzb !=null and repairSfzb != ''">
             ,repair_sfzb = #{repairSfzb}
         </if>
-        <if test="empId !=null ">
-            ,emp_id = #{empId}
-        </if>
         <if test="productId !=null ">
             ,product_id = #{productId}
         </if>
@@ -89,9 +86,6 @@
             <if test="repairGdstae != null and repairGdstae != ''">
                 AND repair_gdstate LIKE CONCAT('%',#{repairGdstae},'%')
             </if>
-            <if test="repairWxfy != null">
-                AND repair_wxfy = #{repairWxfy}
-            </if>
             <if test="repairSfzb != null and repairSfzb != ''">
                 AND repair_sfzb LIKE CONCAT('%',#{repairSfzb},'%')
             </if>
@@ -100,8 +94,8 @@
     </select>
 
     <select id="getRepair" resultMap="RepairResult">
-        SELECT r.*
-        FROM repair_order r
-        WHERE r.repair_id = #{repairId}
+        SELECT repair_id,repair_person,repair_receiving_time,repair_problem,repair_personnel,repair_appointment,repair_actual,repair_gdstate,repair_fault,repair_hfjl,repair_wxfy,repair_sfzb
+        FROM repair_order
+        WHERE repair_id = #{repairId}
     </select>
 </mapper>
