@@ -178,7 +178,7 @@
         },
         treeList:[],
         columns: [
-          {label: '菜单名称',prop: 'menuName'},
+          {label: '菜单名称',prop: 'menuName',width: '200px'},
           {label: '路由匹配',prop: 'url'},
           {label: '图标',prop: 'icon',type: 'template',template: 'iconTemp',width: '50px'},
           {label: '权限标识',prop: 'perms'},

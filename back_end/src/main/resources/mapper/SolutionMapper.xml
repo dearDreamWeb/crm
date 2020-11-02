@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.SolutionMapper">
+    <resultMap id="SolutionResult" type="com.example.entity.response.SolutionResp">
+        <id column="solution_id" property="solutionId"/>
+        <result column="solution_title" property="solutionTitle"/>
+        <result column="create_time" property="createTime"/>
+        <result column="content" property="content"/>
+        <result column="feedback" property="feedback"/>
+        <result column="version" property="version"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="cus_id" property="cusId"/>
+        <result column="sale_id" property="saleId"/>
+        <result column="demand_id" property="demandId"/>
+    </resultMap>
+
+    <insert id="addSolution" parameterType="com.example.entity.request.SolutionReq">
+        INSERT INTO solution
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="solutionTitle != null and solutionTitle != ''">
+                solution_title,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="content != null and content != ''">
+                content,
+            </if>
+            <if test="feedback != null and feedback != ''">
+                feedback,
+            </if>
+            <if test="cusId != null">
+                cus_id,
+            </if>
+            <if test="saleId != null">
+                sale_id,
+            </if>
+            <if test="demandId != null">
+                demand_id,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="solutionTitle != null and solutionTitle != ''">
+                #{solutionTitle},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="content != null and content != ''">
+                #{content},
+            </if>
+            <if test="feedback != null and feedback != ''">
+                #{feedback},
+            </if>
+            <if test="cusId != null">
+                #{cusId},
+            </if>
+            <if test="saleId != null">
+                #{saleId},
+            </if>
+            <if test="demandId != null">
+                #{demandId},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="delSolution" parameterType="Integer">
+        UPDATE solution SET is_delete = 1 WHERE solution_id = #{solutionId}
+    </update>
+
+    <update id="editSolution" parameterType="com.example.entity.request.SolutionReq">
+        UPDATE solution SET update_time = #{updateTime},version = version + 1
+        <if test="solutionTitle != null and solutionTitle != ''">
+            ,solution_title = #{solutionTitle}
+        </if>
+        <if test="createTime != null">
+            ,create_time = #{createTime}
+        </if>
+        <if test="content != null and content != ''">
+            ,content = #{content}
+        </if>
+        <if test="feedback != null and feedback != ''">
+            ,feedback = #{feedback}
+        </if>
+        <if test="cusId != null">
+            ,cus_id = #{cusId}
+        </if>
+        <if test="saleId != null">
+            ,sale_id = #{saleId}
+        </if>
+        <if test="demandId != null">
+            ,demand_id = #{demandId}
+        </if>
+        WHERE solution_id = #{solutionId} AND version = #{version}
+    </update>
+
+    <select id="getSolution" resultMap="SolutionResult">
+        SELECT solution_title,create_time,content,feedback,version,update_time,is_delete,
+        cus_id,sale_id,demand_id
+        FROM solution
+        WHERE solution_id = #{solutionId}
+    </select>
+
+    <select id="listSolution" resultMap="SolutionResult">
+        SELECT solution_title,create_time,content,feedback,version,update_time,is_delete,
+        cus_id,sale_id,demand_id
+        FROM solution
+        <where>
+            <if test="solutionTitle != null and solutionTitle != ''">
+                AND solutionTitle LIKE CONCAT('%',#{solutionTitle},'%')
+            </if>
+            <if test="cusId != null">
+                AND cus_id = #{cusId}
+            </if>
+            <if test="saleId != null">
+                AND sale_id = #{saleId}
+            </if>
+            <if test="demandId != null">
+                AND demand_id = #{demandId}
+            </if>
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+            AND is_delete = 0
+        </where>
+        ORDER BY create_time DESC
+    </select>
+</mapper>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.SaleDetailMapper">
+    <resultMap id="SaleDetailResult" type="com.example.entity.response.SaleDetailResp">
+        <id column="sale_detail_id" property="saleDetailId"/>
+        <result column="sale_estimate_date" property="saleEstimateDate"/>
+        <result column="sale_possibility" property="salePossibility"/>
+        <result column="sale_expect_money" property="saleExpectMoney"/>
+        <result column="sale_star_beacon" property="saleStarBeacon"/>
+        <result column="sale_prior_level" property="salePriorLevel"/>
+        <result column="sale_stage" property="saleStage"/>
+        <result column="sale_stage_remark" property="saleStageRemark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+    </resultMap>
+
+    <insert id="addSaleDetail" parameterType="com.example.entity.request.SaleDetailReq">
+        INSERT INTO sale_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="saleEstimate != null">
+                sale_estimate,
+            </if>
+            <if test="salePossibility != null and salePossibility != ''">
+                sale_possibility,
+            </if>
+            <if test="saleExpectMoney != null">
+                sale_expect_money,
+            </if>
+            <if test="saleStarBeacon != null">
+                sale_star_beacon,
+            </if>
+            <if test="salePriorLevel != null">
+                sale_prior_level,
+            </if>
+            <if test="saleStage != null and saleStage != ''">
+                sale_stage,
+            </if>
+            <if test="saleStageRemark != null and saleStageRemark != ''">
+                sale_stage_remark,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="saleEstimate != null">
+                #{saleEstimate},
+            </if>
+            <if test="salePossibility != null and salePossibility != ''">
+                #{salePossibility},
+            </if>
+            <if test="saleExpectMoney != null">
+                #{saleExpectMoney},
+            </if>
+            <if test="saleStarBeacon != null">
+                #{saleStarBeacon},
+            </if>
+            <if test="salePriorLevel != null">
+                #{salePriorLevel},
+            </if>
+            <if test="saleStage != null and saleStage != ''">
+                #{saleStage},
+            </if>
+            <if test="saleStageRemark != null and saleStageRemark != ''">
+                #{saleStageRemark},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="delSaleDetail" parameterType="Integer">
+        UPDATE sale_detail SET is_delete = 1,version = version + 1
+        WHERE sale_detail_id = #{saleDetailId}
+    </update>
+
+    <update id="editSaleDetail" parameterType="com.example.entity.request.SaleDetailReq">
+        UPDATE sale_detail SET update_time = #{updateTime},version = version + 1
+        <if test="saleEstimateDate != null">
+            ,sale_estimate_date = #{saleEstimateDate}
+        </if>
+        <if test="salePossibility != null and salePossibility != ''">
+            ,sale_possibility = #{salePossibility}
+        </if>
+        <if test="saleExpectMoney != null">
+            ,sale_expect_money = #{saleExpectMoney}
+        </if>
+        <if test="saleStarBeacon != null">
+            ,sale_star_beacon = #{sale_star_beacon}
+        </if>
+        <if test="salePriorLevel != null">
+            ,sale_prior_level = #{salePriorLevel}
+        </if>
+        <if test="saleStage != null and saleStage != ''">
+            ,sale_stage = #{saleStage}
+        </if>
+        <if test="saleStageRemark != null and saleStageRemark != ''">
+            ,sale_stage_remark = #{saleStageRemark}
+        </if>
+        <if test="saleId != null">
+            ,sale_id = #{saleId}
+        </if>
+        WHERE sale_detail_id = #{saleDetailId} AND version = #{version}
+    </update>
+
+    <select id="getSaleDetail" resultMap="SaleDetailResult" parameterType="Integer">
+        SELECT sale_detail_id,sale_estimate_date,sale_possibility,sale_expect_money,sale_star_beacon,
+            sale_prior_level,sale_stage,sale_stage_remark,sale_id,version,create_time,update_time,is_delete
+        FROM sale_detail
+        WHERE sale_detail_id = #{saleDetailId}
+    </select>
+
+    <select id="listSaleDetail" resultMap="SaleDetailResult" parameterType="com.example.entity.request.SaleDetailReq">
+        SELECT sale_detail_id,sale_estimate_date,sale_possibility,sale_expect_money,sale_star_beacon,
+            sale_prior_level,sale_stage,sale_stage_remark,sale_id,version,create_time,update_time,is_delete
+        FROM sale_detail
+        <where>
+            <if test="saleStarBeacon != null">
+                AND sale_star_beacon = #{sale_star_beacon}
+            </if>
+            <if test="salePriorLevel != null">
+                AND sale_prior_level = #{salePriorLevel}
+            </if>
+            <if test="saleStage != null and saleStage != ''">
+                AND sale_stage = #{saleStage}
+            </if>
+            <if test="saleId != null">
+                AND sale_id = #{saleId}
+            </if>
+            AND is_delete = 0
+        </where>
+        ORDER BY create_time DESC
+    </select>
+</mapper>

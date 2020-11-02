@@ -442,7 +442,7 @@
             {required:true,message:'请选择产品型号',trigger:'change'}
           ],
           productBrand:[
-            {required:true,message:'请选择产品品牌',trigger:'change'}
+            {required:true,message:'请选择 产品品牌',trigger:'change'}
           ],
           productSize:[
             {required:true,message:'请选择产品尺寸',trigger:'change'}

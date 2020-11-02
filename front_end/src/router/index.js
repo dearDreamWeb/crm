@@ -112,6 +112,18 @@ const routes = [
       {
         path: '/vuetify',
         component: () => import('../views/vuetify/VuetifyTest')
+      },
+      {
+        path: '/sale',
+        component: () => import('../views/sale/Sale')
+      },
+      {
+        path: '/demand',
+        component: () => import('../views/demand/Demand')
+      },
+      {
+        path: '/solution',
+        component: () => import('../views/solution/Solution')
       }
     ]
   }

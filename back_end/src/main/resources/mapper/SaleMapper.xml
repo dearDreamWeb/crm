@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.SaleMapper">
+    <resultMap id="SaleResult" type="com.example.entity.response.SaleResp">
+        <id column="sale_id" property="saleId"/>
+        <result column="sale_name" property="saleName"/>
+        <result column="sale_status" property="saleStatus"/>
+        <result column="sale_type" property="saleType"/>
+        <result column="sale_source" property="saleSource"/>
+        <result column="discovery_time" property="discoveryTime"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="cus_id" property="cusId"/>
+        <result column="contacts_id" property="contactsId"/>
+        <result column="emp_id" property="empId"/>
+    </resultMap>
+
+    <resultMap id="DetailResult" type="com.example.entity.response.SaleResp">
+        <id column="sale_id" property="saleId"/>
+        <result column="sale_name" property="saleName"/>
+        <result column="sale_status" property="saleStatus"/>
+        <result column="sale_type" property="saleType"/>
+        <result column="sale_source" property="saleSource"/>
+        <result column="discovery_time" property="discoveryTime"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="cus_id" property="cusId"/>
+        <result column="contacts_id" property="contactsId"/>
+        <result column="emp_id" property="empId"/>
+        <association property="saleDetailResp" resultMap=""/>
+    </resultMap>
+
+    <resultMap id="SaleDetailResult" type="com.example.entity.response.SaleDetailResp">
+        <id column="sale_detail_id" property="saleDetailId"/>
+        <result column="sale_estimate_date" property="saleEstimateDate"/>
+        <result column="sale_possibility" property="salePossibility"/>
+        <result column="sale_expect_money" property="saleExpectMoney"/>
+        <result column="sale_star_beacon" property="saleStarBeacon"/>
+        <result column="sale_prior_level" property="salePriorLevel"/>
+        <result column="sale_stage" property="saleStage"/>
+        <result column="sale_stage_remark" property="saleStageRemark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+    </resultMap>
+
+    <insert id="addSale" parameterType="com.example.entity.request.SaleReq">
+        INSERT INTO sale
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="saleName != null and saleName != ''">
+                sale_name,
+            </if>
+            <if test="saleStatus != null">
+                sale_status,
+            </if>
+            <if test="saleType != null">
+                sale_type,
+            </if>
+            <if test="saleSource != null">
+                sale_source,
+            </if>
+            <if test="discoveryTime != null">
+                discovery_time,
+            </if>
+            <if test="cusId != null">
+                cus_id,
+            </if>
+            <if test="contactsId != null">
+                contacts_id,
+            </if>
+            <if test="empId != null">
+                emp_id,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="saleName != null and saleName != ''">
+                #{saleName},
+            </if>
+            <if test="saleStatus != null">
+                #{saleStatus},
+            </if>
+            <if test="saleType != null">
+                #{saleType},
+            </if>
+            <if test="saleSource != null">
+                #{saleSource},
+            </if>
+            <if test="discoveryTime != null">
+                #{discoveryTime},
+            </if>
+            <if test="cusId != null">
+                #{cusId},
+            </if>
+            <if test="contactsId != null">
+                #{contactsId},
+            </if>
+            <if test="empId != null">
+                #{empId},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="delSale" parameterType="Integer">
+        UPDATE sale SET is_delete = 1,version = version + 1
+        WHERE sale_id = #{saleId}
+    </update>
+
+    <update id="editSale" parameterType="com.example.entity.request.SaleReq">
+        UPDATE sale SET update_time = #{updateTime},version = version + 1
+        <if test="saleName != null and saleName != ''">
+            ,sale_name = #{saleName}
+        </if>
+        <if test="saleStatus != null">
+            ,sale_status = #{saleStatus}
+        </if>
+        <if test="saleType != null">
+            ,sale_type = #{saleType}
+        </if>
+        <if test="saleSource != null">
+            ,sale_source = #{saleSource}
+        </if>
+        <if test="discoveryTime != null">
+            ,discovery_time = #{discoveryTime}
+        </if>
+        <if test="cusId != null">
+            ,cus_id = #{cusId}
+        </if>
+        <if test="contactsId != null">
+            ,contacts_id = #{contactsId}
+        </if>
+        <if test="empId != null">
+            ,emp_id = #{empId}
+        </if>
+        WHERE sale_id = #{saleId} AND version = #{version}
+    </update>
+
+    <select id="getSale" resultMap="SaleResult">
+        SELECT sale_id,sale_name,sale_status,sale_type,sale_source,discovery_time,version,
+            create_time,update_time,is_delete,cus_id,contacts_id,emp_id
+        FROM sale
+        WHERE sale_id = #{saleId}
+    </select>
+
+    <select id="listSale" resultMap="DetailResult" parameterType="com.example.entity.request.SaleReq">
+        SELECT sa.sale_id,sa.sale_name,sa.sale_status,sa.sale_type,sa.sale_source,sa.discovery_time,sa.version,
+        sa.create_time,sa.update_time,sa.is_delete,sa.cus_id,sa.contacts_id,sa.emp_id,
+        sd.sale_detail_id,sd.sale_estimate_date,sd.sale_possibility,sd.sale_expect_money,sd.sale_star_beacon,
+        sd.sale_prior_level,sd.sale_stage,sd.sale_stage_remark,sd.sale_id,sd.version,sd.create_time,sd.update_time,sd.is_delete
+        FROM sale sa
+        INNER JOIN sale_detail sd ON sa.sale_id = sd.sale_id
+        <where>
+            <if test="saleName != null and saleName != ''">
+                AND sa.sale_name LIKE CONCAT('%',#{saleName},'%')
+            </if>
+            <if test="saleStatus != null">
+                AND sa.sale_status = #{saleStatus}
+            </if>
+            <if test="saleType != null">
+                AND sa.sale_type = #{saleType}
+            </if>
+            <if test="saleSource != null">
+                AND sa.sale_source = #{saleSource}
+            </if>
+            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+                AND date_format(sa.discovery_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+            </if>
+            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+                AND date_format(sa.discovery_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+            </if>
+            <if test="cusId != null">
+                AND sa.cus_id = #{cusId}
+            </if>
+            <if test="contactsId != null">
+                AND sa.contacts_id = #{contactsId}
+            </if>
+            <if test="empId != null">
+                AND sa.emp_id = #{empId}
+            </if>
+            AND sa.is_delete = 0
+        </where>
+        ORDER BY sa.create_time DESC
+    </select>
+</mapper>
