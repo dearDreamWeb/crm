@@ -20,73 +20,11 @@
         </el-col>
       </el-row>
 
-      <transition name="el-zoom-in-top">
-        <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px;">
-          <el-form :model="searchForm" ref="advancedSearchFormRef"
-                   size="mini" label-position="right" label-width="80px">
-            <el-row>
-              <el-col>
-                <el-form-item label="高级搜索"></el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item prop="careZt" label="昵称">
-                  <el-input v-model="searchForm.careZt" size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item prop="carelxrcontacts" label="联系人">
-                  <el-input v-model="searchForm.carelxrcontacts" size="mini" placeholder="请输入" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="客户">
-                  <el-select v-model="searchForm.cusId">
-                    <el-option v-for="item in empList" :key="item.cusId"
-                               :label="item.cusName" :value="item.cusId">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="10">
-                <el-form-item label="日期">
-                  <el-date-picker v-model="searchForm.startDate" format="yyyy-MM-dd"
-                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
-                                  placeholder="请输入"></el-date-picker>
-                  <span>-</span>
-                  <el-date-picker v-model="searchForm.endDate" format="yyyy-MM-dd"
-                                  value-format="yyyy-MM-dd" type="date" style="width: 46%"
-                                  placeholder="请输入"></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item prop="careexecutor" label="执行人">
-                  <el-select v-model="searchForm.empId">
-                    <el-option v-for="item in edpList" :key="item.empId"
-                               :label="item.empName" :value="item.empId">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item>
-                  <el-button size="mini" @click="advancedQueryClick"
-                             type="primary" icon="el-icon-search"></el-button>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </el-card>
-      </transition>
-
       <el-table :data="listForm" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="40"></el-table-column>
-        <el-table-column prop="repairProblem" label="主题" sortable></el-table-column>
+
         <el-table-column prop="cusId" label="对应客户"></el-table-column>
         <el-table-column prop="repairWxfy" label="费用"></el-table-column>
         <el-table-column prop="repairGdstae" label="状态"></el-table-column>
@@ -102,17 +40,139 @@
       </el-pagination>
     </el-card>
 
+    <el-dialog
+      title="新增关怀"
+      :visible.sync="addDialog"
+      width="50%"
+      @close="handleClose">
+      <el-form ref="addform" :model="addform" :rules="rules" label-width="80px">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="手机号码" prop="empId">
+              <el-input v-model="addform.repairsjhm"></el-input>
+            </el-form-item>
+          </el-col >
+          <el-col :span="8">
+            <el-form-item label="联系人">
+              <el-input v-model="addform.repairLxr"></el-input>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="客户">
+              <el-select v-model="addform.cusId">
+                <el-option v-for="item in empList" :key="item.cusId"
+                           :label="item.cusName" :value="item.cusId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="日期">
+              <el-date-picker type="date" placeholder="选择日期" v-model="addform.repairDate" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="接单人">
+              <el-select v-model="addform.empId">
+                <el-option v-for="item in edpList" :key="item.empId"
+                           :label="item.empName" :value="item.empId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="维修产品">
+              <el-input v-model="addform.productId"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="保修">
+              <el-select v-model="addform.repairSfzb" placeholder="请选择">
+                <el-option label="在保" value="在保"></el-option>
+                <el-option label="出保" value="出保"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="故障描述">
+              <el-input type="textarea" v-model="addform.repairFault"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="承接部门">
+              <el-input v-model="addform.dept"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="费用">
+              <el-input v-model="addform.repairWxfy"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col>
+            <el-form-item label="状态">
+              <el-select v-model="addform.repairGdstae" placeholder="请选择">
+                <el-option label="执行中" value="执行中"></el-option>
+                <el-option label="结束" value="结束"></el-option>
+                <el-option label="意外终止" value="意外终止"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div style="text-align: center;">
+        <el-button @click="addDialog = false">取 消</el-button>
+        <el-button type="primary" @click="addClick"
+                   :loading="addDictButtonLoading">确 定</el-button>
+      </div>
+    </el-dialog>
+
+
   </div>
 </template>
 <script>
 import {repairHttp} from "../../network/system/repair";
 import {userHttp} from "../../network/system/user";
   import {customerHttp} from "../../network/pre_sale/customer";
-
   export default {
     data() {
       return {
-
+        empList:[],
+        edpList:[],
+        addform:{
+          empId:'',
+          repairDate: '',
+          repairProblem:'',
+          repairPersonnel:'',
+          repairAppointment:'',
+          repairActual:'',
+          repairGdstae:'',
+          region: '',
+          repairsjhm:'',
+          repairLxr:'',
+          date1: '',
+          repairFault: '',
+          repairHfjl:'',
+          repairWxfy:'',
+          repairSfzb:'',
+          cusId:'',
+          productId:'',
+          orderId:'',
+          region: '',
+          date1: '',
+        },
         rowCareId:0,
         searchForm:{
           empId:'',
@@ -184,7 +244,7 @@ import {userHttp} from "../../network/system/user";
         },
         num: 1,
         rules:{
-          careZt:[
+          repairProblem:[
             {required: true, message: '请输入活动名称', trigger: 'blur'},
             { min: 4, max: 8, message: '长度在 4 到 8个字符', trigger: 'blur' }
           ]
@@ -208,7 +268,44 @@ import {userHttp} from "../../network/system/user";
           this.empList = res.data
         })
       },
+      addClick(){
+        console.log(this.$refs)
+        this.$refs["addform"].validate(valid => {
+          if (!valid) return
+          this.addDictButtonLoading = true
+          repairHttp.add(this.addform).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+              this.addDialog = false
+              this.addDictButtonLoading = false
+            } else {
+              this.$message({
+                message:res.message,
+                type:"error"
+              })
+              this.addDictButtonLoading = false
+            }
+          })
+        })
+      },
+      deleteCare() {
+        this.$confirm('此操作将永久删除，是否继续','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          repairHttp.del(this.rowCareId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
 
+            } else {
+              this.$message.error(res.message)
+            }
+          })
+        })
+      },
 
       resetForm(){
         this.$refs["advancedSearchFormRef"].resetFields()
@@ -242,7 +339,7 @@ import {userHttp} from "../../network/system/user";
       },
 
       searchInputClick(){
-        this.listForm.repairProblem = this.searchInput
+        this.listForm.repairGdstae = this.searchInput
         repairHttp.list(this.listForm).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total

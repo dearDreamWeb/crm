@@ -30,6 +30,6 @@ public class Repairgd {
     private Integer cusId;
     private Integer productId;
     private Integer orderId;
-    private Integer inventorySeq;
+    private Integer repairsjhm;
     private Integer dictId;
 }

@@ -27,6 +27,8 @@ public class Repair {
     private String repairHfjl;
     private double repairWxfy;
     private String repairSfzb;
+    private String repairLxr;
+    private String repairsjhm;
     private Integer cusId;
     private Integer productId;
     private Integer orderId;
