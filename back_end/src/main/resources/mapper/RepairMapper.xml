@@ -14,7 +14,9 @@
         <result property="repairFault" column="repair_fault"/>
         <result property="repairHfjl" column="repair_hfjl"/>
         <result property="repairWxfy" column="repair_wxfy"/>
+        <result property="repairLxr" column="repair_lxr"/>
         <result property="repairSfzb" column="repair_sfzb"/>
+        <result property="repairsjhm" column="inventory_seq"/>
         <result property="cusId" column="cus_id"/>
         <result property="productId" column="product_id"/>
         <result property="orderId" column="order_id"/>
@@ -23,8 +25,8 @@
         <selectKey keyProperty="repairId" keyColumn="repair_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
         </selectKey>
-        insert into repair_order(repair_person,repair_receiving_time,repair_problem,repair_personnel,repair_appointment,repair_actual,cus_id,repair_gdstate,repair_fault,repair_hfjl,repair_wxfy,repair_sfzb,product_id,order_id,dict_id) VALUES
-        (#{empId},#{repairDate},#{repairProblem},#{repairPersonnel},#{repairAppointment},#{repairActual},#{cusId},#{repairGdstae},#{repairFault},#{repairHfjl},#{repairWxfy},#{repairSfzb},#{productId},#{orderId})
+        insert into repair_order(repair_person,repair_receiving_time,repair_problem,repair_personnel,repair_appointment,repair_actual,cus_id,repair_gdstate,repair_fault,repair_wxfy,inventory_seq,repair_lxr,repair_sfzb) VALUES
+        (#{empId},#{repairDate},#{repairProblem},#{repairPersonnel},#{repairAppointment},#{repairActual},#{cusId},#{repairGdstae},#{repairFault},#{repairWxfy},#{repairSfzb},#{repairsjhm},#{repairLxr})
     </insert>
 
     <update id="updateRepair" parameterType="com.example.entity.request.Repair">
@@ -59,8 +61,14 @@
         <if test="repairHfjl !=null and repairHfjl != ''">
             ,repair_hfjl = #{repairHfjl}
         </if>
+        <if test="repairLxr !=null and repairLxr != ''">
+            ,repair_lxr = #{repairLxr}
+        </if>
         <if test="repairWxfy !=null and repairWxfy != ''">
             ,repair_wxfy = #{repairWxfy}
+        </if>
+        <if test="repairsjhm !=null and repairsjhm != ''">
+            ,inventory_seq = #{repairsjhm}
         </if>
         <if test="repairSfzb !=null and repairSfzb != ''">
             ,repair_sfzb = #{repairSfzb}
@@ -73,11 +81,11 @@
         </if>
         where repair_id = #{repairId}
     </update>
-    <delete id="deleteCare" parameterType="Integer">
+    <delete id="deleteRepair" parameterType="Integer">
         DELETE FROM repair_order WHERE repair_id = #{repairId}
     </delete>
     <select id="listRepair" resultMap="RepairResult">
-        SELECT repair_id,repair_person,repair_receiving_time,repair_problem,repair_personnel,repair_appointment,repair_actual,repair_gdstate,repair_fault,repair_hfjl,repair_wxfy,repair_sfzb
+        SELECT repair_id,repair_person,repair_receiving_time,repair_problem,repair_personnel,repair_appointment,repair_actual,repair_gdstate,repair_fault,repair_hfjl,inventory_seq,repair_wxfy,repair_sfzb,repair_lxr
         FROM repair_order
         <where>
             <if test="repairProblem != null and repairProblem != ''">
@@ -94,7 +102,7 @@
     </select>
 
     <select id="getRepair" resultMap="RepairResult">
-        SELECT repair_id,repair_person,repair_receiving_time,repair_problem,repair_personnel,repair_appointment,repair_actual,repair_gdstate,repair_fault,repair_hfjl,repair_wxfy,repair_sfzb
+        SELECT repair_id,repair_person,repair_receiving_time,repair_problem,repair_personnel,repair_appointment,repair_actual,repair_gdstate,repair_fault,repair_hfjl,inventory_seq,repair_wxfy,repair_sfzb,repair_lxr
         FROM repair_order
         WHERE repair_id = #{repairId}
     </select>
