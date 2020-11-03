@@ -23,21 +23,12 @@ public class SzOrderDetailsController {
     @Autowired
     private SzOrderDetailsServiceLmpl szOrderServicelmpl;
 
+    /*查看订单详情*/
     @RequestMapping("/all")
     public List<SzOrderDetails> listOrderANDOrderDet(Integer odetId) {
         System.out.println(odetId);
         return szOrderServicelmpl.listOrderANDOrderDet(odetId);
     }
 
-//    @RequestMapping("/add")
-//    public List<SzOrderDetails> addOrderANDOrderDet(String product) {
-//        JSONObject obj=(JSONObject)JSONObject.parse(product);
-//        List products = obj.getObject("pur",List.class);
-//        System.out.println("product"+product);
-//        System.out.println("products"+products);
-//
-//
-//        return szOrderServicelmpl.addOrderANDOrderDet();
-//    }
 
 }

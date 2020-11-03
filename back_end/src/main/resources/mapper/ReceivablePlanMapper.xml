@@ -12,11 +12,69 @@
         <result property="planInvoice" column="plan_invoice"/>
         <result property="planDel" column="plan_del"/>
         <result property="ordId" column="ord_id"/>
+        <result property="empId" column="emp_id"/>
     </resultMap>
-    <select id="listszPlan" resultMap="szPlanResult">
-        SELECT p.*,s.*
+
+    <resultMap id="szPlanDetailResult" type="com.example.entity.request.SzReceivablePlan">
+        <id property="planId" column="plan_id"/>
+        <result property="planMoney" column="plan_money"/>
+        <result property="planTime" column="plan_time"/>
+        <result property="planPeriod" column="plan_period"/>
+        <result property="planCaozuopeople" column="plan_caozuopeople"/>
+        <result property="planCaozuotime" column="plan_caozuotime"/>
+        <result property="planInvoice" column="plan_invoice"/>
+        <result property="planDel" column="plan_del"/>
+        <result property="ordId" column="ord_id"/>
+        <association property="szOrder" resultMap="szOrderResult"/>
+        <association property="empResp" resultMap="EmpResult"/>
+
+    </resultMap>
+
+    <resultMap id="szOrderResult" type="com.example.entity.request.SzOrder">
+        <id property="ordId" column="ord_id"/>
+        <result property="ordTheme" column="ord_theme"/>
+        <result property="ordState" column="ord_state"/>
+        <result property="ordHead" column="ord_head"/>
+        <result property="ordTotalmoney" column="ord_totalmoney"/>
+        <result property="ordStarttime" column="ord_starttime"/>
+        <result property="ordDealtime" column="ord_dealtime"/>
+        <result property="ordFahuotime" column="ord_fahuotime"/>
+        <result property="ordHuikuanmoney" column="ord_huikuanmoney"/>
+        <result property="ordConsignee" column="ord_consignee"/>
+        <result property="ordProvince" column="ord_province"/>
+        <result property="ordCity" column="ord_city"/>
+        <result property="ordCountry" column="ord_country"/>
+        <result property="ordDetail" column="ord_detail"/>
+        <result property="ordPhone" column="ord_phone"/>
+        <result property="ordCreatetime" column="ord_createtime"/>
+        <result property="ordDelete" column="ord_delete"/>
+        <result property="cusId" column="cus_id"/>
+        <result property="offerId" column="offer_id"/>
+    </resultMap>
+
+    <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
+        <id property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="sex" column="sex"/>
+        <result property="passWord" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="empStatus" column="emp_status"/>
+        <result property="token" column="token"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+<!--连表的（查询）resultMap返回 连接表szPlanDetailResult-->
+    <select id="listszPlan" resultMap="szPlanDetailResult">
+        SELECT p.*,s.*,e.*
         FROM sz_receivable_plan p
-        left join sz_order s on p.ord_id=s.ord_id
+        LEFT JOIN sz_order s on p.ord_id=s.ord_id
+        LEFT JOIN emp e on p.emp_id= e.emp_id
         <where>
             <if test="planTime != null and planTime !='' ">
                 AND p.plan_time LIKE CONCAT('%',#{planTime})
@@ -36,21 +94,28 @@
             <if test="ordId != null">
                 and p.ord_id=#{ordId}
             </if>
+            <if test="empId !=null ">
+                ,emp_id = #{empId}
+            </if>
             AND p.plan_del = 0
         </where>
         ORDER BY plan_money DESC
     </select>
 
     <select id="getszPlan" resultMap="szPlanResult">
-        SELECT * FROM sz_receivable_plan WHERE plan_id = #{planId}
+        SELECT p.*,o.*
+        FROM sz_receivable_plan p
+        left join sz_order o
+        on p.ord_id=o.ord_id
+        WHERE plan_id =#{planId}
     </select>
 
-    <insert id="addPlan" parameterType="com.example.entity.request.SzReceivablePlan">
+    <insert id="addszPlan" parameterType="com.example.entity.request.SzReceivablePlan">
         <selectKey keyProperty="planId" keyColumn="plan_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
         </selectKey>
-            insert into sz_receivable_plan(plan_money, plan_time, plan_period, plan_caozuopeople, plan_caozuotime, plan_invoice, ord_id) values
-            (#{planMoney},#{planTime},#{planPeriod},#{planCaozuopeople},#{planCaozuotime},#{planInvoice},#{ordId})
+            insert into sz_receivable_plan(plan_money, plan_time, plan_period, plan_caozuopeople, plan_caozuotime, plan_invoice, ord_id, emp_id) values
+            (#{planMoney},#{planTime},#{planPeriod},#{planCaozuopeople},#{planCaozuotime},#{planInvoice},#{ordId},#{empId})
     </insert>
 
     <update id="delszPlan" parameterType="Integer">

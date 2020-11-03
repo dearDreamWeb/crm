@@ -6,7 +6,6 @@ export const orderHttp = {
       url:'/order/add_deta',
       data:{
         product,
-
         /!*'ordTheme':product.prod.ordTheme,
         'ordHead':product.prod.ordHead,
         'ordTotalmoney':product.prod.ordTotalmoney,
@@ -65,16 +64,15 @@ export const orderHttp = {
   list:function (order) {
     let params = {
       url:'/order/list_all',
-      data:{
+/*      data:{
         'ordTheme':order.ordTheme,
         'ordHead':order.ordHead,
         'ordTotalmoney':order.ordTotalmoney,
-        /*'ordStarttime':order.ordStarttime,*/
         'ordState':order.ordState,
         'startDate':order.startDate,
         'endDate':order.endDate,
         'cusId':order.cusId
-      }
+      }*/
     }
     return get(params)
   },

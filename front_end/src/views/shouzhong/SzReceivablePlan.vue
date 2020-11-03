@@ -9,7 +9,7 @@
         </el-col>
         <el-col :span="10">
           <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">添加回款计划</el-button>
-          <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
+        <!--  <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>-->
           <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
         <el-col :span="8">
@@ -26,8 +26,7 @@
         <el-table-column type="index" width="50"></el-table-column>
 
         <!--<el-table-column prop="customerResp.cusName" label="客户"></el-table-column> prop="order.ordTheme"-->
-        <el-table-column  label="订单主题" sortable></el-table-column>
-
+        <el-table-column prop="szOrder.ordTheme"  label="对应订单主题" ></el-table-column>
         <el-table-column prop="planMoney" label="回款金额" sortable></el-table-column>
         <el-table-column prop="planTime" label="计划回款时间" sortable>
           <template slot-scope="scope">
@@ -35,14 +34,14 @@
           </template>
         </el-table-column>
         <el-table-column prop="planPeriod" label="回款期次" sortable></el-table-column>
-        <el-table-column prop="planCaozuopeople" label="操作人" sortable></el-table-column>
+        <el-table-column prop="empResp.empName" label="操作人" sortable></el-table-column>
 
         <el-table-column prop="planCaozuotime" label="操作时间" sortable>
           <template slot-scope="scope">
             {{scope.row.planCaozuotime | dateFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="planInvoice" label="开票" sortable>
+        <el-table-column prop="planInvoice" label="开票">
           <template slot-scope="scope">
             {{scope.row.planInvoice | planInvoiceFormat}}
           </template>
@@ -56,7 +55,7 @@
       </el-pagination>
     </el-card>
 <!--width="65%" top="20px"-->
-      <el-dialog title="回款计划添加"  :visible.sync="addDialog" @close="addHandleClose">
+      <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose">
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
                label-position="right" :rules="formRules">
         <el-row>
@@ -72,9 +71,7 @@
           <el-col :span="12">
             <el-form-item label="总金额" size="small">  <!--clearable :disabled="true"-->
               <el-input v-model="addForm.planMoney" size="mini" >
-                <el-option v-for="item in ordList" :key="item.ordId"
-                           :label="item.ordTotalmoney" :value="item.ordId">
-                </el-option>
+
                 </el-input>
             </el-form-item>
           </el-col>
@@ -89,7 +86,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="操作人">
-              <el-select v-model="addForm.empId" size="small">
+              <el-select v-model="addForm.empId">
                 <el-option v-for="item in empList" :key="item.empId"
                            :label="item.empName" :value="item.empId">
                 </el-option>
@@ -111,20 +108,22 @@
 <script>
   import {planHttp} from "../../network/system/plan";
   import {orderHttp} from "../../network/system/order";
-  import {clueHttp} from "../../network/pre_sale/clue";
   import {userHttp} from "../../network/system/user";
-  import {careHttp} from "../../network/system/care";
+  import {productHttp} from "../../network/system/product";
 
   export default {
     name: "SzReceivavlePlan",
     data() {
       return {
         searchInput:'',
+        empList:[],
+        ordList:[],
         addForm:{
-          planTime:'',
           ordId:'',
           empId:'',
-          planMoney:''
+          planMoney:'',
+          planTime:'',
+
         },
         editForm:{
         },
@@ -133,28 +132,37 @@
         rowplanId: 0,
         tableLoading:false,
         buttonDisabled:true,
-        advancedSearch:false,
+       /* advancedSearch:false,高级查询*/
         addDialog:false,
         addPlanButtonLoading:false,
         listForm:[],
         ordList:[],
-        empList:[],
         pageNum:1,
-        pageSize:2,
+        pageSize:5,
         total:1,
         editDialog:false,
         multipleSelection: []
       }
     },
     methods: {
+   /*   productHttp.listAll(this.gridData).then(res=>{
+        this.gridData = res.data.list
+        this.total = res.data.total
+        this.pageNum = res.data.pageNum
+      })*/
       oidChange(val) {
         console.log(val)
+        orderHttp.list(this.addDialog).then(res=>{
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
+        /*console.log(val)
         this.addForm.planMoney = val.ordTotalmoney
         orderHttp.getOrder(val).then(res=> {
           console.log("oidchange");
           this.addDialog =true;
           this.addForm = res.data
-        })
+        })*/
       },
 
       searchInputClick() {
@@ -166,25 +174,30 @@
         })
       },      handleSelectionChange(val) {
         this.multipleSelection = val;
-      }
-      ,
-      openAddDialog() {
-        this.addDialog = true,
-        this.initOrderList(),
-        this.initEmpList()
       },
-      initEmpList(){
-        userHttp.list().then(res =>{
-          this.empList = res.data.list
-        })
-      },
-      initOrderList(){
-        orderHttp.list().then(res=>{
-          this.ordList=res.data.list
-        })
-      },
+
       addPlanClick(){
-        console.log(this.$refs)
+       /* console.log(this.$refs)
+        this.$refs["addForm"].validate(valid => {
+          if (!valid) return
+          this.addPlanButtonLoading = true
+        })*/
+        planHttp.addplan(this.addForm).then(res => {
+          console.log("kkk",this.addForm)
+          /*if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.initList()
+            this.addDialog = false
+            this.addPlanButtonLoading = false
+          } else {
+            this.$message({
+              message:res.message,
+              type:"error"
+            })
+            this.addPlanButtonLoading = false
+          }*/
+        })
+        /*console.log(this.$refs)
         this.$refs.addFormRef.validate(valid =>{
           if (!valid) return
           this.addPlanButtonLoading = true
@@ -202,27 +215,39 @@
               this.addPlanButtonLoading = false
             }
           })
+        })*/
+      },
+      /**/
+      openAddDialog() {
+        this.addDialog = true
+        this.initEmpList()
+        this.initOrderList()
+      },
+      /*新增选择员工*/
+      initEmpList(){
+        userHttp.list().then(res =>{
+          this.empList = res.data.list
         })
       },
-      resetForm() {
+      /*新增选择订单*/
+      initOrderList(){
+        orderHttp.list().then(res=>{
+          this.ordList=res.data.list
+        })
+      },
+      /*高级搜索*/
+     /* resetForm() {
         this.$refs.advancedSearchFormRef.resetFields()
         this.searchInput = ''
         this.initList()
         this.rowplanId = 0
         this.buttonDisabled = true
-      },
-      resetForm() {
-        this.$refs.advancedSearchFormRef.resetFields()
-        this.searchInput = ''
-        this.initList()
-        this.rowplanId = 0
-        this.buttonDisabled = true
-      },
+      },*/
       editHandleClose() {
         this.$refs.editFormRef.resetFields()
       },
       addHandleClose(){
-
+        this.$refs["addform"].resetFields()
       },
       openEditPlan(){
       },
@@ -277,12 +302,20 @@
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
+          console.log("ppp:",res.data.list)
         })
+      },
+      resetForm() {
+        this.$refs.advancedSearchFormRef.resetFields()
+        this.searchInput = ''
+        this.initList()
+        this.rowplanId = 0
+        this.buttonDisabled = true
       },
     },
     created() {
-      this.initList(),
-      this.initOrderList(),
+      this.initList()
+      this.initOrderList()
       this.initEmpList()
     }
   }

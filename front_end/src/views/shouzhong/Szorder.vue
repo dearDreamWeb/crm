@@ -126,11 +126,11 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="主题" prop="ordTheme">
-              <el-input v-model="addForm.ordTheme" size="mini" placeholder="请输入主题" clearable/>
+              <el-input v-model="addForm.ordTheme" size="medium" placeholder="请输入主题" clearable/>
             </el-form-item>
           </el-col>
           <el-col :span="8" width="600px">
-            <el-form-item label="客户" size="mini">
+            <el-form-item label="客户" size="medium" style="margin-top: 4px">
               <el-select v-model="addForm.cusId" placeholder="请选择客户" >
                 <el-option v-for="item in cusList" :key="item.cusId"
                            :label="item.cusName" :value="item.cusId">
@@ -140,7 +140,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="总金额" prop="ordTotalmoney">
-              <el-input v-model="addForm.ordTotalmoney" size="mini" placeholder="请输入总金额" clearable/>
+              <el-input v-model="addForm.ordTotalmoney" size="medium" placeholder="请输入总金额" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -148,24 +148,24 @@
 
           <el-col :span="8">
             <el-form-item label="收货人" prop="ordConsignee">
-              <el-input v-model="addForm.ordConsignee" size="mini" placeholder="请填写收货人姓名" clearable/>
+              <el-input v-model="addForm.ordConsignee" size="medium" placeholder="请填写收货人姓名" clearable/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="手机号" prop="ordPhone">
-              <el-input v-model="addForm.ordPhone" size="mini" placeholder="请填写收货人电话" clearable/>
+              <el-input v-model="addForm.ordPhone" size="medium" placeholder="请填写收货人电话" clearable/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="地址" size="mini">
-              <area-cascader type='text' v-model="selected2" :level='1' :data="pcaa" @change="areaCascaderChange"></area-cascader>
+            <el-form-item label="地址" size="mini" style="margin-top: 6px">
+              <area-cascader style="margin-bottom: 3px" type='text' v-model="selected2" :level='1' :data="pcaa" @change="areaCascaderChange"></area-cascader>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="详细地址" prop="ordDetail">
-              <el-input v-model="addForm.ordDetail" size="mini" placeholder="请完善详细地址" clearable/>
+              <el-input v-model="addForm.ordDetail" size="medium" placeholder="请完善详细地址" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -192,7 +192,7 @@
           </el-table-column>
         </el-table>
         <el-pagination background
-                       @current-change="AddProPage"
+                       @current-change="handleCurrentChange"
                        :current-page="pageNum" :page-sizes="[1,2,5,10]"
                        :page-size="pageSize" :total="total"
                        layout="prev, pager, next, jumper, total">
@@ -328,7 +328,7 @@
       return {
         input: '',
         searchInput:'',
-        selected2:[],
+        selected2:['湖南省','株洲市','荷塘区'],
         pca:pca,
         pcaa:pcaa,
         gridData:[],
@@ -612,12 +612,11 @@
           })
         })
       },*/
+    /*新增订单（选择产品同时新增订单详情）*/
       addOrderClick() {
-       /* this.addForm.ordProvince=this.selected2[0];
-        this.addForm.ordCity = this.selected2[1];
-        this.addForm.ordCountry=this.selected2[2];*/
        console.log("this.addproplu:",this.addproplus)
-
+        var addDetail = [];
+    /*通过循环得到已选取产品的主键、价格、数量*/
         for(var i=0,n=this.addproplus.length;i<n;i++){
           console.log("addproplus中价格:",this.addproplus[i].productPrice)
           var json={
@@ -625,10 +624,11 @@
             odetBuynum:this.addproplus[i].productNumber,
             odetBuymoney:this.addproplus[i].productPrice,
           }
+          addDetail.push(json)
         }
-        this.addproplus.push(json)
-        console.log("addproplus:",this.addproplus)
-
+        console.log(json)
+        console.log("addDetail:",addDetail)
+    /*给文本框绑定需要的值*/
         let ppp={
           ordTheme:this.addForm.ordTheme,
           ordHead:this.$store.state.empName,
@@ -640,22 +640,24 @@
           ordDetail:this.addForm.ordDetail,
           ordPhone:this.addForm.ordPhone,
           cusId:this.addForm.cusId,
-         /* szOrderDetails:[{
-              odetBuynum:this.addproplus.productNumber,
-              odetBuymoney:this.addproplus.productPrice,
-              productId:this.addproplus.productId
-          }]*/
-          szOrderDetails:this.addproplus
+          szOrderDetails:addDetail
         }
-        /*for (let i=0;i<ppp.szOrderDetails.length;i++) {
-          if (ppp.szOrderDetails[i].productName == null) {
-            ppp.szOrderDetails.splice(i,1);
-          }
-        }*/
         orderHttp.addOrder(ppp).then(res => {
-
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.initList()
+            this.addDialog = false
+            this.addOrderButtonLoading = false
+          } else {
+            this.$message({
+              message:res.message,
+              type:"error"
+            })
+            this.addOrderButtonLoading = false
+          }
         })
       },
+      /*修改订单*/
       editOrderClick(){
         this.editForm.ordProvince=this.selected2[0];
         this.editForm.ordCity = this.selected2[1];
@@ -688,7 +690,6 @@
         })
       },
       initList() {
-
         orderHttp.listPage(this.pageNum,this.pageSize).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
@@ -704,12 +705,9 @@
 </script>
 
 <style scoped>
-  .area-selected-trigger {
-    line-height: 15px !important;
-  }
-  .area-select.large {
-    height: 28px;
-    margin: 5px 0px;
+
+  .area-select .area-selected-trigger{
+    padding: 1px 20px 7px 12px;
   }
   .el-select .el-input__inner{
     height: 29px;

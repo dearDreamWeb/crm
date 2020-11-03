@@ -30,11 +30,15 @@ public class SzOrderServicelmpl implements SzOrderService {
     private SzOrderMapper szorderMapper;
     @Autowired
     private SzOrderDetailsMapper detailsMapper;
-    
+
 
     //一次性新增多个详情
     @Override
     public ResultVo addszOrder(SzOrder order){
+        order.setOrdState(0);/*执行中0*/
+        order.setOrdDelete(0);/*(删除)否0*/
+        order.setOrdStarttime(DateUtils.getDate());/*（订单开始时间）订单创建时间*/
+        order.setOrdCreatetime(DateUtils.getDate());/*订单创建时间*/
         int i =1;
         //第一步:获取所有的详情信息
         List<SzOrderDetails> details = order.getSzOrderDetails();
@@ -51,20 +55,6 @@ public class SzOrderServicelmpl implements SzOrderService {
         }
         return ResultUtils.response(1);
     }
-
-
-//    public ResultVo addszOrder(SzOrder szorder) {
-//        szorder.setOrdState(0);/*执行中0*/
-//        szorder.setOrdDelete(0);/*(删除)否0*/
-//        szorder.setOrdStarttime(DateUtils.getDate());/*当前时间*/
-//        szorder.setOrdCreatetime(DateUtils.getDate());
-//        int addszOrder=szorderMapper.addszOrder(szorder);
-//        if (addszOrder!=1){
-//            throw new SysException(ResultEnum.ORDER_ADD_FAIL.getCode(),ResultEnum.ORDER_ADD_FAIL.getMessage());
-//        }
-//        return ResultUtils.response(addszOrder);
-//    }
-
     @Override
     public ResultVo delszOrder(SzOrder szorder) {
         System.out.println("【订单】删除删除");
@@ -84,7 +74,6 @@ public class SzOrderServicelmpl implements SzOrderService {
             throw new SysException(ResultEnum.ORDER_UPDATE_FAIL.getCode(),
                     ResultEnum.ORDER_UPDATE_FAIL.getMessage());
         }
-        /*szorder.setOrdStarttime(DateUtils.getDate());*/
         int editszOrder = szorderMapper.editszOrder(szorder);
         if (editszOrder != 1) {
             throw new SysException(ResultEnum.ORDER_UPDATE_FAIL.getCode(),
@@ -121,3 +110,4 @@ public class SzOrderServicelmpl implements SzOrderService {
         return szorderMapper.OrdANDDel();
     }
 }
+

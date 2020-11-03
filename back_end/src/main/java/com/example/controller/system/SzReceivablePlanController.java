@@ -21,6 +21,7 @@ public class SzReceivablePlanController {
     @SysLog("添加回款计划")
     @PostMapping("/add")
     public ResultVo addszPlan(@RequestBody SzReceivablePlan szplan) {
+        System.out.println("添加回款计划："+szplan.toString());
         return szReceivablePlanService.addszPlan(szplan);
     }
 
@@ -41,9 +42,10 @@ public class SzReceivablePlanController {
         return szReceivablePlanService.getszPlan(planId);
     }
 
-    @GetMapping("list_all")
+   @GetMapping("list_all")
     public ResultVo listszPlan(SzReceivablePlan szplan){
         return szReceivablePlanService.listPlan(szplan);
     }
+
 
 }
