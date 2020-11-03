@@ -17,5 +17,14 @@ export const contactsHttp = {
       }
     }
     return postJson(params)
+  },
+  getByCustomerId:function (customerId) {
+    let params = {
+      url:'/contacts/get_by_cus',
+      data:{
+        'customerId':customerId
+      }
+    }
+    return get(params)
   }
 }

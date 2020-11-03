@@ -3,9 +3,14 @@ package com.example.service.impl;
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
+import com.example.entity.SaleDetailDemand;
+import com.example.entity.request.DemandReq;
+import com.example.entity.request.SaleDetailReq;
 import com.example.entity.request.SaleReq;
+import com.example.entity.response.CustomerResp;
+import com.example.entity.response.EmpResp;
 import com.example.entity.response.SaleResp;
-import com.example.model.mapper.SaleMapper;
+import com.example.model.mapper.*;
 import com.example.service.SaleService;
 import com.example.util.CheckUtils;
 import com.example.util.DateUtils;
@@ -28,6 +33,18 @@ import java.util.List;
 public class SaleServiceImpl implements SaleService {
     @Autowired
     private SaleMapper saleMapper;
+
+    @Autowired
+    private CustomerMapper customerMapper;
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Autowired
+    private SaleDetailMapper detailMapper;
+
+    @Autowired
+    private DemandMapper demandMapper;
 
     @Override
     public ResultVo addSale(SaleReq saleReq) {
@@ -100,7 +117,59 @@ public class SaleServiceImpl implements SaleService {
         }
         PageHelper.startPage(pageNum,pageSize);
         List<SaleResp> saleResps = saleMapper.listSale(saleReq);
+        for (int i=0;i<saleResps.size();i++) {
+            SaleResp saleResp = saleResps.get(i);
+            EmpResp emp = empMapper.getEmp(saleResp.getEmpId());
+            CustomerResp customer = customerMapper.getCustomer(saleResp.getCusId());
+            saleResp.setCusName(customer.getCusName());
+            saleResp.setEmpName(emp.getEmpName());
+        }
         PageInfo<SaleResp> list = new PageInfo<>(saleResps);
         return ResultUtils.response(list);
+    }
+
+    @Override
+    public ResultVo addSaleDetailDemand(SaleDetailDemand saleDetailDemand) {
+        SaleReq saleReq = new SaleReq();
+        SaleDetailReq saleDetailReq = new SaleDetailReq();
+        DemandReq demandReq = new DemandReq();
+
+        saleReq.setSaleName(saleDetailDemand.getSaleName());
+        saleReq.setSaleStatus(saleDetailDemand.getSaleStatus());
+        saleReq.setCusId(saleDetailDemand.getCusId());
+        saleReq.setContactsId(saleDetailDemand.getContactsId());
+        saleReq.setSaleSource(saleDetailDemand.getSaleSource());
+        saleReq.setDiscoveryTime(saleDetailDemand.getDiscoveryTime());
+        saleReq.setSaleType(saleDetailDemand.getSaleType());
+        saleReq.setEmpId(saleDetailDemand.getEmpId());
+        int addSale = saleMapper.addSale(saleReq);
+        Integer saleId = saleReq.getSaleId();
+        if (addSale != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+        saleDetailReq.setSaleId(saleId);
+        saleDetailReq.setSaleStarBeacon(saleDetailDemand.getSaleStarBeacon());
+        saleDetailReq.setSalePriorLevel(saleDetailDemand.getSalePriorLevel());
+        int addSaleDetail = detailMapper.addSaleDetail(saleDetailReq);
+        if (addSaleDetail != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+        CustomerResp customer = customerMapper.getCustomer(saleDetailDemand.getCusId());
+        demandReq.setDemandTitle(DateUtils.dateToDateStr(DateUtils.getDate())+
+                customer.getCusName()+"需求");
+        demandReq.setDemandContent(saleDetailDemand.getDemandContent());
+        demandReq.setSaleId(saleId);
+        demandReq.setEmpId(saleDetailDemand.getEmpId());
+        demandReq.setCusId(saleDetailDemand.getCusId());
+        demandReq.setContactsId(saleDetailDemand.getContactsId());
+        int addDemand = demandMapper.addDemand(demandReq);
+        if (addDemand != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
+        return ResultUtils.response("新增成功");
     }
 }

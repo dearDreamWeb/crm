@@ -95,4 +95,10 @@ public class ContactsServiceImpl implements ContactsService {
         PageInfo<ContactsResp> list = new PageInfo<>(contactsResps);
         return ResultUtils.response(list);
     }
+
+    @Override
+    public ResultVo getByCustomerId(Integer customerId) {
+        List<ContactsResp> byCustomerId = contactsMapper.getByCustomerId(customerId);
+        return ResultUtils.response(byCustomerId);
+    }
 }

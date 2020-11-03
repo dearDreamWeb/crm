@@ -20,8 +20,8 @@
     <insert id="addSaleDetail" parameterType="com.example.entity.request.SaleDetailReq">
         INSERT INTO sale_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="saleEstimate != null">
-                sale_estimate,
+            <if test="saleEstimateDate != null">
+                sale_estimate_date,
             </if>
             <if test="salePossibility != null and salePossibility != ''">
                 sale_possibility,
@@ -43,8 +43,8 @@
             </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
-            <if test="saleEstimate != null">
-                #{saleEstimate},
+            <if test="saleEstimateDate != null">
+                #{saleEstimateDate},
             </if>
             <if test="salePossibility != null and salePossibility != ''">
                 #{salePossibility},

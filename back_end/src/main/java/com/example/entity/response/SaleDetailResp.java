@@ -20,8 +20,8 @@ public class SaleDetailResp {
     private Date saleEstimateDate;
     private String salePossibility;
     private BigDecimal saleExpectMoney;
-    private Integer saleStarBeacon;
-    private Integer salePriorLevel;
+    private String saleStarBeacon;
+    private String salePriorLevel;
     private String saleStage;
     private String saleStageRemark;
     private Integer saleId;

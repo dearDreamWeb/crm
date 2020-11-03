@@ -14,4 +14,5 @@ public interface ContactsService {
     ResultVo editContacts(ContactsReq contactsReq);
     ResultVo getContacts(Integer contactsId);
     ResultVo listContacts(ContactsReq contactsReq);
+    ResultVo getByCustomerId(Integer customerId);
 }

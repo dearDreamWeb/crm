@@ -19,4 +19,5 @@ public interface ContactsMapper {
     ContactsResp getContacts(Integer contactsId);
     List<ContactsResp> listContacts(ContactsReq contactsReq);
     int addContactsAndCustomer(ContactsReq contactsReq);
+    List<ContactsResp> getByCustomerId(Integer customerId);
 }

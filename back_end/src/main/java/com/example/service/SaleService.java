@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.entity.ResultVo;
+import com.example.entity.SaleDetailDemand;
 import com.example.entity.request.SaleReq;
 
 /**
@@ -14,4 +15,5 @@ public interface SaleService {
     ResultVo editSale(SaleReq saleReq);
     ResultVo getSale(SaleReq saleReq);
     ResultVo listSale(SaleReq saleReq);
+    ResultVo addSaleDetailDemand(SaleDetailDemand saleDetailDemand);
 }

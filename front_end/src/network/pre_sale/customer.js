@@ -70,5 +70,14 @@ export const customerHttp = {
       }
     }
     return get(params)
+  },
+  getCusById:function (cusId) {
+    let params = {
+      url:'/customer',
+      data:{
+        'cusId':cusId
+      }
+    }
+    return get(params)
   }
 }

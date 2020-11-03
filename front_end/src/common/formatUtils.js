@@ -115,3 +115,29 @@ export function followCategoryFormat(followCategory) {
     return 'el-icon-document'
   }
 }
+
+export function salePriorLevelFormat(salePriorLevel) {
+  if (salePriorLevel === 1) {
+    return '一级'
+  } else if (salePriorLevel === 2) {
+    return '二级'
+  } else if (salePriorLevel === 3) {
+    return '三级'
+  } else {
+    return ''
+  }
+}
+
+export function saleStarBeaconFormat(saleStarBeacon) {
+  if (saleStarBeacon === 1) {
+    return 'http://www.eblog.icu/6.png'
+  } else if (saleStarBeacon === 2) {
+    return 'http://www.eblog.icu/1.png'
+  } else if (saleStarBeacon === 3) {
+    return 'http://www.eblog.icu/2.png'
+  } else if (saleStarBeacon === 4) {
+    return 'http://www.eblog.icu/4.png'
+  } else {
+    return 'http://www.eblog.icu/5.png'
+  }
+}

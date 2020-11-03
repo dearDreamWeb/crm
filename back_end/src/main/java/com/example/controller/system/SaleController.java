@@ -2,6 +2,7 @@ package com.example.controller.system;
 
 import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
+import com.example.entity.SaleDetailDemand;
 import com.example.entity.request.SaleReq;
 import com.example.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,10 @@ public class SaleController {
     @GetMapping("/list")
     public ResultVo listSale(SaleReq saleReq) {
         return saleService.listSale(saleReq);
+    }
+
+    @PostMapping("/add_reunite")
+    public ResultVo addSaleDetailDemand(@RequestBody SaleDetailDemand saleDetailDemand) {
+        return saleService.addSaleDetailDemand(saleDetailDemand);
     }
 }

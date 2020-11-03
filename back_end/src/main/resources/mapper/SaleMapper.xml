@@ -32,7 +32,7 @@
         <result column="cus_id" property="cusId"/>
         <result column="contacts_id" property="contactsId"/>
         <result column="emp_id" property="empId"/>
-        <association property="saleDetailResp" resultMap=""/>
+        <association property="saleDetailResp" resultMap="SaleDetailResult"/>
     </resultMap>
 
     <resultMap id="SaleDetailResult" type="com.example.entity.response.SaleDetailResp">
@@ -51,18 +51,21 @@
     </resultMap>
 
     <insert id="addSale" parameterType="com.example.entity.request.SaleReq">
+        <selectKey keyColumn="sale_id" keyProperty="saleId" resultType="Integer" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
         INSERT INTO sale
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="saleName != null and saleName != ''">
                 sale_name,
             </if>
-            <if test="saleStatus != null">
+            <if test="saleStatus != null and saleStatus != ''">
                 sale_status,
             </if>
-            <if test="saleType != null">
+            <if test="saleType != null and saleType != ''">
                 sale_type,
             </if>
-            <if test="saleSource != null">
+            <if test="saleSource != null and saleSource != ''">
                 sale_source,
             </if>
             <if test="discoveryTime != null">
@@ -82,13 +85,13 @@
             <if test="saleName != null and saleName != ''">
                 #{saleName},
             </if>
-            <if test="saleStatus != null">
+            <if test="saleStatus != null and saleStatus != ''">
                 #{saleStatus},
             </if>
-            <if test="saleType != null">
+            <if test="saleType != null and saleType != ''">
                 #{saleType},
             </if>
-            <if test="saleSource != null">
+            <if test="saleSource != null and saleSource != ''">
                 #{saleSource},
             </if>
             <if test="discoveryTime != null">
@@ -116,13 +119,13 @@
         <if test="saleName != null and saleName != ''">
             ,sale_name = #{saleName}
         </if>
-        <if test="saleStatus != null">
+        <if test="saleStatus != null and saleStatus != ''">
             ,sale_status = #{saleStatus}
         </if>
-        <if test="saleType != null">
+        <if test="saleType != null and saleType != ''">
             ,sale_type = #{saleType}
         </if>
-        <if test="saleSource != null">
+        <if test="saleSource != null and saleSource != ''">
             ,sale_source = #{saleSource}
         </if>
         <if test="discoveryTime != null">

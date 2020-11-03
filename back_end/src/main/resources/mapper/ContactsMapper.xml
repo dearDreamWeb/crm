@@ -130,4 +130,10 @@
         INSERT INTO contacts(contacts_name,contacts_phone,qq,wechat,remark,cus_id) VALUES
         (#{contactsName},#{contactsPhone},#{qq},#{wechat},#{remark},#{cusId})
     </insert>
+
+    <select id="getByCustomerId" resultMap="ContactsResult">
+        SELECT contacts_id,contacts_name,birthday,sex,wechat,
+            contacts_phone,qq,email,remark,contacts_dict_type,cus_id
+        FROM contacts WHERE cus_id = #{customerId}
+    </select>
 </mapper>

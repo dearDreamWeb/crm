@@ -17,10 +17,10 @@ import java.util.Date;
 public class SaleReq {
     private Integer saleId;
     private String saleName;
-    private Integer saleStatus;
-    private Integer saleType;
-    private Integer saleSource;
-    private Date discoveryTime;
+    private String saleStatus;
+    private String saleType;
+    private String saleSource;
+    private String discoveryTime;
     private Integer version;
     private Date createTime;
     private Date updateTime;

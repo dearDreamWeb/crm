@@ -31,7 +31,8 @@ Vue.prototype.$urlUtil = urlUtils
 import {
   sexFormat,dateFormat,clueStatusFormat,timeFormat,
   ordStateFormat,delStateFormat,planInvoiceFormat,dateTimeFormat,
-  clueHandleResultFormat,productStatusFormat,followCategoryFormat
+  clueHandleResultFormat,productStatusFormat,followCategoryFormat,
+  salePriorLevelFormat,saleStarBeaconFormat
 } from "./common/formatUtils";
 Vue.filter('dateFormat',dateFormat)
 Vue.filter('timeFormat',timeFormat)
@@ -44,6 +45,8 @@ Vue.filter('dateTimeFormat',dateTimeFormat)
 Vue.filter('clueHandleResultFormat',clueHandleResultFormat)
 Vue.filter('productStatusFormat',productStatusFormat)
 Vue.filter('followCategoryFormat',followCategoryFormat)
+Vue.filter('salePriorLevelFormat',salePriorLevelFormat)
+Vue.filter('saleStarBeaconFormat',saleStarBeaconFormat)
 
 /* eslint-disable no-new */
 new Vue({

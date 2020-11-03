@@ -55,13 +55,13 @@
             <if test="demandTitle != null and demandTitle != ''">
                 demand_title,
             </if>
-            <if test="demandDegree != null">
+            <if test="demandDegree != null and demandDegree != ''">
                 demand_degree,
             </if>
             <if test="demandContent != null and demandContent != ''">
                 demand_content,
             </if>
-            <if test="isSolve != null">
+            <if test="isSolve != null and isSolve != ''">
                 is_solve,
             </if>
             <if test="contactsId != null">
@@ -81,13 +81,13 @@
             <if test="demandTitle != null and demandTitle != ''">
                 #{demandTitle},
             </if>
-            <if test="demandDegree != null">
+            <if test="demandDegree != null and demandDegree != ''">
                 #{demandDegree},
             </if>
             <if test="demandContent != null and demandContent != ''">
                 #{demandContent},
             </if>
-            <if test="isSolve != null">
+            <if test="isSolve != null and isSolve != ''">
                 #{isSolve},
             </if>
             <if test="contactsId != null">
@@ -114,13 +114,13 @@
         <if test="demandTitle != null and demandTitle != ''">
             ,demand_title = #{demandTitle}
         </if>
-        <if test="demandDegree != null">
+        <if test="demandDegree != null and demandDegree != ''">
             ,demand_degree = #{demandDegree}
         </if>
         <if test="demandContent != null and demandContent != ''">
             ,demand_content = #{demandContent}
         </if>
-        <if test="isSolve != null">
+        <if test="isSolve != null and isSolve != ''">
             ,is_solve = #{isSolve}
         </if>
         <if test="contactsId != null">

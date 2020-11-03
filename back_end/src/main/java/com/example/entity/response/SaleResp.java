@@ -15,12 +15,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SaleResp {
-    private Integer salsId;
+    private Integer saleId;
     private String saleName;
-    private Integer saleStatus;
-    private Integer saleType;
-    private Integer saleSource;
-    private Date discoveryTime;
+    private String saleStatus;
+    private String saleType;
+    private String saleSource;
+    private String discoveryTime;
     private Integer version;
     private Date createTime;
     private Date updateTime;
@@ -29,4 +29,7 @@ public class SaleResp {
     private Integer contactsId;
     private Integer empId;
     private SaleDetailResp saleDetailResp;
+
+    private String cusName;
+    private String empName;
 }

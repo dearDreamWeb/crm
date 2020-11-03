@@ -17,9 +17,9 @@ import java.util.Date;
 public class DemandReq {
     private Integer demandId;
     private String demandTitle;
-    private Integer demandDegree;
+    private String demandDegree;
     private String demandContent;
-    private Integer isSolve;
+    private String isSolve;
     private Integer contactsId;
     private Integer saleId;
     private Integer empId;

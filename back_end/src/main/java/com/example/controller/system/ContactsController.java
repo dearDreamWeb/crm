@@ -45,4 +45,9 @@ public class ContactsController {
     public ResultVo listContacts(@RequestBody ContactsReq contactsReq) {
         return contactsService.listContacts(contactsReq);
     }
+
+    @GetMapping("/get_by_cus")
+    public ResultVo getByCustomerId(@RequestParam("customerId")Integer customerId) {
+        return contactsService.getByCustomerId(customerId);
+    }
 }

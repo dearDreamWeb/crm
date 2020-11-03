@@ -18,9 +18,9 @@ import java.util.List;
 public class DemandResp {
     private Integer demandId;
     private String demandTitle;
-    private Integer demandDegree;
+    private String demandDegree;
     private String demandContent;
-    private Integer isSolve;
+    private String isSolve;
     private Integer contactsId;
     private Integer saleId;
     private Integer empId;
