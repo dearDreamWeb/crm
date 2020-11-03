@@ -1,5 +1,6 @@
 package com.example.entity.request;
 
+import com.example.entity.response.EmpResp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,10 @@ public class SzReceivablePlan {
     private Integer planDel;//是1否0删除
 
     private Integer ordId;
+    private Integer empId;
+    private SzOrder szOrder;
+    private EmpResp empResp;
+
 
     private Integer pageNum;
     private Integer pageSize;

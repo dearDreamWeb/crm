@@ -6,6 +6,7 @@ import com.example.entity.ResultVo;
 import com.example.entity.request.SzReceivablePlan;
 import com.example.model.mapper.SzReceivablePlanMapper;
 import com.example.service.SzReceivablePlanService;
+import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -28,6 +29,7 @@ public class SzReceivablePlanServicelmpl implements SzReceivablePlanService {
 
     @Override
     public ResultVo addszPlan(SzReceivablePlan szplan) {
+        szplan.setPlanCaozuotime(DateUtils.getDate());
         int addszPlan=szplanMapper.addszPlan(szplan);
         if (addszPlan != 1){
             throw new SysException(ResultEnum.ReceivablePlan_ADD_FAIL.getCode(),

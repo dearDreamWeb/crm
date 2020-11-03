@@ -1,8 +1,6 @@
 package com.example.controller.system;
 
-import com.alibaba.fastjson.JSONObject;
 import com.example.anno.SysLog;
-import com.example.common.config.addproplusVo;
 import com.example.entity.ResultVo;
 import com.example.entity.request.SzOrder;
 import com.example.entity.request.SzOrderDetails;
@@ -11,7 +9,6 @@ import com.example.service.SzOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -25,16 +22,7 @@ public class SzOrderController {
     @Autowired
     private SzOrderService szorderService;
     @Autowired
-    private SzOrderDetailsService szOrderDetailsService;
-
-    //@SysLog 日志
-   /* @SysLog("添加订单")
-    @PostMapping("/add")
-    public ResultVo addszOrder(@RequestBody SzOrder szorder){
-        *//*szorder.setOrdCreatetime(new Timestamp(System.currentTimeMillis()));*//*
-        System.out.println("订单详情："+szorder.getSzOrderDetails());
-        return szorderService.addszOrder(szorder);
-    }*/
+    private SzOrderDetailsService detailsService;
 
     /*  @SysLog("添加订单")
       @PostMapping("/add")
@@ -82,15 +70,4 @@ public class SzOrderController {
         return szorderService.OrdANDDel();
     }
 
-    @RequestMapping("/add_deta")
-    public void addOrderANDOrderDet(@RequestBody String product) {
-        JSONObject obj=(JSONObject)JSONObject.parse(product);
-        Object products = obj.getObject("product",Object.class);
-        SzOrder szOrder=obj.getObject("prod",SzOrder.class);
-        System.out.println("product"+products);
-        System.out.println(szOrder);
-        // System.out.println("products"+products);
-
-        //szOrderDetailsService.addOrderANDOrderDet(products,szOrder);
-    }
 }
