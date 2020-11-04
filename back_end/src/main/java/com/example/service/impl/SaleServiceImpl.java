@@ -144,6 +144,7 @@ public class SaleServiceImpl implements SaleService {
         saleReq.setEmpId(saleDetailDemand.getEmpId());
         int addSale = saleMapper.addSale(saleReq);
         Integer saleId = saleReq.getSaleId();
+        System.out.println("新增成功的销售编号是："+saleId);
         if (addSale != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
@@ -161,6 +162,7 @@ public class SaleServiceImpl implements SaleService {
                 customer.getCusName()+"需求");
         demandReq.setDemandContent(saleDetailDemand.getDemandContent());
         demandReq.setSaleId(saleId);
+        demandReq.setDemandDegree(degreeRating(saleDetailDemand.getSalePriorLevel()));
         demandReq.setEmpId(saleDetailDemand.getEmpId());
         demandReq.setCusId(saleDetailDemand.getCusId());
         demandReq.setContactsId(saleDetailDemand.getContactsId());
@@ -171,5 +173,15 @@ public class SaleServiceImpl implements SaleService {
         }
 
         return ResultUtils.response("新增成功");
+    }
+
+    public static String degreeRating(String degree) {
+        if (degree.equals("一级") || degree.equals("二级")) {
+            return "非常重要";
+        } else if (degree.equals("三级") || degree.equals("四级")) {
+            return "重要";
+        } else {
+            return "一般";
+        }
     }
 }

@@ -41,6 +41,9 @@
             <if test="saleStageRemark != null and saleStageRemark != ''">
                 sale_stage_remark,
             </if>
+            <if test="saleId != null">
+                sale_id,
+            </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="saleEstimateDate != null">
@@ -63,6 +66,9 @@
             </if>
             <if test="saleStageRemark != null and saleStageRemark != ''">
                 #{saleStageRemark},
+            </if>
+            <if test="saleId != null">
+                #{saleId},
             </if>
         </trim>
     </insert>

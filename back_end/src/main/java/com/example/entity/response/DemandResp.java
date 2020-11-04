@@ -30,4 +30,8 @@ public class DemandResp {
     private Date updateTime;
     private Integer isDelete;
     private List<SolutionResp> solutionResps;
+    private String contactsName;
+    private String saleName;
+    private String empName;
+    private String cusName;
 }

@@ -124,6 +124,31 @@
         SELECT contacts_id,contacts_name,birthday,sex,wechat,
             contacts_phone,qq,email,remark,contacts_dict_type,cus_id
         FROM contacts
+        <where>
+            <if test="contactsName != null and contactsName != ''">
+                AND contacts_name LIKE CONCAT('%',#{contactsName},'%')
+            </if>
+            <if test="sex != null">
+                AND sex = #{sex}
+            </if>
+            <if test="wechat != null and wechat != ''">
+                AND wechat LIKE CONCAT('%',#{wechat},'%')
+            </if>
+            <if test="contactsPhone != null and contactsPhone != ''">
+                AND contacts_phone LIKE CONCAT('%',#{contactsPhone},'%')
+            </if>
+            <if test="qq != null and qq != ''">
+                AND qq LIKE CONCAT('%',#{qq},'%')
+            </if>
+            <if test="email != null and email != ''">
+                AND email LIKE CONCAT('%',#{email},'%')
+            </if>
+            <if test="cusId != null">
+                AND cus_id = #{cusId}
+            </if>
+            AND is_delete = 0
+        </where>
+        ORDER BY create_time DESC
     </select>
 
     <insert id="addContactsAndCustomer" parameterType="com.example.entity.request.ContactsReq">

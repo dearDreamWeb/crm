@@ -21,5 +21,30 @@ export const demandHttp = {
       }
     }
     return postJson(params)
+  },
+  listPage:function (pageNum,pageSize) {
+    let params = {
+      url:'/demand/list',
+      data:{
+        'pageNum':pageNum,
+        'pageSize':pageSize
+      }
+    }
+    return get(params)
+  },
+  search:function (demand) {
+    let params = {
+      url:'/demand/list',
+      data:{
+        'demandTitle':demand.demandTitle,
+        'demandDegree':demand.demandDegree,
+        'isSolve':demand.isSolve,
+        'contactsId':demand.contactsId,
+        'saleId':demand.saleId,
+        'empId':demand.empId,
+        'cusId':demand.cusId
+      }
+    }
+    return get(params)
   }
 }

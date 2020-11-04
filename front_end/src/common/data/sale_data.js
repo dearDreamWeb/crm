@@ -35,5 +35,10 @@ module.exports = {
     {label : '4',value : 'http://www.eblog.icu/4.png',name : '星标四号',level : '四级'},
     {label : '5',value : 'http://www.eblog.icu/5.png',name : '星标五号',level : '五级'},
     {label : '6',value : 'http://www.eblog.icu/6.png',name : '星标六号',level : '六级'}
+  ],
+  demandDegreeData : [
+    {label : '1',value : '非常重要'},
+    {label : '2',value : '重要'},
+    {label : '3',value : '一般'},
   ]
 }

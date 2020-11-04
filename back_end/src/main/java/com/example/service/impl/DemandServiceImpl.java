@@ -4,8 +4,8 @@ import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
 import com.example.entity.request.DemandReq;
-import com.example.entity.response.DemandResp;
-import com.example.model.mapper.DemandMapper;
+import com.example.entity.response.*;
+import com.example.model.mapper.*;
 import com.example.service.DemandService;
 import com.example.util.CheckUtils;
 import com.example.util.DateUtils;
@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +29,18 @@ import java.util.List;
 public class DemandServiceImpl implements DemandService {
     @Autowired
     private DemandMapper demandMapper;
+
+    @Autowired
+    private ContactsMapper contactsMapper;
+
+    @Autowired
+    private SaleMapper saleMapper;
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @Override
     public ResultVo addDemand(DemandReq demandReq) {
@@ -97,7 +110,24 @@ public class DemandServiceImpl implements DemandService {
         }
         PageHelper.startPage(pageNum,pageSize);
         List<DemandResp> demandResps = demandMapper.listDemand(demandReq);
+        extractMethod(demandResps);
         PageInfo<DemandResp> list = new PageInfo<>(demandResps);
         return ResultUtils.response(list);
+    }
+
+    public List<DemandResp> extractMethod(List<DemandResp> list) {
+        List<DemandResp> respList = new ArrayList<DemandResp>();
+        for (DemandResp demandResp : list) {
+            ContactsResp contacts = contactsMapper.getContacts(demandResp.getContactsId());
+            SaleResp sale = saleMapper.getSale(demandResp.getSaleId());
+            EmpResp emp = empMapper.getEmp(demandResp.getEmpId());
+            CustomerResp customer = customerMapper.getCustomer(demandResp.getCusId());
+            demandResp.setContactsName(contacts.getContactsName());
+            demandResp.setSaleName(sale.getSaleName());
+            demandResp.setEmpName(emp.getEmpName());
+            demandResp.setCusName(customer.getCusName());
+            respList.add(demandResp);
+        }
+        return respList;
     }
 }

@@ -146,33 +146,34 @@
     </select>
 
     <select id="listDemand" resultMap="DemandDetailResult" parameterType="com.example.entity.request.DemandReq">
-        SELECT de.demand_title,de.demand_degree,de.demand_content,de.is_solve,de.version,de.create_time,
-        de.update_time,de.is_delete,de.contacts_id,de.sale_id,de.emp_id,de.cus_id
+        SELECT de.demand_id,de.demand_title,de.demand_degree,de.demand_content,de.is_solve,de.version,de.create_time,
+        de.update_time,de.is_delete,de.contacts_id,de.sale_id,de.emp_id,de.cus_id,
+
         so.solution_id,so.solution_title,so.create_time,so.content,so.feedback,so.version,so.update_time,
-        so.is_delete,so.cus_id,so.sale_id,so.demand_id,
+        so.is_delete,so.cus_id,so.sale_id,so.demand_id
         FROM demand de
-        INNER JOIN solution so ON de.demand_id = so.demand_id
+        LEFT JOIN solution so ON de.demand_id = so.demand_id
         <where>
             <if test="demandTitle != null and demandTitle != ''">
-                de.demand_title LIKE CONCAT ('%',#{demandTitle},'%')
+                AND de.demand_title LIKE CONCAT ('%',#{demandTitle},'%')
             </if>
-            <if test="demandDegree != null">
-                de.demand_degree = #{demandDegree}
+            <if test="demandDegree != null and demandDegree != ''">
+                AND de.demand_degree = #{demandDegree}
             </if>
-            <if test="isSolve != null">
-                de.is_solve = #{isSolve}
+            <if test="isSolve != null and isSolve != ''">
+                AND de.is_solve = #{isSolve}
             </if>
             <if test="contactsId != null">
-                de.contacts_id = #{contactsId}
+                AND de.contacts_id = #{contactsId}
             </if>
             <if test="saleId != null">
-                de.sale_id = #{saleId}
+                AND de.sale_id = #{saleId}
             </if>
             <if test="empId != null">
-                de.emp_id = #{empId}
+                AND de.emp_id = #{empId}
             </if>
             <if test="cusId != null">
-                de.cus_id = #{cusId}
+                AND de.cus_id = #{cusId}
             </if>
             <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
                 AND date_format(de.create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')

@@ -8,14 +8,15 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input v-model="searchInput" placeholder="请输入机会名称" clearable size="mini">
+          <el-input v-model="searchInput" placeholder="请输入机会主题" clearable size="mini">
             <el-button size="mini" icon="el-icon-search" slot="append"></el-button>
           </el-input>
         </el-col>
         <el-col :span="9">
           <el-button type="primary" icon="el-icon-plus" size="mini"
                      @click="openAddDialog">新增</el-button>
-          <el-button type="primary" icon="el-icon-zoom-in" size="mini">高查</el-button>
+          <el-button type="primary" icon="el-icon-zoom-in" size="mini"
+                     @click="advancedSearch = !advancedSearch">高查</el-button>
           <el-button type="primary" icon="el-icon-refresh" size="mini"></el-button>
         </el-col>
         <el-col :span="9">
@@ -23,6 +24,73 @@
           <el-button type="danger" size="mini" icon="el-icon-delete">删除</el-button>
         </el-col>
       </el-row>
+
+      <transition name="el-zoom-in:top">
+        <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px;">
+          <el-form :model="searchForm" ref="searchFormRef" size="mini"
+                   label-position="right" label-width="70px">
+            <el-row>
+              <el-col>
+                <el-form-item label="高级查询"></el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <el-form-item label="占位符">
+                  <el-input clearable placeholder="请输入"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="占位符">
+                  <el-select clearable placeholder="请选择"></el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="占位符">
+                  <el-select clearable placeholder="请选择"></el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <el-form-item label="占位符">
+                  <el-input clearable placeholder="请输入"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="占位符">
+                  <el-select clearable placeholder="请选择"></el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="占位符">
+                  <el-select clearable placeholder="请选择"></el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <el-form-item label="占位符">
+                  <el-select clearable placeholder="请选择"></el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="占位符">
+                  <el-select clearable placeholder="请选择"></el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item>
+                  <el-button size="mini" icon="el-icon-zoom-out"
+                             @click="closeAdvancedSearch"></el-button>
+                  <el-button size="mini" @click="advancedSearchClick" type="primary"
+                             icon="el-icon-search"></el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </el-card>
+      </transition>
 
       <el-table :data="listForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
@@ -172,6 +240,9 @@
     name: "Sale",
     data() {
       return {
+        advancedSearch:false,
+        searchForm:{},
+
         addSaleButtonLoading:false,
         addDialog:false,
         addForm:{
@@ -232,6 +303,14 @@
       }
     },
     methods:{
+      advancedSearchClick() {
+
+      },
+      closeAdvancedSearch() {
+        this.advancedSearch = !this.advancedSearch
+        this.$refs.searchFormRef.resetFields()
+      },
+
       addSaleClick() {
         this.$refs.addFormRef.validate(valid => {
           if (!valid) return

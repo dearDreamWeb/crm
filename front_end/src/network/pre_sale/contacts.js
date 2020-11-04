@@ -26,5 +26,20 @@ export const contactsHttp = {
       }
     }
     return get(params)
+  },
+  list_all:function () {
+    let params = {
+      url:'/contacts/list'
+    }
+    return get(params)
+  },
+  getByCusId:function (cusId) {
+    let params = {
+      url:'/contacts/list',
+      data:{
+        'cusId':cusId
+      }
+    }
+    return get(params)
   }
 }

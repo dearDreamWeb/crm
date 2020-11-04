@@ -42,7 +42,7 @@ public class ContactsController {
     }
 
     @GetMapping("/list")
-    public ResultVo listContacts(@RequestBody ContactsReq contactsReq) {
+    public ResultVo listContacts(ContactsReq contactsReq) {
         return contactsService.listContacts(contactsReq);
     }
 

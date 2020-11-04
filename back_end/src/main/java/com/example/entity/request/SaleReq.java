@@ -32,4 +32,15 @@ public class SaleReq {
     private Integer pageSize;
     private String startDate;
     private String endDate;
+
+
+    public void setSaleId(Integer s){
+        System.out.println("成功赋值。。。"+s);
+        this.saleId = s;
+    }
+
+    public Integer getSaleId(){
+        System.out.println("正在是JFK"+this.saleId);
+        return this.saleId;
+    }
 }

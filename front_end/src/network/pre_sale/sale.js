@@ -50,5 +50,20 @@ export const saleHttp = {
       }
     }
     return postJson(params)
+  },
+  list_all:function () {
+    let params = {
+      url:'/sale/list'
+    }
+    return get(params)
+  },
+  getByCusId:function (cusId) {
+    let params = {
+      url:'/sale/list',
+      data:{
+        'cusId':cusId
+      }
+    }
+    return get(params)
   }
 }
