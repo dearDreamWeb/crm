@@ -21,6 +21,52 @@
         <result property="productId" column="product_id"/>
         <result property="orderId" column="order_id"/>
     </resultMap>
+
+    <resultMap id="RepairDetailResult" type="com.example.entity.request.Repair">
+        <id property="repairId" column="repair_id"/>
+        <result property="empId" column="repair_person"/>
+        <result property="repairDate" column="repair_receiving_time"/>
+        <result property="repairProblem" column="repair_problem"/>
+        <result property="repairPersonnel" column="repair_personnel"/>
+        <result property="repairAppointment" column="repair_appointment"/>
+        <result property="repairActual" column="repair_actual"/>
+        <result property="repairGdstae" column="repair_gdstate"/>
+        <result property="repairFault" column="repair_fault"/>
+        <result property="repairHfjl" column="repair_hfjl"/>
+        <result property="repairWxfy" column="repair_wxfy"/>
+        <result property="repairLxr" column="repair_lxr"/>
+        <result property="repairSfzb" column="repair_sfzb"/>
+        <result property="repairsjhm" column="inventory_seq"/>
+        <result property="cusId" column="cus_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="orderId" column="order_id"/>
+        <association property="customerResp" resultMap="CustomerResult"/>
+    </resultMap>
+
+    <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
+        <id column="cus_id" property="cusId"/>
+        <result column="cus_name" property="cusName"/>
+        <result column="life_cycle" property="lifeCycle"/>
+        <result column="first_signing_time" property="firstSigningTime"/>
+        <result column="abbreviation" property="abbreviation"/>
+        <result column="credit" property="credit"/>
+        <result column="settlement" property="settlement"/>
+        <result column="company_account" property="companyAccount"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="detail_address" property="detailAddress"/>
+        <result column="cus_remark" property="cusRemark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="cus_dict_source" property="cusDictSource"/>
+        <result column="cus_dict_stage" property="cusDictStage"/>
+        <result column="qualitative_id" property="qualitativeId"/>
+        <result column="grading_id" property="gradingId"/>
+        <result column="ration_id" property="rationId"/>
+        <result column="emp_id" property="empId"/>
+    </resultMap>
     <insert id="addRepair" parameterType="com.example.entity.request.Repair">
         <selectKey keyProperty="repairId" keyColumn="repair_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
@@ -84,26 +130,32 @@
     <delete id="deleteRepair" parameterType="Integer">
         DELETE FROM repair_order WHERE repair_id = #{repairId}
     </delete>
-    <select id="listRepair" resultMap="RepairResult">
-        SELECT repair_id,repair_person,repair_receiving_time,repair_problem,repair_personnel,repair_appointment,repair_actual,repair_gdstate,repair_fault,repair_hfjl,inventory_seq,repair_wxfy,repair_sfzb,repair_lxr
-        FROM repair_order
+    <select id="listRepair" resultMap="RepairDetailResult">
+        SELECT s.repair_id,s.repair_person,s.repair_receiving_time,s.repair_problem,s.repair_personnel,s.repair_appointment,s.repair_actual,s.repair_gdstate,s.repair_fault,s.repair_hfjl,s.inventory_seq,s.repair_wxfy,s.repair_sfzb,s.repair_lxr,
+        cu.*
+        FROM repair_order s
+        left join customer cu on s.cus_id = cu.cus_id
         <where>
             <if test="repairProblem != null and repairProblem != ''">
-                AND repair_problem LIKE CONCAT('%',#{repairProblem},'%')
+                AND s.repair_problem LIKE CONCAT('%',#{repairProblem},'%')
             </if>
             <if test="repairGdstae != null and repairGdstae != ''">
-                AND repair_gdstate LIKE CONCAT('%',#{repairGdstae},'%')
+                AND s.repair_gdstate LIKE CONCAT('%',#{repairGdstae},'%')
             </if>
             <if test="repairSfzb != null and repairSfzb != ''">
-                AND repair_sfzb LIKE CONCAT('%',#{repairSfzb},'%')
+                AND s.repair_sfzb LIKE CONCAT('%',#{repairSfzb},'%')
+            </if>
+            <if test="cusId != null">
+                and s.cus_id=#{cusId}
             </if>
         </where>
-        ORDER BY repair_receiving_time DESC
+        ORDER BY s.repair_receiving_time DESC
     </select>
 
-    <select id="getRepair" resultMap="RepairResult">
-        SELECT repair_id,repair_person,repair_receiving_time,repair_problem,repair_personnel,repair_appointment,repair_actual,repair_gdstate,repair_fault,repair_hfjl,inventory_seq,repair_wxfy,repair_sfzb,repair_lxr
-        FROM repair_order
-        WHERE repair_id = #{repairId}
+    <select id="getRepair" resultMap="RepairDetailResult">
+        SELECT s.*,cu.*
+        FROM repair_order s
+        LEFT JOIN customer cu ON cu.cus_id = s.cus_id
+        WHERE s.repair_id = #{repairId}
     </select>
 </mapper>

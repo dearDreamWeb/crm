@@ -3,7 +3,7 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input v-model="searchInput" size="mini" placeholder="请输入主题内容查询" clearable>
+          <el-input v-model="searchInput" size="mini" placeholder="请输入状态内容查询" clearable>
             <el-button @click="searchInputClick" slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
@@ -20,16 +20,69 @@
         </el-col>
       </el-row>
 
+      <transition name="el-zoom-in-top">
+        <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px;">
+          <el-form :model="searchForm" ref="advancedSearchFormRef"
+                   size="mini" label-position="right" label-width="80px">
+            <el-row>
+              <el-col>
+                <el-form-item label="高级搜索"></el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <el-form-item prop="careZt" label="部门">
+                  <el-input v-model="searchForm.dept" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item prop="repairSfzb" label="联系人">
+                  <el-input v-model="searchForm.repairSfzb" size="mini" placeholder="请输入" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="客户">
+                  <el-select v-model="searchForm.cusId">
+                    <el-option v-for="item in empList" :key="item.cusId"
+                               :label="item.cusName" :value="item.cusId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <el-form-item prop="careexecutor" label="接单人">
+                  <el-select v-model="searchForm.empId">
+                    <el-option v-for="item in edpList" :key="item.empId"
+                               :label="item.empName" :value="item.empId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item>
+                  <el-button size="mini" @click="advancedQueryClick"
+                             type="primary" icon="el-icon-search"></el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </el-card>
+      </transition>
+
       <el-table :data="listForm" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="40"></el-table-column>
 
-        <el-table-column prop="cusId" label="对应客户"></el-table-column>
+        <el-table-column prop="customerResp.cusName" label="对应客户"></el-table-column>
+        <el-table-column prop="repairSfzb" label="联系人"></el-table-column>
         <el-table-column prop="repairWxfy" label="费用"></el-table-column>
         <el-table-column prop="repairGdstae" label="状态"></el-table-column>
         <el-table-column prop="empResp.empName" label="承接部门"></el-table-column>
         <el-table-column prop="empId" label="接单人"></el-table-column>
+        <el-table-column prop="repairsjhm" label="是否在保"></el-table-column>
       </el-table>
 
       <el-pagination background
@@ -41,7 +94,7 @@
     </el-card>
 
     <el-dialog
-      title="新增关怀"
+      title="新增"
       :visible.sync="addDialog"
       width="50%"
       @close="handleClose">
@@ -114,13 +167,13 @@
               <el-input v-model="addform.dept"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="8">
             <el-form-item label="费用">
               <el-input v-model="addform.repairWxfy"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col>
             <el-form-item label="状态">
               <el-select v-model="addform.repairGdstae" placeholder="请选择">
@@ -139,13 +192,110 @@
       </div>
     </el-dialog>
 
+    <el-dialog
+      title="修改关怀"
+      :visible.sync="editDialog"
+      width="50%"
+      @close="editHandleClose">
+      <el-form ref="updateform" :model="updateform" :rules="rules" label-width="80px">
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="手机号码" prop="empId">
+                <el-input v-model="updateform.repairLxr"></el-input>
+              </el-form-item>
+            </el-col >
+            <el-col :span="8">
+              <el-form-item label="联系人">
+                <el-input v-model="updateform.repairSfzb"></el-input>
+              </el-form-item>
+            </el-col>
 
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="客户">
+                <el-select v-model="updateform.cusId">
+                  <el-option v-for="item in empList" :key="item.cusId"
+                             :label="item.cusName" :value="item.cusId">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
+              <el-form-item label="日期">
+                <el-date-picker type="date" placeholder="选择日期" v-model="updateform.repairDate" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="接单人">
+                <el-select v-model="updateform.empId">
+                  <el-option v-for="item in edpList" :key="item.empId"
+                             :label="item.empName" :value="item.empId">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="维修产品">
+                <el-input v-model="updateform.productId"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="保修">
+                <el-select v-model="updateform.repairsjhm" placeholder="请选择">
+                  <el-option label="在保" value="在保"></el-option>
+                  <el-option label="出保" value="出保"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="故障描述">
+                <el-input type="textarea" v-model="updateform.repairFault"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="承接部门">
+                <el-input v-model="updateform.dept"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="费用">
+                <el-input v-model="updateform.repairWxfy"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col>
+              <el-form-item label="状态">
+                <el-select v-model="updateform.repairGdstae" placeholder="请选择">
+                  <el-option label="执行中" value="执行中"></el-option>
+                  <el-option label="结束" value="结束"></el-option>
+                  <el-option label="意外终止" value="意外终止"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      <div style="text-align: center;">
+        <el-button @click="editDialog = false">取 消</el-button>
+        <el-button type="warning" @click="editCareClick" :loading="editDictButtonLoading">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import {repairHttp} from "../../network/system/repair";
 import {userHttp} from "../../network/system/user";
   import {customerHttp} from "../../network/pre_sale/customer";
+
   export default {
     data() {
       return {
@@ -184,6 +334,7 @@ import {userHttp} from "../../network/system/user";
           repairGdstae:'',
           region: '',
           date1: '',
+          repairLxr:'',
           repairFault: '',
           repairHfjl:'',
           repairWxfy:'',
@@ -207,9 +358,6 @@ import {userHttp} from "../../network/system/user";
         editDictButtonLoading:false,
         editDialog:false,
         searchInput:'',
-        careZt:'',
-
-        careData:'',
 
         listForm:[],
         tableLoading:'',
@@ -230,6 +378,7 @@ import {userHttp} from "../../network/system/user";
           repairGdstae:'',
           region: '',
           date1: '',
+          repairLxr:'',
           repairFault: '',
           repairHfjl:'',
           repairWxfy:'',
@@ -324,11 +473,36 @@ import {userHttp} from "../../network/system/user";
         })
       },
 
+      editCareClick(){
+        this.editDictButtonLoading = true
+        this.updateform.repairId = this.rowCareId
+        repairHttp.update(this.updateform).then(res => {
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.initList()
+            this.editDictButtonLoading = false
+            this.editDialog = false
+          } else {
+            this.$message({
+              message:res.message,
+              type:'error'
+            })
+            this.editDictButtonLoading = false
+          }
+        })
+      },
       openEditCare(){
         this.editDialog = true;
         this.getEmpDetail()
       },
-
+      getEmpDetail(){
+        repairHttp.get(this.rowCareId).then(res =>{
+          console.log("编辑获得的数据",res.data);
+          this.updateform = res.data;
+          this.updateform.cusName = res.data.customerResp.cusName
+          this.updateform.empName = res.data.empResp.empName
+        })
+      },
       editHandleClose() {
         this.$refs["updateform"].resetFields()
         this.editDictButtonLoading = false

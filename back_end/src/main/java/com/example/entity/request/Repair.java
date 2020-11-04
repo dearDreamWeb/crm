@@ -1,5 +1,6 @@
 package com.example.entity.request;
 
+import com.example.entity.response.CustomerResp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,12 +21,12 @@ public class Repair {
     private Date repairDate;//接单时间
     private String repairProblem;//zhut
     private String repairPersonnel;
-    private Date repairAppointment;
-    private Date repairActual;
+    private String repairAppointment;
+    private String repairActual;
     private String repairGdstae;
     private String repairFault;
     private String repairHfjl;
-    private double repairWxfy;
+    private Integer repairWxfy;
     private String repairSfzb;
     private String repairLxr;
     private String repairsjhm;
@@ -35,4 +36,5 @@ public class Repair {
     private Integer dictId;
     private Integer pageNum;
     private Integer pageSize;
+    private CustomerResp customerResp;
 }

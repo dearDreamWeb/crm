@@ -36,7 +36,21 @@ export const repairHttp = {
     let params = {
       url:'/repair/update',
       data:{
-
+        'repairId':repair.repairId,
+        'repairProblem':repair.repairProblem,
+        'repairPersonnel':repair.repairPersonnel,
+        'repairDate':repair.repairDate,
+        'repairAppointment':repair.repairAppointment,
+        'repairActual':repair.repairActual,
+        'repairGdstae':repair.repairGdstae,
+        'repairFault':repair.repairFault,
+        'repairHfjl':repair.repairHfjl,
+        'repairWxfy':repair.repairWxfy,
+        'repairSfzb':repair.repairSfzb,
+        'repairLxr':repair.repairLxr,
+        'repairsjhm':repair.repairsjhm,
+        'cusId':repair.cusId,
+        'empId':repair.empId
       }
     }
     return postJson(params)
