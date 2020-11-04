@@ -57,7 +57,7 @@
 <!--width="65%" top="20px"-->
       <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose">
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
-               label-position="right" :rules="formRules">
+               label-position="right" :rules="FormRules">
         <el-row>
           <el-col :span="12">
             <el-form-item label="选择订单" >
@@ -102,6 +102,38 @@
       </span>
     </el-dialog>
 
+<!--修改-->
+    <el-dialog
+      title="修改计划"
+      :visible.sync="editDialog"
+      width="50%"
+      @close="editHandleClose">
+      <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="80px">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="计划回款时间" prop="planTime">
+              <el-input v-model="editForm.planTime"></el-input>
+            </el-form-item>
+          </el-col >
+          <el-col :span="8">
+           <!-- <el-form-item label="执行人" prop="customerExecutor">
+              <el-select v-model="editForm.empId">
+                <el-option v-for="item in edpList" :key="item.empId"
+                           :label="item.empName" :value="item.empId">
+                </el-option>
+              </el-select>
+            </el-form-item>-->
+          </el-col>
+
+        </el-row>
+      </el-form>
+
+      <span slot="footer">
+        <el-button @click="editDialog = false">取消</el-button>
+        <el-button type="primary" @click="editPlanClick"
+                   :loading="editPlanButtonLoading">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -127,7 +159,10 @@
         },
         editForm:{
         },
-        formRules:{
+        editFormRules:{
+
+        },
+        FormRules:{
         },
         rowplanId: 0,
         tableLoading:false,
@@ -135,6 +170,7 @@
        /* advancedSearch:false,高级查询*/
         addDialog:false,
         addPlanButtonLoading:false,
+        editPlanButtonLoading:false,
         listForm:[],
         ordList:[],
         pageNum:1,
@@ -145,24 +181,12 @@
       }
     },
     methods: {
-   /*   productHttp.listAll(this.gridData).then(res=>{
-        this.gridData = res.data.list
-        this.total = res.data.total
-        this.pageNum = res.data.pageNum
-      })*/
       oidChange(val) {
         console.log(val)
         orderHttp.list(this.addDialog).then(res=>{
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
-        /*console.log(val)
-        this.addForm.planMoney = val.ordTotalmoney
-        orderHttp.getOrder(val).then(res=> {
-          console.log("oidchange");
-          this.addDialog =true;
-          this.addForm = res.data
-        })*/
       },
 
       searchInputClick() {
@@ -177,11 +201,6 @@
       },
 
       addPlanClick(){
-       /* console.log(this.$refs)
-        this.$refs["addForm"].validate(valid => {
-          if (!valid) return
-          this.addPlanButtonLoading = true
-        })*/
         planHttp.addplan(this.addForm).then(res => {
           console.log("kkk",this.addForm)
           /*if (res.code === 20000) {
@@ -197,27 +216,8 @@
             this.addPlanButtonLoading = false
           }*/
         })
-        /*console.log(this.$refs)
-        this.$refs.addFormRef.validate(valid =>{
-          if (!valid) return
-          this.addPlanButtonLoading = true
-          planHttp.addPlan(this.addform).then(res => {
-            if (res.code === 20000) {
-              this.$message.success(res.message)
-              this.initList()
-              this.addDialog = false
-              this.addPlanButtonLoading = false
-            } else {
-              this.$message({
-                message:res.message,
-                type:"error"
-              })
-              this.addPlanButtonLoading = false
-            }
-          })
-        })*/
       },
-      /**/
+
       openAddDialog() {
         this.addDialog = true
         this.initEmpList()
@@ -249,7 +249,10 @@
       addHandleClose(){
         this.$refs["addform"].resetFields()
       },
+      /*点击修改按钮获取改行id*/
       openEditPlan(){
+        this.editDialog=true;
+        this.getEditPlan()
       },
       delPlan(planId){
         this.$confirm('确定删除此订单吗','提示',{
@@ -269,6 +272,21 @@
               })
             }
           })
+        })
+      },
+
+      getEditPlan(){
+        planHttp.getplan(this.rowplanId).then(res=>{
+          console.log("获得修改数据：",res.data);
+          /*this.editForm.empName=res.data.empResp.empName
+          console.log("this.editForm.empName:",this.editForm)*/
+        })
+      },
+      editPlanClick(){
+        this.editPlanButtonLoading=true
+        /*this.editForm.cusId=this.rowplanId*/
+        planHttp.editplan(this.editForm).then(res=>{
+          console.log("111")
         })
       },
       handleCurrentChange(pageIndex) {
