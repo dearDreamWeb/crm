@@ -64,7 +64,7 @@ export const orderHttp = {
   list:function (order) {
     let params = {
       url:'/order/list_all',
-/*      data:{
+      data:{
         'ordTheme':order.ordTheme,
         'ordHead':order.ordHead,
         'ordTotalmoney':order.ordTotalmoney,
@@ -72,7 +72,7 @@ export const orderHttp = {
         'startDate':order.startDate,
         'endDate':order.endDate,
         'cusId':order.cusId
-      }*/
+      }
     }
     return get(params)
   },

@@ -139,13 +139,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="总金额" prop="ordTotalmoney">
+            <el-form-item label="总金额" prop="ordTotalmoney" >
               <el-input v-model="addForm.ordTotalmoney" size="medium" placeholder="请输入总金额" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-
           <el-col :span="8">
             <el-form-item label="收货人" prop="ordConsignee">
               <el-input v-model="addForm.ordConsignee" size="medium" placeholder="请填写收货人姓名" clearable/>
@@ -201,30 +200,34 @@
       </el-popover>
       <h3>购物车</h3>
       <!--<el-table :data="szorder">-->
-      <el-table :data="addproplus" >
-        <el-table-column property="productBrand" label="产品品牌"></el-table-column>
+      <el-table :data="addproplus" style="text-align: center;">
+        <el-table-column width="100" property="productBrand" label="产品品牌"></el-table-column>
         <el-table-column property="productName" label="产品名称" ></el-table-column>
         <el-table-column property="productModel" label="产品型号"></el-table-column>
-        <el-table-column property="productNumber" label="数量">
+        <el-table-column width="180" property="productNumber" label="数量" >
           <template slot-scope="scope">
           <el-input-number
             size="mini"
             v-model.number="scope.row.productNumber"
             :max="99"
             :min="1"
-            :step="1" ></el-input-number>
+            :step="1" @change="ProNumderChange(scope.row)">1</el-input-number>
           </template>
         </el-table-column>
-        <el-table-column property="productPrice" label="产品价格"></el-table-column>
-        <el-table-column property="odetBuymoney" label="操作" >
-          <el-button type="text" @click="delpro">删除</el-button>
+        <el-table-column width="100" property="productPrice" label="产品单价"></el-table-column>
+        <el-table-column width="100" property="odetBuymoney" label="操作" >
+          <template slot-scope="scope">
+            <el-button type="text" @click="delpro(scope.row.productId)">删除</el-button>
+          </template>
+          <!-- @click="chakan(scope.row.ordId)-->
         </el-table-column>
       </el-table>
-      <span>总金额:</span>
+      <span>总金额: {{zj}}</span>
       <span slot="footer">
         <el-button @click="addDialog = false">取消</el-button>
         <el-button type="primary" @click="addOrderClick"
                    :loading="addOrderButtonLoading">确定</el-button>
+        <el-button @click="tanClick" :loading="tanButtonLoading">弹</el-button>
       </span>
     </el-dialog>
 
@@ -335,7 +338,6 @@
         isDisable:false,
         searchInputpro:'',
         editForm:{
-
         },
         searchForm:{
           ordTheme:'',
@@ -359,19 +361,6 @@
         pageNum:1,
         pageSize:10,
         total:1,
-        /*addForm: {
-          ordTheme:'',
-          ordHead:'',
-          ordTotalmoney:'',
-          ordConsignee:'',
-          ordPhone:'',
-          ordProvince:'',
-          ordCity:'',
-          ordCountry:'',
-          ordDetail:'',
-          cusId: '',
-          cusIdList:[]
-        },*/
         addForm: {
           ordTheme:'',
           ordHead:'',
@@ -410,19 +399,50 @@
 
         },
         addOrderButtonLoading:false,
+        tanButtonLoading:false,
         editDialog:false,
         editOrderButtonLoading:false,
         dialogTableVisible:false,
         addOrdButtonLoading:false,
         szorder:[],
-        cusList:[],
-        addproplus:[],
-        productNumber:''
+        cusList:[
+        ],
+        addproplus: [],
+        totalmoney:'',
+        zj:0
       }
     },
     methods: {
+      /*算钱change*/
+      ProNumderChange(row){
+        /*productNumber=this.product*/
+        console.log('数量:',row.productNumber)
+        console.log('1价格:',row.productNumber * row.productPrice)
+        row.totalmoney=row.productNumber * row.productPrice
+        console.log("产品总金额：",row.totalmoney)
+       /* this.zj = this.zj+ row.productPrice
+        console.log(this.zj);*/
+       let totalzj = 0;
+        this.addproplus.forEach(value => {
+          totalzj=totalzj + value.totalmoney
+        })
+        this.addForm.ordTotalmoney = totalzj
+        this.zj=totalzj
+        console.log("添加产品后总价：",this.zj)
+      },
+      delpro(index,row){
+        var index = this.addproplus.indexOf(row)
+        this.addproplus.splice(index,1)
+        let totalzj = 0;
+        this.addproplus.forEach(value => {
+          totalzj=totalzj + value.totalmoney
+        })
+        this.addForm.ordTotalmoney = totalzj
+        this.zj=totalzj
+        console.log("删除产品后总价：",this.zj)
+        /*this.addproplus.splice(row,1)*/
+      },
       areaCascaderChange() {
-
         console.log("di",this.selected2)
       },
       advancedQueryClick() {
@@ -474,9 +494,7 @@
           this.pageNum = res.data.pageNum
         })
       },
-      delpro(){
 
-      },
       addpro(val){
        /* this.isDisable=true;*/
         this.addDialog=true;
@@ -484,26 +502,16 @@
             //已存在商品  修改数量
             alert("改产品已添加")
         }else{
-            //this.addproplus.pro
-            // this.$refs.forEach((pro,i)=> {
-            //   this.$set(pro, 'purNumber', 1);
-            //   pro.productId = pro.producttId;
-            //   pro.productName = pro.product.productName;
-            //   pro.purPrice = pro.producttPrice;
-            //   pro.productSize = pro.chanpincongbiaoShuxinzhi;
-            //   this.purList.splice(i, 0, pro);
-
+            // this.addproplus.productNumber=1;
             this.addproplus.push(val);
+           /* val.productNumber=1;
+            this.addproplus.push(val);
+            this.ProNumderChange(val);*/
             for(var i=0,n=this.addproplus.length;i<n;i++){
               console.log("addproplus啦啦啦啦啦",this.addproplus)
-            }
-           // });
-        }
 
-        // orderHttp.addpro(val).then(res=>{
-        //   console.log(res);
-        //   this.gridData=res;
-        // })
+            }
+        }
       },
       AddProPage(pageIndex){
         this.pageNum = pageIndex
@@ -612,6 +620,9 @@
           })
         })
       },*/
+      tanClick(){
+        alert("弹")
+      },
     /*新增订单（选择产品同时新增订单详情）*/
       addOrderClick() {
        console.log("this.addproplu:",this.addproplus)

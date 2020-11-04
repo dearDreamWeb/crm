@@ -23,6 +23,20 @@ export const planHttp = {
     }
     return postJson(params)
   },
+  editplan:function(plan){
+    let params={
+      url:'/plan/edit',
+      data:{
+        'planId':plan.planId,
+        'planTime':plan.planTime,
+        'planPeriod':plan.planPeriod,
+        'planCaozuopeople':plan.planCaozuopeople,
+        'ordId':plan.ordId,
+        'empId':plan.empId
+      }
+    }
+    return postJson(params)
+  },
   getplan:function (planId) {
     let params = {
       url:'/plan',
