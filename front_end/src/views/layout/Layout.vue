@@ -1,7 +1,7 @@
 <template>
   <el-container style="height: 100%">
     <el-aside class="sidebar" v-bind:class="{'sidebar-collapse':isCollapse}"
-              style="transition: .5s">
+              style="transition: .5s;">
       <el-header class="logo">
         <img src="@/assets/logo.png">
         <h1>Element</h1>

@@ -33,6 +33,10 @@ public class SaleReq {
     private String startDate;
     private String endDate;
 
+    private String salePriorLevel;
+    private String saleStage;
+    private String saleStarBeacon;
+
 
     public void setSaleId(Integer s){
         System.out.println("成功赋值。。。"+s);

@@ -143,11 +143,14 @@
         WHERE sale_id = #{saleId} AND version = #{version}
     </update>
 
-    <select id="getSale" resultMap="SaleResult">
-        SELECT sale_id,sale_name,sale_status,sale_type,sale_source,discovery_time,version,
-            create_time,update_time,is_delete,cus_id,contacts_id,emp_id
-        FROM sale
-        WHERE sale_id = #{saleId}
+    <select id="getSale" resultMap="DetailResult">
+        SELECT sa.sale_id,sa.sale_name,sa.sale_status,sa.sale_type,sa.sale_source,sa.discovery_time,sa.version,
+        sa.create_time,sa.update_time,sa.is_delete,sa.cus_id,sa.contacts_id,sa.emp_id,
+        sd.sale_detail_id,sd.sale_estimate_date,sd.sale_possibility,sd.sale_expect_money,sd.sale_star_beacon,
+        sd.sale_prior_level,sd.sale_stage,sd.sale_stage_remark,sd.sale_id,sd.version,sd.create_time,sd.update_time,sd.is_delete
+        FROM sale sa
+        INNER JOIN sale_detail sd ON sa.sale_id = sd.sale_id
+        WHERE sa.sale_id = #{saleId}
     </select>
 
     <select id="listSale" resultMap="DetailResult" parameterType="com.example.entity.request.SaleReq">
@@ -161,13 +164,13 @@
             <if test="saleName != null and saleName != ''">
                 AND sa.sale_name LIKE CONCAT('%',#{saleName},'%')
             </if>
-            <if test="saleStatus != null">
+            <if test="saleStatus != null and saleStatus != ''">
                 AND sa.sale_status = #{saleStatus}
             </if>
-            <if test="saleType != null">
+            <if test="saleType != null and saleType != ''">
                 AND sa.sale_type = #{saleType}
             </if>
-            <if test="saleSource != null">
+            <if test="saleSource != null and saleSource != ''">
                 AND sa.sale_source = #{saleSource}
             </if>
             <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
@@ -184,6 +187,15 @@
             </if>
             <if test="empId != null">
                 AND sa.emp_id = #{empId}
+            </if>
+            <if test="salePriorLevel != null and salePriorLevel != ''">
+                AND sd.sale_prior_level = #{salePriorLevel}
+            </if>
+            <if test="saleStage != null and saleStage != ''">
+                AND sd.sale_stage = #{saleStage}
+            </if>
+            <if test="saleStarBeacon != null and saleStarBeacon != ''">
+                AND sd.sale_star_beacon = #{saleStarBeacon}
             </if>
             AND sa.is_delete = 0
         </where>

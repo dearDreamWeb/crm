@@ -122,10 +122,26 @@ public class DemandServiceImpl implements DemandService {
             SaleResp sale = saleMapper.getSale(demandResp.getSaleId());
             EmpResp emp = empMapper.getEmp(demandResp.getEmpId());
             CustomerResp customer = customerMapper.getCustomer(demandResp.getCusId());
-            demandResp.setContactsName(contacts.getContactsName());
-            demandResp.setSaleName(sale.getSaleName());
-            demandResp.setEmpName(emp.getEmpName());
-            demandResp.setCusName(customer.getCusName());
+            if (contacts != null) {
+                demandResp.setContactsName(contacts.getContactsName());
+            } else {
+                demandResp.setContactsName(null);
+            }
+            if (sale != null) {
+                demandResp.setSaleName(sale.getSaleName());
+            } else {
+                demandResp.setSaleName(null);
+            }
+            if (emp != null) {
+                demandResp.setEmpName(emp.getEmpName());
+            } else {
+                demandResp.setEmpName(null);
+            }
+            if (customer != null) {
+                demandResp.setCusName(customer.getCusName());
+            } else {
+                demandResp.setCusName(null);
+            }
             respList.add(demandResp);
         }
         return respList;

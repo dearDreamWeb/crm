@@ -15,6 +15,8 @@ import 'e-icon-picker/dist/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 import 'element-ui/lib/theme-chalk/icon.css'
 
+import onlyNumber from '@/directive/el-input'; //自定义全局指令
+
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(iconPicker,{
@@ -24,6 +26,7 @@ Vue.use(iconPicker,{
   eIconSymbol: true
 })
 Vue.use(VueAreaLinkage)
+Vue.use(onlyNumber); //使用该全局指令
 Vue.component('tree-table', TreeTable)
 Vue.prototype.$urlUtil = urlUtils
 

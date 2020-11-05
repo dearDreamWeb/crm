@@ -16,7 +16,8 @@
           <el-button type="primary" icon="el-icon-plus" size="mini" @click="openAddDialog">添加</el-button>
           <el-button type="primary" icon="el-icon-zoom-in" size="mini"
                      @click="advancedSearch = !advancedSearch">高级查询</el-button>
-          <el-button type="primary" icon="el-icon-refresh" size="mini" @click="resetForm"></el-button>
+          <el-button type="primary" icon="el-icon-refresh" size="mini"
+                     @click="resetForm"></el-button>
         </el-col>
         <el-col :span="9">
           <el-button type="warning" size="mini" icon="el-icon-edit"

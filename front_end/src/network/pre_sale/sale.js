@@ -65,5 +65,39 @@ export const saleHttp = {
       }
     }
     return get(params)
+  },
+  search_sale:function (sale) {
+    let params = {
+      url:'/sale/list',
+      data:{
+        'saleName':sale.saleName,
+        'saleStatus':sale.saleStatus,
+        'saleType':sale.saleType,
+        'cusId':sale.cusId,
+        'empId':sale.empId,
+        'salePriorLevel':sale.salePriorLevel,
+        'saleStage':sale.saleStage,
+        'saleStarBeacon':sale.saleStarBeacon
+      }
+    }
+    return get(params)
+  },
+  del:function (saleId) {
+    let params = {
+      url:'/sale/del',
+      data:{
+        'saleId':saleId
+      }
+    }
+    return postJson(params)
+  },
+  get_by_id:function (saleId) {
+    let params = {
+      url:'/sale',
+      data:{
+        'saleId':saleId
+      }
+    }
+    return get(params)
   }
 }

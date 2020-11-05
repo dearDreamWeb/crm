@@ -262,6 +262,7 @@
           if (res.code === 20000) {
             this.tableLoading = false
             this.listForm = res.data.list
+            this.total = res.data.total
           }
         })
       },

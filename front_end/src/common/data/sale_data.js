@@ -40,5 +40,5 @@ module.exports = {
     {label : '1',value : '非常重要'},
     {label : '2',value : '重要'},
     {label : '3',value : '一般'},
-  ]
+  ],
 }
