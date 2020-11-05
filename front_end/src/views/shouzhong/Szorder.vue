@@ -145,6 +145,7 @@
           </el-col>
         </el-row>
         <el-row>
+
           <el-col :span="8">
             <el-form-item label="收货人" prop="ordConsignee">
               <el-input v-model="addForm.ordConsignee" size="medium" placeholder="请填写收货人姓名" clearable/>

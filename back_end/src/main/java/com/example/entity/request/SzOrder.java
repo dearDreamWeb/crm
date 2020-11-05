@@ -40,7 +40,7 @@ public class SzOrder {
 
     private CustomerResp customerResp;//客户
     private List<SzOrderDetails> SzOrderDetails;
-    private List<SzReceivablePlan> SzReceivablePlan;
+    private SzReceivablePlan SzReceivablePlan;
 
     private String startDate;
     private String endDate;

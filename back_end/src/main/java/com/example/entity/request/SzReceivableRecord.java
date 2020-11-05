@@ -24,4 +24,6 @@ public class SzReceivableRecord {
     private Integer recoLiushui;//交易流水号
 
     private Integer planId;//回款计划编号
+
+    private SzReceivablePlan szReceivablePlan;
 }
