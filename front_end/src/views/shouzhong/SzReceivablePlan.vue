@@ -55,13 +55,13 @@
       </el-pagination>
     </el-card>
 <!--width="65%" top="20px"-->
-      <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose">
+      <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose" size="medium" >
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
                label-position="right" :rules="FormRules">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="选择订单" >
-              <el-select v-model="addForm.ordId" placeholder="请选择订单" size="small" @change="oidChange">
+            <el-form-item label="关联订单" >
+              <el-select v-model="addForm.ordId" placeholder="请选择订单" size="medium" @change="oidChange">
                 <el-option v-for="item in ordList" :key="item.ordId"
                            :label="item.ordTheme" :value="item.ordId">
                 </el-option>
@@ -69,9 +69,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="总金额" size="small">  <!--clearable :disabled="true"-->
-              <el-input v-model="addForm.planMoney" size="mini" >
-
+            <el-form-item label="总金额" size="medium" >
+              <el-input v-model="addForm.planMoney" width="217px">
                 </el-input>
             </el-form-item>
           </el-col>
@@ -81,17 +80,38 @@
             <el-form-item label="回款日期">
               <el-date-picker v-model="addForm.planTime" format="yyyy-MM-dd"
                               value-format="yyyy-MM-dd" type="date"
-                              placeholder="请选择计划回款日期" size="small"></el-date-picker>
+                              placeholder="请选择计划回款日期" size="medium" ></el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="操作人">
+          <el-col :span="12" height="36px">
+            <el-form-item label="操作人" >
               <el-select v-model="addForm.empId">
                 <el-option v-for="item in empList" :key="item.empId"
                            :label="item.empName" :value="item.empId">
                 </el-option>
               </el-select>
             </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col >
+
+            <el-form-item label="分期(可选)">
+              <el-select v-model="addForm.planPeriod" placeholder="不选择默认全款" clearable >
+                <el-option label="全款" value="1"></el-option>
+                <el-option label="分3期(含手续费)" value="3"></el-option>
+                <el-option label="分6期(含手续费)" value="6"></el-option>
+                <el-option label="分12期(含手续费)" value="12"></el-option>
+              </el-select>
+            </el-form-item>
+            <!--<el-form-item label="选择期次" size="medium">
+              <el-select v-model="addForm.planPeriod">
+                <el-option>全款</el-option >
+                <el-option>分3期</el-option>
+                <el-option>分6期</el-option>
+                <el-option>分12期</el-option>
+              </el-select>
+            </el-form-item>-->
           </el-col>
         </el-row>
       </el-form>
@@ -155,7 +175,7 @@
           empId:'',
           planMoney:'',
           planTime:'',
-
+          planPeriod:''
         },
         editForm:{
         },
@@ -203,7 +223,7 @@
       addPlanClick(){
         planHttp.addplan(this.addForm).then(res => {
           console.log("kkk",this.addForm)
-          /*if (res.code === 20000) {
+          if (res.code === 20000) {
             this.$message.success(res.message)
             this.initList()
             this.addDialog = false
@@ -214,14 +234,14 @@
               type:"error"
             })
             this.addPlanButtonLoading = false
-          }*/
+          }
         })
       },
 
       openAddDialog() {
         this.addDialog = true
-        this.initEmpList()
         this.initOrderList()
+        this.initEmpList()
       },
       /*新增选择员工*/
       initEmpList(){
@@ -231,7 +251,7 @@
       },
       /*新增选择订单*/
       initOrderList(){
-        orderHttp.list().then(res=>{
+        orderHttp.list_all().then(res=>{
           this.ordList=res.data.list
         })
       },
@@ -323,6 +343,7 @@
           console.log("ppp:",res.data.list)
         })
       },
+
       resetForm() {
         this.$refs.advancedSearchFormRef.resetFields()
         this.searchInput = ''
@@ -333,8 +354,8 @@
     },
     created() {
       this.initList()
-      this.initOrderList()
       this.initEmpList()
+      this.initOrderList()
     }
   }
 </script>

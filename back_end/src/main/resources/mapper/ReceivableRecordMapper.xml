@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.SzReceivableRecordMapper">
+    <resultMap id="RecordResult" type="com.example.entity.request.SzReceivableRecord">
+        <id property="recoId" column="reco_id"/>
+        <result property="recoReceivable" column="reco_receivable"/>
+        <result property="recoCaozuopeople" column="reco_caozuopeople"/>
+        <result property="recoTime" column="reco_time"/>
+        <result property="recoMoney" column="reco_money"/>
+        <result property="recoLiushui" column="reco_liushui"/>
+        <result property="planId" column="plan_id"/>
+    </resultMap>
+
+    <resultMap id="RecordANDPlanResult" type="com.example.entity.request.SzReceivableRecord">
+        <id property="recoId" column="reco_id"/>
+        <result property="recoReceivable" column="reco_receivable"/>
+        <result property="recoCaozuopeople" column="reco_caozuopeople"/>
+        <result property="recoTime" column="reco_time"/>
+        <result property="recoMoney" column="reco_money"/>
+        <result property="recoLiushui" column="reco_liushui"/>
+        <result property="planId" column="plan_id"/>
+        <association property="szReceivablePlan" resultMap="szReceivablePlan"/>
+    </resultMap>
+
+    <resultMap id="szPlanResult" type="com.example.entity.request.SzReceivablePlan">
+        <id property="planId" column="plan_id"/>
+        <result property="planMoney" column="plan_money"/>
+        <result property="planTime" column="plan_time"/>
+        <result property="planPeriod" column="plan_period"/>
+        <result property="planCaozuopeople" column="plan_caozuopeople"/>
+        <result property="planCaozuotime" column="plan_caozuotime"/>
+        <result property="planInvoice" column="plan_invoice"/>
+        <result property="planDel" column="plan_del"/>
+        <result property="ordId" column="ord_id"/>
+        <result property="empId" column="emp_id"/>
+    </resultMap>
+
+    <!--回款计划和回款记录-->
+    <select id="listPlanANDReco" resultMap="RecordResult">
+        SELECT reco_id, reco_receivable, reco_caozuopeople, reco_time, reco_money, reco_liushui, plan_id
+         FROM sz_receivable_record WHERE plan_id=#{recoId}
+    </select>
+    <!--增-->
+    <insert id="addPlanANDReco" parameterType="java.util.List">
+        <selectKey keyProperty="recoId" keyColumn="reco_id" resultType="Integer" order="AFTER">
+            SELECT last_insert_id();
+        </selectKey>
+        insert into sz_receivable_record(reco_receivable, reco_caozuopeople, reco_time, reco_money, reco_liushui, plan_id) VALUES
+        (#{recoReceivable},#{recoCaozuopeople},#{recoTime},#{recoMoney},#{recoLiushui},#{planId})
+    </insert>
+</mapper>

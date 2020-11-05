@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author: yangqianqian
@@ -30,7 +31,7 @@ public class SzReceivablePlan {
     private Integer empId;
     private SzOrder szOrder;
     private EmpResp empResp;
-
+    private List<SzReceivableRecord> szReceivableRecorde;//回款计划对记录
 
     private Integer pageNum;
     private Integer pageSize;

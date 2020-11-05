@@ -76,6 +76,14 @@ export const orderHttp = {
     }
     return get(params)
   },
+  list_all:function (order) {
+    let params = {
+      url:'/order/list_all',
+      data:{
+      }
+    }
+    return get(params)
+  },
   listPage:function (pageNum,pageSize) {
     let params = {
       url:'/order/list_all',

@@ -4,7 +4,9 @@ import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
 import com.example.entity.request.SzReceivablePlan;
+import com.example.entity.request.SzReceivableRecord;
 import com.example.model.mapper.SzReceivablePlanMapper;
+import com.example.model.mapper.SzReceivableRecordMapper;
 import com.example.service.SzReceivablePlanService;
 import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,15 +29,45 @@ import java.util.List;
 public class SzReceivablePlanServicelmpl implements SzReceivablePlanService {
     @Autowired
     private SzReceivablePlanMapper szplanMapper;
+    @Autowired
+    private SzReceivableRecordMapper szrecordMapper;
 
     @Override
     public ResultVo addszPlan(SzReceivablePlan szplan) {
         szplan.setPlanCaozuotime(DateUtils.getDate());
+        szplan.setPlanDel(0);//(删除)否0
+        //获取回款计划的期次
+   /*    Integer period =szplan.getPlanPeriod();
+       List<SzReceivableRecord> list=new ArrayList<>(period);
+
+       if (szplan.getPlanId() != null){
+           SzReceivablePlan plan=szplanMapper.getszPlan(szplan.getPlanId());
+           szplan.setPlanPeriod(szplan.getPlanPeriod());
+       }*/
+
         int addszPlan=szplanMapper.addszPlan(szplan);
-        if (addszPlan != 1){
+        //1.获取回款记录的信息
+        List<SzReceivableRecord> records=szplan.getSzReceivableRecorde();
+        //2.调用mapper方法，新增单条
+        szplanMapper.addszPlan(szplan);
+        //3.获取新增计划编号
+        Integer planid=szplan.getPlanId();
+        System.out.println("plan主键编号是："+planid);
+        //4.通过循环逐条递增回款记录
+        for (SzReceivableRecord record :records){
+            System.out.println("进入for循环啦~~~");
+            record.setPlanId(planid);
+            //5.调用记录的新增方法
+            szrecordMapper.addPlanANDReco(record);
+            if (addszPlan != 1){
+                throw new SysException(ResultEnum.ReceivablePlan_ADD_FAIL.getCode(),
+                        ResultEnum.ReceivablePlan_ADD_FAIL.getMessage());
+            }
+        }
+        /*if (addszPlan != 1){
             throw new SysException(ResultEnum.ReceivablePlan_ADD_FAIL.getCode(),
                     ResultEnum.ReceivablePlan_ADD_FAIL.getMessage());
-        }
+        }*/
         return ResultUtils.response(addszPlan);
     }
 
