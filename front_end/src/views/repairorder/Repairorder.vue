@@ -80,8 +80,8 @@
         <el-table-column prop="repairSfzb" label="联系人"></el-table-column>
         <el-table-column prop="repairWxfy" label="费用"></el-table-column>
         <el-table-column prop="repairGdstae" label="状态"></el-table-column>
-        <el-table-column prop="empResp.empName" label="承接部门"></el-table-column>
-        <el-table-column prop="empId" label="接单人"></el-table-column>
+        <el-table-column prop="dept" label="维修部门"></el-table-column>
+        <el-table-column prop="empResp.empName" label="接单人"></el-table-column>
         <el-table-column prop="repairsjhm" label="是否在保"></el-table-column>
       </el-table>
 
@@ -163,7 +163,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="承接部门">
+            <el-form-item label="维修部门">
               <el-input v-model="addform.dept"></el-input>
             </el-form-item>
           </el-col>
@@ -262,7 +262,7 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="承接部门">
+              <el-form-item label="维修部门">
                 <el-input v-model="updateform.dept"></el-input>
               </el-form-item>
             </el-col>
