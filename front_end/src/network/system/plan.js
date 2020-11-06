@@ -4,13 +4,13 @@ export const planHttp = {
   addplan:function (plan) {
     let params = {
       url:'/plan/add',
-      data:{
+      data:plan
+      /*data:{
         'planTime':plan.planTime,
         'planMoney':plan.planMoney,
         'ordId':plan.ordId,
         'empId':plan.empId
-         /*data:plan*/
-      }
+      }*/
     }
     return postJson(params)
   },
