@@ -104,14 +104,17 @@
         <selectKey keyProperty="repairId" keyColumn="repair_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
         </selectKey>
-        insert into repair_order(repair_receiving_time,repair_problem,repair_personnel,cus_id,emp_id,repair_gdstate,repair_fault,repair_wxfy,inventory_seq,repair_lxr,repair_sfzb) VALUES
-        (#{repairDate},#{repairProblem},#{repairPersonnel},#{cusId},#{empId},#{repairGdstae},#{repairFault},#{repairWxfy},#{repairSfzb},#{repairsjhm},#{repairLxr})
+        insert into repair_order(repair_receiving_time,repair_problem,repair_personnel,cus_id,emp_id,dept_id,repair_gdstate,repair_fault,repair_wxfy,inventory_seq,repair_lxr,repair_sfzb) VALUES
+        (#{repairDate},#{repairProblem},#{repairPersonnel},#{cusId},#{empId},#{deptId},#{repairGdstae},#{repairFault},#{repairWxfy},#{repairSfzb},#{repairsjhm},#{repairLxr})
     </insert>
 
     <update id="updateRepair" parameterType="com.example.entity.request.Repair">
         update repair_order set repair_receiving_time = #{repairDate}
         <if test="empId !=null ">
             ,emp_id = #{empId}
+        </if>
+        <if test="deptId !=null ">
+            ,dept_id = #{deptId}
         </if>
         <if test="repairProblem !=null and repairProblem != ''">
             ,repair_problem = #{repairProblem}
@@ -166,10 +169,12 @@
     <select id="listRepair" resultMap="RepairDetailResult">
         SELECT s.repair_id,s.repair_person,s.repair_receiving_time,s.repair_problem,s.repair_personnel,s.repair_appointment,s.repair_actual,s.repair_gdstate,s.repair_fault,s.repair_hfjl,s.inventory_seq,s.repair_wxfy,s.repair_sfzb,s.repair_lxr,
         cu.*,
-        e.*
+        e.*,
+        d.*
         FROM repair_order s
         left join customer cu on s.cus_id = cu.cus_id
         left join emp e on s.emp_id = e.emp_id
+        left join dept d on s.dept_id = d.dept_id
         <where>
             <if test="repairProblem != null and repairProblem != ''">
                 AND s.repair_problem LIKE CONCAT('%',#{repairProblem},'%')
@@ -186,15 +191,19 @@
             <if test="empId != null">
                 and s.emp_id=#{empId}
             </if>
+            <if test="deptId != null">
+                and s.dept_id=#{deptId}
+            </if>
         </where>
         ORDER BY s.repair_receiving_time DESC
     </select>
 
     <select id="getRepair" resultMap="RepairDetailResult">
-        SELECT s.*,cu.*,e.*
+        SELECT s.*,cu.*,e.*,d.*
         FROM repair_order s
         LEFT JOIN customer cu ON cu.cus_id = s.cus_id
           LEFT JOIN emp e ON e.emp_id = s.emp_id
+          left join dept d on s.dept_id = d.dept_id
         WHERE s.repair_id = #{repairId}
     </select>
 </mapper>
