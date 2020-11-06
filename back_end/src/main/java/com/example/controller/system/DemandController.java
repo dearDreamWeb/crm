@@ -45,4 +45,9 @@ public class DemandController {
     public ResultVo listDemand(DemandReq demandReq) {
         return demandService.listDemand(demandReq);
     }
+
+    @GetMapping("/get_by_saleId")
+    public ResultVo getBySaleId(@RequestParam("saleId")Integer saleId) {
+        return demandService.getBySaleId(saleId);
+    }
 }

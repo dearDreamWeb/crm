@@ -46,5 +46,44 @@ export const demandHttp = {
       }
     }
     return get(params)
+  },
+  getById:function (demandId) {
+    let params = {
+      url:'/demand',
+      data:{
+        'demandId':demandId
+      }
+    }
+    return get(params)
+  },
+  editDemand:function (demand) {
+    let params = {
+      url:'/demand/edit',
+      data:{
+        'demandId':demand.demandId,
+        'demandTitle':demand.demandTitle,
+        'demandDegree':demand.demandDegree,
+        'demandContent':demand.demandContent
+      }
+    }
+    return postJson(params)
+  },
+  delDemand:function (demandId) {
+    let params = {
+      url:'/demand/del',
+      data:{
+        'demandId':demandId
+      }
+    }
+    return postJson(params)
+  },
+  getBySaleId:function (saleId) {
+    let params = {
+      url:'/demand/get_by_saleId',
+      data:{
+        'saleId':saleId
+      }
+    }
+    return get(params)
   }
 }

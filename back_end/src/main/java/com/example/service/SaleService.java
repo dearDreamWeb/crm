@@ -16,4 +16,5 @@ public interface SaleService {
     ResultVo getSale(SaleReq saleReq);
     ResultVo listSale(SaleReq saleReq);
     ResultVo addSaleDetailDemand(SaleDetailDemand saleDetailDemand);
+    ResultVo editSaleAndDetail(SaleDetailDemand saleDetailDemand);
 }

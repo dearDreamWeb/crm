@@ -51,4 +51,9 @@ public class SaleController {
     public ResultVo addSaleDetailDemand(@RequestBody SaleDetailDemand saleDetailDemand) {
         return saleService.addSaleDetailDemand(saleDetailDemand);
     }
+
+    @PostMapping("/sale_edit")
+    public ResultVo editAndDetailEdit(@RequestBody SaleDetailDemand saleDetailDemand) {
+        return saleService.editSaleAndDetail(saleDetailDemand);
+    }
 }

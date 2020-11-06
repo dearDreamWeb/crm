@@ -280,7 +280,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row :gutter="20">
+          <!--<el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="星标" prop="saleStarBeacon">
                 <el-select v-model="editForm.saleStarBeacon">
@@ -300,7 +300,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-          </el-row>
+          </el-row>-->
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="预计签单" prop="saleEstimateDate">
@@ -358,7 +358,19 @@
     name: "Sale",
     data() {
       return {
-        editForm:{},
+        editForm:{
+          saleId:'',
+          saleName:'',
+          saleSource:'',
+          saleType:'',
+          saleStarBeacon:'',
+          salePriorLevel:'',
+          saleEstimateDate:'',
+          saleExpectMoney:'',
+          salePossibility:'',
+          saleStage:''
+        },
+        editDetailForm:{},
         editFormRules:{
           saleName:[
             {required:true,message:'请输入机会主题',trigger:'blur'}
@@ -462,7 +474,21 @@
     },
     methods:{
       editSaleClick() {
-
+        this.$refs.editFormRef.validate(valid => {
+          if (!valid) return
+          this.editButtonLoading = true
+          saleHttp.editSaleAndDetail(this.editForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.editButtonLoading = false
+              this.editDialog = false
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+              this.editButtonLoading = false
+            }
+          })
+        })
       },
       editDialogClose() {
         this.$refs.editFormRef.resetFields()
@@ -473,7 +499,14 @@
         this.initCustomerSourceList()
         saleHttp.get_by_id(this.rowSaleId).then(res => {
           this.editForm = res.data
+          this.saleDetailForm = res.data.saleDetailResp
         })
+        this.editForm.saleStarBeacon = this.saleDetailForm.saleStarBeacon
+        this.editForm.salePriorLevel = this.saleDetailForm.salePriorLevel
+        this.editForm.saleEstimateDate = this.saleDetailForm.saleEstimateDate
+        this.editForm.saleExpectMoney = this.saleDetailForm.saleExpectMoney
+        this.editForm.salePossibility = this.saleDetailForm.salePossibility
+        this.editForm.saleStage = this.saleDetailForm.saleStage
       },
 
       delSaleClick() {

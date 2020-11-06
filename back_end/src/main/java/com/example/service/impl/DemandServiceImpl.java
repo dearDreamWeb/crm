@@ -115,6 +115,12 @@ public class DemandServiceImpl implements DemandService {
         return ResultUtils.response(list);
     }
 
+    @Override
+    public ResultVo getBySaleId(Integer saleId) {
+        DemandResp bySaleId = demandMapper.getBySaleId(saleId);
+        return ResultUtils.response(bySaleId);
+    }
+
     public List<DemandResp> extractMethod(List<DemandResp> list) {
         List<DemandResp> respList = new ArrayList<DemandResp>();
         for (DemandResp demandResp : list) {

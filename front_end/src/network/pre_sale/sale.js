@@ -99,5 +99,23 @@ export const saleHttp = {
       }
     }
     return get(params)
+  },
+  editSaleAndDetail:function (sale) {
+    let params = {
+      url:'/sale/sale_edit',
+      data:{
+        'saleId':sale.saleId,
+        'saleName':sale.saleName,
+        'saleSource':sale.saleSource,
+        'saleType':sale.saleType,
+        'saleStarBeacon':sale.saleStarBeacon,
+        'salePriorLevel':sale.salePriorLevel,
+        'saleEstimateDate':sale.saleEstimateDate,
+        'saleExpectMoney':sale.saleExpectMoney,
+        'salePossibility':sale.salePossibility,
+        'saleStage':sale.saleStage
+      }
+    }
+    return postJson(params)
   }
 }

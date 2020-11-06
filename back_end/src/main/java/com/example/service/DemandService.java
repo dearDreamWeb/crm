@@ -14,4 +14,5 @@ public interface DemandService {
     ResultVo editDemand(DemandReq demandReq);
     ResultVo getDemand(DemandReq demandReq);
     ResultVo listDemand(DemandReq demandReq);
+    ResultVo getBySaleId(Integer saleId);
 }

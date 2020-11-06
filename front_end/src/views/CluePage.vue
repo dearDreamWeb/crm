@@ -16,19 +16,19 @@
           <hr>
           <h1 style="font-family: 华文琥珀;color: red">截至~~~{{activity.endTime}}~~~结束</h1>
           <hr>
-          <el-form :model="clueForm" ref="clueFormRef" :rules="clueFormRules">
+          <el-form name="form" :model="clueForm" ref="clueFormRef" :rules="clueFormRules">
             <el-form-item label="名称" prop="clueName">
               <el-input v-model="clueForm.clueName" clearable
-                        placeholder="请输入名称"></el-input>
+                        placeholder="请输入名称" name="clueName"></el-input>
             </el-form-item>
             <el-form-item label="联系方式" prop="cluePhone">
               <el-input v-model="clueForm.cluePhone" clearable
-                        placeholder="请输入联系方式"></el-input>
+                        placeholder="请输入联系方式" name="cluePhone"></el-input>
             </el-form-item>
             <el-row>
               <el-col :offset="9">
                 <el-form-item size="large">
-                  <el-button type="primary" @click="addClue"
+                  <el-button type="primary" @click="addClue" name="=addButton"
                              :loading="addButtonLoading">点击按钮~立即参加</el-button>
                 </el-form-item>
               </el-col>

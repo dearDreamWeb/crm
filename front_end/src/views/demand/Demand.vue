@@ -22,9 +22,9 @@
         </el-col>
         <el-col :span="9">
           <el-button type="warning" size="mini" icon="el-icon-edit"
-                     :disabled="buttonDisabled">修改</el-button>
+                     :disabled="buttonDisabled" @click="openEditDialog">修改</el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete"
-                     :disabled="buttonDisabled">删除</el-button>
+                     :disabled="buttonDisabled" @click="delDemandClick">删除</el-button>
         </el-col>
       </el-row>
 
@@ -173,6 +173,41 @@
                    @click="addDemandClick">确定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="修改需求" :visible.sync="editDialog" @close="editDialogClose">
+      <el-form :model="editForm" label-position="right" label-width="80px"
+               size="mini" ref="editFormRef" :rules="editFormRules">
+        <el-row>
+          <el-col>
+            <el-form-item label="需求主题" prop="demandTitle">
+              <el-input v-model="editForm.demandTitle"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="重要程度" prop="demandDegree">
+              <el-select v-model="editForm.demandDegree">
+                <el-option v-for="item in demandDegreeList" :key="item.label"
+                           :label="item.value" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="需求内容" prop="demandContent">
+              <el-input v-model="editForm.demandContent" type="textarea"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="editDialog = false">取消</el-button>
+        <el-button type="primary" :loading="editButtonLoading"
+                   @click="editDemandClick">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -188,6 +223,21 @@
     name: "Demand",
     data() {
       return {
+        editDialog:false,
+        editForm:{},
+        editFormRules:{
+          demandTitle:[
+            {required:true,message:'请输入需求主题',trigger:'blur'}
+          ],
+          demandDegree:[
+            {required:true,message:'请选择',trigger:'change'}
+          ],
+          demandContent:[
+            {required:true,message:'请输入需求内容',trigger:'blur'}
+          ]
+        },
+        editButtonLoading:false,
+
         addForm:{
           demandTitle:'',
           cusId:'',
@@ -247,6 +297,51 @@
       }
     },
     methods:{
+      delDemandClick() {
+        this.$confirm('将删除该需求','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          demandHttp.delDemand(this.rowDemandId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+            }
+          })
+        })
+      },
+
+      editDemandClick() {
+        this.$refs.editFormRef.validate(valid => {
+          if (!valid) return
+          this.editButtonLoading = true
+          demandHttp.editDemand(this.editForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.editButtonLoading = false
+              this.editDialog = false
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+              this.editButtonLoading = false
+            }
+          })
+        })
+      },
+      editDialogClose() {
+        this.$refs.editFormRef.resetFields()
+        this.editButtonLoading = false
+      },
+      openEditDialog() {
+        this.editDialog = true
+        demandHttp.getById(this.rowDemandId).then(res => {
+          this.editForm = res.data
+        })
+      },
+
       resetForm() {
         this.$refs.searchFormRef.resetFields()
         this.searchInput = ''

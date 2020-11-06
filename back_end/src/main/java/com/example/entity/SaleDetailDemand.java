@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -15,6 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SaleDetailDemand {
+    private Integer saleId;
     private String saleName;
     private String saleStatus;
     private Integer cusId;
@@ -25,5 +27,9 @@ public class SaleDetailDemand {
     private String saleStarBeacon;
     private String salePriorLevel;
     private String demandContent;
+    private Date saleEstimateDate;
+    private BigDecimal saleExpectMoney;
+    private String salePossibility;
+    private String saleStage;
     private Integer empId;
 }

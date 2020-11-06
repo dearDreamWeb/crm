@@ -28,6 +28,7 @@ public class SaleReq {
     private Integer cusId;
     private Integer contactsId;
     private Integer empId;
+
     private Integer pageNum;
     private Integer pageSize;
     private String startDate;

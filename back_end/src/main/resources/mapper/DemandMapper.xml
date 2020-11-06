@@ -139,7 +139,7 @@
     </update>
 
     <select id="getDemand" resultMap="DemandResult">
-        SELECT demand_title,demand_degree,demand_content,is_solve,version,create_time,
+        SELECT demand_id,demand_title,demand_degree,demand_content,is_solve,version,create_time,
         update_time,is_delete,contacts_id,sale_id,emp_id,cus_id
         FROM demand
         WHERE demand_id = #{demandId}
@@ -184,5 +184,12 @@
             AND de.is_delete = 0
         </where>
         ORDER BY de.create_time DESC
+    </select>
+
+    <select id="getBySaleId" resultMap="DemandResult">
+        SELECT demand_id,demand_title,demand_degree,demand_content,is_solve,version,create_time,
+        update_time,is_delete,contacts_id,sale_id,emp_id,cus_id
+        FROM demand
+        WHERE sale_id = #{saleId}
     </select>
 </mapper>

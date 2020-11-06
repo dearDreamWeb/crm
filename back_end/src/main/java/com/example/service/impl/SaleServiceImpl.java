@@ -9,6 +9,7 @@ import com.example.entity.request.SaleDetailReq;
 import com.example.entity.request.SaleReq;
 import com.example.entity.response.CustomerResp;
 import com.example.entity.response.EmpResp;
+import com.example.entity.response.SaleDetailResp;
 import com.example.entity.response.SaleResp;
 import com.example.model.mapper.*;
 import com.example.service.SaleService;
@@ -173,6 +174,49 @@ public class SaleServiceImpl implements SaleService {
         }
 
         return ResultUtils.response("新增成功");
+    }
+
+    @Override
+    public ResultVo editSaleAndDetail(SaleDetailDemand saleDetailDemand) {
+        Integer saleId = saleDetailDemand.getSaleId();
+        SaleResp sale = saleMapper.getSale(saleId);
+        if (sale == null) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+
+        SaleReq saleReq = new SaleReq();
+        saleReq.setSaleId(saleDetailDemand.getSaleId());
+        saleReq.setSaleName(saleDetailDemand.getSaleName());
+        saleReq.setSaleStatus(saleDetailDemand.getSaleStatus());
+        saleReq.setSaleSource(saleDetailDemand.getSaleSource());
+        saleReq.setSaleType(saleDetailDemand.getSaleType());
+        saleReq.setVersion(sale.getVersion());
+        saleReq.setUpdateTime(DateUtils.getDate());
+        int editSale = saleMapper.editSale(saleReq);
+        if (editSale != 1) {
+            throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
+                    ResultEnum.DATA_UPDATE_FAIL.getMessage());
+        }
+
+        SaleDetailResp saleDetailResp = sale.getSaleDetailResp();
+        SaleDetailReq saleDetailReq = new SaleDetailReq();
+
+        saleDetailReq.setSaleDetailId(saleDetailResp.getSaleDetailId());
+        saleDetailReq.setSaleEstimateDate(saleDetailDemand.getSaleEstimateDate());
+        saleDetailReq.setSaleExpectMoney(saleDetailDemand.getSaleExpectMoney());
+        saleDetailReq.setSalePossibility(saleDetailDemand.getSalePossibility());
+        saleDetailReq.setSaleStage(saleDetailDemand.getSaleStage());
+        saleDetailReq.setSaleStarBeacon(saleDetailDemand.getSaleStarBeacon());
+        saleDetailReq.setSalePriorLevel(saleDetailDemand.getSalePriorLevel());
+        saleDetailReq.setVersion(saleDetailResp.getVersion());
+        saleDetailReq.setUpdateTime(DateUtils.getDate());
+        int editSaleDetail = detailMapper.editSaleDetail(saleDetailReq);
+        if (editSaleDetail != 1) {
+            throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
+                    ResultEnum.DATA_UPDATE_FAIL.getMessage());
+        }
+        return ResultUtils.response("修改成功");
     }
 
     public static String degreeRating(String degree) {
