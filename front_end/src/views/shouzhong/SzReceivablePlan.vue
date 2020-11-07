@@ -200,13 +200,13 @@
       }
     },
     methods: {
-      oidChange(val) {
+      /*oidChange(val) {
         console.log(val)
         orderHttp.list(this.addDialog).then(res=>{
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
-      },
+      },*/
 
       searchInputClick() {
         this.listForm.planCaozuopeople = this.searchInput
@@ -242,7 +242,7 @@
 
       openAddDialog() {
         this.addDialog = true
-        this.initOrderList()
+        /*this.initOrderList()*/
         this.initEmpList()
       },
       /*新增选择员工*/
@@ -252,11 +252,11 @@
         })
       },
       /*新增选择订单*/
-      initOrderList(){
+      /*initOrderList(){
         orderHttp.list_all().then(res=>{
           this.ordList=res.data.list
         })
-      },
+      },*/
       /*高级搜索*/
       /* resetForm() {
          this.$refs.advancedSearchFormRef.resetFields()
@@ -332,11 +332,6 @@
       iHeaderCellStyle:function({row,column,rowIndex,columnIndex}){
         return 'padding:5px'
       },
-      /*initCusList() {
-        orderHttp.list().then(res => {
-          this.cusList = res.data
-        })
-      },*/
       initList() {
         planHttp.listPage(this.pageNum,this.pageSize).then(res => {
           this.listForm = res.data.list
@@ -357,7 +352,7 @@
     created() {
       this.initList()
       this.initEmpList()
-      this.initOrderList()
+     /* this.initOrderList()*/
     }
   }
 </script>

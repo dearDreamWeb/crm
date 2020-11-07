@@ -25,7 +25,7 @@ public class SzDeliver {
     private Integer delDelete;//1是0否删除
 
     private Integer ordId;//订单编号 (外键 关联订单)
-    private SzOrder szorder;
+    private SzOrder szOrder;
 
     private String startDate;
     private String endDate;

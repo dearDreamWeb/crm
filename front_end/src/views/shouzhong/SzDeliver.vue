@@ -30,8 +30,9 @@
           </template>
         </el-table-column>
         <el-table-column prop="delWuliuid" label="发货单号" sortable></el-table-column>
-        <el-table-column prop="szOrder.ordHead" label="订单" sortable>
-        </el-table-column>
+        <!--<el-table-column prop="szOrder.ordHead" label="订单" sortable>
+        </el-table-column>-->
+        <el-table-column prop="szOrder.ordTheme"  label="对应订单" ></el-table-column>
         <el-table-column prop="delPeople" label="发货人" sortable></el-table-column>
         <el-table-column prop="delState" label="发货状态" sortable>
           <template slot-scope="scope">

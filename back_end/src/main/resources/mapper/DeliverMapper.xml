@@ -23,7 +23,8 @@
         <result property="delState" column="del_state"/>
         <result property="delCreatetime" column="del_createtime"/>
         <result property="delDelete" column="del_delete"/>
-        <association property="szorder" resultMap="szOrderResult"/>
+        <association property="szOrder" resultMap="szOrderResult"/>
+
     </resultMap>
 
     <resultMap id="szOrderResult" type="com.example.entity.request.SzOrder">
@@ -47,38 +48,38 @@
     </resultMap>
 
     <!--全部-->
-    <select id="listszDeliver" resultMap="szDeliverResult">
-        SELECT del_id, del_wuliuid, del_company, del_people, del_delivertime, del_state, del_createtime,
-        del_delete,ord_id
-        FROM sz_deliver
+    <select id="listszDeliver" resultMap="szDeliverDetailResult">
+        SELECT d.*,s.*
+        FROM sz_deliver d
+        LEFT JOIN sz_order s on d.ord_id=s.ord_id
         <where>
             <if test="delWuliuid != null and delWuliuid != ''">
-                AND del_wuliuid LIKE CONCAT('%',#{delWuliuid},'%')
+                AND d.del_wuliuid LIKE CONCAT('%',#{delWuliuid},'%')
             </if>
             <if test="delCompany != null and delCompany != ''">
-                AND del_company LIKE CONCAT('%',#{delCompany},'%')
+                AND d.del_company LIKE CONCAT('%',#{delCompany},'%')
             </if>
             <if test="delPeople != null and delPeople != ''">
-                AND del_people LIKE CONCAT('%',#{delPeople},'%')
+                AND d.del_people LIKE CONCAT('%',#{delPeople},'%')
             </if>
             <if test="delDelivertime != null and delDelivertime != ''">
-                AND del_delivertime LIKE CONCAT('%',#{delDelivertime},'%')
+                AND d.del_delivertime LIKE CONCAT('%',#{delDelivertime},'%')
             </if>
             <if test="delState != null">
-                AND del_state = #{delState}
+                AND d.del_state = #{delState}
             </if>
             <if test="ordId != null">
-                AND ord_id = #{ordId}
+                AND d.ord_id = #{ordId}
             </if>
             <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
-                AND date_format(del_createtime,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+                AND date_format(d.del_createtime,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
             </if>
             <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
-                AND date_format(del_createtime,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+                AND date_format(d.del_createtime,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
-            AND del_state = 1
+            AND d.del_state = 1
         </where>
-        ORDER BY del_createtime DESC
+        ORDER BY d.del_createtime DESC
     </select>
     <!--单条-->
     <select id="getszDeliver" resultMap="szDeliverDetailResult" parameterType="Integer">
