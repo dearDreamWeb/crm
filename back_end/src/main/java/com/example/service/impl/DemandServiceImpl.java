@@ -117,7 +117,7 @@ public class DemandServiceImpl implements DemandService {
 
     @Override
     public ResultVo getBySaleId(Integer saleId) {
-        DemandResp bySaleId = demandMapper.getBySaleId(saleId);
+        List<DemandResp> bySaleId = demandMapper.getBySaleId(saleId);
         return ResultUtils.response(bySaleId);
     }
 

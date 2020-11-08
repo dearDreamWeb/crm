@@ -97,14 +97,14 @@
     </update>
 
     <select id="getSolution" resultMap="SolutionResult">
-        SELECT solution_title,create_time,content,feedback,version,update_time,is_delete,
+        SELECT solution_id,solution_title,create_time,content,feedback,version,update_time,is_delete,
         cus_id,sale_id,demand_id
         FROM solution
         WHERE solution_id = #{solutionId}
     </select>
 
     <select id="listSolution" resultMap="SolutionResult">
-        SELECT solution_title,create_time,content,feedback,version,update_time,is_delete,
+        SELECT solution_id,solution_title,create_time,content,feedback,version,update_time,is_delete,
         cus_id,sale_id,demand_id
         FROM solution
         <where>

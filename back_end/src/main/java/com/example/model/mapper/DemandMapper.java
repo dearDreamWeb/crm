@@ -18,5 +18,5 @@ public interface DemandMapper {
     int editDemand(DemandReq demandReq);
     DemandResp getDemand(Integer demandId);
     List<DemandResp> listDemand(DemandReq demandReq);
-    DemandResp getBySaleId(Integer saleId);
+    List<DemandResp> getBySaleId(Integer saleId);
 }

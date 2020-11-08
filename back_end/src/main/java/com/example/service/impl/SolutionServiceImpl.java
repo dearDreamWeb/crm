@@ -4,7 +4,13 @@ import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
 import com.example.entity.request.SolutionReq;
+import com.example.entity.response.CustomerResp;
+import com.example.entity.response.DemandResp;
+import com.example.entity.response.SaleResp;
 import com.example.entity.response.SolutionResp;
+import com.example.model.mapper.CustomerMapper;
+import com.example.model.mapper.DemandMapper;
+import com.example.model.mapper.SaleMapper;
 import com.example.model.mapper.SolutionMapper;
 import com.example.service.SolutionService;
 import com.example.util.CheckUtils;
@@ -16,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +35,15 @@ import java.util.List;
 public class SolutionServiceImpl implements SolutionService {
     @Autowired
     private SolutionMapper solutionMapper;
+
+    @Autowired
+    private CustomerMapper customerMapper;
+
+    @Autowired
+    private SaleMapper saleMapper;
+
+    @Autowired
+    private DemandMapper demandMapper;
 
     @Override
     public ResultVo addSolution(SolutionReq solutionReq) {
@@ -97,7 +113,34 @@ public class SolutionServiceImpl implements SolutionService {
         }
         PageHelper.startPage(pageNum,pageSize);
         List<SolutionResp> solutionResps = solutionMapper.listSolution(solutionReq);
+        extractMethod(solutionResps);
         PageInfo<SolutionResp> list = new PageInfo<>(solutionResps);
         return ResultUtils.response(list);
+    }
+
+    public List<SolutionResp> extractMethod(List<SolutionResp> list) {
+        List<SolutionResp> solutionResps = new ArrayList<>();
+        for (SolutionResp solutionResp : list) {
+            CustomerResp customer = customerMapper.getCustomer(solutionResp.getCusId());
+            SaleResp sale = saleMapper.getSale(solutionResp.getSaleId());
+            DemandResp demand = demandMapper.getDemand(solutionResp.getDemandId());
+            if (customer != null) {
+                solutionResp.setCusName(customer.getCusName());
+            } else {
+                solutionResp.setCusName(null);
+            }
+            if (sale != null) {
+                solutionResp.setSaleName(sale.getSaleName());
+            } else {
+                solutionResp.setSaleName(null);
+            }
+            if (demand != null) {
+                solutionResp.setDemandTitle(demand.getDemandTitle());
+            } else {
+                solutionResp.setDemandTitle(null);
+            }
+            solutionResps.add(solutionResp);
+        }
+        return solutionResps;
     }
 }

@@ -29,5 +29,37 @@ export const solutionHttp = {
       }
     }
     return postJson(params)
+  },
+  getSolution:function (solutionId) {
+    let params = {
+      url:'/solution',
+      data:{
+        'solutionId':solutionId
+      }
+    }
+    return get(params)
+  },
+  edit:function (solution) {
+    let params = {
+      url:'/solution/edit',
+      data:{
+        'solutionId':solution.solutionId,
+        'solutionTitle':solution.solutionTitle,
+        'content':solution.content,
+        'cusId':solution.cusId,
+        'saleId':solution.saleId,
+        'demandId':solution.demandId
+      }
+    }
+    return postJson(params)
+  },
+  del:function (solutionId) {
+    let params = {
+      url:'/solution/del',
+      data:{
+        'solutionId':solutionId
+      }
+    }
+    return postJson(params)
   }
 }

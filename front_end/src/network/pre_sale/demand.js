@@ -85,5 +85,11 @@ export const demandHttp = {
       }
     }
     return get(params)
+  },
+  listAll:function () {
+    let params = {
+      url:'/demand/list'
+    }
+    return get(params)
   }
 }

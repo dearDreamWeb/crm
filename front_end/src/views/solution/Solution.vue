@@ -31,8 +31,10 @@
               <el-button type="primary" icon="el-icon-refresh" size="mini"></el-button>
             </el-col>
             <el-col :span="9">
-              <el-button type="warning" size="mini" icon="el-icon-edit">修改</el-button>
-              <el-button type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+              <el-button type="warning" size="mini" icon="el-icon-edit"
+                         :disabled="buttonDisabled" @click="openEditDialog">修改</el-button>
+              <el-button type="danger" size="mini" icon="el-icon-delete"
+                         :disabled="buttonDisabled" @click="delSolution">删除</el-button>
             </el-col>
           </el-row>
 
@@ -40,14 +42,17 @@
                     :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                     highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
             <el-table-column type="index" width="50"></el-table-column>
-            <el-table-column label="占位符"></el-table-column>
-            <el-table-column label="占位符"></el-table-column>
-            <el-table-column label="占位符"></el-table-column>
-            <el-table-column label="占位符"></el-table-column>
-            <el-table-column label="占位符"></el-table-column>
-            <el-table-column label="占位符"></el-table-column>
-            <el-table-column label="占位符"></el-table-column>
-            <el-table-column label="占位符"></el-table-column>
+            <el-table-column prop="solutionTitle" label="方案主题"></el-table-column>
+            <el-table-column prop="createTime" label="提交时间">
+              <template slot-scope="scope">
+                {{scope.row.createTime | dateFormat}}
+              </template>
+            </el-table-column>
+            <el-table-column prop="content" label="方案内容"></el-table-column>
+            <el-table-column prop="feedback" label="客户反馈"></el-table-column>
+            <el-table-column prop="cusName" label="客户"></el-table-column>
+            <el-table-column prop="saleName" label="机会"></el-table-column>
+            <el-table-column prop="demandTitle" label="需求"></el-table-column>
           </el-table>
 
           <el-pagination background :page-size="pageSize" :total="total"
@@ -121,6 +126,66 @@
                    @click="addSolutionClick">确定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="修改方案" :visible.sync="editDialog" @close="editDialogClose">
+      <el-form :model="editForm" label-position="right" label-width="80px"
+               ref="editFormRef" :rules="editFormRules" size="mini">
+        <el-row>
+          <el-col>
+            <el-form-item label="方案主题" prop="solutionTitle">
+              <el-input v-model="editForm.solutionTitle" clearable></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="客户" prop="cusId">
+              <el-select v-model="editForm.cusId" disabled>
+                <el-option v-for="item in customerList" :key="item.cusId"
+                           :label="item.cusName" :value="item.cusId"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="机会" prop="saleId">
+              <el-select v-model="editForm.saleId" disabled>
+                <el-option v-for="item in saleList" :key="item.saleId"
+                           :label="item.saleName" :value="item.saleId"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="需求" prop="demandId">
+              <el-select v-model="editForm.demandId" disabled>
+                <el-option v-for="item in demandList" :key="item.demandId"
+                           :label="item.demandTitle" :value="item.demandId"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="时间" prop="createTime">
+              <el-date-picker v-model="editForm.createTime" format="yyyy-MM-dd"
+                              value-format="yyyy-MM-dd" type="date" disabled
+                              placeholder="请输入"></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="内容" prop="content">
+              <el-input type="textarea" v-model="editForm.content" clearable></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="editDialog = false">取消</el-button>
+        <el-button type="primary" :loading="editButtonLoading"
+                   @click="editSolutionClick">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -134,6 +199,28 @@
     name: "Solution",
     data() {
       return {
+        editDialog:false,
+        editButtonLoading:false,
+        editForm:{},
+        editFormRules:{
+          solutionTitle:[
+            {required:true,message:'请输入方案主题',trigger:'blur'}
+          ],
+          content:[
+            {required:true,message:'请输入方案内容',trigger:'blur'}
+          ],
+          cusId:[
+            {required:true,message:'请选择客户',trigger:'change'}
+          ],
+          saleId:[
+            {required:true,message:'请选择机会',trigger:'change'}
+          ],
+          demandId:[
+            {required:true,message:'请选择需求',trigger:'change'}
+          ]
+        },
+        editSaleId:0,
+
         addForm:{
           solutionTitle:'',
           content:'',
@@ -189,8 +276,76 @@
       }
     },
     methods:{
-      addSolutionClick() {
+      delSolution() {
+        this.$confirm('此操作将删除该方案，请谨慎操作','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          solutionHttp.del(this.rowSolutionId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+            }
+          })
+        })
+      },
 
+      editSolutionClick() {
+        this.$refs.editFormRef.validate(valid => {
+          if (!valid) return
+          this.editButtonLoading = true
+          solutionHttp.edit(this.editForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.editButtonLoading = false
+              this.editDialog = false
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+              this.editButtonLoading = false
+            }
+          })
+        })
+      },
+      editDialogClose() {
+        this.$refs.editFormRef.resetFields()
+        this.editButtonLoading = false
+      },
+      openEditDialog() {
+        this.editDialog = true
+        solutionHttp.getSolution(this.rowSolutionId).then(res => {
+          this.editForm = res.data
+        })
+        customerHttp.listAll().then(res => {
+           this.customerList = res.data
+        })
+        saleHttp.list_all().then(res => {
+          this.saleList = res.data.list
+        })
+        demandHttp.listAll().then(res => {
+          this.demandList = res.data.list
+        })
+      },
+
+      addSolutionClick() {
+        this.$refs.addFormRef.validate(valid => {
+          if (!valid) return
+          this.addButtonLoading = true
+          solutionHttp.addSolution(this.addForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.addButtonLoading = false
+              this.addDialog = false
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+              this.addButtonLoading = false
+            }
+          })
+        })
       },
       addDialogClose() {
         this.$refs.addFormRef.resetFields()
@@ -198,10 +353,11 @@
       },
       openAddDialog() {
         this.addDialog = true
+        this.initCustomerList()
       },
       customerChange(val) {
         saleHttp.getByCusId(val).then(res => {
-          this.saleList = res.data
+          this.saleList = res.data.list
         })
       },
       saleChange(val) {

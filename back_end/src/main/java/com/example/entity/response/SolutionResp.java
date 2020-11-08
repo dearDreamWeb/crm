@@ -26,4 +26,7 @@ public class SolutionResp {
     private Integer version;
     private Date updateTime;
     private Integer isDelete;
+    private String cusName;
+    private String saleName;
+    private String demandTitle;
 }
