@@ -1,6 +1,7 @@
 package com.example.entity.request;
 
 import com.example.entity.response.CustomerResp;
+import com.example.entity.response.DeptResp;
 import com.example.entity.response.EmpResp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,4 +41,5 @@ public class Repair {
     private Integer pageSize;
     private CustomerResp customerResp;
     private EmpResp empResp;
+    private DeptResp deptResp ;
 }

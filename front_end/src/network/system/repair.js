@@ -18,6 +18,7 @@ export const repairHttp = {
         'repairLxr':repair.repairLxr,
         'repairsjhm':repair.repairsjhm,
         'cusId':repair.cusId,
+        'deptId':repair.deptId,
         'empId':repair.empId
       }
     }
@@ -50,6 +51,7 @@ export const repairHttp = {
         'repairLxr':repair.repairLxr,
         'repairsjhm':repair.repairsjhm,
         'cusId':repair.cusId,
+        'deptId':repair.deptId,
         'empId':repair.empId
       }
     }
@@ -75,6 +77,7 @@ export const repairHttp = {
         'repairActual':repair.repairActual,
         'repairGdstae':repair.repairGdstae,
         'cusId':repair.cusId,
+        'deptId':repair.deptId,
         'empId':repair.empId
 
       }
@@ -96,6 +99,7 @@ export const repairHttp = {
         'repairWxfy':repair.repairWxfy,
         'repairSfzb':repair.repairSfzb,
         'cusId':repair.cusId,
+        'deptId':repair.deptId,
         'productId':repair.productId,
         'orderId':repair.orderId,
         'dictId':repair.dictId,

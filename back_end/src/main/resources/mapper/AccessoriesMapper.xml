@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.entity.request.Accessories">
+    <resultMap id="AccessoriesResult" type="com.example.entity.request.Accessories">
+        <id property="accessId" column="access_id"/>
+        <result property="repairId" column="repair_id"/>
+        <result property="accessSjcharge" column="access_sjcharge"/>
+        <result property="accessShul" column="access_shul"/>
+        <result property="empId" column="emp_id"/>
+    </resultMap>
+
+    <insert id="addAccessories" parameterType="com.example.entity.request.Accessories">
+        <selectKey keyProperty="accessId" keyColumn="access_id" resultType="Integer" order="AFTER">
+            SELECT last_insert_id();
+        </selectKey>
+        insert into accessories(access_sjcharge,repair_id,access_shul) VALUES
+        (#{accessSjcharge},#{repairId},#{accessShul})
+    </insert>
+
+    <update id="updateAccessories" parameterType="com.example.entity.request.Accessories">
+        update accessories set access_sjcharge = #{accessSjcharge}
+        <if test="repairId !=null ">
+            ,repair_id = #{repairId}
+        </if>
+        <if test="accessShul !=null and accessShul != '' ">
+            ,access_shul = #{accessShul}
+        </if>
+        <if test="accessSjcharge !=null and accessSjcharge != '' ">
+            ,access_sjcharge = #{accessSjcharge}
+        </if>
+        where access_id = #{accessId}
+    </update>
+    <delete id="deleteAccessories" parameterType="Integer">
+        DELETE FROM accessories WHERE access_id = #{accessId}
+    </delete>
+
+    <select id="listAccessories" resultMap="AccessoriesResult">
+        SELECT access_id,access_sjcharge,repair_id,access_shul
+        FROM accessories
+        <where>
+<!--            <if test="accessSjcharge != null and accessSjcharge != ''">-->
+<!--                AND access_shul LIKE CONCAT('%',#{accessSjcharge},'%')-->
+<!--            </if>-->
+<!--            <if test="empId != null">-->
+<!--                and emp_id=#{empId}-->
+<!--            </if>-->
+<!--            <if test="deptId != null">-->
+<!--                and dept_id=#{deptId}-->
+<!--            </if>-->
+        </where>
+        ORDER BY access_sjcharge DESC
+    </select>
+    <select id="getAccessories" resultMap="AccessoriesResult">
+        SELECT s.*
+        FROM accessories s
+        WHERE s.access_id = #{accessId}
+    </select>
+
+</mapper>

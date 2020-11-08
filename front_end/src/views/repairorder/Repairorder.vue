@@ -32,7 +32,11 @@
             <el-row :gutter="20">
               <el-col :span="8">
                 <el-form-item prop="careZt" label="部门">
-                  <el-input v-model="searchForm.dept" size="mini" placeholder="请输入" clearable></el-input>
+                  <el-select v-model="searchForm.deptId">
+                    <el-option v-for="item in deptList" :key="item.deptId"
+                               :label="item.deptName" :value="item.deptId">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -80,7 +84,7 @@
         <el-table-column prop="repairSfzb" label="联系人"></el-table-column>
         <el-table-column prop="repairWxfy" label="费用"></el-table-column>
         <el-table-column prop="repairGdstae" label="状态"></el-table-column>
-        <el-table-column prop="dept" label="维修部门"></el-table-column>
+        <el-table-column prop="deptResp.deptName" label="维修部门"></el-table-column>
         <el-table-column prop="empResp.empName" label="接单人"></el-table-column>
         <el-table-column prop="repairsjhm" label="是否在保"></el-table-column>
       </el-table>
@@ -164,7 +168,11 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="维修部门">
-              <el-input v-model="addform.dept"></el-input>
+              <el-select v-model="addform.deptId">
+                <el-option v-for="item in deptList" :key="item.deptId"
+                           :label="item.deptName" :value="item.deptId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -215,11 +223,11 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="客户">
-                <el-select v-model="updateform.cusId">
-                  <el-option v-for="item in empList" :key="item.cusId"
-                             :label="item.cusName" :value="item.cusId">
-                  </el-option>
-                </el-select>
+                <el-input
+                  placeholder="请输入内容"
+                  v-model="updateform.cusName"
+                  :disabled="true">
+                </el-input>
               </el-form-item>
             </el-col>
 
@@ -263,7 +271,11 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="维修部门">
-                <el-input v-model="updateform.dept"></el-input>
+                <el-select v-model="updateform.deptId">
+                  <el-option v-for="item in deptList" :key="item.deptId"
+                             :label="item.deptName" :value="item.deptId">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -295,10 +307,12 @@
 import {repairHttp} from "../../network/system/repair";
 import {userHttp} from "../../network/system/user";
   import {customerHttp} from "../../network/pre_sale/customer";
+import {deptHttp} from "../../network/system/dept";
 
   export default {
     data() {
       return {
+        deptList:[],
         empList:[],
         edpList:[],
         addform:{
@@ -318,6 +332,7 @@ import {userHttp} from "../../network/system/user";
           repairWxfy:'',
           repairSfzb:'',
           cusId:'',
+          deptId:'',
           productId:'',
           orderId:'',
           region: '',
@@ -340,6 +355,7 @@ import {userHttp} from "../../network/system/user";
           repairWxfy:'',
           repairSfzb:'',
           cusId:'',
+          deptId:'',
           productId:'',
           orderId:'',
           region: '',
@@ -370,6 +386,7 @@ import {userHttp} from "../../network/system/user";
         tableData: [],
         form: {
           empId:'',
+          deptId:'',
           repairDate: '',
           repairProblem:'',
           repairPersonnel:'',
@@ -406,10 +423,16 @@ import {userHttp} from "../../network/system/user";
         this.addDialog = true
         this.initEmpList()
         this.initEdpList()
+        this.initDeptList()
       },
       initEdpList(){
         userHttp.list().then(res =>{
           this.edpList = res.data.list
+        })
+      },
+      initDeptList(){
+        deptHttp.listAll().then(res =>{
+          this.deptList = res.data.list
         })
       },
       initEmpList() {
@@ -501,6 +524,7 @@ import {userHttp} from "../../network/system/user";
           this.updateform = res.data;
           this.updateform.cusName = res.data.customerResp.cusName
           this.updateform.empName = res.data.empResp.empName
+          this.updateform.deptName = res.data.deptResp.deptName
         })
       },
       editHandleClose() {
@@ -556,6 +580,7 @@ import {userHttp} from "../../network/system/user";
       this.initList()
       this.initEmpList()
       this.initEdpList()
+      this.initDeptList()
     }
   }
 </script>
