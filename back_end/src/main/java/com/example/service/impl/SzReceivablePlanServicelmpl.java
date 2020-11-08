@@ -9,6 +9,7 @@ import com.example.model.mapper.SzReceivablePlanMapper;
 import com.example.model.mapper.SzReceivableRecordMapper;
 import com.example.service.SzReceivablePlanService;
 import com.example.util.DateUtils;
+import com.example.util.MyUtils;
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -36,21 +37,32 @@ public class SzReceivablePlanServicelmpl implements SzReceivablePlanService {
     public ResultVo addszPlan(SzReceivablePlan szplan) {
         szplan.setPlanCaozuotime(DateUtils.getDate());
         szplan.setPlanDel(0);//(删除)否0
-        //获取回款计划的期次
-   /*    Integer period =szplan.getPlanPeriod();
-       List<SzReceivableRecord> list=new ArrayList<>(period);
 
-       if (szplan.getPlanId() != null){
-           SzReceivablePlan plan=szplanMapper.getszPlan(szplan.getPlanId());
-           szplan.setPlanPeriod(szplan.getPlanPeriod());
-       }*/
+   /*    int addszPlan=szplanMapper.addszPlan(szplan);*/
 
-        int addszPlan=szplanMapper.addszPlan(szplan);
-        //1.获取回款记录的信息
+        //获取回款计划期次
+        Integer period= szplan.getPlanPeriod();
+        List<SzReceivableRecord> list=new ArrayList<>(period);
+        System.out.println("1.List<SzReceivableRecord>:"+list);
+        if (szplan.getPlanId() != null){
+            SzReceivablePlan plan=szplanMapper.getszPlan(szplan.getPlanId());
+            System.out.println("2.plan:"+plan);
+            szplan.setPlanPeriod(szplan.getPlanPeriod());
+            for (int i =0;i<period;i++){
+                SzReceivableRecord record = new SzReceivableRecord();
+                System.out.println("3.record"+record);
+                record.setPlanId(szplan.getPlanId());
+                record.setRecoLiushui(MyUtils.record());
+                list.add(i,record);
+            }
+            szrecordMapper.addPlanANDReco(list);
+        }
+
+       /* //获取回款记录的信息
         List<SzReceivableRecord> records=szplan.getSzReceivableRecorde();
-        //2.调用mapper方法，新增单条
+        //调用mapper方法，新增单条
         szplanMapper.addszPlan(szplan);
-        //3.获取新增计划编号
+        //获取新增计划编号
         Integer planid=szplan.getPlanId();
         System.out.println("plan主键编号是："+planid);
         //4.通过循环逐条递增回款记录
@@ -59,16 +71,12 @@ public class SzReceivablePlanServicelmpl implements SzReceivablePlanService {
             record.setPlanId(planid);
             //5.调用记录的新增方法
             szrecordMapper.addPlanANDReco(record);
-            if (addszPlan != 1){
-                throw new SysException(ResultEnum.ReceivablePlan_ADD_FAIL.getCode(),
-                        ResultEnum.ReceivablePlan_ADD_FAIL.getMessage());
-            }
-        }
+        }*/
         /*if (addszPlan != 1){
             throw new SysException(ResultEnum.ReceivablePlan_ADD_FAIL.getCode(),
                     ResultEnum.ReceivablePlan_ADD_FAIL.getMessage());
         }*/
-        return ResultUtils.response(addszPlan);
+        return ResultUtils.response("新增成功");
     }
 
     @Override

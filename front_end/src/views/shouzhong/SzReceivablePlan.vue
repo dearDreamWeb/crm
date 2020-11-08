@@ -9,7 +9,7 @@
         </el-col>
         <el-col :span="10">
           <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">添加回款计划</el-button>
-        <!--  <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>-->
+          <!--  <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>-->
           <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
         <el-col :span="8">
@@ -54,8 +54,8 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-card>
-<!--width="65%" top="20px"-->
-      <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose" size="medium" >
+    <!--width="65%" top="20px"-->
+    <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose" size="medium" >
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
                label-position="right" :rules="FormRules">
         <el-row>
@@ -71,7 +71,7 @@
           <el-col :span="12">
             <el-form-item label="总金额" size="medium" >
               <el-input v-model="addForm.planMoney" width="217px">
-                </el-input>
+              </el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -97,11 +97,10 @@
           <el-col >
 
             <el-form-item label="分期(可选)">
-              <el-select v-model="addForm.planPeriod" placeholder="不选择默认全款" clearable >
+              <el-select v-model="addForm.planPeriod" placeholder="不选择默认全款" clearable @click="fenqi">
                 <el-option label="全款" value="1"></el-option>
                 <el-option label="分3期(含手续费)" value="3"></el-option>
                 <el-option label="分6期(含手续费)" value="6"></el-option>
-                <el-option label="分12期(含手续费)" value="12"></el-option>
               </el-select>
             </el-form-item>
             <!--<el-form-item label="选择期次" size="medium">
@@ -122,7 +121,7 @@
       </span>
     </el-dialog>
 
-<!--修改-->
+    <!--修改-->
     <el-dialog
       title="修改计划"
       :visible.sync="editDialog"
@@ -136,13 +135,13 @@
             </el-form-item>
           </el-col >
           <el-col :span="8">
-           <!-- <el-form-item label="执行人" prop="customerExecutor">
-              <el-select v-model="editForm.empId">
-                <el-option v-for="item in edpList" :key="item.empId"
-                           :label="item.empName" :value="item.empId">
-                </el-option>
-              </el-select>
-            </el-form-item>-->
+            <!-- <el-form-item label="执行人" prop="customerExecutor">
+               <el-select v-model="editForm.empId">
+                 <el-option v-for="item in edpList" :key="item.empId"
+                            :label="item.empName" :value="item.empId">
+                 </el-option>
+               </el-select>
+             </el-form-item>-->
           </el-col>
 
         </el-row>
@@ -187,7 +186,7 @@
         rowplanId: 0,
         tableLoading:false,
         buttonDisabled:true,
-       /* advancedSearch:false,高级查询*/
+        /* advancedSearch:false,高级查询*/
         addDialog:false,
         addPlanButtonLoading:false,
         editPlanButtonLoading:false,
@@ -201,13 +200,13 @@
       }
     },
     methods: {
-      oidChange(val) {
+      /*oidChange(val) {
         console.log(val)
         orderHttp.list(this.addDialog).then(res=>{
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
-      },
+      },*/
 
       searchInputClick() {
         this.listForm.planCaozuopeople = this.searchInput
@@ -219,8 +218,11 @@
       },      handleSelectionChange(val) {
         this.multipleSelection = val;
       },
+      fenqi(){
 
+      },
       addPlanClick(){
+        console.log("添加确定：",this.addForm)
         planHttp.addplan(this.addForm).then(res => {
           console.log("kkk",this.addForm)
           if (res.code === 20000) {
@@ -240,7 +242,7 @@
 
       openAddDialog() {
         this.addDialog = true
-        this.initOrderList()
+        /*this.initOrderList()*/
         this.initEmpList()
       },
       /*新增选择员工*/
@@ -250,19 +252,19 @@
         })
       },
       /*新增选择订单*/
-      initOrderList(){
+      /*initOrderList(){
         orderHttp.list_all().then(res=>{
           this.ordList=res.data.list
         })
-      },
-      /*高级搜索*/
-     /* resetForm() {
-        this.$refs.advancedSearchFormRef.resetFields()
-        this.searchInput = ''
-        this.initList()
-        this.rowplanId = 0
-        this.buttonDisabled = true
       },*/
+      /*高级搜索*/
+      /* resetForm() {
+         this.$refs.advancedSearchFormRef.resetFields()
+         this.searchInput = ''
+         this.initList()
+         this.rowplanId = 0
+         this.buttonDisabled = true
+       },*/
       editHandleClose() {
         this.$refs.editFormRef.resetFields()
       },
@@ -330,11 +332,6 @@
       iHeaderCellStyle:function({row,column,rowIndex,columnIndex}){
         return 'padding:5px'
       },
-      /*initCusList() {
-        orderHttp.list().then(res => {
-          this.cusList = res.data
-        })
-      },*/
       initList() {
         planHttp.listPage(this.pageNum,this.pageSize).then(res => {
           this.listForm = res.data.list
@@ -355,7 +352,7 @@
     created() {
       this.initList()
       this.initEmpList()
-      this.initOrderList()
+     /* this.initOrderList()*/
     }
   }
 </script>

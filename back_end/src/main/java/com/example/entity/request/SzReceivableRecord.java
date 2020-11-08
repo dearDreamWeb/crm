@@ -21,7 +21,7 @@ public class SzReceivableRecord {
     private String recoCaozuopeople;//处理人
     private Date recoTime;//实际回款时间
     private BigDecimal recoMoney;//实际回款金额
-    private Integer recoLiushui;//交易流水号
+    private String recoLiushui;//交易流水号
 
     private Integer planId;//回款计划编号
 

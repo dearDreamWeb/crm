@@ -39,8 +39,9 @@ public class SzOrder {
     private Integer offerId;//报价编号
 
     private CustomerResp customerResp;//客户
-    private List<SzOrderDetails> SzOrderDetails;
-    private SzReceivablePlan SzReceivablePlan;
+    private List<SzOrderDetails> SzOrderDetails;//1n
+    private SzReceivablePlan SzReceivablePlan;//11
+    private SzDeliver szDeliver;//11
 
     private String startDate;
     private String endDate;
