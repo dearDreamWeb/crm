@@ -46,6 +46,48 @@
         <association property="customerResp" resultMap="CustomerResult"/>
         <association property="empResp" resultMap="EmpResult"/>
         <association property="deptResp" resultMap="DeptResult"/>
+        <association property="productResp" resultMap="ProductResult"/>
+        <association property="szOrder" resultMap="szOrderResult"/>
+    </resultMap>
+
+    <resultMap id="szOrderResult" type="com.example.entity.request.SzOrder">
+        <id property="ordId" column="ord_id"/>
+        <result property="ordTheme" column="ord_theme"/>
+        <result property="ordState" column="ord_state"/>
+        <result property="ordHead" column="ord_head"/>
+        <result property="ordTotalmoney" column="ord_totalmoney"/>
+        <result property="ordStarttime" column="ord_starttime"/>
+        <result property="ordDealtime" column="ord_dealtime"/>
+        <result property="ordFahuotime" column="ord_fahuotime"/>
+        <result property="ordHuikuanmoney" column="ord_huikuanmoney"/>
+        <result property="ordConsignee" column="ord_consignee"/>
+        <result property="ordProvince" column="ord_province"/>
+        <result property="ordCity" column="ord_city"/>
+        <result property="ordCountry" column="ord_country"/>
+        <result property="ordDetail" column="ord_detail"/>
+        <result property="ordPhone" column="ord_phone"/>
+        <result property="ordCreatetime" column="ord_createtime"/>
+        <result property="ordDelete" column="ord_delete"/>
+        <result property="cusId" column="cus_id"/>
+        <result property="offerId" column="offer_id"/>
+    </resultMap>
+
+    <resultMap id="ProductResult" type="com.example.entity.response.ProductResp">
+        <id column="product_id" property="productId"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_image" property="productImage"/>
+        <result column="product_model" property="productModel"/>
+        <result column="product_price" property="productPrice"/>
+        <result column="product_brand" property="productBrand"/>
+        <result column="product_stock" property="productStock"/>
+        <result column="product_size" property="productSize"/>
+        <result column="product_cost" property="productCost"/>
+        <result column="product_status" property="productStatus"/>
+        <result column="remark" property="remark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
     </resultMap>
 
     <resultMap id="DeptResult" type="com.example.entity.response.DeptResp">
@@ -104,8 +146,8 @@
         <selectKey keyProperty="repairId" keyColumn="repair_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
         </selectKey>
-        insert into repair_order(repair_receiving_time,repair_problem,repair_personnel,cus_id,emp_id,dept_id,repair_gdstate,repair_fault,repair_wxfy,inventory_seq,repair_lxr,repair_sfzb) VALUES
-        (#{repairDate},#{repairProblem},#{repairPersonnel},#{cusId},#{empId},#{deptId},#{repairGdstae},#{repairFault},#{repairWxfy},#{repairSfzb},#{repairsjhm},#{repairLxr})
+        insert into repair_order(repair_receiving_time,repair_problem,repair_personnel,cus_id,emp_id,dept_id,product_id,order_id,repair_gdstate,repair_fault,repair_wxfy,inventory_seq,repair_lxr,repair_sfzb) VALUES
+        (#{repairDate},#{repairProblem},#{repairPersonnel},#{cusId},#{empId},#{deptId},#{productId},#{ordId}#{repairGdstae},#{repairFault},#{repairWxfy},#{repairSfzb},#{repairsjhm},#{repairLxr})
     </insert>
 
     <update id="updateRepair" parameterType="com.example.entity.request.Repair">
@@ -170,11 +212,15 @@
         SELECT s.repair_id,s.repair_person,s.repair_receiving_time,s.repair_problem,s.repair_personnel,s.repair_appointment,s.repair_actual,s.repair_gdstate,s.repair_fault,s.repair_hfjl,s.inventory_seq,s.repair_wxfy,s.repair_sfzb,s.repair_lxr,
         cu.*,
         e.*,
-        d.*
+        d.*,
+        p.*,
+        sz.*
         FROM repair_order s
         left join customer cu on s.cus_id = cu.cus_id
         left join emp e on s.emp_id = e.emp_id
         left join dept d on s.dept_id = d.dept_id
+        left join product p on s.product_id = p.product_id
+        left join sz_order sz on s.order_id = sz.ord_id
         <where>
             <if test="repairProblem != null and repairProblem != ''">
                 AND s.repair_problem LIKE CONCAT('%',#{repairProblem},'%')
@@ -194,16 +240,21 @@
             <if test="deptId != null">
                 and s.dept_id=#{deptId}
             </if>
+            <if test="productId != null">
+                and s.product_id=#{productId}
+            </if>
         </where>
         ORDER BY s.repair_receiving_time DESC
     </select>
 
     <select id="getRepair" resultMap="RepairDetailResult">
-        SELECT s.*,cu.*,e.*,d.*
+        SELECT s.*,cu.*,e.*,d.*,p.*,sz.*
         FROM repair_order s
         LEFT JOIN customer cu ON cu.cus_id = s.cus_id
           LEFT JOIN emp e ON e.emp_id = s.emp_id
           left join dept d on s.dept_id = d.dept_id
+           left join product p on s.product_id = p.product_id
+            left join sz_order sz on s.order_id = sz.ord_id
         WHERE s.repair_id = #{repairId}
     </select>
 </mapper>

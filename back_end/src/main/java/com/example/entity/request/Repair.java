@@ -3,6 +3,7 @@ package com.example.entity.request;
 import com.example.entity.response.CustomerResp;
 import com.example.entity.response.DeptResp;
 import com.example.entity.response.EmpResp;
+import com.example.entity.response.ProductResp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,4 +43,6 @@ public class Repair {
     private CustomerResp customerResp;
     private EmpResp empResp;
     private DeptResp deptResp ;
+    private ProductResp productResp;
+    private SzOrder szOrder;
 }
