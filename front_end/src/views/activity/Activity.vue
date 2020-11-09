@@ -101,7 +101,7 @@
       <el-row>
         <el-col>
           <el-form-item label="活动日期">
-            <el-date-picker
+            <!--<el-date-picker
               v-model="addForm.activityDate"
               type="daterange"
               format="yyyy-MM-dd"
@@ -109,7 +109,15 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期">
-            </el-date-picker>
+            </el-date-picker>-->
+            <el-date-picker v-model="addForm.startTime" format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd" type="date"
+                            placeholder="请输入"></el-date-picker>
+            <span>-</span>
+            <el-date-picker v-model="addForm.endTime" format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd" type="date"
+                            @change="addFormEndTimeChange"
+                            placeholder="请输入"></el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
@@ -146,7 +154,7 @@
       <el-row>
         <el-col>
           <el-form-item label="活动日期">
-            <el-date-picker
+            <!--<el-date-picker
               v-model="editForm.activityDate"
               type="daterange"
               format="yyyy-MM-dd"
@@ -154,7 +162,14 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期">
-            </el-date-picker>
+            </el-date-picker>-->
+            <el-date-picker v-model="editForm.startTime" format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd" type="date"
+                            placeholder="请输入"></el-date-picker>
+            <span>-</span>
+            <el-date-picker v-model="editForm.endTime" format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd" type="date"
+                            placeholder="请输入"></el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
@@ -230,7 +245,6 @@
           createBy:'',
           startTime:'',
           endTime:'',
-          activityDate:'',
           empId:0,
           views:0
         },
@@ -255,6 +269,17 @@
       }
     },
     methods:{
+      addFormEndTimeChange(val) {
+        if (new Date(val).getTime() < new Date(this.addForm.startTime).getTime()) {
+          this.addForm.endTime = ''
+          this.$message.error("结束日期不能小于开始日期")
+        }
+        if (new Date(val).getTime() == new Date(this.addForm.startTime).getTime()) {
+          this.addForm.endTime = ''
+          this.$message.error("请设置正确的活动日期")
+        }
+      },
+
       refreshClick() {
         this.searchInput = ''
         this.initList()
@@ -358,8 +383,6 @@
         this.addDialog = true
       },
       addActivityClick() {
-        this.addForm.startTime = this.addForm.activityDate[0]
-        this.addForm.endTime = this.addForm.activityDate[1]
         this.addForm.createBy = this.$store.state.empName
         this.$refs.addFormRef.validate(valid => {
           if (!valid) return
@@ -383,7 +406,8 @@
       addHandleClose() {
         this.$refs.addFormRef.resetFields()
         this.addActivityLoading = false
-        this.addForm.activityDate = ''
+        this.addForm.startTime = ''
+        this.addForm.endTime = ''
       },
 
       handleRowClick(row,event,column) {

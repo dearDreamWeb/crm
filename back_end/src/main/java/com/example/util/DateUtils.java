@@ -83,4 +83,22 @@ public class DateUtils {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.parse(dateStr);
     }
+
+    /**
+     * 活动页面专属转换方法
+     * @param dateStr
+     * @return
+     * @throws ParseException
+     */
+    public static Date activityStrToDate(String dateStr) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date parse = null;
+        try {
+            parse = format.parse(dateStr);
+            System.out.println(parse);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return parse;
+    }
 }

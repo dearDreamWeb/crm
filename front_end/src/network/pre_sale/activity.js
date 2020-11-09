@@ -86,6 +86,6 @@ export const activityHttp = {
         'activityId':activityId
       }
     }
-    return postJson(params)
+    return get(params)
   }
 }

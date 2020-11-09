@@ -29,7 +29,8 @@
               <el-col :offset="9">
                 <el-form-item size="large">
                   <el-button type="primary" @click="addClue" name="=addButton"
-                             :loading="addButtonLoading">点击按钮~立即参加</el-button>
+                             :loading="addButtonLoading"
+                             :disabled="activityDisabled">立即参加</el-button>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -55,6 +56,7 @@
         cb(new Error('请输入合法的手机号'))
       }
       return {
+        activityDisabled:false,
         addButtonLoading:false,
         activityId:'',
         empId:'',
@@ -101,6 +103,7 @@
       initActivity() {
         activityHttp.getActivity(this.activityId).then(res => {
           this.activity = res.data
+          this.compareDate(this.activity.endTime)
         })
       },
       addViews() {
@@ -109,7 +112,16 @@
             console.log("成功")
           }
         })
-      }
+      },
+      compareDate(date) {
+        let systemDate = new Date();
+        let activityDate = new Date(date);
+        if (systemDate > activityDate) {
+          this.activityDisabled = true
+          this.$message.error("该活动已过期，请留意其他活动")
+          return false
+        }
+      },
     },
     created() {
       this.activityId = this.$urlUtil.getQueryVariable("activityId")

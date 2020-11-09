@@ -1,5 +1,5 @@
 <template>
-  <el-container style="height: 100%">
+  <el-container style="height: 100%" class="outer-container">
     <el-aside class="sidebar" v-bind:class="{'sidebar-collapse':isCollapse}"
               style="transition: .5s;">
       <el-header class="logo">
@@ -111,5 +111,14 @@
 </script>
 
 <style scoped>
-
+  .sidebar{
+    overflow-x: scroll;
+    white-space: nowrap;
+  }
+  ::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  ::-webkit-scrollbar {
+    width: 0 !important;height: 0;
+  }
 </style>

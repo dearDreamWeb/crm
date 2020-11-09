@@ -7,27 +7,36 @@
   <div>
     <el-card>
       <el-row :gutter="20">
-        <el-col :span="5">
-          <el-input size="mini" clearable placeholder="请输入">
-            <el-button icon="el-icon-search" slot="append"></el-button>
-          </el-input>
-          <el-tree style="margin-top: 20px" :data="data" :props="defaultProps"
-                   @node-click="handleNodeClick"></el-tree>
+        <el-col :span="6">
+          <el-row :gutter="10">
+            <el-col :span="20">
+              <el-input v-model="filterText" size="mini" clearable placeholder="请输入"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <el-button size="mini" icon="el-icon-search" type="primary"
+                         :disabled="treeQueryDisabled" @click="treeQueryClick"></el-button>
+            </el-col>
+          </el-row>
+          <div style="margin-top: 20px;height: 450px;overflow: auto">
+            <el-tree :data="demandTreeData" :props="defaultProps" ref="tree"
+                     @node-click="handleNodeClick" :filter-node-method="filterNode"></el-tree>
+          </div>
         </el-col>
         <el-col :span="1">
           <el-divider direction="vertical"></el-divider>
         </el-col>
-        <el-col :span="18">
+        <el-col :span="17">
           <el-row :gutter="20">
             <el-col :span="7">
-              <el-input size="mini" clearable placeholder="请输入">
-                <el-button icon="el-icon-search" slot="append"></el-button>
+              <el-input v-model="searchInput" size="mini" clearable placeholder="请输入">
+                <el-button @click="searchInputClick" icon="el-icon-search" slot="append"></el-button>
               </el-input>
             </el-col>
             <el-col :span="8">
               <el-button type="primary" icon="el-icon-plus" size="mini"
                          @click="openAddDialog">新增</el-button>
-              <el-button type="primary" icon="el-icon-zoom-in" size="mini">高查</el-button>
+              <el-button type="primary" icon="el-icon-zoom-in" size="mini"
+                         @click="advancedSearch = !advancedSearch">高查</el-button>
               <el-button type="primary" icon="el-icon-refresh" size="mini"></el-button>
             </el-col>
             <el-col :span="9">
@@ -37,6 +46,64 @@
                          :disabled="buttonDisabled" @click="delSolution">删除</el-button>
             </el-col>
           </el-row>
+
+          <transition name="el-zoom-in:top">
+            <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px;">
+              <el-form :model="searchForm" ref="searchFormRef" size="mini"
+                       label-width="80px" label-position="right">
+                <el-row>
+                  <el-col :span="4">
+                    <el-form-item label="高级查询"></el-form-item>
+                  </el-col>
+                  <el-col :span="14">
+                    <el-form-item label="时间">
+                      <el-date-picker v-model="searchForm.startDate" format="yyyy-MM-dd"
+                                      value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                      placeholder="请输入"></el-date-picker>
+                      <span>-</span>
+                      <el-date-picker v-model="searchForm.endDate" format="yyyy-MM-dd"
+                                      value-format="yyyy-MM-dd" type="date" style="width: 46%"
+                                      placeholder="请输入"></el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item>
+                      <el-button size="mini" icon="el-icon-zoom-out"
+                                 @click="closeAdvancedSearch"></el-button>
+                      <el-button size="mini" @click="advancedSearchClick" type="primary"
+                                 icon="el-icon-search"></el-button>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="客户" prop="cusId">
+                      <el-select v-model="searchForm.cusId" clearable placeholder="请选择">
+                        <el-option v-for="item in customerList" :key="item.cusId"
+                                   :label="item.cusName" :value="item.cusId"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="机会" prop="saleId">
+                      <el-select v-model="searchForm.saleId" clearable placeholder="请选择">
+                        <el-option v-for="item in saleList" :key="item.saleId"
+                                   :label="item.saleName" :value="item.saleId"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="需求" prop="demandId">
+                      <el-select v-model="searchForm.demandId" clearable placeholder="请选择">
+                        <el-option v-for="item in demandList" :key="item.demandId"
+                                   :label="item.demandTitle" :value="item.demandId"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </el-card>
+          </transition>
 
           <el-table :data="listForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                     :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
@@ -199,6 +266,22 @@
     name: "Solution",
     data() {
       return {
+        count:0,
+        filterText:'',
+        treeQueryDisabled:true,
+        treeSolutionId:0,
+
+        searchInput:'',
+        advancedSearch:false,
+        searchForm:{
+          solutionTitle:'',
+          cusId:'',
+          saleId:'',
+          demandId:'',
+          startDate:'',
+          endDate:''
+        },
+
         editDialog:false,
         editButtonLoading:false,
         editForm:{},
@@ -260,22 +343,77 @@
         rowSolutionId:0,
         buttonDisabled:true,
 
-        data: [{
-          label: '一级 1',
-          children: [{
-            label: '二级 1-1',
-            children: [{
-              label: '三级 1-1-1'
-            }]
-          }]
-        }],
+        demandTreeData: [],
         defaultProps: {
           children: 'children',
           label: 'label'
         }
       }
     },
+    watch: {
+      filterText(val) {
+        this.$refs.tree.filter(val);
+      }
+    },
     methods:{
+      load () {
+        this.count += 2
+      },
+      treeQueryClick() {
+        this.searchForm.demandId = this.treeSolutionId
+        solutionHttp.list(this.searchForm).then(res => {
+          this.listForm = res.data.list
+        })
+      },
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.label.indexOf(value) !== -1;
+      },
+
+      initDemandTreeList() {
+        demandHttp.listAll().then(res => {
+          for (let i=0;i<res.data.list.length;i++) {
+            let obj = {
+              label:res.data.list[i].demandTitle,
+              id:res.data.list[i].demandId,
+              children:{}
+            }
+            this.demandTreeData.push(obj)
+          }
+        })
+      },
+
+      searchInputClick() {
+        this.searchForm.solutionTitle = this.searchInput
+        this.tableLoading = true
+        solutionHttp.list(this.searchForm).then(res => {
+          this.tableLoading = false
+          this.listForm = res.data.list
+          this.pageNum = res.data.pageNum
+          this.total = res.data.total
+        })
+      },
+      resetForm() {
+        this.$refs.searchFormRef.resetFields()
+        this.searchInput = ''
+        this.initList()
+        this.rowSolutionId = 0
+        this.buttonDisabled = true
+      },
+      advancedSearchClick() {
+        this.tableLoading = true
+        solutionHttp.list(this.searchForm).then(res => {
+          this.tableLoading = false
+          this.listForm = res.data.list
+          this.pageNum = res.data.pageNum
+          this.total = res.data.total
+        })
+      },
+      closeAdvancedSearch() {
+        this.advancedSearch = !this.advancedSearch
+        this.$refs.searchFormRef.resetFields()
+      },
+
       delSolution() {
         this.$confirm('此操作将删除该方案，请谨慎操作','提示',{
           confirmButtonText:'确定',
@@ -396,9 +534,23 @@
           this.customerList = res.data
         })
       },
+      initSaleList() {
+        saleHttp.list_all().then(res => {
+          this.saleList = res.data.list
+        })
+      },
+      initDemandList() {
+        demandHttp.listAll().then(res => {
+          this.demandList = res.data.list
+        })
+      },
 
       handleNodeClick(data) {
-        console.log(data);
+        console.log(data.id);
+        this.treeSolutionId = data.id
+        if (this.treeSolutionId != 0) {
+          this.treeQueryDisabled = false
+        }
       },
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'
@@ -409,6 +561,10 @@
     },
     created() {
       this.initList()
+      this.initSaleList()
+      this.initDemandList()
+      this.initCustomerList()
+      this.initDemandTreeList()
     }
   }
 </script>

@@ -109,7 +109,7 @@
         FROM solution
         <where>
             <if test="solutionTitle != null and solutionTitle != ''">
-                AND solutionTitle LIKE CONCAT('%',#{solutionTitle},'%')
+                AND solution_title LIKE CONCAT('%',#{solutionTitle},'%')
             </if>
             <if test="cusId != null">
                 AND cus_id = #{cusId}

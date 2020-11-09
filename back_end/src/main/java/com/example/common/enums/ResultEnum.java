@@ -86,6 +86,8 @@ public enum ResultEnum {
 
     CLUE_TRANSFER_NOT_OWN(80035,"转换对象不能是自己"),
 
+    ACTIVITY_DATE_ERROR(80036,"结束日期不能小于开始日期"),
+
     PLACEHOLDER(null,null);//占位符，方便快速编写代码（无其他业务作用）
 
     private Integer code;

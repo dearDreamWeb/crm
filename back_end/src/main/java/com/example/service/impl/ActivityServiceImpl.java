@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,6 +36,13 @@ public class ActivityServiceImpl implements ActivityService {
         if (checkActivity != 0) {
             throw new SysException(ResultEnum.ACTIVITY_EXIST.getCode(),
                     ResultEnum.ACTIVITY_EXIST.getMessage());
+        }
+        Date starTime = DateUtils.activityStrToDate(activityReq.getStartTime());
+        Date endTime = DateUtils.activityStrToDate(activityReq.getEndTime());
+        if (starTime.getTime() < endTime.getTime() &&
+                starTime.getTime() == endTime.getTime()) {
+            throw new SysException(ResultEnum.ACTIVITY_DATE_ERROR.getCode(),
+                    ResultEnum.ACTIVITY_DATE_ERROR.getMessage());
         }
         int addActivity = activityMapper.addActivity(activityReq);
         if (addActivity != 1) {

@@ -61,5 +61,19 @@ export const solutionHttp = {
       }
     }
     return postJson(params)
+  },
+  list:function (solution) {
+    let params = {
+      url:'/solution/list',
+      data:{
+        'solutionTitle':solution.solutionTitle,
+        'cusId':solution.cusId,
+        'saleId':solution.saleId,
+        'demandId':solution.demandId,
+        'startDate':solution.starData,
+        'endDate':solution.endDate
+      }
+    }
+    return get(params)
   }
 }

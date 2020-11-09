@@ -60,8 +60,9 @@ public class ActivityController {
         return activityService.listByEmp(empId);
     }
 
-    @PostMapping("/add_views")
-    public ResultVo addViews(@RequestParam("activityId")Integer activityId) {
+    @GetMapping("/add_views")
+    public ResultVo addViews(@RequestParam("activityId") Integer activityId) {
+        System.err.println(activityId);
         return activityService.addViews(activityId);
     }
 }
