@@ -17,6 +17,8 @@
                    @click="openAddDialog">添加活动</el-button>
         <el-button type="primary" size="mini" icon="el-icon-refresh"
                    @click="refreshClick"></el-button>
+        <el-button type="primary" size="mini" icon="el-icon-brush"
+                   @click="linkCustomActivity" tag="a">自定义活动</el-button>
       </el-col>
       <el-col :span="8">
         <el-button type="warning" size="mini" icon="el-icon-edit"
@@ -269,6 +271,13 @@
       }
     },
     methods:{
+      linkCustomActivity() {
+        let routeData = this.$router.resolve({
+          path: '/custom_activity'
+        })
+        window.open(routeData.href, "_blank")
+      },
+
       addFormEndTimeChange(val) {
         if (new Date(val).getTime() < new Date(this.addForm.startTime).getTime()) {
           this.addForm.endTime = ''

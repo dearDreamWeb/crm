@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from "../views/Login";
 import Dashboard from "../views/Dashboard";
 import Layout from "../views/layout/Layout";
+import CustomActivity from "../views/CustomActivity";
 
 Vue.use(Router)
 
@@ -19,6 +20,11 @@ const routes = [
   {
     path: '/clue_page',
     component: () => import('../views/CluePage')
+  },
+  {
+    name: CustomActivity,
+    path: '/custom_activity',
+    component: () => import('../views/CustomActivity')
   },
   {
     path: '/base',
@@ -124,7 +130,7 @@ const routes = [
       {
         path: '/solution',
         component: () => import('../views/solution/Solution')
-      }
+      },
     ]
   }
 ]
