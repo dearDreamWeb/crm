@@ -19,6 +19,8 @@ export const repairHttp = {
         'repairsjhm':repair.repairsjhm,
         'cusId':repair.cusId,
         'deptId':repair.deptId,
+        'orderId':repair.orderId,
+        'productId':repair.productId,
         'empId':repair.empId
       }
     }
@@ -51,7 +53,9 @@ export const repairHttp = {
         'repairLxr':repair.repairLxr,
         'repairsjhm':repair.repairsjhm,
         'cusId':repair.cusId,
+        'orderId':repair.orderId,
         'deptId':repair.deptId,
+        'productId':repair.productId,
         'empId':repair.empId
       }
     }
@@ -78,6 +82,8 @@ export const repairHttp = {
         'repairGdstae':repair.repairGdstae,
         'cusId':repair.cusId,
         'deptId':repair.deptId,
+        'orderId':repair.orderId,
+        'productId':repair.productId,
         'empId':repair.empId
 
       }

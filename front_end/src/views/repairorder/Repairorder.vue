@@ -64,6 +64,15 @@
                   </el-select>
                 </el-form-item>
               </el-col>
+              <el-col :span="8">
+                <el-form-item label="产品">
+                  <el-select v-model="searchForm.productId">
+                    <el-option v-for="item in productList" :key="item.productId"
+                               :label="item.productName" :value="item.productId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
               <el-col :span="4">
                 <el-form-item>
                   <el-button size="mini" @click="advancedQueryClick"
@@ -85,7 +94,13 @@
         <el-table-column prop="repairWxfy" label="费用"></el-table-column>
         <el-table-column prop="repairGdstae" label="状态"></el-table-column>
         <el-table-column prop="deptResp.deptName" label="维修部门"></el-table-column>
+        <el-table-column prop="productResp.productName" label="维修产品"></el-table-column>
         <el-table-column prop="empResp.empName" label="接单人"></el-table-column>
+        <el-table-column prop="careData" label="日期">
+          <template slot-scope="scope">
+            {{scope.row.repairDate | dateFormat}}
+          </template>
+        </el-table-column>
         <el-table-column prop="repairsjhm" label="是否在保"></el-table-column>
       </el-table>
 
@@ -97,34 +112,51 @@
       </el-pagination>
     </el-card>
 
+    <el-dialog :visible.sync="Dingda">
+    <el-table :data="listDingda">
+      <el-table-column prop="SzOrder.ordId" label="订单Id"></el-table-column>
+      <el-table-column prop="SzOrder。ordTheme" label="主题"></el-table-column>
+      <el-table-column prop="SzOrder.cusName" label="客户"></el-table-column>
+      <el-table-column prop="SzOrder。ordHead" label="负责人"></el-table-column>
+      <el-table-column prop="SzOrder。ordConsignee" label="收货人"></el-table-column>
+      <el-table-column prop="SzOrder.ordPhone" label="手机号码"></el-table-column>
+    </el-table>
+
+    <div style="text-align: center;">
+      <el-button @click="Dingda = false">取 消</el-button>
+      <el-button type="primary" @click="addDid"
+                 :loading="Dingddd">确 定</el-button>
+    </div>
+  </el-dialog>
     <el-dialog
       title="新增"
       :visible.sync="addDialog"
       width="50%"
       @close="handleClose">
+
       <el-form ref="addform" :model="addform" :rules="rules" label-width="80px">
+
         <el-row>
           <el-col :span="8">
-            <el-form-item label="手机号码" prop="empId">
-              <el-input v-model="addform.repairsjhm"></el-input>
-            </el-form-item>
-          </el-col >
-          <el-col :span="8">
-            <el-form-item label="联系人">
-              <el-input v-model="addform.repairLxr"></el-input>
+            <el-form-item label="订单编号">
+              <el-input
+                placeholder="请输入内容"
+                v-model="addform.ordId"
+                :disabled="true">
+              </el-input>
             </el-form-item>
           </el-col>
-
+            <el-col :span="8">
+              <el-form-item>
+                <el-button size="mini" type="primary" icon="el-icon-plus" @click="xians"></el-button>
+              </el-form-item>
+            </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="客户">
-              <el-select v-model="addform.cusId">
-                <el-option v-for="item in empList" :key="item.cusId"
-                           :label="item.cusName" :value="item.cusId">
-                </el-option>
-              </el-select>
+            <el-form-item label="联系人">
+              <el-input v-model="addform.repairLxr"></el-input>
             </el-form-item>
           </el-col>
 
@@ -146,7 +178,11 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="维修产品">
-              <el-input v-model="addform.productId"></el-input>
+              <el-select v-model="addform.productId">
+                <el-option v-for="item in productList" :key="item.productId"
+                           :label="item.productName" :value="item.productId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -201,7 +237,7 @@
     </el-dialog>
 
     <el-dialog
-      title="修改关怀"
+      title="修改"
       :visible.sync="editDialog"
       width="50%"
       @close="editHandleClose">
@@ -249,7 +285,11 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="维修产品">
-                <el-input v-model="updateform.productId"></el-input>
+                <el-select v-model="updateform.productId">
+                  <el-option v-for="item in productList" :key="item.productId"
+                             :label="item.productName" :value="item.productId">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -308,6 +348,8 @@ import {repairHttp} from "../../network/system/repair";
 import {userHttp} from "../../network/system/user";
   import {customerHttp} from "../../network/pre_sale/customer";
 import {deptHttp} from "../../network/system/dept";
+import {productHttp} from "../../network/system/product";
+import {orderHttp} from "../../network/system/order";
 
   export default {
     data() {
@@ -315,6 +357,7 @@ import {deptHttp} from "../../network/system/dept";
         deptList:[],
         empList:[],
         edpList:[],
+        productList:[],
         addform:{
           empId:'',
           repairDate: '',
@@ -369,13 +412,16 @@ import {deptHttp} from "../../network/system/dept";
         advancedSearch:false,
         updateform:{},
         addDialog:false,
+        Dingda:false,
         buttonDisabled:true,
         addDictButtonLoading:false,
+        Dingddd:false,
         editDictButtonLoading:false,
         editDialog:false,
         searchInput:'',
 
         listForm:[],
+        listDingda:[],
         tableLoading:'',
         total:0,
         pageNum:1,
@@ -424,6 +470,10 @@ import {deptHttp} from "../../network/system/dept";
         this.initEmpList()
         this.initEdpList()
         this.initDeptList()
+        this.initProductList()
+      },
+      xians(){
+        this.Dingda = true
       },
       initEdpList(){
         userHttp.list().then(res =>{
@@ -438,6 +488,11 @@ import {deptHttp} from "../../network/system/dept";
       initEmpList() {
         customerHttp.listAll().then(res => {
           this.empList = res.data
+        })
+      },
+      initProductList(){
+        productHttp.listAll().then(res =>{
+          this.productList = res.data.list
         })
       },
       addClick(){
@@ -457,6 +512,27 @@ import {deptHttp} from "../../network/system/dept";
                 type:"error"
               })
               this.addDictButtonLoading = false
+            }
+          })
+        })
+      },
+      addDid(){
+        console.log(this.$refs)
+        this.$refs["addform"].validate(valid => {
+          if (!valid) return
+          this.Dingddd = true
+          orderHttp.add(this.addform).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+              this.Dingda = false
+              this.Dingddd = false
+            } else {
+              this.$message({
+                message:res.message,
+                type:"error"
+              })
+              this.Dingddd = false
             }
           })
         })
@@ -581,6 +657,7 @@ import {deptHttp} from "../../network/system/dept";
       this.initEmpList()
       this.initEdpList()
       this.initDeptList()
+      this.initProductList()
     }
   }
 </script>
