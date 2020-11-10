@@ -131,6 +131,10 @@ const routes = [
         path: '/solution',
         component: () => import('../views/solution/Solution')
       },
+      {
+        path: '/contacts',
+        component: () => import('../views/customer/Contacts')
+      }
     ]
   }
 ]

@@ -356,9 +356,6 @@
       }
     },
     methods:{
-      load () {
-        this.count += 2
-      },
       treeQueryClick() {
         this.searchForm.demandId = this.treeSolutionId
         solutionHttp.list(this.searchForm).then(res => {

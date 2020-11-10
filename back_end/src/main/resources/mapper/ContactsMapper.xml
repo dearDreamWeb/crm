@@ -146,6 +146,9 @@
             <if test="cusId != null">
                 AND cus_id = #{cusId}
             </if>
+            <if test="contactsDictType != null and contactsDictType != ''">
+                AND contacts_dict_type = #{contactsDictType}
+            </if>
             AND is_delete = 0
         </where>
         ORDER BY create_time DESC

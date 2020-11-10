@@ -41,5 +41,31 @@ export const contactsHttp = {
       }
     }
     return get(params)
+  },
+  listPage:function (pageNum,pageSize) {
+    let params = {
+      url:'/contacts/list',
+      data:{
+        'pageNum':pageNum,
+        'pageSize':pageSize
+      }
+    }
+    return get(params)
+  },
+  search:function (contacts) {
+    let params = {
+      url:'/contacts/list',
+      data:{
+        'contactsName':contacts.contactsName,
+        'sex':contacts.sex,
+        'contactsPhone':contacts.contactsPhone,
+        'wechat':contacts.wechat,
+        'qq':contacts.qq,
+        'email':contacts.email,
+        'contactsDictType':contacts.contactsDictType,
+        'cusId':contacts.cusId
+      }
+    }
+    return get(params)
   }
 }
