@@ -88,7 +88,7 @@
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="40"></el-table-column>
-
+        <el-table-column prop="szOrder.ordId" label="订单Id"></el-table-column>
         <el-table-column prop="customerResp.cusName" label="对应客户"></el-table-column>
         <el-table-column prop="repairSfzb" label="联系人"></el-table-column>
         <el-table-column prop="repairWxfy" label="费用"></el-table-column>
@@ -105,28 +105,33 @@
       </el-table>
 
       <el-pagination background
-                     @current-change="handleCurrentChange"
-                     :current-page="pageNum" :page-sizes="[1,2,5,10]"
-                     :page-size="pageSize" :total="total"
-                     layout="prev, pager, next, jumper, total">
-      </el-pagination>
+                                      @current-change="handleCurrentChange"
+                                      :current-page="pageNum" :page-sizes="[1,2,5,10]"
+                                      :page-size="pageSize" :total="total"
+                                      layout="prev, pager, next, jumper, total">
+    </el-pagination>
     </el-card>
 
     <el-dialog :visible.sync="Dingda">
     <el-table :data="listDingda">
-      <el-table-column prop="SzOrder.ordId" label="订单Id"></el-table-column>
-      <el-table-column prop="SzOrder。ordTheme" label="主题"></el-table-column>
-      <el-table-column prop="SzOrder.cusName" label="客户"></el-table-column>
-      <el-table-column prop="SzOrder。ordHead" label="负责人"></el-table-column>
-      <el-table-column prop="SzOrder。ordConsignee" label="收货人"></el-table-column>
-      <el-table-column prop="SzOrder.ordPhone" label="手机号码"></el-table-column>
+      <el-table-column prop="ordId" label="订单Id"></el-table-column>
+      <el-table-column prop="ordTheme" label="主题"></el-table-column>
+      <el-table-column prop="customerResp.cusName" label="客户"></el-table-column>
+      <el-table-column prop="ordHead" label="负责人"></el-table-column>
+      <el-table-column prop="ordConsignee" label="收货人"></el-table-column>
+      <el-table-column prop="ordPhone" label="手机号码"></el-table-column>
+      <el-table-column width="80" label="操作" >
+        <template slot-scope="scope">
+          <el-button type="text" size="small" icon="el-icon-plus" @click="addpro(scope.row.ordId)" :disabled="isDisable"></el-button>
+        </template>
+      </el-table-column>
     </el-table>
-
-    <div style="text-align: center;">
-      <el-button @click="Dingda = false">取 消</el-button>
-      <el-button type="primary" @click="addDid"
-                 :loading="Dingddd">确 定</el-button>
-    </div>
+      <el-pagination background
+                     @current-change="handleCurrentChangedd"
+                     :current-page="pageNum1" :page-sizes="[1,2,5,10]"
+                     :page-size="pageSize1" :total="total1"
+                     layout="prev, pager, next, jumper, total">
+      </el-pagination>
   </el-dialog>
     <el-dialog
       title="新增"
@@ -223,7 +228,7 @@
               <el-select v-model="addform.repairGdstae" placeholder="请选择">
                 <el-option label="执行中" value="执行中"></el-option>
                 <el-option label="结束" value="结束"></el-option>
-                <el-option label="意外终止" value="意外终止"></el-option>
+                <el-option label="未执行" value="未执行"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -330,7 +335,7 @@
                 <el-select v-model="updateform.repairGdstae" placeholder="请选择">
                   <el-option label="执行中" value="执行中"></el-option>
                   <el-option label="结束" value="结束"></el-option>
-                  <el-option label="意外终止" value="意外终止"></el-option>
+                  <el-option label="未执行" value="未执行"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -350,6 +355,7 @@ import {userHttp} from "../../network/system/user";
 import {deptHttp} from "../../network/system/dept";
 import {productHttp} from "../../network/system/product";
 import {orderHttp} from "../../network/system/order";
+import {followHttp} from "../../network/pre_sale/followlog";
 
   export default {
     data() {
@@ -358,6 +364,7 @@ import {orderHttp} from "../../network/system/order";
         empList:[],
         edpList:[],
         productList:[],
+        isDisable:false,
         addform:{
           empId:'',
           repairDate: '',
@@ -406,6 +413,9 @@ import {orderHttp} from "../../network/system/order";
 
           delivery: false,
           type: [],
+          pageNum1:1,
+          pageSize1:8,
+          total1:0,
           resource: '',
           desc: ''
         },
@@ -474,7 +484,21 @@ import {orderHttp} from "../../network/system/order";
       },
       xians(){
         this.Dingda = true
+        orderHttp.list(this.listDingda).then(res=>{
+          this.listDingda = res.data.list
+          this.total1 = res.data.total1
+          this.pageNum1 = res.data.pageNum1
+        })
       },
+      addpro(ordId) {
+        this.Dingda = false
+        console.log(ordId)
+        this.addform.ordId = ordId
+        orderHttp.getOrder(ordId).then(res => {
+          this.listDingda = res.data
+        })
+      },
+
       initEdpList(){
         userHttp.list().then(res =>{
           this.edpList = res.data.list
@@ -644,6 +668,16 @@ import {orderHttp} from "../../network/system/order";
           this.pageNum = res.data.pageNum
         })
       },
+      handleCurrentChangedd(pageIndex){
+        this.listDingda.pageNum1 = pageIndex
+        this.listDingda.pageSize1 = this.pageSize
+        orderHttp.list(this.listDingda).then(res => {
+          this.listDingda = res.data.list
+          this.total1 = res.data.total1
+          this.pageNum1 = res.data.pageNum1
+        })
+      },
+
       initList() {
         repairHttp.listPage(this.pageNum, this.pageSize).then(res => {
           this.listForm = res.data.list
