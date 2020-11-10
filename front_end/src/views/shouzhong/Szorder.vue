@@ -103,7 +103,7 @@
         </el-table-column>
       </el-table>
       <el-pagination background
-                     @current-change="handleCurrentChange1"
+                     @current-change="handleCurrentChange"
                      :current-page="pageNum" :page-sizes="[1,2,5,10]"
                      :page-size="pageSize" :total="total"
                      layout="prev, pager, next, jumper, total">
@@ -192,7 +192,7 @@
           </el-table-column>
         </el-table>
         <el-pagination background
-                       @current-change="handleCurrentChange"
+                       @current-change="handleCurrentChange1"
                        :current-page="pageNum1" :page-sizes="[1,2,5,10]"
                        :page-size="pageSize1" :total="total1"
                        layout="prev, pager, next, jumper, total">
@@ -350,7 +350,9 @@
           ordCountry:'',
           ordDetail:'',
           pageNum:1,
-          pageSize:10
+          pageNum1:1,
+          pageSize:10,
+          pageSize1:1,
         },
         addDialog:false,
         rowordId: 0,
@@ -362,9 +364,11 @@
         pageNum:1,
         pageSize:10,
         total:1,
+/*产品分页*/
         pageNum1:1,
-        pageSize1:5,
+        pageSize1:1,
         total1:1,
+
         addForm: {
           ordTheme:'',
           ordHead:'',
@@ -560,13 +564,14 @@
           this.pageNum = res.data.pageNum
         })
       },
+      /*产品分页*/
       handleCurrentChange1(pageIndex) {
-        this.pageNum = pageIndex
-        this.pageSize = this.pageSize
-        orderHttp.listPage1(this.pageNum,this.pageSize).then(res => {
+        this.pageNum1=pageIndex
+        thia.pageSize1=this.pageSize1
+        orderHttp.listPage1(this.pageNum1,this.pageSize1).then(res => {
           this.listForm = res.data.list
-          this.total = res.data.total
-          this.pageNum = res.data.pageNum
+          this.total1 = res.data.total
+          this.pageNum1 = res.data.pageNum
         })
       },
       chakan(val){

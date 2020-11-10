@@ -48,11 +48,29 @@
          FROM sz_receivable_record WHERE plan_id=#{recoId}
     </select>
     <!--增-->
-    <insert id="addPlanANDReco" parameterType="java.util.List">
+    <!--<insert id="batchAddProduct" parameterType="java.util.List">
+        INSERT INTO product(product_name,product_image,product_model,product_price,product_brand,
+        product_stock,product_size,product_cost,product_status,remark)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.productName},#{item.productImage},#{item.productModel},#{item.productPrice},
+            #{item.productBrand},#{item.productStock},#{item.productSize},#{item.productCost},
+            #{item.productStatus},#{item.remark})
+        </foreach>
+    </insert>-->
+    <!--<insert id="addPlanANDReco" parameterType="java.util.List">
         <selectKey keyProperty="recoId" keyColumn="reco_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
         </selectKey>
         insert into sz_receivable_record(reco_receivable, reco_caozuopeople, reco_time, reco_money, reco_liushui, record_plan, time_plan, money_plan, plan_id) VALUES
         (#{recoReceivable},#{recoCaozuopeople},#{recoTime},#{recoMoney},#{recoLiushui},#{recordPlan},#{timePlan},#{moneyPlan},#{planId})
+    </insert>-->
+    <insert id="addPlanANDReco" parameterType="java.util.List">
+        INSERT INTO sz_receivable_record(reco_receivable, reco_caozuopeople, reco_time, reco_money, reco_liushui,
+         record_plan, time_plan, money_plan, plan_id)
+        VALUES
+    <foreach collection="list" item="item" separator=",">
+        #{recoReceivable},#{recoCaozuopeople},#{recoTime},#{recoMoney},#{recoLiushui},#{recordPlan},#{timePlan},#{moneyPlan},#{planId}
+    </foreach>
     </insert>
 </mapper>
