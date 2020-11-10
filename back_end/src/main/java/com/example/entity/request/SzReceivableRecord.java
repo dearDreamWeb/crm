@@ -19,10 +19,12 @@ public class SzReceivableRecord {
     private Integer recoId;//回款记录编号
     private Integer recoReceivable;//是否回款
     private String recoCaozuopeople;//处理人
+    private Integer recordPlan;//计划回款期次
+    private Date timePlan;//计划回款时间
     private Date recoTime;//实际回款时间
+    private BigDecimal moneyPlan;//计划回款金额
     private BigDecimal recoMoney;//实际回款金额
     private String recoLiushui;//交易流水号
-
     private Integer planId;//回款计划编号
 
     private SzReceivablePlan szReceivablePlan;

@@ -103,7 +103,7 @@
         </el-table-column>
       </el-table>
       <el-pagination background
-                     @current-change="handleCurrentChange"
+                     @current-change="handleCurrentChange1"
                      :current-page="pageNum" :page-sizes="[1,2,5,10]"
                      :page-size="pageSize" :total="total"
                      layout="prev, pager, next, jumper, total">
@@ -193,8 +193,8 @@
         </el-table>
         <el-pagination background
                        @current-change="handleCurrentChange"
-                       :current-page="pageNum" :page-sizes="[1,2,5,10]"
-                       :page-size="pageSize" :total="total"
+                       :current-page="pageNum1" :page-sizes="[1,2,5,10]"
+                       :page-size="pageSize1" :total="total1"
                        layout="prev, pager, next, jumper, total">
         </el-pagination>
         <el-button slot="reference" icon="el-icon-plus" type="primary" @click="choosepro">选择产品</el-button>
@@ -362,6 +362,9 @@
         pageNum:1,
         pageSize:10,
         total:1,
+        pageNum1:1,
+        pageSize1:5,
+        total1:1,
         addForm: {
           ordTheme:'',
           ordHead:'',
@@ -552,6 +555,15 @@
         this.pageNum = pageIndex
         this.pageSize = this.pageSize
         orderHttp.listPage(this.pageNum,this.pageSize).then(res => {
+          this.listForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
+      },
+      handleCurrentChange1(pageIndex) {
+        this.pageNum = pageIndex
+        this.pageSize = this.pageSize
+        orderHttp.listPage1(this.pageNum,this.pageSize).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
