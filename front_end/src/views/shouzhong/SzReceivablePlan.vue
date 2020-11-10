@@ -75,11 +75,20 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+        <!--  <el-col :span="12">
             <el-form-item label="回款日期">
               <el-date-picker v-model="addForm.planTime" format="yyyy-MM-dd"
                               value-format="yyyy-MM-dd" type="date"
                               placeholder="请选择计划回款日期" size="medium" ></el-date-picker>
+            </el-form-item>
+          </el-col>-->
+          <el-col :span="12">
+            <el-form-item label="分期(可选)" :data="xuanfenqi">
+              <el-select v-model="addForm.planPeriod" placeholder="请选择期次"  @change="fenqi" clearable>
+                <el-option label="全款" value="1"></el-option>
+                <el-option label="分3期(免手续费)" value="3"></el-option>
+                <el-option label="分6期(免手续费)" value="6"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12" height="36px">
@@ -92,34 +101,16 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col >
-<!--
- <el-form-item label="分期(可选)">
-              <template slot-scope="scope">
-                <el-select v-model="addForm.planPeriod" placeholder="请选择期次" clearable @click="fenqi(scope.row)">
-                  <el-option label="全款" value="1"></el-option>
-                  <el-option label="分3期(含手续费)" value="3"></el-option>
-                  <el-option label="分6期(含手续费)" value="6"></el-option>
-                </el-select>
-              </template>
-            </el-form-item>
--->
-            <el-form-item label="分期(可选)" :data="xuanfenqi">
-              <el-select v-model="addForm.planPeriod" placeholder="请选择期次"  @change="fenqi" clearable>
-                <el-option label="全款" value="1"></el-option>
-                <el-option label="分3期(含手续费)" value="3"></el-option>
-                <el-option label="分6期(含手续费)" value="6"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
       </el-form>
      <!-- 分期表格-->
       <el-table :data="addrecord" style="text-align: center;" size="small" align="center">
-        <el-table-column prop="record_plan" label="期次" align="center" width="140px"></el-table-column>
-        <el-table-column prop="time_plan" label="还款时间" align="center"></el-table-column>
-        <el-table-column prop="money_plan" label="还款金额" align="center"></el-table-column>
+        <el-table-column label="期次" align="center" width="140px">
+          <template slot-scope="s">
+            第{{s.row.recordPlan}}期
+          </template>
+        </el-table-column>
+        <el-table-column prop="timePlan" label="还款时间" align="center"></el-table-column>
+        <el-table-column prop="moneyPlan" label="还款金额" align="center"></el-table-column>
       </el-table>
 
       <span slot="footer">
@@ -181,8 +172,7 @@
           ordId:'',
           empId:'',
           planMoney:'',
-          planTime:'',
-          planPeriod:[]
+          szReceivableRecorde:[]
         },
         editForm:{
         },
@@ -237,36 +227,52 @@
       fenqi(){
         console.log("1分期",this.addForm.planPeriod)
         let it = this.addForm.planPeriod; //选中的x期次
-        let recordplan=[];
+        let recordplan=0;
         let money=0; //前x-1期
         let qici=1;
         let qc=[];
+        let yumoney=0;
         var nowDate = new Date();//时间
+
        for(var i=1; i<=it;i++){
          console.log("it:",it)
-          console.log("addForm.planPeriod分期",this.addrecord)
+          console.log("addForm.planPeriod分期",this.addForm.planPeriod)
+
+         var date = {
+           year: nowDate.getFullYear(),
+           month: nowDate.getMonth() + 1 +i,
+           day: nowDate.getDate(),
+         }
+         /*if (date.month  >12){
+           date.years=date.year+1;
+         }*/
          //分期小于循环
-         if(this.addForm.planPeriod<i-1){
+         if(this.addForm.planPeriod<=i){
+           yumoney= parseInt(this.ordTotalmoney - money);
+           recordplan=yumoney;
+           console.log("最后一期："+yumoney);
+           console.log("recordplan",recordplan)
+           this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year + '-' + date.month + '-' + date.day ,moneyPlan:recordplan})
            return false;
          }
-         money+=parseFloat(this.ordTotalmoney)/this.addForm.planPeriod;
-          console.log("this.ordTotalmoney",this.ordTotalmoney);
+         money+=parseInt(this.ordTotalmoney/this.addForm.planPeriod);
          console.log("金额：",money);
-         console.log("第",i,"次循环")
-          this.xuanfenqi.push(parseInt(this.ordTotalmoney/this.addForm.planPeriod))
-        //recordplan.push(parseInt(this.ordTotalmoney/this.addForm.planPeriod))
+         console.log("第",i,"次循环");
+         console.log("this.ordTotalmoney",this.ordTotalmoney);
+         // this.xuanfenqi.push(parseInt(this.ordTotalmoney/this.addForm.planPeriod))
+          recordplan=parseInt(this.ordTotalmoney/this.addForm.planPeriod);
          qici++;
          qc.push(qici);
-         this.addrecord.splice(i,0,{record_plan:"第"+i+"期",time_plan:nowDate.getMonth() + 1,money_plan:"xxx"})
+         this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year+ '-'  + date.month + '-'  + date.day , moneyPlan:recordplan})
         }
         /*this.addForm.ordTotalmoney - money;*/
-       let yumoney = this.ordTotalmoney - money;
-        recordplan.push(yumoney)
-        console.log("recordplan",recordplan)
       },
 
       addPlanClick(){
         console.log("添加确定：",this.addForm)
+        //this.addrecord.push(this.addForm.planPeriod);
+        console.log("1this.addrecord",this.addForm.szReceivableRecorde)  //给planPeriod[]赋值
+        this.addForm.szReceivableRecorde=this.addrecord
         planHttp.addplan(this.addForm).then(res => {
           console.log("kkk",this.addForm)
           if (res.code === 20000) {

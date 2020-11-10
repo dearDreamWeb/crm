@@ -37,13 +37,11 @@ public class SzReceivablePlanServicelmpl implements SzReceivablePlanService {
     public ResultVo addszPlan(SzReceivablePlan szplan) {
         szplan.setPlanCaozuotime(DateUtils.getDate());
         szplan.setPlanDel(0);//(删除)否0
-
-   /*    int addszPlan=szplanMapper.addszPlan(szplan);*/
-
+        szplanMapper.addszPlan(szplan);//调用szplan的新增方法
         //获取回款计划期次
         Integer period= szplan.getPlanPeriod();
+      // List<SzReceivableRecord> s= szplan.getSzReceivableRecorde();
         List<SzReceivableRecord> list=new ArrayList<>(period);
-        System.out.println("1.List<SzReceivableRecord>:"+list);
         if (szplan.getPlanId() != null){
             SzReceivablePlan plan=szplanMapper.getszPlan(szplan.getPlanId());
             System.out.println("2.plan:"+plan);
@@ -53,6 +51,7 @@ public class SzReceivablePlanServicelmpl implements SzReceivablePlanService {
                 System.out.println("3.record"+record);
                 record.setPlanId(szplan.getPlanId());
                 record.setRecoLiushui(MyUtils.record());
+                record.setRecoReceivable(0);
                 list.add(i,record);
             }
             szrecordMapper.addPlanANDReco(list);

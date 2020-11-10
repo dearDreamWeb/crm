@@ -94,6 +94,16 @@ export const orderHttp = {
     }
     return get(params)
   },
+  listPage1:function (pageNum,pageSize) {
+    let params = {
+      url:'/order/list_all',
+      data:{
+        'pageNum':pageNum,
+        'pageSize':pageSize
+      }
+    }
+    return get(params)
+  },
   szxiangq:function (id) {
     let params = {
       url:'/details/all',
