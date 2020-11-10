@@ -243,6 +243,10 @@
            month: nowDate.getMonth() + 1 +i,
            day: nowDate.getDate(),
          }
+         if (date.month>12){
+           date.year = date.year+1
+           date.month=date.month-12
+         }
          /*if (date.month  >12){
            date.years=date.year+1;
          }*/
