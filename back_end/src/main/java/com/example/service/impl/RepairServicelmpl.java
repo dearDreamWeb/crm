@@ -4,6 +4,8 @@ import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
 import com.example.entity.request.Repair;
+import com.example.entity.response.CustomerResp;
+import com.example.model.mapper.CustomerMapper;
 import com.example.model.mapper.RepairMapper;
 import com.example.service.RepairService;
 import com.example.util.CheckUtils;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +29,9 @@ import java.util.List;
 public class RepairServicelmpl implements RepairService {
     @Autowired
     private RepairMapper repairMapper;
+
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @Override
     public ResultVo addRepair(Repair repair) {
@@ -80,6 +86,7 @@ public class RepairServicelmpl implements RepairService {
         }
         PageHelper.startPage(pageNum,pageSize);
         List<Repair> repairs = repairMapper.listRepair(repair);
+        extractMethod(repairs);
         PageInfo<Repair> list = new PageInfo<>(repairs);
         return ResultUtils.response(list);
     }
@@ -87,5 +94,18 @@ public class RepairServicelmpl implements RepairService {
     public ResultVo getRepair(Integer repairId) {
         Repair repair = repairMapper.getRepair(repairId);
         return ResultUtils.response(repair);
+    }
+    public List<Repair> extractMethod(List<Repair> list) {
+        List<Repair> respList = new ArrayList<Repair>();
+        for (Repair repair : list) {
+            CustomerResp customer = customerMapper.getCustomer(repair.getCusId());
+            if (customer != null) {
+                repair.setCusName(customer.getCusName());
+            } else {
+                repair.setCusName(null);
+            }
+            respList.add(repair);
+        }
+        return respList;
     }
 }

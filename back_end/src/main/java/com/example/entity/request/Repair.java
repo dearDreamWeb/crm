@@ -45,4 +45,5 @@ public class Repair {
     private DeptResp deptResp ;
     private ProductResp productResp;
     private SzOrder szOrder;
+    private String cusName;
 }
