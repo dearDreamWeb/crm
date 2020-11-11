@@ -18,11 +18,11 @@
           <hr>
           <el-form name="form" :model="clueForm" ref="clueFormRef" :rules="clueFormRules">
             <el-form-item label="名称" prop="clueName">
-              <el-input v-model="clueForm.clueName" clearable
+              <el-input v-model="clueForm.clueName" clearable :disabled="activityDisabled"
                         placeholder="请输入名称" name="clueName"></el-input>
             </el-form-item>
             <el-form-item label="联系方式" prop="cluePhone">
-              <el-input v-model="clueForm.cluePhone" clearable
+              <el-input v-model="clueForm.cluePhone" clearable :disabled="activityDisabled"
                         placeholder="请输入联系方式" name="cluePhone"></el-input>
             </el-form-item>
             <el-row>

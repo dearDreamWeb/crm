@@ -27,6 +27,10 @@ const routes = [
     component: () => import('../views/CustomActivity')
   },
   {
+    path: '/activity_detail_duplicate',
+    component: () => import('../views/activity/ActivityDetailDuplicate')
+  },
+  {
     path: '/base',
     component: () => import('../views/layout/Layout'),
     redirect: 'home',
@@ -134,7 +138,7 @@ const routes = [
       {
         path: '/contacts',
         component: () => import('../views/customer/Contacts')
-      }
+      },
     ]
   }
 ]

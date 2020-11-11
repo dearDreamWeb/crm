@@ -88,6 +88,7 @@ export const userHttp = {
         'phone':emp.phone,
         'sex':emp.sex,
         'empStatus':emp.empStatus,
+        'deptId':emp.deptId,
         'startDate':emp.startDate,
         'endDate':emp.endDate,
         'pageNum':emp.pageNum,

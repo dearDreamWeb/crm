@@ -49,6 +49,13 @@
           {{scope.row.endTime | dateFormat}}
         </template>
       </el-table-column>
+      <el-table-column width="50px" align="center">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" content="详情" placement="top">
+            <el-button @click="toDetailDuplicate(scope.row.activityId)" type="text" icon="el-icon-thumb"></el-button>
+          </el-tooltip>
+        </template>
+      </el-table-column>
     </el-table>
 
     <el-row :gutter="20">
@@ -190,12 +197,18 @@
           占位卡片，后续升级
           <hr>
           分配活动后，提示已分配员工
+          <hr>
+          已分配人员
+          <span v-for="item in isAuthEmpList" :key="item.empId">
+            <el-tag>{{item.empName}}</el-tag>
+            <el-divider direction="vertical"></el-divider>
+          </span>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card>
           <el-form :model="authForm">
-            <el-form-item label="选择用户">
+            <el-form-item label="选择销售人员">
               <el-select v-model="authForm.empIdList" multiple filterable clearable>
                 <el-option v-for="item in empList" :key="item.empId"
                            :label="item.empName" :value="item.empId">
@@ -219,11 +232,13 @@
 <script>
   import {activityHttp} from "../../network/pre_sale/activity";
   import {userHttp} from "../../network/system/user";
+  import {activityDetailHttp} from "../../network/pre_sale/activityDetail";
 
   export default {
     name: "Activity",
     data() {
       return {
+        isAuthEmpList:[],
 
         authDialog:false,
         authForm:{
@@ -271,6 +286,15 @@
       }
     },
     methods:{
+      toDetailDuplicate(activityId) {
+        let resolve = this.$router.resolve({
+          path: '/activity_detail_duplicate',
+          query:{
+            activityId:activityId
+          }
+        });
+        window.open(resolve.href,'_blank')
+      },
       linkCustomActivity() {
         let routeData = this.$router.resolve({
           path: '/custom_activity'
@@ -320,6 +344,9 @@
       openAuthDialog() {
         this.authDialog = true
         this.initEmpList()
+        activityDetailHttp.getEmpByActivityId(this.rowActivityId).then(res => {
+          this.isAuthEmpList = res.data
+        })
       },
       initEmpList() {
         userHttp.listNotAuth(this.rowActivityId).then(res => {

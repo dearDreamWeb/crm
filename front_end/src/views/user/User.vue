@@ -24,9 +24,17 @@
         <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px;">
           <el-form :model="searchForm" ref="advancedSearchFormRef"
                    size="mini" label-position="right" label-width="80px">
-            <el-row>
-              <el-col>
+            <el-row :gutter="20">
+              <el-col :span="12">
                 <el-form-item label="高级搜索"></el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="部门" prop="deptId">
+                  <el-select v-model="searchForm.deptId" clearable placeholder="请选择">
+                    <el-option v-for="item in deptList" :key="item.deptId"
+                               :label="item.deptName" :value="item.deptId"></el-option>
+                  </el-select>
+                </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
@@ -275,6 +283,7 @@
           email:'',
           sex:'',
           phone:'',
+          deptId:'',
           startDate:'',
           endDate:'',
           pageNum:1,

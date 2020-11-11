@@ -37,7 +37,7 @@
               <el-tab-pane label="尺寸" name="size">
                 <el-form :model="sizeForm" label-position="right"
                          label-width="50px" size="mini" ref="sizeFormRef">
-                  <el-form-item label="标题" prop="clueTitle">
+                  <el-form-item label="标题" prop="clueTitle" style="margin-top: 10px">
                     <el-slider v-model="sizeForm.clueTitle"></el-slider>
                   </el-form-item>
                   <el-form-item label="内容" prop="clueContent">
@@ -46,7 +46,7 @@
                   <el-form-item label="日期" prop="clueDate">
                     <el-slider v-model="sizeForm.clueDate"></el-slider>
                   </el-form-item>
-                  <el-form-item label="名称" prop="clueNameInput">
+                  <!--<el-form-item label="名称" prop="clueNameInput">
                     <el-slider v-model="sizeForm.clueNameInput"></el-slider>
                   </el-form-item>
                   <el-form-item label="手机" prop="cluePhoneInput">
@@ -54,57 +54,74 @@
                   </el-form-item>
                   <el-form-item label="按钮" prop="clueButton">
                     <el-slider v-model="sizeForm.clueButton"></el-slider>
-                  </el-form-item>
+                  </el-form-item>-->
                 </el-form>
               </el-tab-pane>
               <el-tab-pane label="颜色" name="color">
                 <el-form :model="colorForm" label-position="right"
                          label-width="50px" size="mini" ref="colorFormRef">
-                  <el-form-item label="标题" prop="clueTitle">
-                    <el-slider v-model="colorForm.clueTitle"></el-slider>
-                  </el-form-item>
-                  <el-form-item label="内容" prop="clueContent">
-                    <el-slider v-model="colorForm.clueContent"></el-slider>
-                  </el-form-item>
-                  <el-form-item label="日期" prop="clueDate">
-                    <el-slider v-model="colorForm.clueDate"></el-slider>
-                  </el-form-item>
+                  <el-row :gutter="20" style="margin-top: 10px">
+                    <el-col :span="8">
+                      <el-form-item label="标题" prop="clueTitle">
+                        <el-color-picker v-model="colorForm.clueTitle"></el-color-picker>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="内容" prop="clueContent">
+                        <el-color-picker v-model="colorForm.clueContent"></el-color-picker>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="日期" prop="clueDate">
+                        <el-color-picker v-model="colorForm.clueDate"></el-color-picker>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
                   <!--<el-form-item label="名称" prop="clueNameInput">
                     <el-slider v-model="colorForm.clueNameInput"></el-slider>
                   </el-form-item>
                   <el-form-item label="手机" prop="cluePhoneInput">
                     <el-slider v-model="colorForm.cluePhoneInput"></el-slider>
-                  </el-form-item>-->
+                  </el-form-item>
                   <el-form-item label="按钮" prop="clueButton">
                     <el-slider v-model="colorForm.clueButton"></el-slider>
-                  </el-form-item>
+                  </el-form-item>-->
                 </el-form>
               </el-tab-pane>
               <el-tab-pane label="字体" name="font">
                 <el-form :model="fontForm" label-position="right"
                          label-width="50px" size="mini" ref="fontFormRef">
-                  <el-form-item label="标题" prop="clueTitle">
-                    <el-slider v-model="fontForm.clueTitle"></el-slider>
+                  <el-form-item label="标题" prop="clueTitle" style="margin-top: 10px">
+                    <el-select v-model="fontForm.clueTitle" clearable placeholder="请选择">
+                      <el-option v-for="item in fontFamilyList" :key="item.label"
+                                 :label="item.value" :value="item.value"></el-option>
+                    </el-select>
                   </el-form-item>
                   <el-form-item label="内容" prop="clueContent">
-                    <el-slider v-model="fontForm.clueContent"></el-slider>
+                    <el-select v-model="fontForm.clueContent" clearable placeholder="请选择">
+                      <el-option v-for="item in fontFamilyList" :key="item.label"
+                                 :label="item.value" :value="item.value"></el-option>
+                    </el-select>
                   </el-form-item>
                   <el-form-item label="日期" prop="clueDate">
-                    <el-slider v-model="fontForm.clueDate"></el-slider>
+                    <el-select v-model="fontForm.clueDate" clearable placeholder="请选择">
+                      <el-option v-for="item in fontFamilyList" :key="item.label"
+                                 :label="item.value" :value="item.value"></el-option>
+                    </el-select>
                   </el-form-item>
                   <!--<el-form-item label="名称" prop="clueNameInput">
                     <el-slider v-model="fontForm.clueNameInput"></el-slider>
                   </el-form-item>
                   <el-form-item label="手机" prop="cluePhoneInput">
                     <el-slider v-model="fontForm.cluePhoneInput"></el-slider>
-                  </el-form-item>-->
+                  </el-form-item>
                   <el-form-item label="按钮" prop="clueButton">
                     <el-slider v-model="fontForm.clueButton"></el-slider>
-                  </el-form-item>
+                  </el-form-item>-->
                 </el-form>
               </el-tab-pane>
-              <el-tab-pane label="边距" name="margin">
-                <!--<el-form :model="marginForm" label-position="right"
+              <!--<el-tab-pane label="边距" name="margin">
+                &lt;!&ndash;<el-form :model="marginForm" label-position="right"
                          label-width="50px" size="mini" ref="marginFormRef">
                   <el-form-item label="标题" prop="clueTitle">
                     <el-slider v-model="marginForm.clueTitle"></el-slider>
@@ -124,31 +141,31 @@
                   <el-form-item label="按钮" prop="clueButton">
                     <el-slider v-model="marginForm.clueButton"></el-slider>
                   </el-form-item>
-                </el-form>-->
+                </el-form>&ndash;&gt;
                 <el-collapse v-model="collapseName" accordion>
                   <el-collapse-item title="标题" name="1">
-                    <el-form label-width="30px" label-position="right">
+                    <el-form :model="clueTitleMargin" label-width="30px" label-position="right">
                       <el-row :gutter="10">
                         <el-col :span="12">
-                          <el-form-item label="上">
-                            <el-slider v-model="marginForm.clueTitle"></el-slider>
+                          <el-form-item label="上" prop="topMargin">
+                            <el-slider v-model="clueTitleMargin.topMargin"></el-slider>
                           </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                          <el-form-item label="上">
-                            <el-slider v-model="marginForm.clueTitle"></el-slider>
+                          <el-form-item label="下" prop="bottomMargin">
+                            <el-slider v-model="clueTitleMargin.bottomMargin"></el-slider>
                           </el-form-item>
                         </el-col>
                       </el-row>
                       <el-row :gutter="10">
                         <el-col :span="12">
-                          <el-form-item label="上">
-                            <el-slider v-model="marginForm.clueTitle"></el-slider>
+                          <el-form-item label="左" prop="leftMargin">
+                            <el-slider v-model="clueTitleMargin.leftMargin"></el-slider>
                           </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                          <el-form-item label="上">
-                            <el-slider v-model="marginForm.clueTitle"></el-slider>
+                          <el-form-item label="右" prop="rightMargin">
+                            <el-slider v-model="clueTitleMargin.rightMargin"></el-slider>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -180,7 +197,7 @@
                     </el-row>
                   </el-collapse-item>
                 </el-collapse>
-              </el-tab-pane>
+              </el-tab-pane>-->
             </el-tabs>
             <el-divider content-position="left">背景图片</el-divider>
             <el-row :gutter="10">
@@ -198,8 +215,7 @@
               <el-col :span="8">
                 <el-image
                   style="width: 100px; height: 100px"
-                  :src="url"
-                  :preview-src-list="srcList">
+                  :src="url">
                 </el-image>
               </el-col>
             </el-row>
@@ -208,18 +224,18 @@
         <el-col :span="16">
           <el-card>
             <div style="width: 100%;height: 100%">
-              <div class="out-box" :style="{ 'background-image' : 'url(' + this.url + ')' }">
-                <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">{{clueForm.titleClue}}</div>
-                <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">{{clueForm.contentClue}}</div>
+              <div class="out-box" :style="{ 'background-image' : 'url(' + this.url + ')' }" style="background-size:cover;">
+                <div style="margin: auto" :style="{ color: this.colorForm.clueTitle, fontSize: this.sizeForm.clueTitle + 'px',fontFamily:this.fontForm.clueTitle, }">
+                  <div :style="{marginTop:this.clueTitleMargin.topMargin+'px',marginBottom:this.clueTitleMargin.bottomMargin+'px',marginLeft:this.clueTitleMargin.leftMargin+'px',marginRight:this.clueTitleMargin.rightMargin+'px'}">{{clueForm.titleClue}}</div>
+                </div>
+                <div :style="{ color: this.colorForm.clueContent, fontSize: this.sizeForm.clueContent + 'px',fontFamily:this.fontForm.clueContent }">{{clueForm.contentClue}}</div>
                 <el-row>
-                  <el-col :span="12">
-                    <div>{{clueForm.startDate}}</div>
-                  </el-col>
-                  <el-col :span="12">
-                    <div>{{clueForm.endDate}}</div>
+                  <el-col>
+                    <div :style="{ color:this.colorForm.clueDate,fontSize:this.sizeForm.clueDate+'px',fontFamily:this.fontForm.clueDate }">{{clueForm.startDate}}</div>
+                    <div :style="{ color:this.colorForm.clueDate,fontSize:this.sizeForm.clueDate+'px',fontFamily:this.fontForm.clueDate }">{{clueForm.endDate}}</div>
                   </el-col>
                 </el-row>
-                <div>
+                <!--<div>
                   <el-input style="width: 30%" clearable placeholder="请输入"></el-input>
                 </div>
                 <div>
@@ -227,7 +243,7 @@
                 </div>
                 <div>
                   <el-button type="primary" icon="el-icon-plus">立即参加</el-button>
-                </div>
+                </div>-->
               </div>
             </div>
           </el-card>
@@ -241,13 +257,14 @@
 </template>
 
 <script>
+  import {ActivityFamilyCN} from '../common/data/custom_activity'
   export default {
     name: "CustomerActivity",
     data() {
       return {
+        fontFamilyList:ActivityFamilyCN,
 
-        activeColor: 'red',
-        fontSize: 30,
+        activeColor: 'black',
 
         activeName: 'activity',
 
@@ -259,28 +276,25 @@
           endDate:''
         },
         sizeForm:{
-          clueTitle:0,
-          clueContent:0,
-          clueDate:0,
-          clueNameInput:0,
-          cluePhoneInput:0,
-          clueButton:0
+          clueTitle:40,
+          clueContent:50,
+          clueDate:20,
+          clueNameInput:1,
+          cluePhoneInput:1,
+          clueButton:1
         },
         colorForm:{
-          clueTitle:0,
-          clueContent:0,
-          clueDate:0,
+          clueTitle:'#409EFF',
+          clueContent:'#409EFF',
+          clueDate:'#409EFF',
           clueNameInput:0,
           cluePhoneInput:0,
           clueButton:0
         },
         fontForm:{
-          clueTitle:0,
-          clueContent:0,
-          clueDate:0,
-          clueNameInput:0,
-          cluePhoneInput:0,
-          clueButton:0
+          clueTitle:'小豆岛默陌乐童简',
+          clueContent:'小豆岛默陌乐童简',
+          clueDate:'小豆岛默陌乐童简'
         },
         marginForm:{
           clueTitle:0,
@@ -290,16 +304,19 @@
           cluePhoneInput:0,
           clueButton:0
         },
-        url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        srcList: [
-          'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
-          'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
-        ]
+        clueTitleMargin:{
+          topMargin:0,
+          bottomMargin:0,
+          leftMargin:0,
+          rightMargin:0
+        },
+
+        url: 'http://www.eblog.icu/jaychou.jpg',
       }
     },
     methods:{
       handleClick(tab, event) {
-        console.log(tab, event);
+
       }
     }
   }

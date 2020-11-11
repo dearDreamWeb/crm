@@ -90,15 +90,10 @@ public class DateUtils {
      * @return
      * @throws ParseException
      */
-    public static Date activityStrToDate(String dateStr) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date parse = null;
-        try {
-            parse = format.parse(dateStr);
-            System.out.println(parse);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public static Date activityStrToDate(String dateStr) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date parse = format.parse(dateStr);
+        System.out.println(parse);
         return parse;
     }
 }

@@ -39,7 +39,7 @@
         </el-row>
       </el-form>
 
-      <el-table :data="listForm"
+      <el-table :data="listForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>

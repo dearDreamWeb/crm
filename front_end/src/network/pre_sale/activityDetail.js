@@ -26,5 +26,14 @@ export const activityDetailHttp = {
       }
     }
     return get(params)
+  },
+  getEmpByActivityId:function (activityId) {
+    let params = {
+      url:'/activity_detail/get_emp_by_activity',
+      data:{
+        'activityId':activityId
+      }
+    }
+    return get(params)
   }
 }

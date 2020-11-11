@@ -106,5 +106,13 @@
                 AND date_format(ad.create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
         </where>
+        ORDER BY ad.create_time DESC
+    </select>
+
+    <select id="getEmpByActivityId" resultMap="EmpResult">
+        SELECT e.emp_id,e.emp_name
+        FROM activity_detail ad
+        INNER JOIN emp e ON e.emp_id = ad.emp_id
+        WHERE ad.activity_id = #{activityId}
     </select>
 </mapper>

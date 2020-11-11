@@ -4,8 +4,11 @@ import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
 import com.example.entity.request.ActivityReq;
+import com.example.entity.response.ActivityDetailResp;
 import com.example.entity.response.ActivityResp;
+import com.example.entity.response.EmpResp;
 import com.example.model.mapper.ActivityMapper;
+import com.example.model.mapper.EmpMapper;
 import com.example.service.ActivityService;
 import com.example.util.CheckUtils;
 import com.example.util.DateUtils;
@@ -29,6 +32,9 @@ public class ActivityServiceImpl implements ActivityService {
     @Autowired
     private ActivityMapper activityMapper;
 
+    @Autowired
+    private EmpMapper empMapper;
+
     @Override
     public ResultVo addActivity(ActivityReq activityReq) {
         CheckUtils.validate(activityReq);
@@ -37,8 +43,14 @@ public class ActivityServiceImpl implements ActivityService {
             throw new SysException(ResultEnum.ACTIVITY_EXIST.getCode(),
                     ResultEnum.ACTIVITY_EXIST.getMessage());
         }
-        Date starTime = DateUtils.activityStrToDate(activityReq.getStartTime());
-        Date endTime = DateUtils.activityStrToDate(activityReq.getEndTime());
+        Date starTime = null;
+        Date endTime = null;
+        try {
+            starTime = DateUtils.activityStrToDate(activityReq.getStartTime());
+            endTime = DateUtils.activityStrToDate(activityReq.getEndTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (starTime.getTime() < endTime.getTime() &&
                 starTime.getTime() == endTime.getTime()) {
             throw new SysException(ResultEnum.ACTIVITY_DATE_ERROR.getCode(),
@@ -89,6 +101,11 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public ResultVo getActivity(Integer activityId) {
         ActivityResp activity = activityMapper.getActivity(activityId);
+        List<ActivityDetailResp> activityDetailResps = activity.getActivityDetailResps();
+        for (int i=0;i<activity.getActivityDetailResps().size();i++) {
+            EmpResp emp = empMapper.getEmp(activityDetailResps.get(i).getEmpId());
+            activityDetailResps.get(i).setEmpName(emp.getEmpName());
+        }
         return ResultUtils.response(activity);
     }
 

@@ -49,4 +49,9 @@ public class ActivityDetailController {
     public ResultVo getActivityDetail(ActivityDetailReq activityDetailReq) {
         return detailService.getActivityDetail(activityDetailReq);
     }
+
+    @GetMapping("/get_emp_by_activity")
+    public ResultVo getEmpByActivityId(@RequestParam("activityId")Integer activityId) {
+        return detailService.getEmpByActivityId(activityId);
+    }
 }

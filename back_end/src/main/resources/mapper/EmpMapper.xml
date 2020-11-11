@@ -108,37 +108,42 @@
         WHERE e.emp_id = #{empId}
     </select>
 
-    <select id="listEmp" resultMap="EmpResult">
-        SELECT emp_id,emp_name,nick_name,sex,email,phone,emp_status,remark,create_time
-        FROM emp
+    <select id="listEmp" resultMap="EmpResult" parameterType="com.example.entity.request.EmpReq">
+        SELECT e.emp_id,e.emp_name,e.nick_name,sex,e.email,phone,e.emp_status,e.remark,e.create_time
+        FROM emp e
+        INNER JOIN emp_dept ed ON ed.emp_id = e.emp_id
+        INNER JOIN dept d ON ed.dept_id = d.dept_id
         <where>
             <if test="empName != null and empName != ''">
-                AND emp_name LIKE CONCAT('%',#{empName},'%')
+                AND e.emp_name LIKE CONCAT('%',#{empName},'%')
             </if>
             <if test="nickName != null and nickName != ''">
-                AND nick_name LIKE CONCAT('%',#{nickName},'%')
+                AND e.nick_name LIKE CONCAT('%',#{nickName},'%')
             </if>
             <if test="sex != null">
-                AND sex = #{sex}
+                AND e.sex = #{sex}
             </if>
             <if test="email != null and email != ''">
-                AND email LIKE CONCAT('%',#{email},'%')
+                AND e.email LIKE CONCAT('%',#{email},'%')
             </if>
-            <if test="phone != null">
-                AND phone LIKE CONCAT('%',#{phone},'%')
+            <if test="phone != null and phone != ''">
+                AND e.phone LIKE CONCAT('%',#{phone},'%')
             </if>
             <if test="empStatus != null">
-                AND emp_status = #{empStatus}
+                AND e.emp_status = #{empStatus}
             </if>
             <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
-                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+                AND e.date_format(create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
             </if>
             <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
-                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+                AND e.date_format(create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
-            AND is_delete = 0 AND emp_name != 'admin'
+            <if test="deptId != null">
+                AND d.dept_id = #{deptId}
+            </if>
+            AND e.is_delete = 0 AND e.emp_name != 'admin'
         </where>
-        ORDER BY create_time DESC
+        ORDER BY e.create_time DESC
     </select>
 
     <select id="findMenuByToken" resultMap="MenuResult">
@@ -209,11 +214,13 @@
     <select id="listNotAuthActivity" resultMap="EmpResult">
         SELECT e.emp_id,e.emp_name
         FROM emp e
+        INNER JOIN emp_dept ed ON ed.emp_id = e.emp_id
+		INNER JOIN dept d ON d.dept_id = ed.dept_id
         WHERE
             (SELECT COUNT(1) AS num
             FROM activity_detail ad
             INNER JOIN activity a ON a.activity_id = ad.activity_id
             WHERE ad.emp_id = e.emp_id AND a.activity_id = #{activityId})
-        = 0 AND e.emp_name != 'admin'
+        = 0 AND e.emp_name != 'admin' AND d.dept_id = 2
     </select>
 </mapper>

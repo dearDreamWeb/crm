@@ -14,6 +14,8 @@ import iconPicker from 'e-icon-picker'
 import 'e-icon-picker/dist/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 import 'element-ui/lib/theme-chalk/icon.css'
+import "@/common/font/myfont.css";
+import "@/common/font_cn/myfont.css";
 
 import onlyNumber from '@/directive/el-input'; //自定义全局指令
 

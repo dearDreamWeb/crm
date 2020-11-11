@@ -55,6 +55,18 @@
       </el-col>
     </el-row>
     <el-row>
+      <el-col :span="12">
+        <el-card>
+          对于线索的每一个跟进操作，都将操作记录下来
+          <hr>
+          准备集成企业微信
+          <hr>
+          线索添加微信或QQ字段，通过企业微信等确认后做下一步转化；
+          线索转为个人客户后，直接添加到联系人
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row>
       <el-col>
         <el-card>
           任务调度待解决<hr>

@@ -5,6 +5,7 @@ import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
 import com.example.entity.request.ActivityDetailReq;
 import com.example.entity.response.ActivityDetailResp;
+import com.example.entity.response.EmpResp;
 import com.example.model.mapper.ActivityDetailMapper;
 import com.example.service.ActivityDetailService;
 import com.example.util.DateUtils;
@@ -114,6 +115,12 @@ public class ActivityDetailServiceImpl implements ActivityDetailService {
         }
         PageInfo<ActivityDetailResp> list = new PageInfo<>(activityDetailResps);
         return ResultUtils.response(list);
+    }
+
+    @Override
+    public ResultVo getEmpByActivityId(Integer activityId) {
+        List<EmpResp> empByActivityId = detailMapper.getEmpByActivityId(activityId);
+        return ResultUtils.response(empByActivityId);
     }
 
     public static String generateUrl(Integer activityId,Integer empId) {

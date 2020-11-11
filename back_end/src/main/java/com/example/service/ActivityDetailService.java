@@ -14,4 +14,5 @@ public interface ActivityDetailService {
     ResultVo editActivityDetail(ActivityDetailReq activityDetailReq);
     ResultVo getActivityDetail(ActivityDetailReq activityDetailReq);
     ResultVo listActivityDetail(ActivityDetailReq activityDetailReq);
+    ResultVo getEmpByActivityId(Integer activityId);
 }

@@ -30,4 +30,5 @@ public class ActivityResp {
     private Integer isDelete;
     private List<Integer> empIdList;
     private List<EmpResp> emps;
+    private List<ActivityDetailResp> activityDetailResps;
 }
