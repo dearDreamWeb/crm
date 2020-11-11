@@ -61,7 +61,15 @@ export const planHttp = {
     }
     return get(params)
   },
-
+  chakan_record:function (id) {
+    let params = {
+      url:'/record/all',
+      data:{
+        'recoId':id
+      }
+    }
+    return get(params)
+  },
   listPage:function (pageNum,pageSize) {
     let params = {
       url:'/plan/list_all',
