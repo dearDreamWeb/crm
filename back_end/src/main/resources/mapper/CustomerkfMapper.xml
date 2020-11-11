@@ -50,6 +50,24 @@
         <result property="updateTime" column="update_time"/>
         <result property="isDelete" column="is_delete"/>
     </resultMap>
+    
+    <resultMap id="ComplaintResult" type="com.example.entity.request.Complaint">
+        <id property="complaintId" column="complaint_id"/>
+        <result property="complaintZt" column="complaint_complaintzt"/>
+        <result property="complaintReceptionist" column="complaint_receptionist"/>
+        <result property="complaintClassification" column="complaint_classification"/>
+        <result property="complaintDescribe" column="complaint_describe"/>
+        <result property="complaintData" column="complaint_data"/>
+        <result property="complaintComplainants" column="complaint_complainants"/>
+        <result property="complaintUrgent" column="complaint_urgent"/>
+        <result property="complaintHandle" column="complaint_handle"/>
+        <result property="complaintHandlegc" column="complaint_handlegc"/>
+        <result property="complaintCustomerfk" column="complaint_customerfk"/>
+        <result property="complaintHfvisit" column="complaint_hfvisit"/>
+        <result property="cusId" column="cus_id"/>
+        <result property="empId" column="emp_id"/>
+    </resultMap>
+
 
     <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
         <id column="cus_id" property="cusId"/>

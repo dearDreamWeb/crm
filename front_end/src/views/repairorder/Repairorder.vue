@@ -122,7 +122,7 @@
       <el-table-column prop="ordPhone" label="手机号码"></el-table-column>
       <el-table-column width="80" label="操作" >
         <template slot-scope="scope">
-          <el-button type="text" size="small" icon="el-icon-plus" @click="addpro(scope.row.ordId)" :disabled="isDisable"></el-button>
+          <el-button type="text" size="small" icon="el-icon-plus" @click="addpro(scope.row.ordId,scope.row.customerResp.cusId)" :disabled="isDisable"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -466,7 +466,7 @@ import {followHttp} from "../../network/pre_sale/followlog";
         },
         num: 1,
         rules:{
-          repairProblem:[
+          ordId:[
             {required: true, message: '请输入活动名称', trigger: 'blur'},
             { min: 4, max: 8, message: '长度在 4 到 8个字符', trigger: 'blur' }
           ]
@@ -490,9 +490,10 @@ import {followHttp} from "../../network/pre_sale/followlog";
           this.pageNum1 = res.data.pageNum1
         })
       },
-      addpro(ordId) {
+      addpro(ordId,cusId) {
         this.Dingda = false
         console.log(ordId)
+        console.log(cusId)
         this.addform.ordId = ordId
         orderHttp.getOrder(ordId).then(res => {
           this.listDingda = res.data
