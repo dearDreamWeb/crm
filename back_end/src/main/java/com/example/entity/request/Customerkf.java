@@ -35,4 +35,5 @@ public class Customerkf {
     private Integer pageSize;
     private CustomerResp customerResp;
     private EmpResp empResp;
+    private Complaint complaint;
 }

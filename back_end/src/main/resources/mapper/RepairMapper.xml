@@ -147,7 +147,7 @@
             SELECT last_insert_id();
         </selectKey>
         insert into repair_order(repair_receiving_time,repair_problem,repair_personnel,cus_id,emp_id,dept_id,product_id,order_id,repair_gdstate,repair_fault,repair_wxfy,inventory_seq,repair_lxr,repair_sfzb) VALUES
-        (#{repairDate},#{repairProblem},#{repairPersonnel},#{cusId},#{empId},#{deptId},#{productId},#{ordId}#{repairGdstae},#{repairFault},#{repairWxfy},#{repairSfzb},#{repairsjhm},#{repairLxr})
+        (#{repairDate},#{repairProblem},#{repairPersonnel},#{cusId},#{empId},#{deptId},#{productId},#{orderId},#{repairGdstae},#{repairFault},#{repairWxfy},#{repairSfzb},#{repairsjhm},#{repairLxr})
     </insert>
 
     <update id="updateRepair" parameterType="com.example.entity.request.Repair">
