@@ -21,13 +21,13 @@ import java.util.List;
 @RequestMapping("/details")
 public class SzOrderDetailsController {
     @Autowired
-    private SzOrderDetailsServiceLmpl szOrderServicelmpl;
+    private SzOrderDetailsServiceLmpl DetailsServicelmpl;
 
     /*查看订单详情*/
     @RequestMapping("/all")
     public List<SzOrderDetails> listOrderANDOrderDet(Integer odetId) {
         System.out.println(odetId);
-        return szOrderServicelmpl.listOrderANDOrderDet(odetId);
+        return DetailsServicelmpl.listOrderANDOrderDet(odetId);
     }
 
 

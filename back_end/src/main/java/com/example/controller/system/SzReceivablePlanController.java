@@ -40,7 +40,7 @@ public class SzReceivablePlanController {
         System.out.println("1.记录："+szplan.getSzReceivableRecorde());
         System.out.println("2.计划："+ szplan);
         for (SzReceivableRecord r1 : szplan.getSzReceivableRecorde()) {
-            System.out.println("3。计划："+r1);
+            System.out.println("3。记录："+r1);
         }
         return szReceivablePlanService.addszPlan(szplan);
     }

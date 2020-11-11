@@ -28,4 +28,20 @@ public class SzReceivableRecord {
     private Integer planId;//回款计划编号
 
     private SzReceivablePlan szReceivablePlan;
+
+    @Override
+    public String toString() {
+        return "SzReceivableRecord{" +
+                "recoId=" + recoId +
+                ", recoReceivable=" + recoReceivable +
+                ", recoCaozuopeople='" + recoCaozuopeople + '\'' +
+                ", recordPlan=" + recordPlan +
+                ", timePlan=" + timePlan +
+                ", recoTime=" + recoTime +
+                ", moneyPlan=" + moneyPlan +
+                ", recoMoney=" + recoMoney +
+                ", recoLiushui='" + recoLiushui + '\'' +
+                ", planId=" + planId +
+                '}';
+    }
 }

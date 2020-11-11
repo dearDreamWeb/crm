@@ -27,14 +27,14 @@
 
         <!--<el-table-column prop="customerResp.cusName" label="客户"></el-table-column> prop="order.ordTheme"-->
         <el-table-column prop="szOrder.ordTheme"  label="对应订单主题" ></el-table-column>
-        <el-table-column prop="planMoney" label="回款金额" sortable></el-table-column>
+        <!--<el-table-column prop="planMoney" label="回款金额" sortable></el-table-column>
         <el-table-column prop="planTime" label="计划回款时间" sortable>
           <template slot-scope="scope">
             {{scope.row.planTime | dateFormat}}
           </template>
-        </el-table-column>
-        <el-table-column prop="planPeriod" label="回款期次" sortable></el-table-column>
-        <el-table-column prop="empResp.empName" label="操作人" sortable></el-table-column>
+        </el-table-column>-->
+        <el-table-column prop="planPeriod" label="回款期次" ></el-table-column>
+        <el-table-column prop="empResp.empName" label="操作人" ></el-table-column>
 
         <el-table-column prop="planCaozuotime" label="操作时间" sortable>
           <template slot-scope="scope">
@@ -46,6 +46,11 @@
             {{scope.row.planInvoice | planInvoiceFormat}}
           </template>
         </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="text" @click="chakan_record(scope.row.planId)">查看详情</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination background
                      @current-change="handleCurrentChange"
@@ -54,6 +59,13 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-card>
+    <el-dialog title="回款记录" :visible.sync="dialogTableVisible">
+      <el-table :data="szrecord">
+        <el-table-column prop="recoId" label="回款记录编号" width="150"></el-table-column>
+        <el-table-column property="timePlan" label="回款时间" width="200"></el-table-column>
+        <el-table-column property="moneyPlan" label="改期回款金额" width="200"></el-table-column>
+      </el-table>
+    </el-dialog>
     <!--width="65%" top="20px"-->
     <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose" size="medium" >
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
@@ -189,10 +201,12 @@
         addDialog:false,
         addPlanButtonLoading:false,
         editPlanButtonLoading:false,
+        dialogTableVisible:false,
         listForm:[],
         ordList:[],
         addrecord:[],
         xuanfenqi:[],
+        szrecord:[],
         pageNum:1,
         pageSize:5,
         total:1,
@@ -256,7 +270,7 @@
            recordplan=yumoney;
            console.log("最后一期："+yumoney);
            console.log("recordplan",recordplan)
-           this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year + '-' + date.month + '-' + date.day ,moneyPlan:recordplan})
+           this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year + '-' + ("0" + (date.month)).slice(-2) + '-' + date.day ,moneyPlan:recordplan})
            return false;
          }
          money+=parseInt(this.ordTotalmoney/this.addForm.planPeriod);
@@ -267,7 +281,7 @@
           recordplan=parseInt(this.ordTotalmoney/this.addForm.planPeriod);
          qici++;
          qc.push(qici);
-         this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year+ '-'  + date.month + '-'  + date.day , moneyPlan:recordplan})
+         this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year+ '-'  + ("0" + (date.month)).slice(-2) + '-'  + date.day , moneyPlan:recordplan})
         }
         /*this.addForm.ordTotalmoney - money;*/
       },
@@ -363,6 +377,13 @@
         /*this.editForm.cusId=this.rowplanId*/
         planHttp.editplan(this.editForm).then(res=>{
           console.log("111")
+        })
+      },
+      chakan_record(val){
+        this.dialogTableVisible = true;
+        alert(val)
+        planHttp.chakan_record(val).then(res=>{
+          this.szrecord=res
         })
       },
       handleCurrentChange(pageIndex) {

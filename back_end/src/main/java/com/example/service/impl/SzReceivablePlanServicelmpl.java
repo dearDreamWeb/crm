@@ -40,41 +40,28 @@ public class SzReceivablePlanServicelmpl implements SzReceivablePlanService {
         szplanMapper.addszPlan(szplan);//调用szplan的新增方法
         //获取回款计划期次
         Integer period= szplan.getPlanPeriod();
-      // List<SzReceivableRecord> s= szplan.getSzReceivableRecorde();
+        //批量新增从表
         List<SzReceivableRecord> list=new ArrayList<>(period);
+
         if (szplan.getPlanId() != null){
             SzReceivablePlan plan=szplanMapper.getszPlan(szplan.getPlanId());
-            System.out.println("2.plan:"+plan);
+            System.out.println("***2.plan****:"+plan);
             szplan.setPlanPeriod(szplan.getPlanPeriod());
             for (int i =0;i<period;i++){
                 SzReceivableRecord record = new SzReceivableRecord();
-                System.out.println("3.record"+record);
+                System.out.println("****333.**."+szplan.getSzReceivableRecorde());
+                // 给从表 记录表赋值
                 record.setPlanId(szplan.getPlanId());
                 record.setRecoLiushui(MyUtils.record());
                 record.setRecoReceivable(0);
+                record.setMoneyPlan(szplan.getSzReceivableRecorde().get(i).getMoneyPlan());
+                record.setRecordPlan(szplan.getSzReceivableRecorde().get(i).getRecordPlan());
+                record.setTimePlan(szplan.getSzReceivableRecorde().get(i).getTimePlan());
                 list.add(i,record);
+                System.out.println("详情请字段："+record);
             }
             szrecordMapper.addPlanANDReco(list);
         }
-
-       /* //获取回款记录的信息
-        List<SzReceivableRecord> records=szplan.getSzReceivableRecorde();
-        //调用mapper方法，新增单条
-        szplanMapper.addszPlan(szplan);
-        //获取新增计划编号
-        Integer planid=szplan.getPlanId();
-        System.out.println("plan主键编号是："+planid);
-        //4.通过循环逐条递增回款记录
-        for (SzReceivableRecord record :records){
-            System.out.println("进入for循环啦~~~");
-            record.setPlanId(planid);
-            //5.调用记录的新增方法
-            szrecordMapper.addPlanANDReco(record);
-        }*/
-        /*if (addszPlan != 1){
-            throw new SysException(ResultEnum.ReceivablePlan_ADD_FAIL.getCode(),
-                    ResultEnum.ReceivablePlan_ADD_FAIL.getMessage());
-        }*/
         return ResultUtils.response("新增成功");
     }
 
