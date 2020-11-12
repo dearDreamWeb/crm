@@ -50,7 +50,7 @@
         <result property="updateTime" column="update_time"/>
         <result property="isDelete" column="is_delete"/>
     </resultMap>
-    
+
     <resultMap id="ComplaintResult" type="com.example.entity.request.Complaint">
         <id property="complaintId" column="complaint_id"/>
         <result property="complaintZt" column="complaint_complaintzt"/>
