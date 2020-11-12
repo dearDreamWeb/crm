@@ -34,7 +34,7 @@ Vue.prototype.$urlUtil = urlUtils
 
 /*格式化*/
 import {
-  sexFormat,dateFormat,clueStatusFormat,timeFormat,
+  sexFormat,dateFormat,clueStatusFormat,timeFormat,clueTypeFormat,
   ordStateFormat,delStateFormat,planInvoiceFormat,recoReceivableFormat,
   dateTimeFormat,clueHandleResultFormat,productStatusFormat,followCategoryFormat,
   salePriorLevelFormat,saleStarBeaconFormat
