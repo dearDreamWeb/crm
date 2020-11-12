@@ -31,6 +31,10 @@ const routes = [
     component: () => import('../views/activity/ActivityDetailDuplicate')
   },
   {
+    path: '/clue_detail',
+    component: () => import('../views/clue/ClueDetail')
+  },
+  {
     path: '/base',
     component: () => import('../views/layout/Layout'),
     redirect: 'home',

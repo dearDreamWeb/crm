@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.ClueFollowLogMapper">
+    <resultMap id="ClueFollowLogResult" type="com.example.entity.response.ClueFollowLogResp">
+        <id column="clue_follow_id" property="clueFollowId"/>
+        <result column="clue_id" property="clueId"/>
+        <result column="clue_follow_title" property="clueFollowTitle"/>
+        <result column="clue_follow_time" property="clueFollowTime"/>
+        <result column="clue_follow_person" property="cluueFollowPerson"/>
+        <result column="clue_follow_content" property="clueFollowContent"/>
+    </resultMap>
+
+    <insert id="addClueFollow" parameterType="com.example.entity.response.ClueFollowLogResp">
+        INSERT INTO clue_follow_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clueId != null">
+                clue_id,
+            </if>
+            <if test="clueFollowTitle != null and clueFollowTitle != ''">
+                clue_follow_title,
+            </if>
+            <if test="clueFollowTime != null">
+                clue_follow_time,
+            </if>
+            <if test="clueFollowPerson != null and clueFollowPerson != ''">
+                clue_follow_person,
+            </if>
+            <if test="clueFollowContent != null and clueFollowContent != ''">
+                clue_follow_content,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="clueId != null">
+                #{clueId},
+            </if>
+            <if test="clueFollowTitle != null and clueFollowTitle != ''">
+                #{clueFollowTitle},
+            </if>
+            <if test="clueFollowTime != null">
+                #{clueFollowTime},
+            </if>
+            <if test="clueFollowPerson != null and clueFollowPerson != ''">
+                #{clueFollowPerson},
+            </if>
+            <if test="clueFollowContent != null and clueFollowContent != ''">
+                #{clueFollowContent},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="listClueFollow" resultMap="ClueFollowLogResult">
+        SELECT clue_follow_id,clue_id,clue_follow_title,clue_follow_time,clue_follow_content,clue_follow_person
+        FROM clue_follow_log
+        ORDER BY clue_follow_time DESC
+    </select>
+</mapper>

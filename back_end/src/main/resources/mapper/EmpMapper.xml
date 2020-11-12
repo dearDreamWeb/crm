@@ -111,8 +111,8 @@
     <select id="listEmp" resultMap="EmpResult" parameterType="com.example.entity.request.EmpReq">
         SELECT DISTINCT e.emp_name,e.emp_id,e.nick_name,e.sex,e.email,e.phone,e.emp_status,e.remark,e.create_time
         FROM emp e
-        INNER JOIN emp_dept ed ON ed.emp_id = e.emp_id
-        INNER JOIN dept d ON ed.dept_id = d.dept_id
+        LEFT JOIN emp_dept ed ON ed.emp_id = e.emp_id
+        LEFT JOIN dept d ON ed.dept_id = d.dept_id
         <where>
             <if test="empName != null and empName != ''">
                 AND e.emp_name LIKE CONCAT('%',#{empName},'%')

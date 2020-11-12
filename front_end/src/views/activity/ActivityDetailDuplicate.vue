@@ -7,7 +7,7 @@
   <div>
     <el-card>
       <div slot="header">
-        <span style="font-size: 20px">卡片名称</span>
+        <span style="font-size: 20px">活动详情</span>
       </div>
       <div>
         <el-row>
@@ -76,7 +76,7 @@
     },
     created() {
       this.activityId = this.$urlUtil.getQueryVariable("activityId")
-      console.log(this.activityId)
+      // console.log(this.activityId)
       this.initActivity()
     }
   }

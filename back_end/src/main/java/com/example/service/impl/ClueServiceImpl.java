@@ -5,9 +5,11 @@ import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
 import com.example.entity.request.ClueReq;
 import com.example.entity.response.ActivityResp;
+import com.example.entity.response.ClueFollowLogResp;
 import com.example.entity.response.ClueResp;
 import com.example.entity.response.EmpResp;
 import com.example.model.mapper.ActivityMapper;
+import com.example.model.mapper.ClueFollowLogMapper;
 import com.example.model.mapper.ClueMapper;
 import com.example.model.mapper.EmpMapper;
 import com.example.service.ClueService;
@@ -39,17 +41,31 @@ public class ClueServiceImpl implements ClueService {
     @Autowired
     private EmpMapper empMapper;
 
+    @Autowired
+    private ClueFollowLogMapper clueFollowLogMapper;
+
     @Override
     public ResultVo addClue(ClueReq clueReq) {
         CheckUtils.validate(clueReq);
+        ClueFollowLogResp clueFollowLogResp = new ClueFollowLogResp();
         clueReq.setClueStatus(0);
         Integer activityId = clueReq.getActivityId();
         if (activityId == null) {
             clueReq.setEmpId(0);
             clueReq.setActivityId(0);
         }
+        ActivityResp activity = activityMapper.getActivity(activityId);
         int addClue = clueMapper.addClue(clueReq);
         if (addClue != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+        clueFollowLogResp.setClueId(activity.getActivityId());
+        clueFollowLogResp.setClueFollowTitle("新增线索，水鱼来了");
+        clueFollowLogResp.setClueFollowContent("水鱼通过【"+activity.getActivityTitle()+"】提交");
+        clueFollowLogResp.setClueFollowTime(DateUtils.getDate());
+        int addClueFollow = clueFollowLogMapper.addClueFollow(clueFollowLogResp);
+        if (addClueFollow != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
@@ -148,6 +164,20 @@ public class ClueServiceImpl implements ClueService {
 
     @Override
     public ResultVo batchEditClueType(ClueReq clueReq) {
+        ClueFollowLogResp clueFollowLogResp = new ClueFollowLogResp();
+        for (int i=0;i<clueReq.getClueIdList().size();i++) {
+            clueFollowLogResp.setClueId(clueReq.getClueIdList().get(i));
+            clueFollowLogResp.setClueFollowTitle("确认线索类型");
+            clueFollowLogResp.setClueFollowTime(DateUtils.getDate());
+            clueFollowLogResp.setClueFollowPerson(clueReq.getHandlePerson());
+            clueFollowLogResp.setClueFollowContent("由【"+clueReq.getHandlePerson()+
+                    "】确认该线索有效且类型为【"+clueHandleResultFormat(clueReq.getClueType())+"】");
+            int addClueFollow = clueFollowLogMapper.addClueFollow(clueFollowLogResp);
+            if (addClueFollow != 1) {
+                throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                        ResultEnum.DATA_ADD_FAIL.getMessage());
+            }
+        }
         if (clueReq.getClueIdList().size() == 0) {
             throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
                     ResultEnum.DATA_NOT_EXIST.getMessage());
@@ -187,6 +217,14 @@ public class ClueServiceImpl implements ClueService {
                     ResultEnum.DATA_UPDATE_FAIL.getMessage());
         }
         return ResultUtils.response(editClue);
+    }
+
+    public static String clueHandleResultFormat(Integer clueHandleResult) {
+        if (clueHandleResult != null && clueHandleResult == 1) {
+            return "公司线索";
+        } else {
+            return "个人线索";
+        }
     }
 
 }

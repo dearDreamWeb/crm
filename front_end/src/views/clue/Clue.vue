@@ -731,8 +731,15 @@
         })
       },
       getClueDetailButton() {
-        this.clueDetailDialog = true
-        this.getCLueDetail()
+        /*this.clueDetailDialog = true
+        this.getCLueDetail()*/
+        let resolve = this.$router.resolve({
+          path:'/clue_detail',
+          query:{
+            clueId:this.rowClueId
+          }
+        });
+        window.open(resolve.href,'_blank')
       },
 
       initActivityList() {

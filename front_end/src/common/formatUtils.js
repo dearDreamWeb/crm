@@ -74,6 +74,14 @@ export function clueStatusFormat(clueStatus) {
   }
 }
 
+export function clueTypeFormat(clueType) {
+  if (clueType === 1) {
+    return'公司'
+  } else {
+    return '个人'
+  }
+}
+
 export function ordStateFormat(ordState) {
   if (ordState === 1){
     return '已完成'
