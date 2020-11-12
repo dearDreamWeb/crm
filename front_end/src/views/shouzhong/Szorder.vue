@@ -75,27 +75,27 @@
       <el-table :data="listForm" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
-        <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column prop="ordTheme" label="主题" sortable></el-table-column>
-        <el-table-column prop="ordTotalmoney" label="总金额" sortable></el-table-column>
-        <el-table-column prop="ordStarttime" label="开始时间" sortable>
+        <el-table-column type="index" width="45"></el-table-column>
+        <el-table-column prop="ordTheme" label="主题"></el-table-column>
+        <!--<el-table-column prop="ordTotalmoney" label="总金额"></el-table-column>-->
+        <el-table-column prop="ordStarttime" label="开始时间" sortable width="150">
           <template slot-scope="scope">
             {{scope.row.ordStarttime | dateFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="ordDealtime" label="成交时间" sortable>
+        <!--<el-table-column prop="ordDealtime" label="成交时间" sortable>
           <template slot-scope="scope">
             {{scope.row.ordDealtime | dateFormat}}
           </template>
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column prop="customerResp.cusName" label="客户"></el-table-column>
-        <el-table-column prop="ordState" label="订单状态" sortable>
+        <el-table-column prop="ordState" label="订单状态" width="140">
           <template slot-scope="scope">
             {{scope.row.ordState | ordStateFormat}}
           </template>
         </el-table-column>
         <!--<el-table-column prop="ordState" label="订单状态" sortable></el-table-column>-->
-        <el-table-column prop="ordHead" label="负责人" sortable></el-table-column>
+        <el-table-column prop="ordHead" label="负责人" width="140"></el-table-column>
         <el-table-column label="操作" sortable>
           <template slot-scope="scope">
             <el-button type="text" @click="chakan(scope.row.ordId)">查看详情</el-button>
@@ -116,7 +116,7 @@
         <el-table-column property="odetId" label="详情编号" width="150"></el-table-column>
         <el-table-column property="productId" label="产品编号" width="200"></el-table-column>
         <el-table-column property="odetBuynum" label="购买数量" width="200"></el-table-column>
-        <el-table-column property="odetBuymoney" label="购买价格"></el-table-column>
+        <el-table-column property="odetBuymoney" label="购买单价"></el-table-column>
       </el-table>
     </el-dialog>
 

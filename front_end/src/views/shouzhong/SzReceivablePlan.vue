@@ -46,9 +46,15 @@
             {{scope.row.planInvoice | planInvoiceFormat}}
           </template>
         </el-table-column>
+       <!-- <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="text" @click="chakan_record(scope.row.planId)">操作回款记录</el-button>
+          </template>
+        </el-table-column>-->
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" @click="chakan_record(scope.row.planId)">查看详情</el-button>
+           <!-- <el-button type="text" @click="chakan_record(scope.row.planId)">操作回款记录</el-button>-->
+            <el-button type="text" @click="chakan_record(scope.row.planId),dialogTableVisible = true">操作回款记录</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -59,13 +65,67 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-card>
-    <el-dialog title="回款记录" :visible.sync="dialogTableVisible">
-      <el-table :data="szrecord">
+    <el-drawer title="回款记录"
+      :visible.sync="dialogTableVisible"
+      direction="btt" size="60%"  width="80%">
+      <!--<el-table :data="szrecord">
+        <el-table-column property="odetId" label="详情编号" width="150"></el-table-column>
+        <el-table-column property="productId" label="产品编号" width="200"></el-table-column>
+        <el-table-column property="odetBuynum" label="购买数量" width="200"></el-table-column>
+        <el-table-column property="odetBuymoney" label="购买单价"></el-table-column>
+      </el-table>-->
+      <el-table :data="szrecord" :row-style="{height:'10px'}"
+                :cell-style="{padding:'5px 0'}">
         <el-table-column prop="recoId" label="回款记录编号" width="150"></el-table-column>
-        <el-table-column property="timePlan" label="回款时间" width="200"></el-table-column>
-        <el-table-column property="moneyPlan" label="改期回款金额" width="200"></el-table-column>
+        <el-table-column  label="回款期次">
+          <template slot-scope="recordPlans">
+            第{{recordPlans.row.recordPlan}}期
+          </template>
+        </el-table-column>
+        <el-table-column  label="最晚回款时间">
+          <template slot-scope="scope">
+            {{scope.row.timePlan | dateFormat}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="recoTime" label="实际回款时间">
+
+        </el-table-column>
+        <el-table-column prop="moneyPlan" label="回款金额" width="200">
+
+        </el-table-column>
+        <el-table-column  label="操作">
+          <template slot-scope="scope">
+            <!--<el-button type="text" @click="huikuan(scope.row.planId)">查看详情</el-button>-->
+            <el-button type="text" >立即回款</el-button>
+          </template>
+        </el-table-column>
       </el-table>
-    </el-dialog>
+    </el-drawer>
+    <!--<el-dialog title="回款记录" :visible.sync="dialogTableVisible" width="65%" >
+      <el-table :data="szrecord">
+        <el-table-column property="recoId" label="回款记录编号"></el-table-column>
+        <el-table-column  label="回款期次">
+          <template slot-scope="recordPlans">
+            第{{recordPlans.row.recordPlan}}期
+          </template>
+        </el-table-column>
+        <el-table-column property="timePlan" label="最晚回款时间">
+          <template slot-scope="scope">
+            {{scope.row.timePlan | dateFormat}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="recoTime" label="实际回款时间">
+
+        </el-table-column>
+        <el-table-column prop="moneyPlan" label="回款金额"></el-table-column>
+        <el-table-column  label="操作">
+          <template slot-scope="scope">
+           &lt;!&ndash; &lt;!&ndash;<el-button type="text" @click="huikuan(scope.row.planId)">查看详情</el-button>&ndash;&gt;
+            <el-button type="text" >点击回款</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>-->
     <!--width="65%" top="20px"-->
     <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose" size="medium" >
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
@@ -74,7 +134,7 @@
           <el-col :span="12">
             <el-form-item label="关联订单" >
               <el-select v-model="addForm.ordId" placeholder="请选择订单" size="medium" @change="oidChange">
-                <el-option v-for="item in ordList" :key="item.ordId"
+                <el-option v-for="(item,i) in ordList" :key="i"
                            :label="item.ordTheme" :value="item.ordId">
                 </el-option>
               </el-select>
@@ -106,7 +166,7 @@
           <el-col :span="12" height="36px">
             <el-form-item label="操作人" >
               <el-select v-model="addForm.empId">
-                <el-option v-for="item in empList" :key="item.empId"
+                <el-option v-for="(item,i) in empList" :key="i"
                            :label="item.empName" :value="item.empId">
                 </el-option>
               </el-select>
@@ -261,9 +321,6 @@
            date.year = date.year+1
            date.month=date.month-12
          }
-         /*if (date.month  >12){
-           date.years=date.year+1;
-         }*/
          //分期小于循环
          if(this.addForm.planPeriod<=i){
            yumoney= parseInt(this.ordTotalmoney - money);
@@ -312,6 +369,7 @@
         this.addDialog = true
         this.initOrderList()
         this.initEmpList()
+        console.log("addform：",this.addForm)
       },
       /*新增选择员工*/
       initEmpList(){
@@ -337,7 +395,11 @@
         this.$refs.editFormRef.resetFields()
       },
       addHandleClose(){
-        this.$refs["addform"].resetFields()
+        this.$refs.addFormRef.resetFields()
+        /*this.addForm.
+        this.$refs.addFormRef.resetFields()
+        this.addForm.cusIdList = []*/
+        this.addPlanButtonLoading = false
       },
       /*点击修改按钮获取改行id*/
       openEditPlan(){
@@ -381,7 +443,6 @@
       },
       chakan_record(val){
         this.dialogTableVisible = true;
-        alert(val)
         planHttp.chakan_record(val).then(res=>{
           this.szrecord=res
         })
@@ -427,11 +488,13 @@
     created() {
       this.initList()
       this.initEmpList()
-     /* this.initOrderList()*/
     }
   }
 </script>
 
 <style scoped>
-
+  /*去掉打开抽屉时自动选中标题时的蓝色边框*/
+  /deep/ :focus {
+    outline: 0;
+  }
 </style>
