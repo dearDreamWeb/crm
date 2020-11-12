@@ -103,6 +103,13 @@ export function planInvoiceFormat(planInvoice) {
     return '未开票'
   }
 }
+export function recoReceivableFormat(recoReceivable) {
+  if (recoReceivable === 1){
+    return '已回款'
+  } else {
+    return '未回款'
+  }
+}
 
 export function clueHandleResultFormat(handleResult) {
   if (handleResult === 1) {
