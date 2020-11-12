@@ -24,18 +24,9 @@
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
-
-        <!--<el-table-column prop="customerResp.cusName" label="客户"></el-table-column> prop="order.ordTheme"-->
         <el-table-column prop="szOrder.ordTheme"  label="对应订单主题" ></el-table-column>
-        <!--<el-table-column prop="planMoney" label="回款金额" sortable></el-table-column>
-        <el-table-column prop="planTime" label="计划回款时间" sortable>
-          <template slot-scope="scope">
-            {{scope.row.planTime | dateFormat}}
-          </template>
-        </el-table-column>-->
         <el-table-column prop="planPeriod" label="回款期次" ></el-table-column>
         <el-table-column prop="empResp.empName" label="操作人" ></el-table-column>
-
         <el-table-column prop="planCaozuotime" label="操作时间" sortable>
           <template slot-scope="scope">
             {{scope.row.planCaozuotime | dateFormat}}
@@ -46,14 +37,8 @@
             {{scope.row.planInvoice | planInvoiceFormat}}
           </template>
         </el-table-column>
-       <!-- <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button type="text" @click="chakan_record(scope.row.planId)">操作回款记录</el-button>
-          </template>
-        </el-table-column>-->
         <el-table-column label="操作">
           <template slot-scope="scope">
-           <!-- <el-button type="text" @click="chakan_record(scope.row.planId)">操作回款记录</el-button>-->
             <el-button type="text" @click="chakan_record(scope.row.planId),dialogTableVisible = true">操作回款记录</el-button>
           </template>
         </el-table-column>
@@ -65,42 +50,7 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-card>
-    <el-drawer title="回款记录"
-      :visible.sync="dialogTableVisible"
-      direction="btt" size="60%"  width="80%">
-      <!--<el-table :data="szrecord">
-        <el-table-column property="odetId" label="详情编号" width="150"></el-table-column>
-        <el-table-column property="productId" label="产品编号" width="200"></el-table-column>
-        <el-table-column property="odetBuynum" label="购买数量" width="200"></el-table-column>
-        <el-table-column property="odetBuymoney" label="购买单价"></el-table-column>
-      </el-table>-->
-      <el-table :data="szrecord" :row-style="{height:'10px'}"
-                :cell-style="{padding:'5px 0'}">
-        <el-table-column prop="recoId" label="回款记录编号" width="150"></el-table-column>
-        <el-table-column  label="回款期次">
-          <template slot-scope="recordPlans">
-            第{{recordPlans.row.recordPlan}}期
-          </template>
-        </el-table-column>
-        <el-table-column  label="最晚回款时间">
-          <template slot-scope="scope">
-            {{scope.row.timePlan | dateFormat}}
-          </template>
-        </el-table-column>
-        <el-table-column prop="recoTime" label="实际回款时间">
 
-        </el-table-column>
-        <el-table-column prop="moneyPlan" label="回款金额" width="200">
-
-        </el-table-column>
-        <el-table-column  label="操作">
-          <template slot-scope="scope">
-            <!--<el-button type="text" @click="huikuan(scope.row.planId)">查看详情</el-button>-->
-            <el-button type="text" >立即回款</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-drawer>
     <!--<el-dialog title="回款记录" :visible.sync="dialogTableVisible" width="65%" >
       <el-table :data="szrecord">
         <el-table-column property="recoId" label="回款记录编号"></el-table-column>
@@ -126,7 +76,6 @@
         </el-table-column>
       </el-table>
     </el-dialog>-->
-    <!--width="65%" top="20px"-->
     <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose" size="medium" >
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
                label-position="right" :rules="FormRules">
@@ -191,7 +140,57 @@
                    :loading="addPlanButtonLoading">确定</el-button>
       </span>
     </el-dialog>
+    <el-drawer title="回款记录"
+               :visible.sync="dialogTableVisible"
+               direction="btt" size="60%"  width="80%">
+      <el-table :data="szrecord" :row-style="{height:'5px'}"
+                :cell-style="{padding:'5px 0'}">
+        <el-table-column prop="recoId" label="回款记录编号" width="150"></el-table-column>
+        <el-table-column  label="回款期次">
+          <template slot-scope="recordPlans">
+            第{{recordPlans.row.recordPlan}}期
+          </template>
+        </el-table-column>
+        <el-table-column  label="最晚回款时间">
+          <template slot-scope="scope">
+            {{scope.row.timePlan | dateFormat}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="recoTime" label="实际回款时间">
 
+        </el-table-column>
+        <el-table-column prop="moneyPlan" label="回款金额" width="200">
+
+        </el-table-column>
+        <el-table-column prop="recoReceivable" label="状态" width="200">
+          <template slot-scope="scope">
+            {{scope.row.recoReceivable | recoReceivableFormat}}
+          </template>
+        </el-table-column>
+        <el-table-column  label="操作">
+          <el-button type="text" @click="like_record">立即回款</el-button>
+        </el-table-column>
+      </el-table>
+    </el-drawer>
+    <!--立刻回款的弹窗-->
+    <el-dialog
+      :visible.sync="likeDialog"
+      @close="likeHandleClose">
+      <el-form ref="editFormRef" :model="likeForm" :rules="likeFormRules" label-width="60px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="交易流水号" prop="ordDetail">
+              <el-input  size="medium" placeholder="交易流水号" clearable/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="likeDialog = false">取消</el-button>
+        <el-button type="primary" @click="like_recordClick"
+                   :loading="like_recordButtonLoading">确定</el-button>
+      </span>
+    </el-dialog>
     <!--修改-->
     <el-dialog
       title="修改计划"
@@ -205,19 +204,8 @@
               <el-input v-model="editForm.planTime"></el-input>
             </el-form-item>
           </el-col >
-          <el-col :span="8">
-            <!-- <el-form-item label="执行人" prop="customerExecutor">
-               <el-select v-model="editForm.empId">
-                 <el-option v-for="item in edpList" :key="item.empId"
-                            :label="item.empName" :value="item.empId">
-                 </el-option>
-               </el-select>
-             </el-form-item>-->
-          </el-col>
-
         </el-row>
       </el-form>
-
       <span slot="footer">
         <el-button @click="editDialog = false">取消</el-button>
         <el-button type="primary" @click="editPlanClick"
@@ -231,7 +219,6 @@
   import {planHttp} from "../../network/system/plan";
   import {orderHttp} from "../../network/system/order";
   import {userHttp} from "../../network/system/user";
-  import {productHttp} from "../../network/system/product";
 
   export default {
     name: "SzReceivavlePlan",
@@ -246,13 +233,11 @@
           planMoney:'',
           szReceivableRecorde:[]
         },
-        editForm:{
-        },
-        editFormRules:{
-
-        },
-        FormRules:{
-        },
+        likeForm:{},
+        likeFormRules:{},
+        editForm:{},
+        editFormRules:{},
+        FormRules:{},
         ordTotalmoney:0,
         rowplanId: 0,
         tableLoading:false,
@@ -260,6 +245,7 @@
         /* advancedSearch:false,高级查询*/
         addDialog:false,
         addPlanButtonLoading:false,
+        like_recordButtonLoading:false,
         editPlanButtonLoading:false,
         dialogTableVisible:false,
         listForm:[],
@@ -271,6 +257,7 @@
         pageSize:5,
         total:1,
         editDialog:false,
+        likeDialog:false,
         multipleSelection: []
       }
     },
@@ -285,7 +272,6 @@
           this.pageNum = res.data.pageNum
         })
       },
-
       searchInputClick() {
         this.listForm.planCaozuopeople = this.searchInput
         planHttp.list(this.listForm).then(res => {
@@ -297,7 +283,6 @@
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
-
       fenqi(){
         console.log("1分期",this.addForm.planPeriod)
         let it = this.addForm.planPeriod; //选中的x期次
@@ -307,11 +292,9 @@
         let qc=[];
         let yumoney=0;
         var nowDate = new Date();//时间
-
        for(var i=1; i<=it;i++){
          console.log("it:",it)
           console.log("addForm.planPeriod分期",this.addForm.planPeriod)
-
          var date = {
            year: nowDate.getFullYear(),
            month: nowDate.getMonth() + 1 +i,
@@ -334,15 +317,12 @@
          console.log("金额：",money);
          console.log("第",i,"次循环");
          console.log("this.ordTotalmoney",this.ordTotalmoney);
-         // this.xuanfenqi.push(parseInt(this.ordTotalmoney/this.addForm.planPeriod))
           recordplan=parseInt(this.ordTotalmoney/this.addForm.planPeriod);
          qici++;
          qc.push(qici);
          this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year+ '-'  + ("0" + (date.month)).slice(-2) + '-'  + date.day , moneyPlan:recordplan})
         }
-        /*this.addForm.ordTotalmoney - money;*/
       },
-
       addPlanClick(){
         console.log("添加确定：",this.addForm)
         //this.addrecord.push(this.addForm.planPeriod);
@@ -364,41 +344,32 @@
           }
         })
       },
-
       openAddDialog() {
         this.addDialog = true
         this.initOrderList()
         this.initEmpList()
         console.log("addform：",this.addForm)
       },
-      /*新增选择员工*/
+      /*添加记录-选择员工*/
       initEmpList(){
         userHttp.list().then(res =>{
           this.empList = res.data.list
         })
       },
-      /*新增选择订单*/
+      /*添加记录-选择订单*/
       initOrderList(){
         orderHttp.list_all().then(res=>{
           this.ordList=res.data.list
         })
       },
-      /*高级搜索*/
-      /* resetForm() {
-         this.$refs.advancedSearchFormRef.resetFields()
-         this.searchInput = ''
-         this.initList()
-         this.rowplanId = 0
-         this.buttonDisabled = true
-       },*/
       editHandleClose() {
         this.$refs.editFormRef.resetFields()
       },
+      likeHandleClose(){
+
+      },
       addHandleClose(){
         this.$refs.addFormRef.resetFields()
-        /*this.addForm.
-        this.$refs.addFormRef.resetFields()
-        this.addForm.cusIdList = []*/
         this.addPlanButtonLoading = false
       },
       /*点击修改按钮获取改行id*/
@@ -426,13 +397,16 @@
           })
         })
       },
-
       getEditPlan(){
         planHttp.getplan(this.rowplanId).then(res=>{
           console.log("获得修改数据：",res.data);
           /*this.editForm.empName=res.data.empResp.empName
           console.log("this.editForm.empName:",this.editForm)*/
         })
+      },
+      like_recordClick(){
+        this.like_recordButtonLoading=true
+
       },
       editPlanClick(){
         this.editPlanButtonLoading=true
@@ -446,6 +420,10 @@
         planHttp.chakan_record(val).then(res=>{
           this.szrecord=res
         })
+      },
+      like_record(){
+        this.likeDialog=true
+       /* alert("点击啦！")*/
       },
       handleCurrentChange(pageIndex) {
         this.pageNum = pageIndex
@@ -476,7 +454,6 @@
           console.log("ppp:",res.data.list)
         })
       },
-
       resetForm() {
         this.$refs.advancedSearchFormRef.resetFields()
         this.searchInput = ''
