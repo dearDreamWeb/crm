@@ -5,6 +5,7 @@ import com.example.entity.response.ClueResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,4 +24,6 @@ public interface ClueMapper {
                                    @Param("empName")String empName);
     int batchEditClueType(ClueReq clueReq);
     List<ClueResp> listCompany();
+    int shareClue(@Param("clueId") Integer clueId, @Param("updateTime") Date updateTime);
+    int invalidClue(@Param("clueId") Integer clueId, @Param("updateTime") Date updateTime);
 }

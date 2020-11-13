@@ -83,6 +83,8 @@ public enum ResultEnum {
 
     CLUE_NOT_BE_EDIT(80033,"您不能修改此条线索"),
     CLUE_NOT_BE_DEL(80034,"您不能删除此条线索"),
+    CLUE_NOT_BE_SHARE(80037,"您不能共享此条线索"),
+    CLUE_SHARE_ERROR(80038,"共享线索失败"),
 
     CLUE_TRANSFER_NOT_OWN(80035,"转换对象不能是自己"),
 

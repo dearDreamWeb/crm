@@ -122,5 +122,32 @@ export const clueHttp = {
       }
     }
     return postJson(params)
+  },
+  shareClue:function (clueId) {
+    let params = {
+      url:'/clue/clue_share',
+      data:{
+        'clueId':clueId
+      }
+    }
+    return postJson(params)
+  },
+  invalidClue:function (clueId) {
+    let params = {
+      url:'/clue/clue_invalid',
+      data:{
+        'clueId':clueId
+      }
+    }
+    return postJson(params)
+  },
+  getFollow:function (clueId) {
+    let params = {
+      url:'/clue/get_follow',
+      data:{
+        'clueId':clueId
+      }
+    }
+    return get(params)
   }
 }

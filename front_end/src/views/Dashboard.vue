@@ -65,6 +65,11 @@
           线索转为个人客户后，直接添加到联系人
         </el-card>
       </el-col>
+      <el-col :span="12">
+        <el-card>
+          线索剩余：待办和转订单未完成
+        </el-card>
+      </el-col>
     </el-row>
     <el-row>
       <el-col>
@@ -237,7 +242,7 @@
       <div id="demo1"></div>
       <el-button class="btn" @click="getEditorData">获取当前内容</el-button>
     </div>
-    <v-btn large color="primary" @click="getEditorData">Primary</v-btn>
+<!--    <v-btn large color="primary" @click="getEditorData">Primary</v-btn>-->
   </div>
 </template>
 

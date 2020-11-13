@@ -18,4 +18,7 @@ public interface ClueService {
     ResultVo batchEditClueType(ClueReq clueReq);
     ResultVo listCompany();
     ResultVo transferCustomer(ClueReq clueReq,String token);
+    ResultVo shareClue(Integer clueId,String token);
+    ResultVo invalidClue(Integer clueId,String token);
+    ResultVo getClueFollow(Integer clueId);
 }

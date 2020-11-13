@@ -7,13 +7,11 @@ import com.example.entity.ResultVo;
 import com.example.entity.request.ClueReq;
 import com.example.entity.request.ContactsReq;
 import com.example.entity.request.CustomerReq;
+import com.example.entity.response.ClueFollowLogResp;
 import com.example.entity.response.ClueResp;
 import com.example.entity.response.CustomerResp;
 import com.example.entity.response.EmpResp;
-import com.example.model.mapper.ClueMapper;
-import com.example.model.mapper.ContactsMapper;
-import com.example.model.mapper.CustomerMapper;
-import com.example.model.mapper.EmpMapper;
+import com.example.model.mapper.*;
 import com.example.service.CustomerService;
 import com.example.util.CheckUtils;
 import com.example.util.DateUtils;
@@ -34,6 +32,9 @@ import java.util.List;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class CustomerServiceImpl implements CustomerService {
+    @Autowired
+    private ClueFollowLogMapper clueFollowLogMapper;
+
     @Autowired
     private CustomerMapper customerMapper;
 
@@ -167,6 +168,19 @@ public class CustomerServiceImpl implements CustomerService {
         }
         int addContacts = contactsMapper.addContactsAndCustomer(contactsReq);
         if (addContacts != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
+        ClueFollowLogResp clueFollowLogResp = new ClueFollowLogResp();
+        clueFollowLogResp.setClueId(cusConReq.getClueId());
+        clueFollowLogResp.setClueFollowPerson(empByToken.getEmpName());
+        clueFollowLogResp.setClueFollowTitle("线索转客户");
+        clueFollowLogResp.setClueFollowContent("该线索被【"+empByToken.getEmpName()+
+                "】转为客户【"+cusConReq.getCusName()+"】");
+        clueFollowLogResp.setClueFollowTime(DateUtils.getDate());
+        int addClueFollow = clueFollowLogMapper.addClueFollow(clueFollowLogResp);
+        if (addClueFollow != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }

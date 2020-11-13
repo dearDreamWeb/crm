@@ -7,7 +7,7 @@
         <result column="clue_id" property="clueId"/>
         <result column="clue_follow_title" property="clueFollowTitle"/>
         <result column="clue_follow_time" property="clueFollowTime"/>
-        <result column="clue_follow_person" property="cluueFollowPerson"/>
+        <result column="clue_follow_person" property="clueFollowPerson"/>
         <result column="clue_follow_content" property="clueFollowContent"/>
     </resultMap>
 
@@ -51,7 +51,7 @@
 
     <select id="listClueFollow" resultMap="ClueFollowLogResult">
         SELECT clue_follow_id,clue_id,clue_follow_title,clue_follow_time,clue_follow_content,clue_follow_person
-        FROM clue_follow_log
+        FROM clue_follow_log WHERE clue_id = #{clueId}
         ORDER BY clue_follow_time DESC
     </select>
 </mapper>

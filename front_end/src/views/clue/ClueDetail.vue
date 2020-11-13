@@ -56,17 +56,28 @@
         <el-divider><i class="el-icon-notebook-1"> 跟进日志</i></el-divider>
         <div class="block">
           <el-row>
-            <el-col :offset="2">
-              <el-timeline>
+            <el-col :offset="15">
+              <div class="radio">
+                排序：
+                <el-radio-group v-model="reverse">
+                  <el-radio :label="false">正序</el-radio>
+                  <el-radio :label="true">倒序</el-radio>
+                </el-radio-group>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12" :offset="2">
+              <el-timeline :reverse="reverse">
                 <el-timeline-item
-                  v-for="(activity, index) in activities"
-                  :key="index"
-                  :icon="activity.icon"
-                  :type="activity.type"
-                  :color="activity.color"
-                  :size="activity.size"
-                  :timestamp="activity.timestamp">
-                  {{activity.content}}
+                  v-for="item in activities"
+                  :key="item.clueFollowId"
+                  :icon="icon"
+                  :size="size"
+                  :type="type">
+                  操作人：{{item.clueFollowPerson}}<br>
+                  操作时间：{{item.clueFollowTime}}<br>
+                  操作内容：{{item.clueFollowContent}}
                 </el-timeline-item>
               </el-timeline>
             </el-col>
@@ -79,6 +90,7 @@
 
 <script>
   import {clueHttp} from "../../network/pre_sale/clue";
+  import {dateFormat} from "../../common/formatUtils";
 
   export default {
     name: "ClueDetail",
@@ -86,24 +98,11 @@
       return {
         clueId:'',
         clueDetailForm:{},
-        activities: [{
-          content: '支持使用图标',
-          timestamp: '2018-04-12 20:46',
-          size: 'large',
-          type: 'primary',
-          icon: 'el-icon-more'
-        }, {
-          content: '支持自定义颜色',
-          timestamp: '2018-04-03 20:46',
-          color: '#0bbd87'
-        }, {
-          content: '支持自定义尺寸',
-          timestamp: '2018-04-03 20:46',
-          size: 'large'
-        }, {
-          content: '默认样式的节点',
-          timestamp: '2018-04-03 20:46'
-        }]
+        activities: [],
+        icon:'el-icon-more',
+        size: 'large',
+        type: 'primary',
+        reverse:false
       }
     },
     methods:{
@@ -111,11 +110,21 @@
         clueHttp.getDetail(this.clueId).then(res => {
           this.clueDetailForm = res.data
         })
+      },
+      initClueFollowList() {
+        clueHttp.getFollow(this.clueId).then(res => {
+          this.activities = res.data
+          for (let i=0;i<this.activities.length;i++) {
+            this.activities[i].clueFollowTime =
+              dateFormat(this.activities[i].clueFollowTime)
+          }
+        })
       }
     },
     created() {
       this.clueId = this.$urlUtil.getQueryVariable("clueId")
       this.initClue()
+      this.initClueFollowList()
     }
   }
 </script>

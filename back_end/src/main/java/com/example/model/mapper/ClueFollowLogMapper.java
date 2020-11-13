@@ -13,5 +13,5 @@ import java.util.List;
 @Repository
 public interface ClueFollowLogMapper {
     int addClueFollow(ClueFollowLogResp followLogResp);
-    List<ClueFollowLogResp> listClueFollow();
+    List<ClueFollowLogResp> listClueFollow(Integer clueId);
 }

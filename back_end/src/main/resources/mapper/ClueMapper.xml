@@ -216,4 +216,14 @@
         FROM clue
         WHERE clue_type = 1
     </select>
+
+    <update id="shareClue">
+        UPDATE clue SET emp_id = 0,version = version + 1,update_time = #{updateTime}
+        WHERE clue_id = #{clueId}
+    </update>
+
+    <update id="invalidClue">
+        UPDATE clue SET handle_result = 0,update_time = #{updateTime}
+        WHERE clue_id = #{clueId}
+    </update>
 </mapper>

@@ -89,4 +89,23 @@ public class ClueController {
         String token = request.getHeader("X-Token");
         return clueService.transferCustomer(clueReq,token);
     }
+
+    @PostMapping("/clue_share")
+    public ResultVo clueShare(@RequestParam("clueId")Integer clueId,
+                              HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return clueService.shareClue(clueId,token);
+    }
+
+    @PostMapping("/clue_invalid")
+    public ResultVo clueInvalid(@RequestParam("clueId")Integer clueId,
+                                HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return clueService.invalidClue(clueId,token);
+    }
+
+    @GetMapping("/get_follow")
+    public ResultVo getFollow(Integer clueId) {
+        return clueService.getClueFollow(clueId);
+    }
 }

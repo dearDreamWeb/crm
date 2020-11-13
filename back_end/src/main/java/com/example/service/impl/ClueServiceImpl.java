@@ -216,7 +216,93 @@ public class ClueServiceImpl implements ClueService {
             throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
                     ResultEnum.DATA_UPDATE_FAIL.getMessage());
         }
+
+        EmpResp emp = empMapper.getEmp(clueReq.getEmpId());
+        ClueFollowLogResp clueFollowLogResp = new ClueFollowLogResp();
+        clueFollowLogResp.setClueId(clueId);
+        clueFollowLogResp.setClueFollowTitle("线索转移");
+        clueFollowLogResp.setClueFollowTime(DateUtils.getDate());
+        clueFollowLogResp.setClueFollowPerson(empByToken.getEmpName());
+        clueFollowLogResp.setClueFollowContent("该线索被【"+empByToken.getEmpName()+
+                "】转移给【"+emp.getEmpName()+"】");
+        clueFollowLogResp.setClueFollowTime(DateUtils.getDate());
+        int addClueFollow = clueFollowLogMapper.addClueFollow(clueFollowLogResp);
+        if (addClueFollow != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
         return ResultUtils.response(editClue);
+    }
+
+    @Override
+    public ResultVo shareClue(Integer clueId,String token) {
+        ClueResp clue = clueMapper.getClue(clueId);
+        if (clue == null) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        if (empByToken.getEmpId() != clue.getEmpId()) {
+            throw new SysException(ResultEnum.CLUE_NOT_BE_SHARE.getCode(),
+                    ResultEnum.CLUE_NOT_BE_SHARE.getMessage());
+        }
+        int shareClue = clueMapper.shareClue(clueId,DateUtils.getDate());
+        if (shareClue != 1) {
+            throw new SysException(ResultEnum.CLUE_SHARE_ERROR.getCode(),
+                    ResultEnum.CLUE_SHARE_ERROR.getMessage());
+        }
+
+        ClueFollowLogResp clueFollowLogResp = new ClueFollowLogResp();
+        clueFollowLogResp.setClueId(clueId);
+        clueFollowLogResp.setClueFollowTitle("线索共享");
+        clueFollowLogResp.setClueFollowTime(DateUtils.getDate());
+        clueFollowLogResp.setClueFollowPerson(empByToken.getEmpName());
+        clueFollowLogResp.setClueFollowContent("【"+empByToken.getEmpName()+"】将此线索共享至线索池");
+        int addClueFollow = clueFollowLogMapper.addClueFollow(clueFollowLogResp);
+        if (addClueFollow != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+        return ResultUtils.response(shareClue);
+    }
+
+    @Override
+    public ResultVo invalidClue(Integer clueId, String token) {
+        ClueResp clue = clueMapper.getClue(clueId);
+        if (clue == null) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        if (empByToken.getEmpId() != clue.getEmpId()) {
+            throw new SysException(ResultEnum.CLUE_NOT_BE_SHARE.getCode(),
+                    ResultEnum.CLUE_NOT_BE_SHARE.getMessage());
+        }
+        int invalidClue = clueMapper.invalidClue(clueId, DateUtils.getDate());
+        if (invalidClue != 1) {
+            throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
+                    ResultEnum.DATA_UPDATE_FAIL.getMessage());
+        }
+        ClueFollowLogResp clueFollowLogResp = new ClueFollowLogResp();
+        clueFollowLogResp.setClueId(clueId);
+        clueFollowLogResp.setClueFollowTitle("线索无效");
+        clueFollowLogResp.setClueFollowTime(DateUtils.getDate());
+        clueFollowLogResp.setClueFollowPerson(empByToken.getEmpName());
+        clueFollowLogResp.setClueFollowContent("该线索被【"+empByToken.getEmpName()+
+                "设置为无效线索");
+        int addClueFollow = clueFollowLogMapper.addClueFollow(clueFollowLogResp);
+        if (addClueFollow != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+        return ResultUtils.response(invalidClue);
+    }
+
+    @Override
+    public ResultVo getClueFollow(Integer clueId) {
+        List<ClueFollowLogResp> clueFollowLogResps = clueFollowLogMapper.listClueFollow(clueId);
+        return ResultUtils.response(clueFollowLogResps);
     }
 
     public static String clueHandleResultFormat(Integer clueHandleResult) {

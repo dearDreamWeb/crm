@@ -13,15 +13,15 @@
           </el-input>
         </el-col>
         <el-col :span="9">
-          <el-button type="primary" icon="el-icon-plus" size="mini" @click="addDialog = true">添加线索</el-button>
+<!--          <el-button type="primary" icon="el-icon-plus" size="mini" @click="addDialog = true">添加线索</el-button>-->
           <el-button type="primary" icon="el-icon-zoom-in" size="mini"
                      @click="advancedSearch = !advancedSearch">高级查询</el-button>
           <el-button type="primary" icon="el-icon-refresh"
                      size="mini" @click="resetForm"></el-button>
         </el-col>
         <el-col :span="9">
-          <el-button type="warning" size="mini" icon="el-icon-edit"
-                     :disabled="buttonDisabled" @click="openEditDialog">修改</el-button>
+          <!--<el-button type="warning" size="mini" icon="el-icon-edit"
+                     :disabled="buttonDisabled" @click="openEditDialog">修改</el-button>-->
           <el-button type="danger" size="mini" icon="el-icon-delete"
                      :disabled="buttonDisabled" @click="delClue">删除</el-button>
           <el-button type="info" size="mini" icon="el-icon-zoom-in"
@@ -32,7 +32,7 @@
         </el-col>
       </el-row>
 
-      <transition name="el-zoom-in-top">
+      <transition name="el-zoom-in:top">
         <el-card class="advanced_search" v-show="advancedSearch" style="margin-top: 10px">
           <el-form :model="searchForm" ref="advancedSearchFormRef" size="mini" label-width="80px">
             <el-row>
@@ -278,7 +278,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-button type="text" icon="el-icon-share">共享</el-button>
+            <el-button type="text" icon="el-icon-share"
+                       @click="clueShare">共享</el-button>
           </el-col>
           <el-col :span="6">
             <el-button type="text" icon="el-icon-s-promotion"
@@ -330,6 +331,7 @@
           <el-col :span="6">
             <el-tooltip class="item" effect="dark" content="设为无效" placement="top">
               <el-button type="danger" icon="el-icon-error" circle
+                         @click="invalidClueClick"
                          :disabled="this.manipulateForm.handleResult != null">
               </el-button>
             </el-tooltip>
@@ -594,6 +596,40 @@
       }
     },
     methods: {
+      invalidClueClick() {
+        this.$confirm('请确认是否执行此操作','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          clueHttp.invalidClue(this.rowClueId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.clueManipulateDialog = false
+            } else {
+              this.$message.error(res.message)
+              this.clueManipulateDialog = false
+            }
+          })
+        })
+      },
+      clueShare() {
+        this.$confirm('请再三考虑是否执行此操作','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          clueHttp.shareClue(this.rowClueId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.clueManipulateDialog = false
+            } else {
+              this.$message.error(res.message)
+              this.clueManipulateDialog = false
+            }
+          })
+        })
+      },
       openTransferDialog() {
         this.transferCustomerDialog = true
       },
