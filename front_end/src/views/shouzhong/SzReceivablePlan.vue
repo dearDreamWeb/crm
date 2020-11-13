@@ -143,8 +143,8 @@
     <el-drawer title="回款记录"
                :visible.sync="dialogTableVisible"
                direction="btt" size="60%"  width="80%">
-      <el-table :data="szrecord" :row-style="{height:'5px'}"
-                :cell-style="{padding:'5px 0'}">
+      <el-table :data="szrecord" :row-style="{height:'1px'}"
+                :cell-style="{padding:'1px 0'}">
         <el-table-column prop="recoId" label="回款记录编号" width="150"></el-table-column>
         <el-table-column  label="回款期次">
           <template slot-scope="recordPlans">
@@ -153,13 +153,14 @@
         </el-table-column>
         <el-table-column  label="最晚回款时间">
           <template slot-scope="scope">
+            <i class="el-icon-time"></i>
             {{scope.row.timePlan | dateFormat}}
           </template>
         </el-table-column>
         <el-table-column prop="recoTime" label="实际回款时间">
-
+         <!-- <i class="el-icon-time"></i>-->
         </el-table-column>
-        <el-table-column prop="moneyPlan" label="回款金额" width="200">
+        <el-table-column prop="moneyPlan" label="需回款金额" width="200">
 
         </el-table-column>
         <el-table-column prop="recoReceivable" label="状态" width="200">
@@ -177,6 +178,16 @@
       :visible.sync="likeDialog"
       @close="likeHandleClose">
       <el-form ref="editFormRef" :model="likeForm" :rules="likeFormRules" label-width="60px">
+        <!--立刻回款的记录弹簧表格-->
+        <el-table :data="like" style="text-align: center;" size="small" align="center">
+          <el-table-column  label="回款期次">
+            <template slot-scope="recordPlans">
+              第{{recordPlans.row.recordPlan}}期
+            </template>
+          </el-table-column>
+          <el-table-column prop="timePlan" label="还款时间" align="center"></el-table-column>
+          <el-table-column prop="moneyPlan" label="还款金额" align="center"></el-table-column>
+        </el-table>
         <el-row>
           <el-col :span="12">
             <el-form-item label="交易流水号" prop="ordDetail">

@@ -12,6 +12,7 @@
         <result property="recordPlan" column="record_plan"/>
         <result property="timePlan" column="time_plan"/>
         <result property="moneyPlan" column="money_plan"/>
+        <result property="recoCreatetime" column="reco_createtime"/>
         <result property="planId" column="plan_id"/>
     </resultMap>
 
@@ -25,6 +26,7 @@
         <result property="recordPlan" column="record_plan"/>
         <result property="timePlan" column="time_plan"/>
         <result property="moneyPlan" column="money_plan"/>
+        <result property="recoCreatetime" column="reco_createtime"/>
         <result property="planId" column="plan_id"/>
         <association property="szReceivablePlan" resultMap="szReceivablePlan"/>
     </resultMap>
@@ -44,7 +46,7 @@
 
     <!--回款计划和回款记录-->
     <select id="listPlanANDReco" resultMap="RecordResult">
-        SELECT reco_id, reco_receivable, reco_caozuopeople, reco_time, reco_money, reco_liushui, record_plan, time_plan, money_plan, plan_id
+        SELECT reco_id, reco_receivable, reco_caozuopeople, reco_time, reco_money, reco_liushui, record_plan, time_plan, money_plan,reco_createtime, plan_id
          FROM sz_receivable_record WHERE plan_id=#{recoId}
     </select>
     <!--增-->
@@ -63,4 +65,18 @@
         (#{item.recoReceivable},#{item.recoCaozuopeople},#{item.recoTime},#{item.recoMoney},#{item.recoLiushui},#{item.recordPlan},#{item.timePlan},#{item.moneyPlan},#{item.planId})
     </foreach>
     </insert>
+
+    <update id="editReco" parameterType="SzReceivableRecord">
+        update sz_receivable_record set reco_createtime = #{recoCreatetime}
+        <if test="recoTime !=null and recoTime != ''">
+            ,reco_time = #{recoTime}
+        </if>
+        <if test="recoMoney !=null and recoMoney != ''">
+            ,reco_money = #{recoMoney}
+        </if>
+        <if test="recoLiushui !=null and recoLiushui != ''">
+            ,reco_liushui = #{recoLiushui}
+        </if>
+        where reco_id = #{recoId}
+    </update>
 </mapper>

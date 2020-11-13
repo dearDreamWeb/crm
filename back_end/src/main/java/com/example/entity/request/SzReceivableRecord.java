@@ -25,6 +25,7 @@ public class SzReceivableRecord {
     private BigDecimal moneyPlan;//计划回款金额
     private BigDecimal recoMoney;//实际回款金额
     private String recoLiushui;//交易流水号
+    private String recoCreatetime;//创建时间
     private Integer planId;//回款计划编号
 
     private SzReceivablePlan szReceivablePlan;
@@ -41,6 +42,7 @@ public class SzReceivableRecord {
                 ", moneyPlan=" + moneyPlan +
                 ", recoMoney=" + recoMoney +
                 ", recoLiushui='" + recoLiushui + '\'' +
+                ", recoCreatetime='" + recoCreatetime + '\'' +
                 ", planId=" + planId +
                 '}';
     }
