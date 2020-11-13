@@ -24,7 +24,7 @@
                      :disabled="buttonDisabled" @click="openEditDialog">修改</el-button>-->
           <el-button type="danger" size="mini" icon="el-icon-delete"
                      :disabled="buttonDisabled" @click="delClue">删除</el-button>
-          <el-button type="info" size="mini" icon="el-icon-zoom-in"
+          <el-button type="info" size="mini" icon="el-icon-view"
                      :disabled="buttonDisabled" @click="getClueDetailButton">详情</el-button>
           <el-button type="success" size="mini" icon="el-icon-edit-outline"
                      :disabled="this.multipleClueIdList.length == 0"

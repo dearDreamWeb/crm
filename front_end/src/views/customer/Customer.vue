@@ -136,6 +136,15 @@
         <el-table-column prop="creditId" label="信用等级"></el-table-column>
         <el-table-column prop="cusDictSource" label="来源"></el-table-column>
         <el-table-column prop="cusRemark" label="备注"></el-table-column>
+        <el-table-column label="操作" width="70px" align="center">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" content="详情" placement="top">
+              <el-button type="text" icon="el-icon-view" size="medium"
+                         @click="manipulateCustomerClick(scope.row.cusId)">
+              </el-button>
+            </el-tooltip>
+          </template>
+        </el-table-column>
       </el-table>
 
       <el-pagination @current-change="handleCurrentChange"
@@ -187,6 +196,16 @@
       }
     },
     methods:{
+      manipulateCustomerClick() {
+        let resolve = this.$router.resolve({
+          path:'/customer_detail',
+          query:{
+            customerId:this.rowCustomerId
+          }
+        });
+        window.open(resolve.href,'_blank')
+      },
+
       initLifeCycle() {
         dictHttp.tree_dict_byId(36).then(res => {
           this.cusLifeCycleList = res.data.children
