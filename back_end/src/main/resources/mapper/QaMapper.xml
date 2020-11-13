@@ -8,13 +8,39 @@
         <result property="qaJjsolve" column="qa_jjsolve"/>
         <result property="qaCustomerfk" column="qa_customerfk"/>
         <result property="qaData" column="qa_data"/>
+        <result property="empId" column="emp_id"/>
+    </resultMap>
+    <resultMap id="QaDetailResult" type="com.example.entity.request.Qa">
+        <id property="qaId" column="qa_id"/>
+        <result property="qaWtproblem" column="qa_wtproblem"/>
+        <result property="qaJjsolve" column="qa_jjsolve"/>
+        <result property="qaCustomerfk" column="qa_customerfk"/>
+        <result property="qaData" column="qa_data"/>
+        <result property="empId" column="emp_id"/>
+       <association property="empResp" resultMap="EmpResult"/>
+    </resultMap>
+    <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
+        <id property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="sex" column="sex"/>
+        <result property="passWord" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="empStatus" column="emp_status"/>
+        <result property="token" column="token"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
     </resultMap>
     <insert id="addQa" parameterType="com.example.entity.request.Qa">
         <selectKey keyProperty="qaId" keyColumn="qa_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
         </selectKey>
-        insert into qa(qa_wtproblem,qa_jjsolve,qa_customerfk,qa_data) VALUES
-        (#{qaWtproblem},#{qaJjsolve},#{qaCustomerfk},#{qaData})
+        insert into qa(qa_wtproblem,qa_jjsolve,qa_customerfk,qa_data,emp_id) VALUES
+        (#{qaWtproblem},#{qaJjsolve},#{qaCustomerfk},#{qaData},#{empId})
     </insert>
 
     <update id="updateQa" parameterType="com.example.entity.request.Qa">
@@ -28,14 +54,19 @@
         <if test="qaCustomerfk !=null and qaCustomerfk != ''">
             ,qa_customerfk = #{qaCustomerfk}
         </if>
+        <if test="empId !=null ">
+            ,emp_id = #{empId}
+        </if>
         where qa_id = #{qaId}
     </update>
     <delete id="deleteQa" parameterType="Integer">
         DELETE FROM qa WHERE qa_id = #{qaId}
     </delete>
-    <select id="listQa" resultMap="QaResult">
-        SELECT qa_id,qa_wtproblem,qa_jjsolve,qa_customerfk,qa_data
-        FROM qa
+    <select id="listQa" resultMap="QaDetailResult">
+        SELECT q.qa_id,q.qa_wtproblem,q.qa_jjsolve,q.qa_customerfk,q.qa_data,
+        e.*
+        FROM qa q
+        left join emp e on q.emp_id = e.emp_id
         <where>
             <if test="qaWtproblem != null and qaWtproblem != ''">
                 AND qa_wtproblem LIKE CONCAT('%',#{qaWtproblem},'%')
@@ -52,10 +83,16 @@
             <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
                 AND date_format(qa_data,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
+            <if test="empId != null">
+                and q.emp_id=#{empId}
+            </if>
         </where>
         ORDER BY qa_data DESC
     </select>
-    <select id="getQa" resultMap="QaResult">
-        SELECT * FROM qa WHERE qa_id = #{qaId}
+    <select id="getQa" resultMap="QaDetailResult">
+        SELECT q.* ,e.*
+        FROM qa q
+        LEFT JOIN emp e ON e.emp_id = q.emp_id
+        WHERE q.qa_id = #{qaId}
     </select>
 </mapper>
