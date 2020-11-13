@@ -52,7 +52,7 @@ public class SzReceivablePlanServicelmpl implements SzReceivablePlanService {
                 System.out.println("****333.**."+szplan.getSzReceivableRecorde());
                 // 给从表 记录表赋值
                 record.setPlanId(szplan.getPlanId());
-                record.setRecoLiushui(MyUtils.record());
+               // record.setRecoLiushui(MyUtils.record());
                 record.setRecoReceivable(0);
                 record.setMoneyPlan(szplan.getSzReceivableRecorde().get(i).getMoneyPlan());
                 record.setRecordPlan(szplan.getSzReceivableRecorde().get(i).getRecordPlan());
