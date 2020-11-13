@@ -42,7 +42,11 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item prop="qaCustomerfk" label="录入人">
-                  <el-input v-model="searchForm.qaCustomerfk" size="mini" placeholder="请输入" clearable></el-input>
+                  <el-select v-model="searchForm.empId">
+                    <el-option v-for="item in edpList" :key="item.empId"
+                               :label="item.empName" :value="item.empId">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -65,7 +69,7 @@
         <el-table-column type="index" width="40"></el-table-column>
         <el-table-column prop="qaWtproblem" label="标题" sortable></el-table-column>
         <el-table-column prop="qaJjsolve" label="答案"></el-table-column>
-        <el-table-column prop="qaCustomerfk" label="录入人"></el-table-column>
+        <el-table-column prop="empResp.empName" label="录入人"></el-table-column>
         <el-table-column prop="qaData" label="录入日期">
           <template slot-scope="scope">
             {{scope.row.qaData | dateFormat}}
@@ -96,7 +100,11 @@
           </el-col >
           <el-col :span="12">
             <el-form-item label="录入人">
-              <el-input v-model="addform.qaCustomerfk"></el-input>
+              <el-select v-model="addform.empId">
+                <el-option v-for="item in edpList" :key="item.empId"
+                           :label="item.empName" :value="item.empId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
 
@@ -133,7 +141,11 @@
           </el-col >
           <el-col :span="8">
             <el-form-item label="录入人">
-              <el-input v-model="updateform.qaCustomerfk"></el-input>
+              <el-select v-model="updateform.empId">
+                <el-option v-for="item in edpList" :key="item.empId"
+                           :label="item.empName" :value="item.empId">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -167,6 +179,7 @@
 
   import 'quill/dist/quill.core.css'
   import 'quill/dist/quill.snow.css'
+  import {userHttp} from "../../network/system/user";
   // import 'quill/dist/quill.bubble.css'
 
   export default {
@@ -176,13 +189,14 @@
     },
     data() {
       return {
-
+        edpList:[],
         content: null,
         editorOption: {},
         rowCareId:0,
         addform:{
           qaWtproblem:'',
           qaJjsolve:'',
+          empId:'',
           qaCustomerfk:'',
           qaData:'',
 
@@ -198,6 +212,7 @@
           qaJjsolve:'',
           qaCustomerfk:'',
           startDate:'',
+          empId:'',
           endDate:'',
           region: '',
           date1: '',
@@ -230,6 +245,7 @@
         form: {
           qaWtproblem:'',
           qaJjsolve:'',
+          empId:'',
           qaCustomerfk:'',
           region: '',
           date1: '',
@@ -249,8 +265,17 @@
       }
     },
     methods:{
-      addClick(){
 
+      openAddDialog() {
+        this.addDialog = true
+        this.initEdpList()
+      },
+      initEdpList(){
+        userHttp.list().then(res =>{
+          this.edpList = res.data.list
+        })
+      },
+      addClick(){
         this.$refs["addform"].validate(valid => {
           if (!valid) return
           this.addDictButtonLoading = true
@@ -312,7 +337,7 @@
         qaHttp.get(this.rowCareId).then(res =>{
           console.log("编辑获得的数据",res.data);
           this.updateform = res.data;
-          console.log(this.updateform);
+          this.updateform.empName = res.data.empResp.empName
         })
       },
       deleteCare() {
@@ -392,7 +417,7 @@
     },
     created() {
       this.initList()
-
+      this.initEdpList()
     }
   }
 </script>

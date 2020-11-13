@@ -1,5 +1,6 @@
 package com.example.entity.request;
 
+import com.example.entity.response.EmpResp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,10 @@ public class Qa {
     private String qaCustomerfk;//录入人
     private Date qaData;//录入时间
     private String startDate;
+    private Integer empId;
     private String endDate;
     private Integer pageNum;
     private Integer pageSize;
+    private EmpResp empResp;
 
 }

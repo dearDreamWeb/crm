@@ -95,8 +95,8 @@
         ,care_customerfk = #{carecustomerfk}
     </if>
     <if test="empId !=null ">
-        ,emp_id = #{empId}
-    </if>
+    ,emp_id = #{empId}
+</if>
     where care_id = #{careId}
 </update>
 <delete id="deleteCare" parameterType="Integer">

@@ -7,6 +7,7 @@ export const qaHttp = {
       data:{
         'qaWtproblem':qa.qaWtproblem,
         'qaJjsolve':qa.qaJjsolve,
+        'empId':qa.empId,
         'qaCustomerfk':qa.qaCustomerfk,
         'qaData':qa.qaData
 
@@ -31,6 +32,7 @@ export const qaHttp = {
         'qaWtproblem':qa.qaWtproblem,
         'qaJjsolve':qa.qaJjsolve,
         'qaData':qa.qaData,
+        'empId':qa.empId,
         'qaCustomerfk':qa.qaCustomerfk
 
       }
@@ -52,6 +54,7 @@ export const qaHttp = {
       data:{
         'qaWtproblem':qa.qaWtproblem,
         'qaJjsolve':qa.qaJjsolve,
+        'empId':qa.empId,
         'qaCustomerfk':qa.qaCustomerfk,
         'qaData':qa.qaData
       }
@@ -66,6 +69,7 @@ export const qaHttp = {
         'qaJjsolve':qa.qaJjsolve,
         'qaCustomerfk':qa.qaCustomerfk,
         'qaData':qa.qaData,
+        'empId':qa.empId,
         'startDate':qa.startDate,
         'endDate':qa.endDate,
         'pageNum':qa.pageNum,
