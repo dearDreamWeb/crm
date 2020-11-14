@@ -13,6 +13,7 @@ import 'vue-area-linkage/dist/index.css'
 import iconPicker from 'e-icon-picker'
 import 'e-icon-picker/dist/index.css'
 import 'font-awesome/css/font-awesome.min.css'
+import './assets/alibaba_icon/icon/iconfont.css'
 import 'element-ui/lib/theme-chalk/icon.css'
 import "@/common/font/myfont.css";
 import "@/common/font_cn/myfont.css";
