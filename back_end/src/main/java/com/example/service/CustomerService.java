@@ -10,7 +10,7 @@ import com.example.entity.request.CustomerReq;
  * @description:
  */
 public interface CustomerService {
-    ResultVo addCustomer(CustomerReq customerReq);
+    ResultVo addCustomer(CustomerReq customerReq,String token);
     ResultVo delCustomer(CustomerReq customerReq);
     ResultVo editCustomer(CustomerReq customerReq);
     ResultVo getCustomer(Integer cusId);

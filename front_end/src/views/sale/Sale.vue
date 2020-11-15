@@ -246,10 +246,10 @@
           </el-row>
         </el-form>
         <span slot="footer">
-        <el-button @click="addDialog = false">取消</el-button>
-        <el-button type="primary" :loading="addSaleButtonLoading"
-                   @click="addSaleClick">确定</el-button>
-      </span>
+          <el-button @click="addDialog = false">取消</el-button>
+          <el-button type="primary" :loading="addSaleButtonLoading"
+                     @click="addSaleClick">确定</el-button>
+        </span>
       </el-dialog>
 
       <el-dialog title="机会修改" :visible.sync="editDialog" @close="editDialogClose" top="30px">

@@ -3,6 +3,7 @@ package com.example.service.impl;
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.CusConReq;
+import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
 import com.example.entity.request.ClueReq;
 import com.example.entity.request.ContactsReq;
@@ -33,6 +34,9 @@ import java.util.List;
 @Transactional(rollbackFor = Exception.class)
 public class CustomerServiceImpl implements CustomerService {
     @Autowired
+    private CustomerRecordMapper recordMapper;
+
+    @Autowired
     private ClueFollowLogMapper clueFollowLogMapper;
 
     @Autowired
@@ -48,13 +52,27 @@ public class CustomerServiceImpl implements CustomerService {
     private EmpMapper empMapper;
 
     @Override
-    public ResultVo addCustomer(CustomerReq customerReq) {
+    public ResultVo addCustomer(CustomerReq customerReq,String token) {
         CheckUtils.validate(customerReq);
+        EmpResp empByToken = empMapper.getEmpByToken(token);
         int addCustomer = customerMapper.addCustomer(customerReq);
         if (addCustomer != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
+        CustomerRecord customerRecord = new CustomerRecord();
+        customerRecord.setRecordTitle("客户添加");
+        customerRecord.setRecordType("客户操作记录");
+        customerRecord.setRecordTime(DateUtils.getDate());
+        customerRecord.setRecordContent("客户由【"+empByToken.getEmpName()+"】添加");
+        customerRecord.setCusId(customerReq.getCusId());
+        customerRecord.setEmpId(empByToken.getEmpId());
+        int addCustomerRecord = recordMapper.addCustomerRecord(customerRecord);
+        if (addCustomerRecord != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
         return ResultUtils.response(addCustomer);
     }
 
@@ -181,6 +199,20 @@ public class CustomerServiceImpl implements CustomerService {
         clueFollowLogResp.setClueFollowTime(DateUtils.getDate());
         int addClueFollow = clueFollowLogMapper.addClueFollow(clueFollowLogResp);
         if (addClueFollow != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
+        CustomerRecord customerRecord = new CustomerRecord();
+        customerRecord.setRecordTitle("客户转换");
+        customerRecord.setRecordType("客户操作记录");
+        customerRecord.setRecordTime(DateUtils.getDate());
+        customerRecord.setRecordContent("客户添加，由线索【"+clue.getClueName()+
+                "】转换而来");
+        customerRecord.setCusId(customerReq.getCusId());
+        customerRecord.setEmpId(empByToken.getEmpId());
+        int addCustomerRecord = recordMapper.addCustomerRecord(customerRecord);
+        if (addCustomerRecord  != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }

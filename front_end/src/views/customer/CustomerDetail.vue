@@ -4,7 +4,7 @@
 @description:
 -->
 <template>
-  <el-container>
+  <el-container style="height: 100%">
     <el-main>
       <div class="window-box">
         <el-button type="primary" circle @click="openCustomerMore"

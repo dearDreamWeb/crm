@@ -761,14 +761,14 @@
         })
       },
 
-      getCLueDetail() {
+      getClueDetail() {
         clueHttp.getDetail(this.rowClueId).then(res => {
           this.clueDetail = res.data
         })
       },
       getClueDetailButton() {
         /*this.clueDetailDialog = true
-        this.getCLueDetail()*/
+        this.getClueDetail()*/
         let resolve = this.$router.resolve({
           path:'/clue_detail',
           query:{

@@ -281,7 +281,7 @@
           empName:'',
           nickName:'',
           email:'',
-          sex:'',
+          sex:1,
           phone:'',
           deptId:'',
           startDate:'',
@@ -306,7 +306,7 @@
           phone:'',
           passWord:'',
           remark:'',
-          deptIdList:[]
+          deptIdList:''
         },
         formRules:{
           empName:[
@@ -425,7 +425,7 @@
       },
       addHandleClose() {
         this.$refs.addFormRef.resetFields()
-        this.addForm.deptIdList = []
+        this.addForm.deptIdList = ''
         this.addEmpButtonLoading = false
       },
       deleteEmp(empId) {

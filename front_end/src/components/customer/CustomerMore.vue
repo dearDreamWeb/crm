@@ -9,21 +9,25 @@
       <span>售前</span>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-button type="text" icon="el-icon-star-on" @click="openSanYiDialog">三一客</el-button>
+          <el-button type="text" icon="el-icon-star-on"
+                     @click="openSanYiDialog">三一客</el-button>
         </el-col>
         <el-col :span="8">
-          <el-button type="text" icon="el-icon-coin">报价</el-button>
+          <el-button type="text" icon="el-icon-coin">报价（暂缓）</el-button>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="4">
-          <el-button type="text" icon="el-icon-office-building">销售机会</el-button>
+          <el-button type="text" icon="el-icon-office-building"
+                     @click="openSaleDialog">销售机会</el-button>
         </el-col>
         <el-col :span="4">
-          <el-button type="text" icon="el-icon-chat-dot-round">客户需求</el-button>
+          <el-button type="text" icon="el-icon-chat-dot-round"
+                     @click="openDemandDialog">客户需求</el-button>
         </el-col>
         <el-col :span="4">
-          <el-button type="text" icon="el-icon-s-claim">解决方案</el-button>
+          <el-button type="text" icon="el-icon-s-claim"
+                     @click="openSolutionDialog">解决方案</el-button>
         </el-col>
         <el-col :span="4">
           <el-button type="text" icon="el-icon-warning">竞争关系</el-button>
@@ -59,30 +63,48 @@
         </el-col>
       </el-row>
       <el-divider></el-divider>
-      <span>全部</span>
+      <span>全程</span>
       <el-row :gutter="20">
         <el-col :span="4">
           <el-button type="text" icon="el-icon-timer">待办任务</el-button>
         </el-col>
         <el-col :span="4">
-          <el-button type="text" icon="el-icon-bicycle">行动记录</el-button>
+          <el-button type="text" icon="el-icon-bicycle"
+                     @click="openFollowDialog">行动记录</el-button>
         </el-col>
         <el-col :span="4">
-          <el-button type="text" icon="el-icon-postcard">联系人</el-button>
+          <el-button type="text" icon="el-icon-postcard"
+                     @click="openContactsDialog">联系人</el-button>
+        </el-col>
+        <el-col :span="4">
+          <el-button type="text" icon="el-icon-potato-strips">纪念日</el-button>
         </el-col>
       </el-row>
     </el-dialog>
-    <el-dialog :visible.sync="sanYiDialog" width="30%"></el-dialog>
+    <customer-more-san-yi ref="customerMoreSanYiRef"></customer-more-san-yi>
+    <customer-more-sale ref="customerMoreSaleRef"></customer-more-sale>
+    <customer-more-demand ref="customerMoreDemandRef"></customer-more-demand>
+    <customer-more-solution ref="customerMoreSolutionRef"></customer-more-solution>
+    <customer-more-follow ref="customerMoreFollowRef"></customer-more-follow>
+    <customer-more-contacts ref="customerMoreContactsRef"></customer-more-contacts>
   </div>
 </template>
 
 <script>
+  import CustomerMoreSanYi from "./CustomerMoreSanYi";
+  import CustomerMoreSale from "./CustomerMoreSale";
+  import CustomerMoreDemand from "./CustomerMoreDemand";
+  import CustomerMoreSolution from "./CustomerMoreSolution";
+  import CustomerMoreFollow from "./CustomerMoreFollow";
+  import CustomerMoreContacts from "./CustomerMoreContacts";
   export default {
     name: "CustomerMore",
+    components: {
+      CustomerMoreContacts,
+      CustomerMoreFollow, CustomerMoreSolution, CustomerMoreDemand, CustomerMoreSale, CustomerMoreSanYi},
     data() {
       return {
         customerMoreDialog:false,
-        sanYiDialog:false
       }
     },
     methods:{
@@ -90,12 +112,38 @@
         this.customerMoreDialog = true
       },
       openSanYiDialog() {
-        this.sanYiDialog = true
+        this.$refs.customerMoreSanYiRef.openSanYiDialog()
+      },
+      openSaleDialog() {
+        this.$refs.customerMoreSaleRef.openAddDialog()
+      },
+      openDemandDialog() {
+        this.$refs.customerMoreDemandRef.openAddDialog()
+      },
+      openSolutionDialog() {
+        this.$refs.customerMoreSolutionRef.openAddDialog()
+      },
+      openFollowDialog() {
+        this.$refs.customerMoreFollowRef.openAddDialog()
+      },
+      openContactsDialog() {
+        this.$refs.customerMoreContactsRef.openAddDialog()
       }
     }
   }
 </script>
 
 <style scoped>
-
+  >>>.el-radio__input .el-radio__inner{
+    display: none;
+  }
+  .radio-box{
+    text-align: center;
+  }
+  >>>.sanDinDialogBox .el-dialog__body{
+    text-align: center;
+  }
+  >>>.sanDinDialogBox .el-dialog__body{
+    padding-top: 5px;
+  }
 </style>
