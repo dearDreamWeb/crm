@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.MaintMapper">
+    <resultMap id="MaintResult" type="com.example.entity.request.Maint">
+        <id property="maintId" column="maint_id"/>
+        <result property="maintrq" column="maint_time"/>
+        <result property="maintfzr" column="maint_fzrperson"/>
+        <result property="maintcz" column="maint_operation"/>
+        <result property="maintjl" column="maint_jlrecord"/>
+    </resultMap>
+    <select id="listMaint" resultMap="MaintResult" parameterType="com.example.entity.request.Maint">
+        select maint_id,maint_time,maint_fzrperson,maint_operation,maint_jlrecord
+        from maintenance
+        <if test="maintfzr != null and maintfzr != ''">
+            AND maint_fzrperson LIKE CONCAT('%',#{maintfzr},'%')
+        </if>
+        <if test="maintcz != null and maintcz != ''">
+            AND maint_operation LIKE CONCAT('%',#{maintcz},'%')
+        </if>
+        <if test="maintjl != null and maintjl != ''">
+            AND maint_jlrecord LIKE CONCAT('%',#{maintjl},'%')
+        </if>
+    </select>
+
+    <select id="getMaint" resultMap="MaintResult">
+        SELECT m.*
+        FROM maintenance m
+        WHERE m.maint_id = #{maintId}
+    </select>
+</mapper>
