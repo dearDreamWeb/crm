@@ -44,6 +44,11 @@
         <result property="empId" column="emp_id"/>
     </resultMap>
 
+    <!--回款记录-->
+    <select id="getszReco" resultMap="RecordResult">
+        SELECT * FROM sz_receivable_record WHERE reco_id = #{recoId}
+    </select>
+
     <!--回款计划和回款记录-->
     <select id="listPlanANDReco" resultMap="RecordResult">
         SELECT reco_id, reco_receivable, reco_caozuopeople, reco_time, reco_money, reco_liushui, record_plan, time_plan, money_plan,reco_createtime, plan_id
@@ -57,6 +62,7 @@
         insert into sz_receivable_record(reco_receivable, reco_caozuopeople, reco_time, reco_money, reco_liushui, record_plan, time_plan, money_plan, plan_id) VALUES
         (#{recoReceivable},#{recoCaozuopeople},#{recoTime},#{recoMoney},#{recoLiushui},#{recordPlan},#{timePlan},#{moneyPlan},#{planId})
     </insert>-->
+    <!--增-->
     <insert id="addPlanANDReco" parameterType="java.util.List">
         INSERT INTO sz_receivable_record(reco_receivable, reco_caozuopeople, reco_time, reco_money, reco_liushui,
          record_plan, time_plan, money_plan, plan_id)
@@ -65,9 +71,9 @@
         (#{item.recoReceivable},#{item.recoCaozuopeople},#{item.recoTime},#{item.recoMoney},#{item.recoLiushui},#{item.recordPlan},#{item.timePlan},#{item.moneyPlan},#{item.planId})
     </foreach>
     </insert>
-
-    <update id="editReco" parameterType="SzReceivableRecord">
-        update sz_receivable_record set reco_createtime = #{recoCreatetime}
+<!---->
+    <update id="editszReco" parameterType="RecordResult">
+        update sz_receivable_record set reco_receivable = 1
         <if test="recoTime !=null and recoTime != ''">
             ,reco_time = #{recoTime}
         </if>

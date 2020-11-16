@@ -81,6 +81,13 @@ public enum ResultEnum {
     ReceivablePlan_UPDATE_FAIL(40014,"计划回款更新失败"),
     ReceivablePlan_NOT_EXIST(40015,"计划回款不存在"),
 
+    //回款记录
+    ReceivableRecord_ADD_FAIL(40011,"计划回款添加失败"),
+    ReceivableRecord_EXIST(40012,"计划回款已存在"),
+    ReceivableRecord_DEL_FAIL(40013,"计划回款删除失败"),
+    ReceivableRecord_UPDATE_FAIL(40014,"计划回款更新失败"),
+    ReceivableRecord_NOT_EXIST(40015,"计划回款不存在"),
+
     CLUE_NOT_BE_EDIT(80033,"您不能修改此条线索"),
     CLUE_NOT_BE_DEL(80034,"您不能删除此条线索"),
     CLUE_NOT_BE_SHARE(80037,"您不能共享此条线索"),
