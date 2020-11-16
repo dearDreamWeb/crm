@@ -13,4 +13,6 @@ import java.util.List;
 //回款记录
 public interface SzReceivableRecordService {
     List<SzReceivableRecord> listPlanANDReco(Integer recoId);
+    ResultVo getszReco(Integer recoId);
+    ResultVo editszReco(SzReceivableRecord record);
 }

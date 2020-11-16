@@ -91,18 +91,18 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="总金额" size="medium" :disabled=false >
-             <el-input v-model="ordTotalmoney" width="217px"></el-input>
+              <el-input v-model="ordTotalmoney" width="217px"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-        <!--  <el-col :span="12">
-            <el-form-item label="回款日期">
-              <el-date-picker v-model="addForm.planTime" format="yyyy-MM-dd"
-                              value-format="yyyy-MM-dd" type="date"
-                              placeholder="请选择计划回款日期" size="medium" ></el-date-picker>
-            </el-form-item>
-          </el-col>-->
+          <!--  <el-col :span="12">
+              <el-form-item label="回款日期">
+                <el-date-picker v-model="addForm.planTime" format="yyyy-MM-dd"
+                                value-format="yyyy-MM-dd" type="date"
+                                placeholder="请选择计划回款日期" size="medium" ></el-date-picker>
+              </el-form-item>
+            </el-col>-->
           <el-col :span="12">
             <el-form-item label="分期(可选)" :data="xuanfenqi">
               <el-select v-model="addForm.planPeriod" placeholder="请选择期次"  @change="fenqi" clearable>
@@ -123,7 +123,7 @@
           </el-col>
         </el-row>
       </el-form>
-     <!-- 分期表格-->
+      <!-- 分期表格-->
       <el-table :data="addrecord" style="text-align: center;" size="small" align="center">
         <el-table-column label="期次" align="center" width="140px">
           <template slot-scope="s">
@@ -140,12 +140,15 @@
                    :loading="addPlanButtonLoading">确定</el-button>
       </span>
     </el-dialog>
-    <el-drawer title="回款记录"
+    <el-drawer
                :visible.sync="dialogTableVisible"
-               direction="btt" size="60%"  width="80%">
+               direction="btt" size="60%"  width="80%"
+               :with-header="false"
+               >
+      <div style="text-align: center;width: 100%">回款记录</div>
       <el-table :data="szrecord" :row-style="{height:'1px'}"
-                :cell-style="{padding:'1px 0'}">
-        <el-table-column prop="recoId" label="回款记录编号" width="150"></el-table-column>
+                :cell-style="{padding:'1px 0'}" height="300px">
+        <el-table-column prop="recoId" label="回款记录编号" width="150" height="100px"></el-table-column>
         <el-table-column  label="回款期次">
           <template slot-scope="recordPlans">
             第{{recordPlans.row.recordPlan}}期
@@ -158,40 +161,87 @@
           </template>
         </el-table-column>
         <el-table-column prop="recoTime" label="实际回款时间">
-         <!-- <i class="el-icon-time"></i>-->
+          <!-- <i class="el-icon-time"></i>-->
         </el-table-column>
-        <el-table-column prop="moneyPlan" label="需回款金额" width="200">
-
-        </el-table-column>
+        <el-table-column prop="moneyPlan" label="应回款金额" width="200"></el-table-column>
         <el-table-column prop="recoReceivable" label="状态" width="200">
+
           <template slot-scope="scope">
-            {{scope.row.recoReceivable | recoReceivableFormat}}
+            <el-tag  type="success">{{scope.row.recoReceivable | recoReceivableFormat}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column  label="操作">
-          <el-button type="text" @click="like_record">立即回款</el-button>
+           <template slot-scope="scope">
+            <el-button type="text" @click="like_record(scope.row.recoId)">立即回款</el-button>
+          </template>
+         <!-- <el-button type="text" @click="like_record">立即回款</el-button>-->
         </el-table-column>
       </el-table>
     </el-drawer>
     <!--立刻回款的弹窗-->
-    <el-dialog
-      :visible.sync="likeDialog"
-      @close="likeHandleClose">
-      <el-form ref="editFormRef" :model="likeForm" :rules="likeFormRules" label-width="60px">
-        <!--立刻回款的记录弹簧表格-->
-        <el-table :data="like" style="text-align: center;" size="small" align="center">
-          <el-table-column  label="回款期次">
-            <template slot-scope="recordPlans">
-              第{{recordPlans.row.recordPlan}}期
-            </template>
-          </el-table-column>
-          <el-table-column prop="timePlan" label="还款时间" align="center"></el-table-column>
-          <el-table-column prop="moneyPlan" label="还款金额" align="center"></el-table-column>
-        </el-table>
+    <el-dialog :visible.sync="likeDialog" @close="likeHandleClose" title="回款记录">
+      <el-form :model="likeForm"  label-width="100px" :rules="likeFormRules"
+               label-position="right" ref="likeFormRef">
+    <!--    <div >
+          <div>金 额 ：{{likeForm.moneyPlan}}</div>
+          <div>编 号 ：{{likeForm.recoId}}</div>
+          <input
+            clearable
+            oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+            v-model="likeForm.moneyPlan"
+            type="text"
+            style="width:200px;border: 0px;outline:none;font-size: 20px; border-bottom: 1px black solid;"
+          />
+        </div>-->
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="交易流水号" prop="ordDetail">
-              <el-input  size="medium" placeholder="交易流水号" clearable/>
+          <el-col :span="11">
+            <el-form-item label="回款记录编号" prop="recoId">
+              <el-input v-model="likeForm.recoId" size="medium " :disabled="true" style="border: 0px"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="应回款金额" prop="moneyPlan">
+              <el-input v-model="likeForm.moneyPlan" size="medium" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="预计回款时间" prop="timePlan">
+              <el-date-picker type="date" placeholder="选择日期"
+                              v-model="likeForm.timePlan" style="width: 100%;":disabled="true">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="回款期次" prop="recordPlan">
+              <el-input v-model="likeForm.recordPlan" size="medium " :disabled="true" style="border: 0px"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="已回款金额" >
+              <el-input size="medium " style="border: 0px" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="回款金额" prop="recoMoney">
+              <el-input v-model="likeForm.recoMoney" size="medium "/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="交易流水号" prop="recoLiushui">
+              <el-input v-model="likeForm.recoLiushui" size="medium "/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="回款时间" prop="recoTime">
+              <el-date-picker type="date" placeholder="选择日期"
+                              v-model="likeForm.recoTime" style="width: 100%;">
+              </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -203,26 +253,26 @@
       </span>
     </el-dialog>
     <!--修改-->
-    <el-dialog
-      title="修改计划"
-      :visible.sync="editDialog"
-      width="50%"
-      @close="editHandleClose">
-      <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="80px">
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="计划回款时间" prop="planTime">
-              <el-input v-model="editForm.planTime"></el-input>
-            </el-form-item>
-          </el-col >
-        </el-row>
-      </el-form>
-      <span slot="footer">
-        <el-button @click="editDialog = false">取消</el-button>
-        <el-button type="primary" @click="editPlanClick"
-                   :loading="editPlanButtonLoading">确定</el-button>
-      </span>
-    </el-dialog>
+    <!-- <el-dialog
+       title="修改计划"
+       :visible.sync="editDialog"
+       width="50%"
+       @close="editHandleClose">
+       <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="80px">
+         <el-row>
+           <el-col :span="8">
+             <el-form-item label="计划回款时间" prop="planTime">
+               <el-input v-model="editForm.planTime"></el-input>
+             </el-form-item>
+           </el-col >
+         </el-row>
+       </el-form>
+       <span slot="footer">
+         <el-button @click="editDialog = false">取消</el-button>
+         <el-button type="primary" @click="editPlanClick"
+                    :loading="editPlanButtonLoading">确定</el-button>
+       </span>
+     </el-dialog>-->
   </div>
 </template>
 
@@ -251,6 +301,7 @@
         FormRules:{},
         ordTotalmoney:0,
         rowplanId: 0,
+        rowrecoId: 0,
         tableLoading:false,
         buttonDisabled:true,
         /* advancedSearch:false,高级查询*/
@@ -264,6 +315,7 @@
         addrecord:[],
         xuanfenqi:[],
         szrecord:[],
+        record:[],
         pageNum:1,
         pageSize:5,
         total:1,
@@ -303,35 +355,35 @@
         let qc=[];
         let yumoney=0;
         var nowDate = new Date();//时间
-       for(var i=1; i<=it;i++){
-         console.log("it:",it)
+        for(var i=1; i<=it;i++){
+          console.log("it:",it)
           console.log("addForm.planPeriod分期",this.addForm.planPeriod)
-         var date = {
-           year: nowDate.getFullYear(),
-           month: nowDate.getMonth() + 1 +i,
-           day: nowDate.getDate(),
-         }
-         if (date.month>12){
-           date.year = date.year+1
-           date.month=date.month-12
-         }
-         //分期小于循环
-         if(this.addForm.planPeriod<=i){
-           yumoney= parseInt(this.ordTotalmoney - money);
-           recordplan=yumoney;
-           console.log("最后一期："+yumoney);
-           console.log("recordplan",recordplan)
-           this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year + '-' + ("0" + (date.month)).slice(-2) + '-' + date.day ,moneyPlan:recordplan})
-           return false;
-         }
-         money+=parseInt(this.ordTotalmoney/this.addForm.planPeriod);
-         console.log("金额：",money);
-         console.log("第",i,"次循环");
-         console.log("this.ordTotalmoney",this.ordTotalmoney);
+          var date = {
+            year: nowDate.getFullYear(),
+            month: nowDate.getMonth() + 1 +i,
+            day: nowDate.getDate(),
+          }
+          if (date.month>12){
+            date.year = date.year+1
+            date.month=date.month-12
+          }
+          //分期小于循环
+          if(this.addForm.planPeriod<=i){
+            yumoney= parseInt(this.ordTotalmoney - money);
+            recordplan=yumoney;
+            console.log("最后一期："+yumoney);
+            console.log("recordplan",recordplan)
+            this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year + '-' + ("0" + (date.month)).slice(-2) + '-' + date.day ,moneyPlan:recordplan})
+            return false;
+          }
+          money+=parseInt(this.ordTotalmoney/this.addForm.planPeriod);
+          console.log("金额：",money);
+          console.log("第",i,"次循环");
+          console.log("this.ordTotalmoney",this.ordTotalmoney);
           recordplan=parseInt(this.ordTotalmoney/this.addForm.planPeriod);
-         qici++;
-         qc.push(qici);
-         this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year+ '-'  + ("0" + (date.month)).slice(-2) + '-'  + date.day , moneyPlan:recordplan})
+          qici++;
+          qc.push(qici);
+          this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year+ '-'  + ("0" + (date.month)).slice(-2) + '-'  + date.day , moneyPlan:recordplan})
         }
       },
       addPlanClick(){
@@ -377,7 +429,8 @@
         this.$refs.editFormRef.resetFields()
       },
       likeHandleClose(){
-
+        this.$refs.likeFormRef.resetFields()
+        this.like_recordButtonLoading=false
       },
       addHandleClose(){
         this.$refs.addFormRef.resetFields()
@@ -415,9 +468,28 @@
           console.log("this.editForm.empName:",this.editForm)*/
         })
       },
+
+      /*修改回款记录*/
       like_recordClick(){
         this.like_recordButtonLoading=true
-
+        this.likeForm.recoId=this.recoId
+        console.log(this.likeForm)
+        planHttp.editrecord(this.likeForm).then(res=>{
+          console.log("11111",this.likeForm);
+/*          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.initList()
+            this.editOrderButtonLoading = false
+            this.editDialog = false
+          }else {
+            this.$message({
+              message:res.message,
+              type:'error'
+            })
+            this.editOrderButtonLoading = false
+            window.console.log(this.editForm)
+          }*/
+        })
       },
       editPlanClick(){
         this.editPlanButtonLoading=true
@@ -432,10 +504,21 @@
           this.szrecord=res
         })
       },
-      like_record(){
-        this.likeDialog=true
-       /* alert("点击啦！")*/
+      like_record(val){
+        this.likeDialog=true;
+        /*this.getRecord()*/
+        this.likeDialog = true;
+        planHttp.getrecord(val).then(res=>{
+          this.likeForm=res.data
+          console.log(this.likeForm)
+        })
       },
+/*      getRecord() {
+        planHttp.getrecord(this.rowrecoId).then(res=>{
+          this.likeDialog=true;
+          this.likeForm=res.data
+        })
+      },*/
       handleCurrentChange(pageIndex) {
         this.pageNum = pageIndex
         this.pageSize = this.pageSize

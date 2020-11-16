@@ -16,5 +16,7 @@ import java.util.List;
 @Repository
 public interface SzReceivableRecordMapper {
     List<SzReceivableRecord> listPlanANDReco(Integer recoId);
-     void addPlanANDReco(List<SzReceivableRecord> list);
+    void addPlanANDReco(List<SzReceivableRecord> list);
+    SzReceivableRecord getszReco(Integer recoId);//单条
+    int editszReco(SzReceivableRecord szrecord);//改
 }
