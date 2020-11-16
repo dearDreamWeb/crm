@@ -24,7 +24,7 @@
         </el-col>
       </el-row>
 
-      <transition name="el-zoom-in-top">
+      <transition name="el-zoom-in:top">
         <el-card v-show="advancedSearch" class="advanced_search" style="margin-top: 10px">
           <el-form :model="searchForm" size="mini" ref="searchFormRef"
                    label-position="right" label-width="80px">
@@ -97,7 +97,7 @@
               </el-col>
             </el-row>
             <el-row :gutter="20">
-              <el-col :span="8">
+              <el-col :span="6">
                 <el-form-item label="结款方式" prop="settlement">
                   <el-select v-model="searchForm.settlement" size="mini" placeholder="请选择" clearable>
                     <el-option v-for="item in cusSettlementList" :key="item.dictId"
@@ -105,7 +105,7 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="6">
                 <el-form-item label="负责人" prop="empId">
                   <el-select v-model="searchForm.empId" clearable size="mini">
                     <el-option v-for="item in cusEmpList" :key="item.empId"
@@ -113,7 +113,15 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="7">
+                <el-form-item label="三一节点" prop="sanyGuest">
+                  <el-select v-model="searchForm.sanyGuest" clearable size="mini">
+                    <el-option v-for="item in sanyGuestList" :key="item.label"
+                               :label="item.value" :value="item.value"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
                 <el-form-item>
                   <el-button size="mini" icon="el-icon-zoom-out"
                              @click="closeAdvancedSearch"></el-button>
@@ -157,6 +165,7 @@
 </template>
 
 <script>
+  import {sanyGuestData} from '../../common/data/customer_data'
   import {customerHttp} from "../../network/pre_sale/customer";
   import {creditHttp} from "../../network/system/syscredit";
   import {dictHttp} from "../../network/system/dict";
@@ -166,6 +175,7 @@
     name: "Customer",
     data() {
       return {
+        sanyGuestList:sanyGuestData,
         cusLifeCycleList:[],
         cusEmpList:[],
         cusSettlementList:[],
@@ -175,6 +185,7 @@
         searchForm:{
           abbreviation:'',
           lifeCycle:'',
+          sanyGuest:'',
           creditId:'',
           cusDictSource:'',
           cusDictStage:'',

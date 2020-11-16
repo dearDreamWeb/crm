@@ -58,6 +58,7 @@ export const customerHttp = {
       data:{
         'abbreviation':customer.abbreviation,
         'lifeCycle':customer.lifeCycle,
+        'sanyGuest':customer.sanyGuest,
         'creditId':customer.creditId,
         'cusDictSource':customer.cusDictSource,
         'cusDictStage':customer.cusDictStage,

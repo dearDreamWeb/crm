@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.GradingMapper">
+    <resultMap id="GradingResult" type="com.example.entity.Grading">
+        <id column="grading_id" property="gradingId"/>
+        <result column="grading_icon" property="gradingIcon"/>
+        <result column="grading_name" property="gradingName"/>
+        <result column="grading_time" property="gradingTime"/>
+        <result column="cus_id" property="cusId"/>
+        <result column="grading_emp_id" property="gradingEmpId"/>
+    </resultMap>
+
+    <insert id="addGrading" parameterType="com.example.entity.Grading">
+        INSERT INTO grading
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gradingIcon != null and gradingIcon != ''">
+                grading_icon,
+            </if>
+            <if test="gradingName != null and gradingName != ''">
+                grading_name,
+            </if>
+            <if test="gradingTime != null">
+                grading_time,
+            </if>
+            <if test="cusId != null">
+                cus_id,
+            </if>
+            <if test="gradingEmpId != null">
+                grading_emp_id,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffixOverrides="," suffix=")">
+            <if test="gradingIcon != null and gradingIcon != ''">
+                #{gradingIcon},
+            </if>
+            <if test="gradingName != null and gradingName != ''">
+                #{gradingName},
+            </if>
+            <if test="gradingTime != null">
+                #{gradingTime},
+            </if>
+            <if test="cusId != null">
+                #{cusId}
+            </if>
+            <if test="gradingEmpId != null">
+                #{gradingEmpId}
+            </if>
+        </trim>
+    </insert>
+
+    <select id="listGrading" resultMap="GradingResult">
+        SELECT grading_id,grading_icon,grading_name,grading_time,cus_id,grading_emp_id
+        <where>
+            <if test="gradingIcon != null and gradingIcon != ''">
+                AND grading_icon = #{gradingIcon}
+            </if>
+            <if test="gradingName != null and gradingName != ''">
+                AND grading_name = #{gradingName}
+            </if>
+            <if test="cusId != null">
+                AND cus_id = #{cusId}
+            </if>
+            <if test="gradingEmpId != null">
+                AND grading_emp_id = #{gradingEmpId}
+            </if>
+        </where>
+    </select>
+</mapper>

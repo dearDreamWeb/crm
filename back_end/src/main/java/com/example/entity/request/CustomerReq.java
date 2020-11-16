@@ -18,6 +18,7 @@ public class CustomerReq {
     private Integer cusId;
     private String cusName;
     private Integer lifeCycle;
+    private String sanyGuest;
     private Date firstSigningTime;
     private String abbreviation;
     private Integer creditId;

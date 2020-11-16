@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.QualitativeMapper">
+    <resultMap id="QualitatvieResult" type="com.example.entity.Qualitative">
+        <id column="qualitative_id" property="qualitativeId"/>
+        <result column="qualitative_icon" property="qualitativeIcon"/>
+        <result column="qualitative_name" property="qualitativeName"/>
+        <result column="qualitative_time" property="qualitativeTime"/>
+        <result column="cus_id" property="cusId"/>
+        <result column="qualitative_emp_id" property="qualitativeEmpId"/>
+    </resultMap>
+
+    <insert id="addQualitative" parameterType="com.example.entity.Qualitative">
+        INSERT INTO qualitative
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="qualitativeIcon != null and qualitativeIcon != ''">
+                qualitative_icon,
+            </if>
+            <if test="qualitativeName != null and qualitativeName != ''">
+                qualitative_name,
+            </if>
+            <if test="qualitativeTime != null">
+                qualitative_time,
+            </if>
+            <if test="cusId != null">
+                cus_id,
+            </if>
+            <if test="qualitativeEmpId != null">
+                qualitative_emp_id,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="qualitativeIcon != null and qualitativeIcon != ''">
+                #{qualitativeIcon},
+            </if>
+            <if test="qualitativeName != null and qualitativeName != ''">
+                #{qualitativeName},
+            </if>
+            <if test="qualitativeTime != null">
+                #{qualitativeTime}
+            </if>
+            <if test="cusId != null">
+                #{cusId},
+            </if>
+            <if test="qualitativeEmpId != null">
+                #{qualitativeEmpId},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="listQualitative" resultMap="QualitativeResult">
+        SELECT qualitative_id,qualitative_icon,qualitative_name,qualitative_time,cus_id,qualitative_emp_id
+        FROM qualitative
+        <where>
+            <if test="qualitativeIcon != null and qualitativeIcon != ''">
+                AND qualitative_icon = #{qualitativeIcon}
+            </if>
+            <if test="qualitativeName != null and qualitativeName != ''">
+                AND qualitative_name = #{qualitativeName}
+            </if>
+            <if test="cusId != null">
+                AND cus_id = #{cusId}
+            </if>
+            <if test="qualitativeEmpId != null">
+                AND qualitative_emp_id = #{qualitativeEmpId}
+            </if>
+        </where>
+    </select>
+</mapper>
