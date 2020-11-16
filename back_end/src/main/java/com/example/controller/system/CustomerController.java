@@ -28,8 +28,10 @@ public class CustomerController {
 
     @SysLog("客户添加")
     @PostMapping("/add")
-    public ResultVo addCustomer(@RequestBody CustomerReq customerReq) {
-        return customerService.addCustomer(customerReq);
+    public ResultVo addCustomer(@RequestBody CustomerReq customerReq,
+                                HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return customerService.addCustomer(customerReq,token);
     }
 
     @SysLog("客户删除")
