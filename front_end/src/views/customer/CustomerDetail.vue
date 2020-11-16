@@ -395,6 +395,16 @@
       }
     },
     methods:{
+      sanYiQualitativeRadioChange() {
+        this.$refs.customerMoreRef.sanYiQualitativeRadioChange()
+      },
+      sanYiGradingRadioChange() {
+        this.$refs.customerMoreRef.sanYiGradingRadioChange()
+      },
+      sanYiRationRadioChange() {
+        this.$refs.customerMoreRef.sanYiRationRadioChange()
+      },
+
       handleClick(tab, event) {
 
       },

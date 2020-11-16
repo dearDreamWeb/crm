@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.SanyGuestMapper">
+    <resultMap id="SanyGuestResult" type="com.example.entity.SanyGuest">
+        <id column="sany_guest_id" property="sanyGuestId"/>
+        <result column="sany_guest_name" property="sanyGuestName"/>
+        <result column="sany_guest_time" property="sanyGuestTime"/>
+        <result column="cus_id" property="cusId"/>
+        <result column="sany_guest_emp_id" property="sanyGuestEmpId"/>
+    </resultMap>
+
+    <insert id="addSanyGuest" parameterType="com.example.entity.SanyGuest">
+        INSERT INTO sany_guest
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sanyGuestName != null and sanyGuest != ''">
+                sany_guest_name,
+            </if>
+            <if test="sanyGuestTime != null">
+                sany_guest_time,
+            </if>
+            <if test="cusId != null">
+                cus_id,
+            </if>
+            <if test="sanyGuestEmpId != null">
+                sany_guest_emp_id,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffixOverrides="," suffix=")">
+            <if test="sanyGuestName != null">
+                #{sanyGuestName},
+            </if>
+            <if test="sanyGuestTime != null">
+                #{sanyGuestTime},
+            </if>
+            <if test="cusId != null">
+                #{cusId},
+            </if>
+            <if test="sanyGuestEmpId != null">
+                #{sanyGuestEmpId},
+            </if>
+        </trim>
+    </insert>
+</mapper>

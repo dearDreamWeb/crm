@@ -8,6 +8,8 @@ import com.example.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author: pengjia
  * @date: 2020/11/2
@@ -21,8 +23,10 @@ public class SaleController {
 
     @SysLog("添加销售机会")
     @PostMapping("/add")
-    public ResultVo addSale(@RequestBody SaleReq saleReq) {
-        return saleService.addSale(saleReq);
+    public ResultVo addSale(@RequestBody SaleReq saleReq,
+                            HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return saleService.addSale(saleReq,token);
     }
 
     @SysLog("删除销售机会")

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.model.mapper.QualitativeMapper">
-    <resultMap id="QualitatvieResult" type="com.example.entity.Qualitative">
+    <resultMap id="QualitativeResult" type="com.example.entity.Qualitative">
         <id column="qualitative_id" property="qualitativeId"/>
         <result column="qualitative_icon" property="qualitativeIcon"/>
         <result column="qualitative_name" property="qualitativeName"/>

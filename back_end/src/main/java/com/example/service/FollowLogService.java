@@ -9,7 +9,7 @@ import com.example.entity.request.FollowLogReq;
  * @description:
  */
 public interface FollowLogService {
-    ResultVo addFollow(FollowLogReq followLogReq);
+    ResultVo addFollow(FollowLogReq followLogReq,String token);
     ResultVo delFollow(FollowLogReq followLogReq);
     ResultVo editFollow(FollowLogReq followLogReq);
     ResultVo getFollow(Integer followId);

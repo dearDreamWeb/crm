@@ -7,6 +7,8 @@ import com.example.service.FollowLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author: pengjia
  * @date: 2020/10/26
@@ -20,8 +22,10 @@ public class FollowLogController {
 
     @SysLog("添加跟进日志")
     @PostMapping("/add")
-    public ResultVo addFollow(@RequestBody FollowLogReq followLogReq) {
-        return logService.addFollow(followLogReq);
+    public ResultVo addFollow(@RequestBody FollowLogReq followLogReq,
+                              HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return logService.addFollow(followLogReq,token);
     }
 
     @SysLog("删除跟进日志")

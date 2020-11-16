@@ -10,7 +10,7 @@ import com.example.entity.request.SaleReq;
  * @description:
  */
 public interface SaleService {
-    ResultVo addSale(SaleReq saleReq);
+    ResultVo addSale(SaleReq saleReq,String token);
     ResultVo delSale(SaleReq saleReq);
     ResultVo editSale(SaleReq saleReq);
     ResultVo getSale(SaleReq saleReq);

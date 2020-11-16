@@ -2,10 +2,14 @@ package com.example.service.impl;
 
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
+import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
+import com.example.entity.SanyGuest;
 import com.example.entity.request.FollowLogReq;
+import com.example.entity.response.CustomerResp;
+import com.example.entity.response.EmpResp;
 import com.example.entity.response.FollowLogResp;
-import com.example.model.mapper.FollowLogMapper;
+import com.example.model.mapper.*;
 import com.example.service.FollowLogService;
 import com.example.util.CheckUtils;
 import com.example.util.DateUtils;
@@ -29,12 +33,21 @@ public class FollowLogServiceImpl implements FollowLogService {
     @Autowired
     private FollowLogMapper logMapper;
 
+    @Autowired
+    private CustomerMapper customerMapper;
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Autowired
+    private SanyGuestMapper sanyGuestMapper;
+
+    @Autowired
+    private CustomerRecordMapper recordMapper;
+
     @Override
-    public ResultVo addFollow(FollowLogReq followLogReq) {
+    public ResultVo addFollow(FollowLogReq followLogReq,String token) {
         CheckUtils.validate(followLogReq);
-        if (followLogReq.getFollowPid() == null) {
-            followLogReq.setFollowPid(0);
-        }
         if (followLogReq.getFollowPid() == null) {
             followLogReq.setFollowPid(0);
         }
@@ -43,6 +56,35 @@ public class FollowLogServiceImpl implements FollowLogService {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
+        Integer cusId = followLogReq.getCusId();
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        CustomerResp customer = customerMapper.getCustomer(cusId);
+
+        SanyGuest sanyGuest = new SanyGuest();
+        sanyGuest.setSanyGuestName("识别接触");
+        sanyGuest.setSanyGuestTime(DateUtils.getDate());
+        sanyGuest.setCusId(cusId);
+        sanyGuest.setSanyGuestEmpId(empByToken.getEmpId());
+        int addSanyGuest = sanyGuestMapper.addSanyGuest(sanyGuest);
+        if (addSanyGuest != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
+        CustomerRecord customerRecord = new CustomerRecord();
+        customerRecord.setRecordTitle("三一客推进");
+        customerRecord.setRecordType("三一客");
+        customerRecord.setRecordTime(DateUtils.getDate());
+        customerRecord.setCusId(cusId);
+        customerRecord.setRecordContent("员工"+empByToken.getEmpName()+
+                "对【"+customer.getCusName()+"】的三一节点推进");
+        customerRecord.setEmpId(empByToken.getEmpId());
+        int addCustomerRecord = recordMapper.addCustomerRecord(customerRecord);
+        if (addCustomerRecord != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
         return ResultUtils.response(addFollow);
     }
 

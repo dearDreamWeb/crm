@@ -2,7 +2,9 @@ package com.example.service.impl;
 
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
+import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
+import com.example.entity.SanyGuest;
 import com.example.entity.request.DemandReq;
 import com.example.entity.response.*;
 import com.example.model.mapper.*;
@@ -42,14 +44,50 @@ public class DemandServiceImpl implements DemandService {
     @Autowired
     private CustomerMapper customerMapper;
 
+    @Autowired
+    private CustomerRecordMapper recordMapper;
+
+    @Autowired
+    private SanyGuestMapper sanyGuestMapper;
+
     @Override
-    public ResultVo addDemand(DemandReq demandReq) {
+    public ResultVo addDemand(DemandReq demandReq, String token) {
         CheckUtils.validate(demandReq);
         int addDemand = demandMapper.addDemand(demandReq);
         if (addDemand != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
+
+        Integer cusId = demandReq.getCusId();
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        CustomerResp customer = customerMapper.getCustomer(cusId);
+
+        CustomerRecord customerRecord = new CustomerRecord();
+        customerRecord.setRecordTitle("新增客户需求");
+        customerRecord.setRecordType("三一客");
+        customerRecord.setRecordTime(DateUtils.getDate());
+        customerRecord.setCusId(cusId);
+        customerRecord.setEmpId(empByToken.getEmpId());
+        customerRecord.setRecordContent("员工【"+empByToken.getEmpName()
+                +"】对客户【"+customer.getCusName()+"】的三一节点推进");
+        int addCustomerRecord = recordMapper.addCustomerRecord(customerRecord);
+        if (addCustomerRecord != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
+        SanyGuest sanyGuest = new SanyGuest();
+        sanyGuest.setSanyGuestName("激发需求");
+        sanyGuest.setSanyGuestTime(DateUtils.getDate());
+        sanyGuest.setCusId(cusId);
+        sanyGuest.setSanyGuestEmpId(empByToken.getEmpId());
+        int addSanyGuest = sanyGuestMapper.addSanyGuest(sanyGuest);
+        if (addSanyGuest != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
         return ResultUtils.response(addDemand);
     }
 

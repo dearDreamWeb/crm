@@ -7,6 +7,8 @@ import com.example.service.DemandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author: pengjia
  * @date: 2020/11/2
@@ -20,8 +22,10 @@ public class DemandController {
 
     @SysLog("新增需求")
     @PostMapping("/add")
-    public ResultVo addDemand(@RequestBody DemandReq demandReq) {
-        return demandService.addDemand(demandReq);
+    public ResultVo addDemand(@RequestBody DemandReq demandReq,
+                              HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return demandService.addDemand(demandReq,token);
     }
 
     @SysLog("删除需求")

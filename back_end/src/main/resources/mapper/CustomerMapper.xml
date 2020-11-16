@@ -6,7 +6,7 @@
         <id column="cus_id" property="cusId"/>
         <result column="cus_name" property="cusName"/>
         <result column="life_cycle" property="lifeCycle"/>
-        <result column="sany_guest" property="sanyGuest"/>
+        <result column="sany_guest_id" property="sanyGuestId"/>
         <result column="first_signing_time" property="firstSigningTime"/>
         <result column="abbreviation" property="abbreviation"/>
         <result column="credit_id" property="creditId"/>
@@ -32,7 +32,7 @@
         <id column="cus_id" property="cusId"/>
         <result column="cus_name" property="cusName"/>
         <result column="life_cycle" property="lifeCycle"/>
-        <result column="sany_guest" property="sanyGuest"/>
+        <result column="sany_guest_id" property="sanyGuestId"/>
         <result column="first_signing_time" property="firstSigningTime"/>
         <result column="abbreviation" property="abbreviation"/>
         <result column="credit_id" property="creditId"/>
@@ -76,10 +76,10 @@
         <selectKey keyColumn="cus_id" keyProperty="cusId" resultType="Integer" order="AFTER">
             select last_insert_id();
         </selectKey>
-        INSERT INTO customer(cus_name,life_cycle,sany_guest,first_signing_time,abbreviation,credit_id,settlement,
+        INSERT INTO customer(cus_name,life_cycle,sany_guest_id,first_signing_time,abbreviation,credit_id,settlement,
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id) VALUES
-        (#{cusName},#{lifeCycle},#{sanyGuest},#{firstSigningTime},#{abbreviation},#{creditId},#{settlement},#{companyAccount},#{province},
+        (#{cusName},#{lifeCycle},#{sanyGuestId},#{firstSigningTime},#{abbreviation},#{creditId},#{settlement},#{companyAccount},#{province},
         #{city},#{detailAddress},#{cusRemark},#{cusDictSource},#{cusDictStage},#{qualitativeId},#{gradingId},#{rationId},#{empId})
     </insert>
 
@@ -95,8 +95,8 @@
         <if test="lifeCycle != null">
             ,life_cycle = #{lifeCycle}
         </if>
-        <if test="sanyGuest != null">
-            ,sany_guest = #{sanyGuest}
+        <if test="sanyGuestId != null">
+            ,sany_guest_id = #{sanyGuestId}
         </if>
         <if test="firstSigningTime != null and firstSigningTime != ''">
             ,first_signing_time = #{firstSigningTime}
@@ -147,7 +147,7 @@
     </update>
 
     <select id="getCustomer" resultMap="CustomerResult">
-        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest,
+        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest_id,
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
@@ -155,7 +155,7 @@
     </select>
 
     <select id="listCustomer" resultMap="CustomerResult">
-        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest,
+        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest_id,
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
@@ -166,8 +166,8 @@
             <if test="lifeCycle != null">
                 AND life_cycle = #{lifeCycle}
             </if>
-            <if test="sanyGuest != null">
-                AND sany_guest = #{sanyGuest}
+            <if test="sanyGuestId != null">
+                AND sany_guest_id = #{sanyGuestId}
             </if>
             <if test="abbreviation != null and abbreviation != ''">
                 AND abbreviation LIKE CONCAT('%',#{abbreviation},'%')
@@ -216,7 +216,7 @@
     </insert>
 
     <select id="getCustomerByName" resultMap="CustomerResult">
-        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest,
+        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest_id,
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
@@ -224,14 +224,14 @@
     </select>
 
     <select id="listAll" resultMap="CustomerResult">
-        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest,
+        SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest_id,
             company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
     </select>
 
     <select id="listCustomerByEmpId" resultMap="CustomerResult">
-        SELECT cu.cus_id,cu.cus_name,cu.life_cycle,cu.first_signing_time,cu.abbreviation,cu.credit_id,cu.settlement,cu.sany_guest,
+        SELECT cu.cus_id,cu.cus_name,cu.life_cycle,cu.first_signing_time,cu.abbreviation,cu.credit_id,cu.settlement,cu.sany_guest_id,
             cu.company_account,cu.province,cu.city,cu.detail_address,cu.cus_remark,cu.cus_dict_source,cu.cus_dict_stage,
             cu.qualitative_id,cu.grading_id,cu.ration_id,cu.emp_id,cu.create_time
         FROM customer cu
@@ -243,8 +243,8 @@
             <if test="lifeCycle != null">
                 AND cu.life_cycle = #{lifeCycle}
             </if>
-            <if test="sanyGuest != null">
-                AND cu.sany_guest = #{sanyGuest}
+            <if test="sanyGuestId != null">
+                AND cu.sany_guest_id = #{sanyGuestId}
             </if>
             <if test="abbreviation != null and abbreviation != ''">
                 AND cu.abbreviation LIKE CONCAT('%',#{abbreviation},'%')

@@ -18,7 +18,7 @@ public class CustomerResp {
     private Integer cusId;
     private String cusName;
     private Integer lifeCycle;
-    private String sanyGuest;
+    private Integer sanyGuestId;
     private Date firstSigningTime;
     private String abbreviation;
     private Integer creditId;

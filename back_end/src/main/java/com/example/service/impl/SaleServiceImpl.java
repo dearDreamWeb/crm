@@ -2,8 +2,10 @@ package com.example.service.impl;
 
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
+import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
 import com.example.entity.SaleDetailDemand;
+import com.example.entity.SanyGuest;
 import com.example.entity.request.DemandReq;
 import com.example.entity.request.SaleDetailReq;
 import com.example.entity.request.SaleReq;
@@ -47,14 +49,35 @@ public class SaleServiceImpl implements SaleService {
     @Autowired
     private DemandMapper demandMapper;
 
+    @Autowired
+    private CustomerRecordMapper recordMapper;
+
     @Override
-    public ResultVo addSale(SaleReq saleReq) {
+    public ResultVo addSale(SaleReq saleReq,String token) {
         CheckUtils.validate(saleReq);
         int addSale = saleMapper.addSale(saleReq);
         if (addSale != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
+
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        CustomerResp customer = customerMapper.getCustomer(saleReq.getCusId());
+
+        CustomerRecord customerRecord = new CustomerRecord();
+        customerRecord.setRecordTitle("添加销售机会");
+        customerRecord.setRecordContent("员工【"+empByToken.getEmpName()+"】对【"+
+                customer.getCusName()+"】添加销售机会");
+        customerRecord.setEmpId(empByToken.getEmpId());
+        customerRecord.setCusId(saleReq.getCusId());
+        customerRecord.setRecordType("销售机会");
+        customerRecord.setRecordTime(DateUtils.getDate());
+        int addCustomerRecord = recordMapper.addCustomerRecord(customerRecord);
+        if (addCustomerRecord != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
         return ResultUtils.response(addSale);
     }
 

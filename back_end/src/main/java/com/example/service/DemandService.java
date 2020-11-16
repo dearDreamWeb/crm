@@ -9,7 +9,7 @@ import com.example.entity.request.DemandReq;
  * @description:
  */
 public interface DemandService {
-    ResultVo addDemand(DemandReq demandReq);
+    ResultVo addDemand(DemandReq demandReq,String token);
     ResultVo delDemand(DemandReq demandReq);
     ResultVo editDemand(DemandReq demandReq);
     ResultVo getDemand(DemandReq demandReq);

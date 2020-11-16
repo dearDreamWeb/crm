@@ -9,6 +9,7 @@
         <result column="ration_time" property="rationTime"/>
         <result column="expect_signing_time" property="expectSigningTime"/>
         <result column="expect_signing_price" property="expectSigningPrice"/>
+        <result column="expect_signing_number" property="expectSigningNumber"/>
         <result column="cus_id" property="cusId"/>
         <result column="ration_emp_id" property="rationEmpId"/>
     </resultMap>
@@ -30,6 +31,9 @@
             </if>
             <if test="expectSigningPrice != null">
                 expect_signing_price,
+            </if>
+            <if test="expectSigningNumber != null">
+                expect_signing_number,
             </if>
             <if test="cusId != null">
                 cus_id,
@@ -54,6 +58,9 @@
             <if test="expectSigningPrice != null">
                 #{expectSigningPrice},
             </if>
+            <if test="expectSigningNumber != null">
+                #{expectSigningNumber},
+            </if>
             <if test="cusId != null">
                 #{cusId},
             </if>
@@ -64,7 +71,7 @@
     </insert>
 
     <select id="listRation" resultMap="RationResult">
-        SELECT ration_id,ration_icon,ration_name,ration_time,
+        SELECT ration_id,ration_icon,ration_name,ration_time,expect_signing_number,
         expect_sigining_time,expect_signing_price,cus_id,ration_emp_id
         <where>
             <if test="rationIcon != null and rationIcon != ''">

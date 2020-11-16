@@ -100,14 +100,26 @@
   export default {
     name: "CustomerMore",
     components: {
-      CustomerMoreContacts,
-      CustomerMoreFollow, CustomerMoreSolution, CustomerMoreDemand, CustomerMoreSale, CustomerMoreSanYi},
+      CustomerMoreContacts,CustomerMoreSanYi,
+      CustomerMoreFollow, CustomerMoreSolution,
+      CustomerMoreDemand, CustomerMoreSale,
+    },
     data() {
       return {
         customerMoreDialog:false,
       }
     },
     methods:{
+      sanYiQualitativeRadioChange() {
+        this.customerMoreSanYiRef.qualitativeRadioChange()
+      },
+      sanYiGradingRadioChange() {
+        this.customerMoreSanYiRef.gradingRadioChange()
+      },
+      sanYiRationRadioChange() {
+        this.customerMoreSanYiRef.rationRadioChange()
+      },
+
       openCustomerMore() {
         this.customerMoreDialog = true
       },

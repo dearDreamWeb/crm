@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * @author: pengjia
  * @date: 2020/11/15
- * @description:
+ * @description: 对客户的操作记录
  */
 @Data
 @AllArgsConstructor
@@ -22,4 +22,7 @@ public class CustomerRecord {
     private String recordContent;
     private Integer cusId;
     private Integer empId;
+    /*
+    * 客户记录类型：三一客，任务行动，销售机会，订单，回款，计划回款，
+    */
 }

@@ -22,6 +22,7 @@ public class Ration {
     private Date rationTime;
     private Date expectSigningTime;
     private BigDecimal expectSigningPrice;
+    private Integer expectSigningNumber;
     private Integer cusId;
     private Integer rationEmpId;
 }
