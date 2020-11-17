@@ -13,5 +13,7 @@ import java.util.List;
 @Repository
 public interface GradingMapper {
     int addGrading(Grading grading);
+    int editGrading(Grading grading);
     List<Grading> listGrading(Grading grading);
+    Grading getGradingByCusId(Integer cusId);
 }

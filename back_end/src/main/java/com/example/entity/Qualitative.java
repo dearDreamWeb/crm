@@ -20,5 +20,5 @@ public class Qualitative {
     private String qualitativeName;
     private Date qualitativeTime;
     private Integer cusId;
-    private Integer qualitationEmpId;
+    private Integer qualitativeEmpId;
 }

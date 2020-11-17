@@ -13,5 +13,7 @@ import java.util.List;
 @Repository
 public interface QualitativeMapper {
     int addQualitative(Qualitative qualitative);
+    int editQualitative(Qualitative qualitative);
     List<Qualitative> listQualitative(Qualitative qualitative);
+    Qualitative getQualitativeByCusId(Integer cusId);
 }

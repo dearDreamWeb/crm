@@ -20,7 +20,7 @@ public class Ration {
     private String rationIcon;
     private String rationName;
     private Date rationTime;
-    private Date expectSigningTime;
+    private String expectSigningTime;
     private BigDecimal expectSigningPrice;
     private Integer expectSigningNumber;
     private Integer cusId;

@@ -11,8 +11,8 @@
                    icon="el-icon-circle-plus-outline"></el-button>
       </div>
       <div class="header-box">
-        <p class="customer_name">客户名称</p>
-        <p>创建：更新：隶属：</p>
+        <p class="customer_name">{{this.customer.cusName}}</p>
+        <p>创建：{{this.customer.createTime}} 更新：{{this.customer.updateTime}}隶属：</p>
       </div>
       <el-row :gutter="20">
         <el-col :span="8">
@@ -355,13 +355,14 @@
           </el-row>
         </el-col>
       </el-row>
-      <customer-more ref="customerMoreRef"></customer-more>
+      <customer-more ref="customerMoreRef" :msg="customerId"></customer-more>
     </el-main>
   </el-container>
 </template>
 
 <script>
   import CustomerMore from "../../components/customer/CustomerMore";
+  import {customerHttp} from "../../network/pre_sale/customer";
   export default {
     name: "CustomerDetail",
     components:{
@@ -369,6 +370,7 @@
     },
     data() {
       return {
+
         customerId:'',
         customer:{},
         activeName: '1',
@@ -395,6 +397,7 @@
       }
     },
     methods:{
+
       sanYiQualitativeRadioChange() {
         this.$refs.customerMoreRef.sanYiQualitativeRadioChange()
       },
@@ -410,10 +413,17 @@
       },
       openCustomerMore() {
         this.$refs.customerMoreRef.openCustomerMore()
+      },
+      initCustomerDetail() {
+        customerHttp.getCusById(this.customerId).then(res => {
+          this.customer = res.data
+        })
       }
+
     },
     created() {
       this.customerId = this.$urlUtil.getQueryVariable("customerId")
+      this.initCustomerDetail()
     }
   }
 </script>

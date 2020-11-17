@@ -207,11 +207,11 @@
       }
     },
     methods:{
-      manipulateCustomerClick() {
+      manipulateCustomerClick(val) {
         let resolve = this.$router.resolve({
           path:'/customer_detail',
           query:{
-            customerId:this.rowCustomerId
+            customerId:val
           }
         });
         window.open(resolve.href,'_blank')

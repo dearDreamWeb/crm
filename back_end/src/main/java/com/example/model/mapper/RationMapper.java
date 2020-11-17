@@ -13,5 +13,7 @@ import java.util.List;
 @Repository
 public interface RationMapper {
     int addRation(Ration ration);
+    int editRation(Ration ration);
     List<Ration> listRation(Ration ration);
+    Ration getRationByCusId(Integer cusId);
 }

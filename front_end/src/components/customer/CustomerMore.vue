@@ -5,7 +5,8 @@
 -->
 <template>
   <div>
-    <el-dialog :visible.sync="customerMoreDialog" top="25px" :show-close="false">
+    <el-dialog :visible.sync="customerMoreDialog" top="25px"
+               :show-close="false">
       <span>售前</span>
       <el-row :gutter="20">
         <el-col :span="8">
@@ -80,8 +81,9 @@
           <el-button type="text" icon="el-icon-potato-strips">纪念日</el-button>
         </el-col>
       </el-row>
+      <p>$attrs：{{$attrs}}</p>
     </el-dialog>
-    <customer-more-san-yi ref="customerMoreSanYiRef"></customer-more-san-yi>
+    <customer-more-san-yi ref="customerMoreSanYiRef" v-bind="$attrs" v-on="$listeners"></customer-more-san-yi>
     <customer-more-sale ref="customerMoreSaleRef"></customer-more-sale>
     <customer-more-demand ref="customerMoreDemandRef"></customer-more-demand>
     <customer-more-solution ref="customerMoreSolutionRef"></customer-more-solution>

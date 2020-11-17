@@ -41,10 +41,10 @@
                 #{gradingTime},
             </if>
             <if test="cusId != null">
-                #{cusId}
+                #{cusId},
             </if>
             <if test="gradingEmpId != null">
-                #{gradingEmpId}
+                #{gradingEmpId},
             </if>
         </trim>
     </insert>
@@ -65,5 +65,15 @@
                 AND grading_emp_id = #{gradingEmpId}
             </if>
         </where>
+    </select>
+
+    <update id="editGrading" parameterType="com.example.entity.Grading">
+        UPDATE grading SET grading_icon = #{gradingIcon},grading_name = #{gradingName}
+        WHERE grading_id = #{gradingId}
+    </update>
+
+    <select id="getGradingByCusId" resultMap="GradingResult">
+        SELECT grading_id,grading_icon,grading_name,grading_time,cus_id,grading_emp_id
+        FROM grading WHERE cus_id = #{cusId}
     </select>
 </mapper>

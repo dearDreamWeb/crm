@@ -23,10 +23,10 @@
             <if test="rationName != null and rationName != ''">
                 ration_name,
             </if>
-            <if test="rationTime != null and rationTime != ''">
+            <if test="rationTime != null">
                 ration_time,
             </if>
-            <if test="expectSigningTime != null">
+            <if test="expectSigningTime != null and expectSigningTime != ''">
                 expect_signing_time,
             </if>
             <if test="expectSigningPrice != null">
@@ -49,10 +49,10 @@
             <if test="rationName != null and rationName != ''">
                 #{rationName},
             </if>
-            <if test="rationTime != null and rationTime != ''">
+            <if test="rationTime != null">
                 #{rationTime},
             </if>
-            <if test="expectSigningTime != null">
+            <if test="expectSigningTime != null and expectSigningTime != ''">
                 #{expectSigningTime},
             </if>
             <if test="expectSigningPrice != null">
@@ -72,7 +72,7 @@
 
     <select id="listRation" resultMap="RationResult">
         SELECT ration_id,ration_icon,ration_name,ration_time,expect_signing_number,
-        expect_sigining_time,expect_signing_price,cus_id,ration_emp_id
+        expect_signing_time,expect_signing_price,cus_id,ration_emp_id
         <where>
             <if test="rationIcon != null and rationIcon != ''">
                 AND ration_icon = #{rationIcon}
@@ -87,5 +87,17 @@
                 AND ration_emp_id = #{rationEmpId}
             </if>
         </where>
+    </select>
+
+    <update id="editRation" parameterType="com.example.entity.Ration">
+        UPDATE ration SET ration_icon = #{rationIcon},ration_name = #{rationName},
+        expect_signing_time = #{expectSigningTime},expect_signing_price = #{expectSigningPrice},
+        expect_signing_number = #{expectSigningNumber} WHERE ration_id = #{rationId}
+    </update>
+
+    <select id="getRationByCusId" resultMap="RationResult">
+        SELECT ration_id,ration_icon,ration_name,ration_time,expect_signing_number,
+        expect_signing_time,expect_signing_price,cus_id,ration_emp_id
+        FROM ration WHERE cus_id = #{cusId}
     </select>
 </mapper>

@@ -20,13 +20,13 @@ import javax.servlet.http.HttpServletRequest;
  * @description:
  */
 @RestController
-@RequestMapping("/sanyi")
+@RequestMapping("/san_yi")
 public class SanYiKeController {
     @Autowired
     private SanYiKeService sanYiKeService;
 
     @SysLog("客户定性")
-    @PostMapping("/add_ration")
+    @PostMapping("/ration")
     public ResultVo addRation(@RequestBody Ration ration,
                               HttpServletRequest request) {
         String token = request.getHeader("X-Token");
@@ -34,7 +34,7 @@ public class SanYiKeController {
     }
 
     @SysLog("客户定级")
-    @PostMapping("/add_grading")
+    @PostMapping("/grading")
     public ResultVo addGrading(@RequestBody Grading grading,
                                HttpServletRequest request) {
         String token = request.getHeader("X-Token");
@@ -42,7 +42,7 @@ public class SanYiKeController {
     }
 
     @SysLog("客户定量")
-    @PostMapping("/add_qualitative")
+    @PostMapping("/qualitative")
     public ResultVo addQualitative(@RequestBody Qualitative qualitative,
                                    HttpServletRequest request) {
         String token = request.getHeader("X-Token");

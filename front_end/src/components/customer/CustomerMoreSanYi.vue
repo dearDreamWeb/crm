@@ -6,10 +6,11 @@
 <template>
   <div>
     <el-dialog title="三定" :visible.sync="sanYiDialog" width="30%"
-               top="15px" class="sanDinDialogBox">
+               top="15px" class="sanDinDialogBox" @close="sanYiDialogClose">
       <el-row>
         <el-col>
           <span style="float: right;margin-bottom: 3px">1.定性</span>
+          <p>$attrs: {{msg}}</p>
         </el-col>
       </el-row>
       <el-row type="flex" justify="space-between">
@@ -145,10 +146,18 @@
 </template>
 
 <script>
+  import {sanYiKeHttp} from "../../network/pre_sale/sanyike";
+  import {getMonday, getMonth} from "../../common/sanYiDate";
+
   export default {
     name: "CustomerMoreSanYi",
+    props:['msg'],
     data() {
       return {
+        qualitativeLoading:false,
+        gradingLoading:false,
+        rationLoading:false,
+
         estimateMoney:'',
         estimateNumber:'',
         estimateMoneyDialog:false,
@@ -184,7 +193,41 @@
         }
       }
     },
+    watch:{
+
+    },
     methods:{
+
+      sanYiDialogClose() {
+        if (this.sanDinYiForm.qualitativeRadio != 0) {
+          this.qualitativeForm.cusId = this.msg
+          sanYiKeHttp.addQualitative(this.qualitativeForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.qualitativeLoading = true
+            }
+          })
+        }
+        if (this.sanDinYiForm.gradingRadio != 0) {
+          this.gradingForm.cusId = this.msg
+          sanYiKeHttp.addGrading(this.gradingForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.gradingLoading = true
+            }
+          })
+        }
+        if (this.sanDinYiForm.rationRadio != 0) {
+          this.rationForm.cusId = this.msg
+          sanYiKeHttp.addRation(this.rationForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.rationLoading = true
+            }
+          })
+        }
+      },
+
       estimateNumberDialogClose() {
         if (this.estimateNumber != null && this.estimateNumber != 0) {
           this.rationForm.expectSigningNumber = this.estimateNumber
@@ -208,19 +251,30 @@
 
       rationRadioChange(value) {
         if (value == 1) {
+          let starMonday = getMonday("s",0);
+          let endMonday = getMonday("e",0);
           this.rationForm.rationIcon = 'iconfont icon-benzhou'
           this.rationForm.rationName = '本周'
+          this.rationForm.expectSigningTime = starMonday+":"+endMonday
         } else if (value == 2) {
+          let starMonday = getMonday("s",1);
+          let endMonday = getMonday("e",1);
           this.rationForm.rationIcon = 'iconfont icon-xiazhou'
           this.rationForm.rationName = '下周'
+          this.rationForm.expectSigningTime = starMonday+":"+endMonday
         } else if (value == 3) {
+          let starMonth = getMonth("s",0);
+          let endMonth = getMonth("e",0);
           this.rationForm.rationIcon = 'iconfont icon-6'
           this.rationForm.rationName = '本月'
+          this.rationForm.expectSigningTime = starMonth+":"+endMonth
         } else if (value == 4) {
+          let starMonth = getMonth("s",1);
+          let endMonth = getMonth("e",1);
           this.rationForm.rationIcon = 'iconfont icon-xiayue'
           this.rationForm.rationName = '下月'
+          this.rationForm.expectSigningTime = starMonth+":"+endMonth
         }
-        console.log(value)
       },
       gradingRadioChange(value) {
         if (value == 1) {
@@ -250,7 +304,9 @@
       },
       openSanYiDialog() {
         this.sanYiDialog = true
-      }
+      },
+    },
+    created() {
     }
   }
 </script>

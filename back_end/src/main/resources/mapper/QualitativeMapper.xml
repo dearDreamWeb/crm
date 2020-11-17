@@ -38,7 +38,7 @@
                 #{qualitativeName},
             </if>
             <if test="qualitativeTime != null">
-                #{qualitativeTime}
+                #{qualitativeTime},
             </if>
             <if test="cusId != null">
                 #{cusId},
@@ -66,5 +66,15 @@
                 AND qualitative_emp_id = #{qualitativeEmpId}
             </if>
         </where>
+    </select>
+
+    <update id="editQualitative" parameterType="com.example.entity.Qualitative">
+        UPDATE qualitative SET qualitative_icon = #{qualitativeIcon},
+        qualitative_name = #{qualitativeName} WHERE qualitative_id = #{qualitativeId}
+    </update>
+
+    <select id="getQualitativeByCusId" resultMap="QualitativeResult">
+        SELECT qualitative_id,qualitative_icon,qualitative_name,qualitative_time,cus_id,qualitative_emp_id
+        FROM qualitative WHERE cus_id = #{cusId}
     </select>
 </mapper>

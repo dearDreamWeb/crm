@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author: pengjia
  * @date: 2020/11/16
@@ -39,10 +41,22 @@ public class SanYiKeServiceImpl implements SanYiKeService {
     public ResultVo addRation(Ration ration,String token) {
         EmpResp empByToken = empMapper.getEmpByToken(token);
 
-        int addRation = rationMapper.addRation(ration);
-        if (addRation != 1) {
-            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
-                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        Ration rationByCusId = rationMapper.getRationByCusId(ration.getCusId());
+        if (rationByCusId != null) {
+            ration.setRationId(rationByCusId.getRationId());
+            int editRation = rationMapper.editRation(ration);
+            if (editRation != 1) {
+                throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                        ResultEnum.DATA_ADD_FAIL.getMessage());
+            }
+        } else {
+            ration.setRationTime(DateUtils.getDate());
+            ration.setRationEmpId(empByToken.getEmpId());
+            int addRation = rationMapper.addRation(ration);
+            if (addRation != 1) {
+                throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                        ResultEnum.DATA_ADD_FAIL.getMessage());
+            }
         }
 
         CustomerRecord customerRecord = new CustomerRecord();
@@ -59,17 +73,29 @@ public class SanYiKeServiceImpl implements SanYiKeService {
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
 
-        return ResultUtils.response(addRation);
+        return ResultUtils.response("操作成功");
     }
 
     @Override
     public ResultVo addGrading(Grading grading,String token) {
         EmpResp empByToken = empMapper.getEmpByToken(token);
 
-        int addGrading = gradingMapper.addGrading(grading);
-        if (addGrading != 1) {
-            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
-                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        Grading gradingByCusId = gradingMapper.getGradingByCusId(grading.getCusId());
+        if (gradingByCusId != null) {
+            grading.setGradingId(gradingByCusId.getGradingId());
+            int editGrading = gradingMapper.editGrading(grading);
+            if (editGrading != 1) {
+                throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                        ResultEnum.DATA_ADD_FAIL.getMessage());
+            }
+        } else {
+            grading.setGradingTime(DateUtils.getDate());
+            grading.setGradingEmpId(empByToken.getEmpId());
+            int addGrading = gradingMapper.addGrading(grading);
+            if (addGrading != 1) {
+                throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                        ResultEnum.DATA_ADD_FAIL.getMessage());
+            }
         }
 
         CustomerRecord customerRecord = new CustomerRecord();
@@ -86,17 +112,29 @@ public class SanYiKeServiceImpl implements SanYiKeService {
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
 
-        return ResultUtils.response(addGrading);
+        return ResultUtils.response("操作成功");
     }
 
     @Override
     public ResultVo addQualitative(Qualitative qualitative,String token) {
         EmpResp empByToken = empMapper.getEmpByToken(token);
 
-        int addQualitative = qualitativeMapper.addQualitative(qualitative);
-        if (addQualitative != 1) {
-            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
-                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        Qualitative qualitativeByCusId = qualitativeMapper.getQualitativeByCusId(qualitative.getCusId());
+        if (qualitativeByCusId != null) {
+            qualitative.setQualitativeId(qualitativeByCusId.getQualitativeId());
+            int editQualitative = qualitativeMapper.editQualitative(qualitative);
+            if (editQualitative != 1) {
+                throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                        ResultEnum.DATA_ADD_FAIL.getMessage());
+            }
+        } else {
+            qualitative.setQualitativeTime(DateUtils.getDate());
+            qualitative.setQualitativeEmpId(empByToken.getEmpId());
+            int addQualitative = qualitativeMapper.addQualitative(qualitative);
+            if (addQualitative != 1) {
+                throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                        ResultEnum.DATA_ADD_FAIL.getMessage());
+            }
         }
 
         CustomerRecord customerRecord = new CustomerRecord();
@@ -113,6 +151,6 @@ public class SanYiKeServiceImpl implements SanYiKeService {
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
 
-        return ResultUtils.response(addQualitative);
+        return ResultUtils.response("操作成功");
     }
 }
