@@ -50,32 +50,7 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-card>
-
-    <!--<el-dialog title="回款记录" :visible.sync="dialogTableVisible" width="65%" >
-      <el-table :data="szrecord">
-        <el-table-column property="recoId" label="回款记录编号"></el-table-column>
-        <el-table-column  label="回款期次">
-          <template slot-scope="recordPlans">
-            第{{recordPlans.row.recordPlan}}期
-          </template>
-        </el-table-column>
-        <el-table-column property="timePlan" label="最晚回款时间">
-          <template slot-scope="scope">
-            {{scope.row.timePlan | dateFormat}}
-          </template>
-        </el-table-column>
-        <el-table-column prop="recoTime" label="实际回款时间">
-
-        </el-table-column>
-        <el-table-column prop="moneyPlan" label="回款金额"></el-table-column>
-        <el-table-column  label="操作">
-          <template slot-scope="scope">
-           &lt;!&ndash; &lt;!&ndash;<el-button type="text" @click="huikuan(scope.row.planId)">查看详情</el-button>&ndash;&gt;
-            <el-button type="text" >点击回款</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-dialog>-->
+    <!---->
     <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose" size="medium" >
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
                label-position="right" :rules="FormRules">
@@ -161,20 +136,33 @@
           </template>
         </el-table-column>
         <el-table-column prop="recoTime" label="实际回款时间">
-          <!-- <i class="el-icon-time"></i>-->
+          <template slot-scope="scope">
+             <span v-if="scope.row.recoReceivable == 1">
+                <i class="el-icon-time"></i>
+                {{scope.row.recoTime | dateFormat}}
+              </span>
+          </template>
         </el-table-column>
         <el-table-column prop="moneyPlan" label="应回款金额" width="200"></el-table-column>
-        <el-table-column prop="recoReceivable" label="状态" width="200">
-
-          <template slot-scope="scope">
-            <el-tag  type="success">{{scope.row.recoReceivable | recoReceivableFormat}}</el-tag>
-          </template>
+        <el-table-column  label="状态" width="200">
+            <template slot-scope="scope">
+              <span v-if="scope.row.recoReceivable == 1">
+                <el-tag type="success">已回款</el-tag>
+              </span>
+              <span  v-if="scope.row.recoReceivable == 0">
+                <el-tag type="danger">未回款</el-tag>
+              </span>
+              </template>
         </el-table-column>
         <el-table-column  label="操作">
            <template slot-scope="scope">
-            <el-button type="text" @click="like_record(scope.row.recoId)">立即回款</el-button>
+             <span v-if="scope.row.recoReceivable == 0">
+                <el-button  @click="like_record(scope.row.recoId)" size="mini" plain>立即回款</el-button>
+              </span>
+             <span v-if="scope.row.recoReceivable == 1">
+                <el-button @click="like_record(scope.row.recoId)" size="mini" plain>查看记录</el-button>
+              </span>
           </template>
-         <!-- <el-button type="text" @click="like_record">立即回款</el-button>-->
         </el-table-column>
       </el-table>
     </el-drawer>
@@ -469,44 +457,44 @@
         })
       },
 
-      /*修改回款记录*/
+      /*立即回款*/
       like_recordClick(){
         this.like_recordButtonLoading=true
-        this.likeForm.recoId=this.recoId
-        console.log(this.likeForm)
-        planHttp.editrecord(this.likeForm).then(res=>{
+        console.log(this.likeForm.recoId)
+        this.likeForm.recoId=this.likeForm.recoId
+         planHttp.editrecord(this.likeForm).then(res=>{
           console.log("11111",this.likeForm);
-/*          if (res.code === 20000) {
+          if (res.code === 20000) {
             this.$message.success(res.message)
-            this.initList()
-            this.editOrderButtonLoading = false
-            this.editDialog = false
+            /*this.initList()*/
+            /*this.chakan_record()*/
+            this.like_recordButtonLoading = false
+            this.likeDialog = false
           }else {
             this.$message({
               message:res.message,
               type:'error'
             })
-            this.editOrderButtonLoading = false
-            window.console.log(this.editForm)
-          }*/
+            this.like_recordButtonLoading = false
+            window.console.log(this.likeDialog)
+          }
         })
       },
-      editPlanClick(){
+    /*  editPlanClick(){
         this.editPlanButtonLoading=true
-        /*this.editForm.cusId=this.rowplanId*/
+        /!*this.editForm.cusId=this.rowplanId*!/
         planHttp.editplan(this.editForm).then(res=>{
           console.log("111")
         })
-      },
+      },*/
       chakan_record(val){
         this.dialogTableVisible = true;
         planHttp.chakan_record(val).then(res=>{
           this.szrecord=res
+          console.log(this.szrecord)
         })
       },
       like_record(val){
-        this.likeDialog=true;
-        /*this.getRecord()*/
         this.likeDialog = true;
         planHttp.getrecord(val).then(res=>{
           this.likeForm=res.data

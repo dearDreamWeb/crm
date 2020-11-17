@@ -140,7 +140,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="总金额" prop="ordTotalmoney" >
-              <el-input v-model="addForm.ordTotalmoney" size="medium" placeholder="请输入总金额" clearable/>
+              <el-input v-model="addForm.ordTotalmoney" size="medium" :disabled="true"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -226,9 +226,48 @@
       <span>总金额: {{zj}}</span>
       <span slot="footer">
         <el-button @click="addDialog = false">取消</el-button>
+        <el-button @click="developClick" :loading="developButtonLoading">制定回款</el-button>
         <el-button type="primary" @click="addOrderClick"
                    :loading="addOrderButtonLoading">确定</el-button>
-        <el-button @click="tanClick" :loading="tanButtonLoading">弹</el-button>
+      </span>
+    </el-dialog>
+
+    <!--制定回款-->
+    <el-dialog title="制定回款" :visible.sync="addPlanDialog">
+      <el-form :model="addPlanForm" label-width="80px" ref="addPlanFormRef"
+               label-position="right">
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="分期(可选)" :data="xuanfenqi">
+              <el-select v-model="addPlanForm.planPeriod" placeholder="请选择期次"  @change="fenqi" clearable>
+                <el-option label="全款" value="1"></el-option>
+                <el-option label="分3期(免手续费)" value="3"></el-option>
+                <el-option label="分6期(免手续费)" value="6"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="总金额">
+              <el-input v-model="addPlanForm.ordTotalmoney" size="medium"/>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+      </el-form>
+      <!-- 分期表格-->
+      <el-table :data="addPlan" style="text-align: center;" size="small" align="center">
+        <el-table-column label="期次" align="center" width="140px">
+          <template slot-scope="s">
+            第{{s.row.recordPlan}}期
+          </template>
+        </el-table-column>
+        <el-table-column prop="timePlan" label="还款时间" align="center"></el-table-column>
+        <el-table-column prop="moneyPlan" label="还款金额" align="center"></el-table-column>
+      </el-table>
+      <span slot="footer">
+        <el-button @click="addPlanDialog = false">取消</el-button>
+        <el-button type="primary" @click="addPlanClick"
+                   :loading="addPlanButtonLoading">确定</el-button>
       </span>
     </el-dialog>
 
@@ -238,7 +277,7 @@
         <el-row >
           <el-col :span="12">
             <el-form-item label="主题" prop="ordTheme">
-              <el-input v-model="editForm.ordTheme" size="mini"/>
+              <el-input v-model="editForm.ordTheme" size="medium"/>
             </el-form-item>
           </el-col>
           <!--<el-col :span="12">
@@ -259,7 +298,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="总金额" prop="ordTotalmoney">
-              <el-input v-model="editForm.ordTotalmoney" size="mini" :disabled="true" />
+              <el-input v-model="editForm.ordTotalmoney" size="medium" :disabled="true" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -274,12 +313,12 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="收货人" prop="ordConsignee">
-              <el-input v-model="editForm.ordConsignee" size="mini" placeholder="请填写收货人姓名" clearable/>
+              <el-input v-model="editForm.ordConsignee" size="medium" placeholder="请填写收货人姓名" clearable/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="手机号" prop="ordPhone">
-              <el-input v-model="editForm.ordPhone" size="mini" placeholder="请填写收货人电话" clearable/>
+              <el-input v-model="editForm.ordPhone" size="medium" placeholder="请填写收货人电话" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -291,7 +330,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="详细地址" prop="ordDetail">
-              <el-input v-model="editForm.ordDetail" size="mini" clearable/>
+              <el-input v-model="editForm.ordDetail" size="medium" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -355,6 +394,7 @@
           pageSize1:1,
         },
         addDialog:false,
+        addPlanDialog:false,
         rowordId: 0,
         tableLoading:false,
         buttonDisabled:true,
@@ -368,7 +408,6 @@
         pageNum1:1,
         pageSize1:1,
         total1:1,
-
         addForm: {
           ordTheme:'',
           ordHead:'',
@@ -381,6 +420,8 @@
           ordDetail:'',
           cusId: '',
           addproplus:[]
+        },
+        addPlanForm:{
         },
         formRules:{
           ordTheme:[
@@ -407,15 +448,17 @@
 
         },
         addOrderButtonLoading:false,
-        tanButtonLoading:false,
+        developButtonLoading:false,
+        addPlanButtonLoading:false,
         editDialog:false,
         editOrderButtonLoading:false,
         dialogTableVisible:false,
         addOrdButtonLoading:false,
         szorder:[],
-        cusList:[
-        ],
+        cusList:[],
         addproplus: [],
+        addPlan:[],
+        xuanfenqi:[],
         totalmoney:'',
         zj:0
       }
@@ -638,8 +681,52 @@
           })
         })
       },*/
-      tanClick(){
-        alert("弹")
+      /*选择分期*/
+      fenqi(){
+        console.log("1分期",this.addPlanForm.planPeriod)
+        let it = this.addPlanForm.planPeriod; //选中的x期次
+        let recordplan=0;
+        let money=0; //前x-1期
+        let qici=1;
+        let qc=[];
+        let yumoney=0;
+        var nowDate = new Date();//时间
+        for(var i=1; i<=it;i++){
+          var date = {
+            year: nowDate.getFullYear(),
+            month: nowDate.getMonth() + 1 +i,
+            day: nowDate.getDate(),
+          }
+          if (date.month>12){
+            date.year = date.year+1
+            date.month=date.month-12
+          }
+          //分期小于循环
+          if(this.addPlanForm.planPeriod<=i){
+            yumoney= parseInt(this.zj - money);
+            recordplan=yumoney;
+            console.log("最后一期："+yumoney);
+            console.log("recordplan",recordplan)
+            this.addPlan.splice(i,0,{recordPlan:i,timePlan:date.year + '-' + ("0" + (date.month)).slice(-2) + '-' + date.day ,moneyPlan:recordplan})
+            return false;
+          }
+          money+=parseInt(this.zj/this.addPlanForm.planPeriod);
+          console.log("金额：",money);
+          console.log("第",i,"次循环");
+          console.log("this.zj",this.zj);
+          recordplan=parseInt(this.zj/this.addPlanForm.planPeriod);
+          qici++;
+          qc.push(qici);
+          this.addPlan.splice(i,0,{recordPlan:i,timePlan:date.year+ '-'  + ("0" + (date.month)).slice(-2) + '-'  + date.day , moneyPlan:recordplan})
+
+        }
+      },
+      /*制定回款*/
+      developClick(val){
+        this.addPlanForm.ordTotalmoney=""
+        this.addPlanForm.ordTotalmoney=this.zj
+        this.addPlanDialog=true;
+
       },
     /*新增订单（选择产品同时新增订单详情）*/
       addOrderClick() {
@@ -685,6 +772,10 @@
             this.addOrderButtonLoading = false
           }
         })
+      },
+      /*计划回款*/
+      addPlanClick(){
+        console.log("addPlanClick")
       },
       /*修改订单*/
       editOrderClick(){
