@@ -74,7 +74,7 @@
 <!---->
     <update id="editszReco" parameterType="com.example.entity.request.SzReceivableRecord">
         update sz_receivable_record set reco_receivable = 1
-        <if test="recoTime !=null and recoTime != ''">
+        <if test="recoTime != null">
             ,reco_time = #{recoTime}
         </if>
         <if test="recoMoney !=null and recoMoney != ''">
