@@ -147,6 +147,10 @@ const routes = [
         path: '/contacts',
         component: () => import('../views/customer/Contacts')
       },
+      {
+        path: '/repair_control_desk',
+        component: () => import('../views/Maintenance/maintenance')
+      },
     ]
   }
 ]

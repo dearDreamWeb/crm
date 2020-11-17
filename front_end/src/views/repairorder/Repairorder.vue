@@ -93,7 +93,7 @@
         <el-table-column prop="repairSfzb" label="联系人"></el-table-column>
         <el-table-column prop="repairWxfy" label="费用"></el-table-column>
         <el-table-column prop="repairGdstae" label="状态"></el-table-column>
-        <el-table-column prop="deptResp.deptName" label="维修部门"></el-table-column>
+<!--        <el-table-column prop="deptResp.deptName" label="维修部门"></el-table-column>-->
         <el-table-column prop="productResp.productName" label="维修产品"></el-table-column>
         <el-table-column prop="empResp.empName" label="接单人"></el-table-column>
         <el-table-column prop="careData" label="日期">
@@ -119,6 +119,7 @@
       <el-table-column prop="customerResp.cusName" label="客户"></el-table-column>
       <el-table-column prop="ordHead" label="负责人"></el-table-column>
       <el-table-column prop="ordConsignee" label="收货人"></el-table-column>
+<!--      <el-table-column prop="productResp.productName" label="产品"></el-table-column>-->
       <el-table-column prop="ordPhone" label="手机号码"></el-table-column>
       <el-table-column width="80" label="操作" >
         <template slot-scope="scope">
@@ -139,14 +140,14 @@
       width="50%"
       @close="handleClose">
 
-      <el-form ref="addform" :model="addform" :rules="rules" label-width="80px">
+      <el-form ref="addformRef" :model="addform" :rules="rules" label-width="80px">
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="订单编号">
+            <el-form-item label="订单编号" prop="orderId">
               <el-input
                 placeholder="请输入内容"
-                v-model="addform.ordId"
+                v-model="addform.orderId"
                 :disabled="true">
               </el-input>
             </el-form-item>
@@ -160,7 +161,7 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人">
+            <el-form-item label="联系人" prop="repairLxr">
               <el-input v-model="addform.repairLxr"></el-input>
             </el-form-item>
           </el-col>
@@ -182,11 +183,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="维修产品">
-              <el-select v-model="addform.productId">
-                <el-option v-for="item in productList" :key="item.productId"
-                           :label="item.productName" :value="item.productId">
-                </el-option>
+            <el-form-item label="状态">
+              <el-select v-model="addform.repairGdstae" placeholder="请选择">
+                <el-option label="执行中" value="执行中"></el-option>
+                <el-option label="结束" value="结束"></el-option>
+                <el-option label="未执行" value="未执行"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -208,10 +209,10 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="维修部门">
-              <el-select v-model="addform.deptId">
-                <el-option v-for="item in deptList" :key="item.deptId"
-                           :label="item.deptName" :value="item.deptId">
+            <el-form-item label="维修产品">
+              <el-select v-model="addform.productId">
+                <el-option v-for="item in productList" :key="item.productId"
+                           :label="item.productName" :value="item.productId">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -219,17 +220,6 @@
           <el-col :span="8">
             <el-form-item label="费用">
               <el-input v-model="addform.repairWxfy"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col>
-            <el-form-item label="状态">
-              <el-select v-model="addform.repairGdstae" placeholder="请选择">
-                <el-option label="执行中" value="执行中"></el-option>
-                <el-option label="结束" value="结束"></el-option>
-                <el-option label="未执行" value="未执行"></el-option>
-              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -249,16 +239,19 @@
       <el-form ref="updateform" :model="updateform" :rules="rules" label-width="80px">
           <el-row>
             <el-col :span="8">
-              <el-form-item label="手机号码" prop="empId">
-                <el-input v-model="updateform.repairLxr"></el-input>
-              </el-form-item>
-            </el-col >
-            <el-col :span="8">
               <el-form-item label="联系人">
                 <el-input v-model="updateform.repairSfzb"></el-input>
               </el-form-item>
             </el-col>
-
+            <el-col :span="8">
+              <el-form-item label="状态">
+                <el-select v-model="updateform.repairGdstae" placeholder="请选择">
+                  <el-option label="执行中" value="执行中"></el-option>
+                  <el-option label="结束" value="结束"></el-option>
+                  <el-option label="未执行" value="未执行"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
 
           <el-row>
@@ -326,17 +319,6 @@
             <el-col :span="8">
               <el-form-item label="费用">
                 <el-input v-model="updateform.repairWxfy"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-form-item label="状态">
-                <el-select v-model="updateform.repairGdstae" placeholder="请选择">
-                  <el-option label="执行中" value="执行中"></el-option>
-                  <el-option label="结束" value="结束"></el-option>
-                  <el-option label="未执行" value="未执行"></el-option>
-                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -490,11 +472,14 @@ import {followHttp} from "../../network/pre_sale/followlog";
           this.pageNum1 = res.data.pageNum1
         })
       },
-      addpro(ordId,cusId) {
+      addpro(ordId,cusId,productId) {
         this.Dingda = false
         console.log(ordId)
         console.log(cusId)
-        this.addform.ordId = ordId
+        console.log(productId)
+        this.addform.orderId = ordId
+        this.addform.cusId = cusId
+        this.addform.productId = productId
         orderHttp.getOrder(ordId).then(res => {
           this.listDingda = res.data
         })
@@ -521,9 +506,6 @@ import {followHttp} from "../../network/pre_sale/followlog";
         })
       },
       addClick(){
-        console.log(this.$refs)
-        this.$refs["addform"].validate(valid => {
-          if (!valid) return
           this.addDictButtonLoading = true
           repairHttp.add(this.addform).then(res => {
             if (res.code === 20000) {
@@ -539,7 +521,7 @@ import {followHttp} from "../../network/pre_sale/followlog";
               this.addDictButtonLoading = false
             }
           })
-        })
+
       },
       addDid(){
         console.log(this.$refs)
@@ -646,7 +628,7 @@ import {followHttp} from "../../network/pre_sale/followlog";
         })
       },
       handleClose(){
-        this.$refs["addform"].resetFields()
+        this.$refs.addformRef.resetFields()
       },
       handleRowClick(row,event,column) {
         this.rowCareId = row.repairId
