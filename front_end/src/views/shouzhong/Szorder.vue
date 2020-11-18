@@ -111,14 +111,26 @@
       <el-button  @click="anniu">按钮</el-button>
     </el-card>
 
-    <el-dialog title="订单详情" :visible.sync="dialogTableVisible">
+    <el-drawer
+      title="我是标题"
+      :visible.sync="dialogTableVisible" direction="btt"
+      :with-header="false" size="70%">
+      <div class="recordstyle" >订 单 详 情</div>
+        <el-table :data="szorder">
+          <el-table-column property="odetId" label="详情编号" width="150"></el-table-column>
+          <el-table-column property="productId" label="产品编号" width="200"></el-table-column>
+          <el-table-column property="odetBuynum" label="购买数量" width="200"></el-table-column>
+          <el-table-column property="odetBuymoney" label="购买单价"></el-table-column>
+        </el-table>
+    </el-drawer>
+    <!--<el-dialog title="订单详情" :visible.sync="dialogTableVisible">
       <el-table :data="szorder">
         <el-table-column property="odetId" label="详情编号" width="150"></el-table-column>
         <el-table-column property="productId" label="产品编号" width="200"></el-table-column>
         <el-table-column property="odetBuynum" label="购买数量" width="200"></el-table-column>
         <el-table-column property="odetBuymoney" label="购买单价"></el-table-column>
       </el-table>
-    </el-dialog>
+    </el-dialog>-->
 
     <el-dialog title="订单添加" width="65%" top="20px" :visible.sync="addDialog" @close="addHandleClose">
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
@@ -356,6 +368,7 @@
   import {pca,pcaa} from 'area-data'
   import {customerHttp} from "../../network/pre_sale/customer";
   import {productHttp} from "../../network/system/product";
+  import {planHttp} from "../../network/system/plan";
 
   export default {
     name: "Order",
@@ -419,7 +432,8 @@
           ordCountry:'',
           ordDetail:'',
           cusId: '',
-          addproplus:[]
+          addproplus:[],
+          szReceivableRecorde:[]
         },
         addPlanForm:{
         },
@@ -460,7 +474,8 @@
         addPlan:[],
         xuanfenqi:[],
         totalmoney:'',
-        zj:0
+        zj:0,
+        oid:0
       }
     },
     methods: {
@@ -619,7 +634,6 @@
       },
       chakan(val){
         this.dialogTableVisible = true;
-        alert(val);
         orderHttp.szxiangq(val).then(res=>{
           console.log(res);
           this.szorder=res;
@@ -723,13 +737,35 @@
       },
       /*制定回款*/
       developClick(val){
-        this.addPlanForm.ordTotalmoney=""
-        this.addPlanForm.ordTotalmoney=this.zj
-        this.addPlanDialog=true;
+        /*判断是否完善订单信息*/
+        if(this.addproplus.length>0){
+          this.addPlanForm.ordTotalmoney=""
+          this.addPlanForm.ordTotalmoney=this.zj
+          this.addPlanDialog=true;
+        }else{
+          this.$message({
+            message: '请先完善订单信息',
+            type: 'warning'
+          });
+        }
 
       },
+      /*制定回款的确认按钮*/
+      addPlanClick(){
+          this.addPlanForm.szReceivableRecorde=this.addPlan
+          console.log("确定添加：",this.addPlanForm)
+          console.log("this.addPlan：",this.addPlanForm.szReceivableRecorde);
+          this.addPlanForm.ordId=this.oid;
+          console.log("jjj",this.addPlanForm.ordId);
+          console.log("kkk",this.oid);
+          planHttp.addplan(this.addPlanForm).then(res => {
+            console.log("rrr",this.addPlanForm);
+            console.log("O：",res);
+            console.log("Oid：",res.data)
+          })
+      },
     /*新增订单（选择产品同时新增订单详情）*/
-      addOrderClick() {
+      addOrderClick(){
        console.log("this.addproplu:",this.addproplus)
         var addDetail = [];
     /*通过循环得到已选取产品的主键、价格、数量*/
@@ -762,6 +798,9 @@
           if (res.code === 20000) {
             this.$message.success(res.message)
             this.initList()
+            console.log("O：",res);
+            console.log("Oid：",res.data)
+            this.oid=res.data;
             this.addDialog = false
             this.addOrderButtonLoading = false
           } else {
@@ -774,9 +813,7 @@
         })
       },
       /*计划回款*/
-      addPlanClick(){
-        console.log("addPlanClick")
-      },
+
       /*修改订单*/
       editOrderClick(){
         this.editForm.ordProvince=this.selected2[0];
@@ -836,5 +873,13 @@
   }
   .el-select-dropdown .el-popper{
     min-width: 400px;
+  }
+  .recordstyle{
+    text-align: center;
+    width: 100%;
+    font-size:20px;
+    padding: 20px 0px;
+    color: #656561;
+    font-weight: 900;
   }
 </style>
