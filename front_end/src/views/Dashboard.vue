@@ -54,7 +54,14 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row>
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <el-card>
+          销售机会状态默认为【跟踪】，阶段默认为【初期沟通】
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20">
       <el-col :span="12">
         <el-card>
           对于线索的每一个跟进操作，都将操作记录下来

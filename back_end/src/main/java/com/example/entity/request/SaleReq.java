@@ -19,7 +19,6 @@ public class SaleReq {
     private String saleName;
     private String saleStatus;
     private String saleType;
-    private String saleSource;
     private String discoveryTime;
     private Integer version;
     private Date createTime;
@@ -38,14 +37,4 @@ public class SaleReq {
     private String saleStage;
     private String saleStarBeacon;
 
-
-    public void setSaleId(Integer s){
-        System.out.println("成功赋值。。。"+s);
-        this.saleId = s;
-    }
-
-    public Integer getSaleId(){
-        System.out.println("正在是JFK"+this.saleId);
-        return this.saleId;
-    }
 }

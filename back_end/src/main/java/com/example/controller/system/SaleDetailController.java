@@ -45,4 +45,13 @@ public class SaleDetailController {
     public ResultVo listSaleDetail(SaleDetailReq saleDetailReq) {
         return detailService.listSaleDetail(saleDetailReq);
     }
+
+    /**
+     * 销售机会详情页根据客户id获取
+     * @return
+     */
+    @GetMapping("/get_all_by_cus_id")
+    public ResultVo getAll() {
+        return null;
+    }
 }

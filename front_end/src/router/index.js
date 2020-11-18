@@ -39,6 +39,10 @@ const routes = [
     component: () => import('../views/customer/CustomerDetail')
   },
   {
+    path: '/sale_detail',
+    component: () => import('../views/sale/SaleDetail')
+  },
+  {
     path: '/base',
     component: () => import('../views/layout/Layout'),
     redirect: 'home',

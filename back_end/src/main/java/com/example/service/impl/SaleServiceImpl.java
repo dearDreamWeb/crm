@@ -162,18 +162,17 @@ public class SaleServiceImpl implements SaleService {
         saleReq.setSaleStatus(saleDetailDemand.getSaleStatus());
         saleReq.setCusId(saleDetailDemand.getCusId());
         saleReq.setContactsId(saleDetailDemand.getContactsId());
-        saleReq.setSaleSource(saleDetailDemand.getSaleSource());
         saleReq.setDiscoveryTime(saleDetailDemand.getDiscoveryTime());
         saleReq.setSaleType(saleDetailDemand.getSaleType());
         saleReq.setEmpId(saleDetailDemand.getEmpId());
         int addSale = saleMapper.addSale(saleReq);
         Integer saleId = saleReq.getSaleId();
-        System.out.println("新增成功的销售编号是："+saleId);
         if (addSale != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
         saleDetailReq.setSaleId(saleId);
+        saleDetailReq.setSaleStage("需求分析");
         saleDetailReq.setSaleStarBeacon(saleDetailDemand.getSaleStarBeacon());
         saleDetailReq.setSalePriorLevel(saleDetailDemand.getSalePriorLevel());
         int addSaleDetail = detailMapper.addSaleDetail(saleDetailReq);
@@ -212,7 +211,6 @@ public class SaleServiceImpl implements SaleService {
         saleReq.setSaleId(saleDetailDemand.getSaleId());
         saleReq.setSaleName(saleDetailDemand.getSaleName());
         saleReq.setSaleStatus(saleDetailDemand.getSaleStatus());
-        saleReq.setSaleSource(saleDetailDemand.getSaleSource());
         saleReq.setSaleType(saleDetailDemand.getSaleType());
         saleReq.setVersion(sale.getVersion());
         saleReq.setUpdateTime(DateUtils.getDate());

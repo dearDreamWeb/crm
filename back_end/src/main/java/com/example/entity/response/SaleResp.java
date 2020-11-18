@@ -19,7 +19,6 @@ public class SaleResp {
     private String saleName;
     private String saleStatus;
     private String saleType;
-    private String saleSource;
     private String discoveryTime;
     private Integer version;
     private Date createTime;

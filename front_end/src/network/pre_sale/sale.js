@@ -23,7 +23,6 @@ export const saleHttp = {
         'saleName':sale.saleName,
         'saleStatus':sale.saleStatus,
         'saleType':sale.saleType,
-        'saleSource':sale.saleSource,
         'discoveryTime':sale.discoveryTime,
         'cusId':sale.cusId,
         'contactsId':sale.contactsId,
@@ -39,7 +38,6 @@ export const saleHttp = {
         'saleName':saleDetailDemand.saleName,
         'saleStatus':saleDetailDemand.saleStatus,
         'saleType':saleDetailDemand.saleType,
-        'saleSource':saleDetailDemand.saleSource,
         'discoveryTime':saleDetailDemand.discoveryTime,
         'cusId':saleDetailDemand.cusId,
         'contactsId':saleDetailDemand.contactsId,
@@ -106,7 +104,6 @@ export const saleHttp = {
       data:{
         'saleId':sale.saleId,
         'saleName':sale.saleName,
-        'saleSource':sale.saleSource,
         'saleType':sale.saleType,
         'saleStarBeacon':sale.saleStarBeacon,
         'salePriorLevel':sale.salePriorLevel,

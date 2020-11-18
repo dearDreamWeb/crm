@@ -142,6 +142,15 @@
           <el-table-column prop="saleDetailResp.salePossibility" label="可能性"></el-table-column>
           <el-table-column prop="saleDetailResp.saleStage" label="阶段"></el-table-column>
           <el-table-column prop="saleStatus" label="状态" width="80px"></el-table-column>
+          <el-table-column label="操作" width="70px" align="center">
+            <template slot-scope="scope">
+              <el-tooltip class="item" effect="dark" content="详情" placement="top">
+                <el-button type="text" icon="el-icon-view" size="medium"
+                           @click="manipulateCustomerClick(scope.row.saleId,scope.row.cusId)">
+                </el-button>
+              </el-tooltip>
+            </template>
+          </el-table-column>
         </el-table>
 
         <el-pagination background :page-size="pageSize" :total="total"
@@ -153,7 +162,7 @@
 
       <el-dialog title="机会添加" :visible.sync="addDialog" @close="addDialogClose" top="30px">
         <el-form :model="addForm" ref="addFormRef" :rules="addFormRules"
-                 label-width="65px" label-position="right" size="mini">
+                 label-width="80px" label-position="right" size="mini">
           <el-row>
             <el-col>
               <el-form-item label="主题" prop="saleName">
@@ -181,14 +190,6 @@
             </el-col>
           </el-row>
           <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="来源" prop="saleSource">
-                <el-select v-model="addForm.saleSource" clearable placeholder="请选择">
-                  <el-option v-for="item in customerSourceList.children" :key="item.dictId"
-                             :label="item.dictName" :value="item.dictName"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
             <el-col :span="12">
               <el-form-item label="类型" prop="saleType">
                 <el-select v-model="addForm.saleType" clearable placeholder="请选择">
@@ -222,18 +223,10 @@
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="时间" prop="discoveryTime">
+              <el-form-item label="发现时间" prop="discoveryTime">
                 <el-date-picker v-model="addForm.discoveryTime" format="yyyy-MM-dd"
                                 value-format="yyyy-MM-dd" type="date" clearable
                                 placeholder="请输入"></el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="状态" prop="saleStatus">
-                <el-select v-model="addForm.saleStatus" clearable placeholder="请选择">
-                  <el-option v-for="item in saleStatusList" :key="item.value"
-                             :label="item.label" :value="item.label"></el-option>
-                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -263,14 +256,6 @@
             </el-col>
           </el-row>
           <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="来源" prop="saleSource">
-                <el-select v-model="editForm.saleSource">
-                  <el-option v-for="item in customerSourceList.children" :key="item.dictId"
-                             :label="item.dictName" :value="item.dictName"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
             <el-col :span="12">
               <el-form-item label="类型" prop="saleType">
                 <el-select v-model="editForm.saleType">
@@ -361,7 +346,6 @@
         editForm:{
           saleId:'',
           saleName:'',
-          saleSource:'',
           saleType:'',
           saleStarBeacon:'',
           salePriorLevel:'',
@@ -374,9 +358,6 @@
         editFormRules:{
           saleName:[
             {required:true,message:'请输入机会主题',trigger:'blur'}
-          ],
-          saleSource:[
-            {required:true,message:'请输入机会主题',trigger:'change'}
           ],
           saleType:[
             {required:true,message:'请输入机会主题',trigger:'change'}
@@ -419,9 +400,8 @@
           saleStatus:'跟踪',
           cusId:'',
           contactsId:'',
-          saleSource:'',
-          discoveryTime:'',
-          saleType:'',
+          discoveryTime:new Date(),
+          saleType:'办公',
           saleStarBeacon:'',
           salePriorLevel:'',
           demandContent:'',
@@ -441,17 +421,11 @@
           contactsId:[
             {required:true,message:'请选择联系人',trigger:'change'}
           ],
-          saleSource:[
-            {required:true,message:'请选择来源',trigger:'change'}
-          ],
           discoveryTime:[
             {required:true,message:'请选择时间',trigger:'change'}
           ],
           saleType:[
             {required:true,message:'请选择机会类型',trigger:'change'}
-          ],
-          demandContent:[
-            {required:true,message:'请输入客户需求',trigger:'blur'}
           ]
         },
         saleStatusList:saleStatusData,
@@ -473,6 +447,17 @@
       }
     },
     methods:{
+      manipulateCustomerClick(saleId,cusId) {
+        let resolve = this.$router.resolve({
+          path:'/sale_detail',
+          query:{
+            saleId:saleId,
+            cusId:cusId
+          }
+        });
+        window.open(resolve.href,'_blank')
+      },
+
       editSaleClick() {
         this.$refs.editFormRef.validate(valid => {
           if (!valid) return
@@ -578,11 +563,6 @@
           this.contactsList = res.data
         })
         this.addForm.contactsId = ''
-        customerHttp.getCusById(val).then(res => {
-          dictHttp.get(res.data.cusDictSource).then(res => {
-            this.addForm.saleSource = res.data.dictName
-          })
-        })
       },
       addDialogClose() {
         this.$refs.addFormRef.resetFields()
@@ -592,6 +572,7 @@
         this.addDialog = true
         this.initCustomerList()
         this.initCustomerSourceList()
+        /*this.addForm.*/
       },
 
       handleRowClick(row,event,column) {
