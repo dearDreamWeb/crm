@@ -53,7 +53,7 @@ public class SzOrderServicelmpl implements SzOrderService {
             //第五步：调用详细的新增方法
             detailsMapper.addOrderANDOrderDet(detail);
         }
-        return ResultUtils.response(1);
+        return ResultUtils.response(oid);
     }
     @Override
     public ResultVo delszOrder(SzOrder szorder) {
