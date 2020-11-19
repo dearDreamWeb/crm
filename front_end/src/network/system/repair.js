@@ -79,6 +79,7 @@ export const repairHttp = {
         'repairDate':repair.repairDate,
         'repairAppointment':repair.repairAppointment,
         'repairActual':repair.repairActual,
+        'repairsjhm':repair.repairsjhm,
         'repairGdstae':repair.repairGdstae,
         'cusId':repair.cusId,
         'deptId':repair.deptId,
