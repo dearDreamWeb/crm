@@ -7,6 +7,8 @@ import com.example.service.SolutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author: pengjia
  * @date: 2020/11/2
@@ -20,8 +22,10 @@ public class SolutionController {
 
     @SysLog("添加方案")
     @PostMapping("/add")
-    public ResultVo addSolution(@RequestBody SolutionReq solutionReq) {
-        return solutionService.addSolution(solutionReq);
+    public ResultVo addSolution(@RequestBody SolutionReq solutionReq,
+                                HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return solutionService.addSolution(solutionReq,token);
     }
 
     @SysLog("删除方案")
