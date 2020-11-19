@@ -31,7 +31,6 @@ public class SzOrderServicelmpl implements SzOrderService {
     @Autowired
     private SzOrderDetailsMapper detailsMapper;
 
-
     //一次性新增多个详情
     @Override
     public ResultVo addszOrder(SzOrder order){
@@ -108,6 +107,11 @@ public class SzOrderServicelmpl implements SzOrderService {
     @Override
     public List<SzOrder> OrdANDDel() {
         return szorderMapper.OrdANDDel();
+    }
+
+    @Override
+    public List<SzOrder> orderAll(Integer ordId) {
+        return szorderMapper.orderAll(ordId);
     }
 }
 
