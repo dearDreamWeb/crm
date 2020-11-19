@@ -12,5 +12,5 @@ public interface SzOrderService {
     ResultVo getszOrder(Integer ordId);
     ResultVo listszOrder(SzOrder szorder);
     List<SzOrder> OrdANDDel();
-
+    List<SzOrder> orderAll(Integer ordId);//详情全部
 }

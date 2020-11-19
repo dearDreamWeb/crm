@@ -98,7 +98,7 @@
         <el-table-column prop="ordHead" label="负责人" width="140"></el-table-column>
         <el-table-column label="操作" sortable>
           <template slot-scope="scope">
-            <el-button type="text" @click="chakan(scope.row.ordId)">查看详情</el-button>
+            <el-button type="text" @click="chakan(scope.row)">查看详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -111,26 +111,63 @@
       <el-button  @click="anniu">按钮</el-button>
     </el-card>
 
-    <el-drawer
-      title="我是标题"
-      :visible.sync="dialogTableVisible" direction="btt"
-      :with-header="false" size="70%">
-      <div class="recordstyle" >订 单 详 情</div>
-        <el-table :data="szorder">
-          <el-table-column property="odetId" label="详情编号" width="150"></el-table-column>
-          <el-table-column property="productId" label="产品编号" width="200"></el-table-column>
-          <el-table-column property="odetBuynum" label="购买数量" width="200"></el-table-column>
-          <el-table-column property="odetBuymoney" label="购买单价"></el-table-column>
-        </el-table>
-    </el-drawer>
-    <!--<el-dialog title="订单详情" :visible.sync="dialogTableVisible">
-      <el-table :data="szorder">
-        <el-table-column property="odetId" label="详情编号" width="150"></el-table-column>
-        <el-table-column property="productId" label="产品编号" width="200"></el-table-column>
-        <el-table-column property="odetBuynum" label="购买数量" width="200"></el-table-column>
-        <el-table-column property="odetBuymoney" label="购买单价"></el-table-column>
-      </el-table>
-    </el-dialog>-->
+    <el-dialog title="订单" :visible.sync="dialogTableVisible" width="65%" top="70px">
+      <el-card shadow="always" class="card">
+        <div class="mingxi">
+          <span>主题：{{xiangqing.ordTheme}}</span>
+          <span>订单号： {{xiangqing.ordId}}</span>
+          <span>负责人：{{xiangqing.ordHead}}</span>
+          <span>订单状态
+              <i v-if="xiangqing.ordState == 1">已完成</i>
+              <i v-if="xiangqing.ordState == 0">执行中</i>
+            </span>
+          <span>对应客户：{{xiangqing.cusId}}</span>
+        </div>
+      </el-card>
+      <el-tabs type="border-card" >
+        <el-tab-pane label="订单明细">
+<!--          <div  v-for="x in szorder">
+           <div v-for="n in x.szOrderDetails">
+             {{n.odetId}}
+            </div>
+        </div>-->
+          <el-table :data="Detail" border>
+            <el-table-column prop="odetId" label="详情编号"></el-table-column>
+            <el-table-column prop="productId" label="产品编号" ></el-table-column>
+            <el-table-column  label="产品名称">
+<!--             <div  v-for="x in szorder.productReq">
+                {{x}}
+             </div>&ndash;&gt;
+              <template slot-scope="scope">
+                {{scope.row.szOrderDetails[0].productName}}
+              </template>-->
+            </el-table-column>
+            <el-table-column prop="odetBuynum" label="数量"></el-table-column>
+            <el-table-column prop="odetBuymoney" label="单价"></el-table-column>
+            <el-table-column label="金额">
+              <template slot-scope="scope">
+                {{scope.row.odetBuynum * scope.row.odetBuymoney}}
+              </template>
+            </el-table-column>
+          </el-table>
+          <div>
+            <span>总金额:{{xiangqing.ordTotalmoney}}</span>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="关于回款">
+          <el-table :data="abPlan" border>
+            <el-table-column prop="planId" label="计划回款编号" width="150"></el-table-column>
+            <el-table-column prop="planPeriod" label="回款期次" width="150"></el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="关于发货">
+          <el-table :data="abdeliver" border>
+            <el-table-column prop="delId" label="发货编号" width="150"></el-table-column>
+            <el-table-column prop="productId" label="产品编号" width="200"></el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
 
     <el-dialog title="订单添加" width="65%" top="20px" :visible.sync="addDialog" @close="addHandleClose">
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
@@ -212,7 +249,6 @@
         <el-button slot="reference" icon="el-icon-plus" type="primary" @click="choosepro">选择产品</el-button>
       </el-popover>
       <h3>购物车</h3>
-      <!--<el-table :data="szorder">-->
       <el-table :data="addproplus" style="text-align: center;">
         <el-table-column width="100" property="productBrand" label="产品品牌"></el-table-column>
         <el-table-column property="productName" label="产品名称" ></el-table-column>
@@ -468,14 +504,21 @@
         editOrderButtonLoading:false,
         dialogTableVisible:false,
         addOrdButtonLoading:false,
+        szrecord:[],
+        /*szproduct:[],*/
         szorder:[],
+        Detail:[],
+        abPlan:[],
+        abdeliver:[],
         cusList:[],
         addproplus: [],
         addPlan:[],
         xuanfenqi:[],
         totalmoney:'',
+        activeName: 'first',
         zj:0,
-        oid:0
+        oid:0,
+        xiangqing:{}
       }
     },
     methods: {
@@ -634,9 +677,17 @@
       },
       chakan(val){
         this.dialogTableVisible = true;
-        orderHttp.szxiangq(val).then(res=>{
-          console.log(res);
+        let id=val.ordId;
+        this.xiangqing=val;
+        orderHttp.szxiangq(id).then(res=>{
           this.szorder=res;
+          this.Detail=res[0].szOrderDetails;
+          this.abPlan.splice(0,0,res[0].szReceivablePlan)
+          this.abdeliver.splice(0,0,res[0].szDeliver)
+          console.log("all查看详情:",res)
+          console.log("订单，查看详情：",res[0].szOrderDetails);
+          console.log("回款，查看详情：",res[0].szReceivablePlan);
+          console.log("发货，查看详情：",res[0].szDeliver);
         })
       },
       getOrderDetail() {
@@ -735,6 +786,7 @@
 
         }
       },
+
       /*制定回款*/
       developClick(val){
         /*判断是否完善订单信息*/
@@ -874,12 +926,15 @@
   .el-select-dropdown .el-popper{
     min-width: 400px;
   }
-  .recordstyle{
-    text-align: center;
-    width: 100%;
-    font-size:20px;
-    padding: 20px 0px;
-    color: #656561;
-    font-weight: 900;
+
+  .mingxi{
+    margin: 0px 5px 15px 5px;
+  }
+  .mingxi span{
+    padding: 5px 25px;
+    color: #909399;
+  }
+  .card{
+    margin-bottom: 20px;
   }
 </style>

@@ -42,6 +42,7 @@ public class SzOrder {
     private List<SzOrderDetails> SzOrderDetails;//1n
     private SzReceivablePlan SzReceivablePlan;//11
     private SzDeliver szDeliver;//11
+    private List<ProductReq> productReq;//
 
     private String startDate;
     private String endDate;

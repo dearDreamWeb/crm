@@ -120,7 +120,7 @@
                direction="btt" size="60%"  width="80%"
                :with-header="false"
                >
-      <div style="text-align: center;width: 100%">回款记录</div>
+      <div class="recordstyle">回款记录</div>
       <el-table :data="szrecord" :row-style="{height:'1px'}"
                 :cell-style="{padding:'1px 0'}" height="300px">
         <el-table-column prop="recoId" label="回款记录编号" width="150" height="100px"></el-table-column>
@@ -555,5 +555,13 @@
   /*去掉打开抽屉时自动选中标题时的蓝色边框*/
   /deep/ :focus {
     outline: 0;
+  }
+  .recordstyle{
+    text-align: center;
+    width: 100%;
+    font-size:20px;
+    padding: 20px 0px;
+    color: #656561;
+    font-weight: 900;
   }
 </style>

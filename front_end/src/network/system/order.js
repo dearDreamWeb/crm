@@ -106,9 +106,9 @@ export const orderHttp = {
   },
   szxiangq:function (id) {
     let params = {
-      url:'/details/all',
+      url:'/order/orderAll',
       data:{
-        'odetId':id
+        'ordId':id
       }
     }
     return get(params)

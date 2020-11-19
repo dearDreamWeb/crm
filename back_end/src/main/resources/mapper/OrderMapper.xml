@@ -42,6 +42,10 @@
         <result property="ordCreatetime" column="ord_createtime"/>
         <result property="ordDelete" column="ord_delete"/>
         <association property="customerResp" resultMap="CustomerResult"/>
+        <association property="SzOrderDetails" resultMap="szDetailsResult"/>
+        <association property="SzReceivablePlan" resultMap="szPlanResult"/>
+        <association property="szDeliver" resultMap="szDeliverResult"/>
+        <association property="productReq" resultMap="ProductResult"/>
     </resultMap>
     <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
         <id column="cus_id" property="cusId"/>
@@ -67,6 +71,58 @@
         <result column="ration_id" property="rationId"/>
         <result column="emp_id" property="empId"/>
     </resultMap>
+
+    <resultMap id="szDetailsResult" type="com.example.entity.request.SzOrderDetails">
+        <id property="odetId" column="odet_id"/>
+        <result property="odetBuynum" column="odet_buynum"/>
+        <result property="odetBuymoney" column="odet_buymoney"/>
+        <result property="ordId" column="ord_id"/>
+        <result property="productId" column="product_id"/>
+    </resultMap>
+
+    <resultMap id="szPlanResult" type="com.example.entity.request.SzReceivablePlan">
+        <id property="planId" column="plan_id"/>
+        <result property="planMoney" column="plan_money"/>
+        <result property="planTime" column="plan_time"/>
+        <result property="planPeriod" column="plan_period"/>
+        <result property="planCaozuopeople" column="plan_caozuopeople"/>
+        <result property="planCaozuotime" column="plan_caozuotime"/>
+        <result property="planInvoice" column="plan_invoice"/>
+        <result property="planDel" column="plan_del"/>
+        <result property="ordId" column="ord_id"/>
+        <result property="empId" column="emp_id"/>
+    </resultMap>
+
+    <resultMap id="szDeliverResult" type="com.example.entity.request.SzDeliver">
+        <id property="delId" column="del_id"/>
+        <result property="delWuliuid" column="del_wuliuid"/>
+        <result property="delCompany" column="del_company"/>
+        <result property="delPeople" column="del_people"/>
+        <result property="delDelivertime" column="del_delivertime"/>
+        <result property="delState" column="del_state"/>
+        <result property="delCreatetime" column="del_createtime"/>
+        <result property="delDelete" column="del_delete"/>
+        <result property="ordId" column="ord_id"/>
+    </resultMap>
+
+    <resultMap id="ProductResult" type="com.example.entity.response.ProductResp">
+        <id column="product_id" property="productId"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_image" property="productImage"/>
+        <result column="product_model" property="productModel"/>
+        <result column="product_price" property="productPrice"/>
+        <result column="product_brand" property="productBrand"/>
+        <result column="product_stock" property="productStock"/>
+        <result column="product_size" property="productSize"/>
+        <result column="product_cost" property="productCost"/>
+        <result column="product_status" property="productStatus"/>
+        <result column="remark" property="remark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+    </resultMap>
+
     <!--查全部-->
     <select id="listszOrder" resultMap="szOrderDetailResult">
         SELECT s.*,cl.*
@@ -95,6 +151,17 @@
             </if>
             and  ord_delete = 0
         </where>
+    </select>
+    <!--查全部-->
+    <select id="orderAll" resultMap="szOrderDetailResult">
+        SELECT s.*,cl.*,od.*,r.*,p.*
+        FROM sz_order s
+        left join customer cl on s.cus_id = cl.cus_id
+        left join sz_order_details od on s.ord_id=od.ord_id
+        left join sz_receivable_plan r on od.ord_id=r.ord_id
+        left join product p on od.product_id=p.product_id
+        left join sz_deliver d on od.ord_id=d.ord_id
+        where s.ord_id=#{ordId}
     </select>
     <!--单条-->
     <select id="getszOrder" resultMap="szOrderResult">

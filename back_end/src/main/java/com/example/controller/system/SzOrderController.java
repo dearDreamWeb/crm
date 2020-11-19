@@ -70,4 +70,9 @@ public class SzOrderController {
         return szorderService.OrdANDDel();
     }
 
+    @GetMapping("/orderAll")//查全部
+    public List<SzOrder> orderAll(Integer ordId){
+        System.out.println("新的查询"+ordId);
+        return szorderService.orderAll(ordId);
+    }
 }
