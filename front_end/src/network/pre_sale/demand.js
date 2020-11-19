@@ -91,5 +91,14 @@ export const demandHttp = {
       url:'/demand/list'
     }
     return get(params)
+  },
+  list_by_cus:function (cusId) {
+    let params = {
+      url:'/demand/list_by_cus',
+      data:{
+        'cusId':cusId
+      }
+    }
+    return get(params)
   }
 }

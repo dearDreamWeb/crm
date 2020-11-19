@@ -76,10 +76,11 @@
   import {contactsHttp} from "../../network/pre_sale/contacts";
   import {customerHttp} from "../../network/pre_sale/customer";
   import {saleHttp} from "../../network/pre_sale/sale";
+  import {demandHttp} from "../../network/pre_sale/demand";
 
   export default {
     name: "SaleMoreDemand",
-    props:['sale-id','cus-id'],
+    props:['sale-id','cus-id','emp-id'],
     data() {
       return {
         cusName:'',
@@ -93,7 +94,7 @@
           saleId:this.saleId,
           demandDegree:'一般',
           demandContent:'',
-          empId:''
+          empId:this.empId
         },
         addFormRules:{
           demandTitle:[
@@ -118,7 +119,22 @@
     },
     methods:{
       addDemandClick() {
-
+        this.$refs.addFormRef.validate(valid => {
+          if (!valid) return
+          this.addDemandButtonLoading = true
+          this.addForm.empId = this.empId
+          demandHttp.add(this.addForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.addDemandButtonLoading = false
+              this.addDialog = false
+              this.$emit('init-page')
+            } else {
+              this.$message.error(res.message)
+              this.addDemandButtonLoading = false
+            }
+          })
+        })
       },
       addDialogClose() {
         this.$refs.addFormRef.resetFields()
@@ -145,7 +161,7 @@
         })
       },
       initContactsList() {
-        contactsHttp.list_all().then(res => {
+        contactsHttp.getByCusId(this.cusId).then(res => {
           this.contactsList = res.data.list
         })
       },

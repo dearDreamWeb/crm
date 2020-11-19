@@ -452,7 +452,8 @@
           path:'/sale_detail',
           query:{
             saleId:saleId,
-            cusId:cusId
+            cusId:cusId,
+            empId:this.$store.state.empId
           }
         });
         window.open(resolve.href,'_blank')

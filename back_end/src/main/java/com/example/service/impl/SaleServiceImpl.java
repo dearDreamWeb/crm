@@ -5,14 +5,10 @@ import com.example.common.exception.SysException;
 import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
 import com.example.entity.SaleDetailDemand;
-import com.example.entity.SanyGuest;
 import com.example.entity.request.DemandReq;
 import com.example.entity.request.SaleDetailReq;
 import com.example.entity.request.SaleReq;
-import com.example.entity.response.CustomerResp;
-import com.example.entity.response.EmpResp;
-import com.example.entity.response.SaleDetailResp;
-import com.example.entity.response.SaleResp;
+import com.example.entity.response.*;
 import com.example.model.mapper.*;
 import com.example.service.SaleService;
 import com.example.util.CheckUtils;
@@ -51,6 +47,9 @@ public class SaleServiceImpl implements SaleService {
 
     @Autowired
     private CustomerRecordMapper recordMapper;
+
+    @Autowired
+    private ContactsMapper contactsMapper;
 
     @Override
     public ResultVo addSale(SaleReq saleReq,String token) {
@@ -122,6 +121,12 @@ public class SaleServiceImpl implements SaleService {
     public ResultVo getSale(SaleReq saleReq) {
         Integer saleId = saleReq.getSaleId();
         SaleResp sale = saleMapper.getSale(saleId);
+        CustomerResp customer = customerMapper.getCustomer(sale.getCusId());
+        ContactsResp contacts = contactsMapper.getContacts(sale.getContactsId());
+        EmpResp emp = empMapper.getEmp(sale.getEmpId());
+        sale.setCusName(customer.getCusName());
+        sale.setContactsName(contacts.getContactsName());
+        sale.setEmpName(emp.getEmpName());
         if (sale == null) {
             throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
                     ResultEnum.DATA_NOT_EXIST.getMessage());
@@ -172,7 +177,12 @@ public class SaleServiceImpl implements SaleService {
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
         saleDetailReq.setSaleId(saleId);
-        saleDetailReq.setSaleStage("需求分析");
+        if (saleDetailDemand.getDemandContent() != null
+                && !"".equals(saleDetailDemand.getDemandContent())) {
+            saleDetailReq.setSaleStage("需求分析");
+        } else {
+            saleDetailReq.setSaleStage("初期沟通");
+        }
         saleDetailReq.setSaleStarBeacon(saleDetailDemand.getSaleStarBeacon());
         saleDetailReq.setSalePriorLevel(saleDetailDemand.getSalePriorLevel());
         int addSaleDetail = detailMapper.addSaleDetail(saleDetailReq);
@@ -180,19 +190,22 @@ public class SaleServiceImpl implements SaleService {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
-        CustomerResp customer = customerMapper.getCustomer(saleDetailDemand.getCusId());
-        demandReq.setDemandTitle(DateUtils.dateToDateStr(DateUtils.getDate())+
-                customer.getCusName()+"需求");
-        demandReq.setDemandContent(saleDetailDemand.getDemandContent());
-        demandReq.setSaleId(saleId);
-        demandReq.setDemandDegree(degreeRating(saleDetailDemand.getSalePriorLevel()));
-        demandReq.setEmpId(saleDetailDemand.getEmpId());
-        demandReq.setCusId(saleDetailDemand.getCusId());
-        demandReq.setContactsId(saleDetailDemand.getContactsId());
-        int addDemand = demandMapper.addDemand(demandReq);
-        if (addDemand != 1) {
-            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
-                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        if (saleDetailDemand.getDemandContent() != null
+                && !"".equals(saleDetailDemand.getDemandContent())) {
+            CustomerResp customer = customerMapper.getCustomer(saleDetailDemand.getCusId());
+            demandReq.setDemandTitle(DateUtils.dateToDateStr(DateUtils.getDate())+
+                    customer.getCusName()+"需求");
+            demandReq.setDemandContent(saleDetailDemand.getDemandContent());
+            demandReq.setSaleId(saleId);
+            demandReq.setDemandDegree(degreeRating(saleDetailDemand.getSalePriorLevel()));
+            demandReq.setEmpId(saleDetailDemand.getEmpId());
+            demandReq.setCusId(saleDetailDemand.getCusId());
+            demandReq.setContactsId(saleDetailDemand.getContactsId());
+            int addDemand = demandMapper.addDemand(demandReq);
+            if (addDemand != 1) {
+                throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                        ResultEnum.DATA_ADD_FAIL.getMessage());
+            }
         }
 
         return ResultUtils.response("新增成功");

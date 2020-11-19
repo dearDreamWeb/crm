@@ -45,4 +45,9 @@ public class SolutionController {
     public ResultVo listSolution(SolutionReq solutionReq) {
         return solutionService.listSolution(solutionReq);
     }
+
+    @GetMapping("/list_by_cus")
+    public ResultVo listByCus(SolutionReq solutionReq) {
+        return solutionService.listByCus(solutionReq);
+    }
 }

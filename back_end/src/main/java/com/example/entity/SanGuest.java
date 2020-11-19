@@ -14,10 +14,10 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SanyGuest {
-    private Integer sanyGuestId;
-    private String sanyGuestName;
-    private Date sanyGuestTime;
+public class SanGuest {
+    private Integer sanGuestId;
+    private String sanGuestName;
+    private Date sanGuestTime;
     private Integer cusId;
-    private Integer sanyGuestEmpId;
+    private Integer sanGuestEmpId;
 }

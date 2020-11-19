@@ -9,9 +9,10 @@ import com.example.entity.request.SolutionReq;
  * @description:
  */
 public interface SolutionService {
-    ResultVo addSolution(SolutionReq solutionReq);
+    ResultVo addSolution(SolutionReq solutionReq,String token);
     ResultVo delSolution(SolutionReq solutionReq);
     ResultVo editSolution(SolutionReq solutionReq);
     ResultVo getSolution(SolutionReq solutionReq);
     ResultVo listSolution(SolutionReq solutionReq);
+    ResultVo listByCus(SolutionReq solutionReq);
 }

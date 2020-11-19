@@ -4,7 +4,7 @@ import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
-import com.example.entity.SanyGuest;
+import com.example.entity.SanGuest;
 import com.example.entity.request.FollowLogReq;
 import com.example.entity.response.CustomerResp;
 import com.example.entity.response.EmpResp;
@@ -40,7 +40,7 @@ public class FollowLogServiceImpl implements FollowLogService {
     private EmpMapper empMapper;
 
     @Autowired
-    private SanyGuestMapper sanyGuestMapper;
+    private SanGuestMapper sanyGuestMapper;
 
     @Autowired
     private CustomerRecordMapper recordMapper;
@@ -60,12 +60,12 @@ public class FollowLogServiceImpl implements FollowLogService {
         EmpResp empByToken = empMapper.getEmpByToken(token);
         CustomerResp customer = customerMapper.getCustomer(cusId);
 
-        SanyGuest sanyGuest = new SanyGuest();
-        sanyGuest.setSanyGuestName("识别接触");
-        sanyGuest.setSanyGuestTime(DateUtils.getDate());
-        sanyGuest.setCusId(cusId);
-        sanyGuest.setSanyGuestEmpId(empByToken.getEmpId());
-        int addSanyGuest = sanyGuestMapper.addSanyGuest(sanyGuest);
+        SanGuest san = new SanGuest();
+        san.setSanGuestName("识别接触");
+        san.setSanGuestTime(DateUtils.getDate());
+        san.setCusId(cusId);
+        san.setSanGuestEmpId(empByToken.getEmpId());
+        int addSanyGuest = sanyGuestMapper.addSanGuest(san);
         if (addSanyGuest != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
@@ -151,6 +151,12 @@ public class FollowLogServiceImpl implements FollowLogService {
     @Override
     public ResultVo listPidFollow() {
         List<FollowLogResp> followLogResps = logMapper.listPidFollow();
+        return ResultUtils.response(followLogResps);
+    }
+
+    @Override
+    public ResultVo listByCus(FollowLogReq followLogReq) {
+        List<FollowLogResp> followLogResps = logMapper.listFollow(followLogReq);
         return ResultUtils.response(followLogResps);
     }
 }

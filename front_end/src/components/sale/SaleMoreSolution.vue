@@ -75,10 +75,11 @@
   import {saleHttp} from "../../network/pre_sale/sale";
   import {demandHttp} from "../../network/pre_sale/demand";
   import {customerHttp} from "../../network/pre_sale/customer";
+  import {solutionHttp} from "../../network/pre_sale/solution";
 
   export default {
     name: "SaleMoreSolution",
-    props:['sale-id','cus-id'],
+    props:['sale-id','cus-id','emp-id'],
     data() {
       return {
         cusName:'',
@@ -124,17 +125,26 @@
           }
         }
       },
-      saleChange(val) {
-        demandHttp.getBySaleId(val).then(res => {
-          this.demandList = res.data
-        })
-      },
       addDialogClose() {
         this.$refs.addFormRef.resetFields()
         this.addButtonLoading = false
       },
       addSolutionClick() {
-
+        this.$refs.addFormRef.validate(valid => {
+          if (!valid) return
+          this.addButtonLoading = true
+          solutionHttp.addSolution(this.addForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.addButtonLoading = false
+              this.addDialog = false
+              this.$emit('init-page')
+            } else {
+              this.$message.error(res.message)
+              this.addButtonLoading = false
+            }
+          })
+        })
       },
       initCustomerList() {
         customerHttp.listAll().then(res => {
@@ -146,10 +156,16 @@
           this.saleList = res.data.list
         })
       },
+      initDemandList() {
+        demandHttp.getBySaleId(this.saleId).then(res => {
+          this.demandList = res.data
+        })
+      }
     },
     created() {
       this.initCustomerList()
       this.initSaleList()
+      this.initDemandList()
     }
   }
 </script>

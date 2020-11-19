@@ -2,16 +2,12 @@ package com.example.service.impl;
 
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
+import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
+import com.example.entity.SanGuest;
 import com.example.entity.request.SolutionReq;
-import com.example.entity.response.CustomerResp;
-import com.example.entity.response.DemandResp;
-import com.example.entity.response.SaleResp;
-import com.example.entity.response.SolutionResp;
-import com.example.model.mapper.CustomerMapper;
-import com.example.model.mapper.DemandMapper;
-import com.example.model.mapper.SaleMapper;
-import com.example.model.mapper.SolutionMapper;
+import com.example.entity.response.*;
+import com.example.model.mapper.*;
 import com.example.service.SolutionService;
 import com.example.util.CheckUtils;
 import com.example.util.DateUtils;
@@ -45,14 +41,51 @@ public class SolutionServiceImpl implements SolutionService {
     @Autowired
     private DemandMapper demandMapper;
 
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Autowired
+    private CustomerRecordMapper recordMapper;
+
+    @Autowired
+    private SanGuestMapper sanGuestMapper;
+
     @Override
-    public ResultVo addSolution(SolutionReq solutionReq) {
+    public ResultVo addSolution(SolutionReq solutionReq,String token) {
         CheckUtils.validate(solutionReq);
         int addSolution = solutionMapper.addSolution(solutionReq);
         if (addSolution != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
+        Integer cusId = solutionReq.getCusId();
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        CustomerResp customer = customerMapper.getCustomer(cusId);
+
+        CustomerRecord customerRecord = new CustomerRecord();
+        customerRecord.setRecordTitle("新增解决方案");
+        customerRecord.setRecordType("三一客");
+        customerRecord.setRecordTime(DateUtils.getDate());
+        customerRecord.setCusId(cusId);
+        customerRecord.setEmpId(empByToken.getEmpId());
+        customerRecord.setRecordContent("员工【"+empByToken.getEmpName()
+                +"】对客户【"+customer.getCusName()+"】的三一节点推进");
+        int addCustomerRecord = recordMapper.addCustomerRecord(customerRecord);
+        if (addCustomerRecord != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+        SanGuest sanGuest = new SanGuest();
+        sanGuest.setSanGuestName("推荐产品");
+        sanGuest.setSanGuestTime(DateUtils.getDate());
+        sanGuest.setCusId(cusId);
+        sanGuest.setSanGuestEmpId(empByToken.getEmpId());
+        int addSanyGuest = sanGuestMapper.addSanGuest(sanGuest);
+        if (addSanyGuest != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
         return ResultUtils.response(addSolution);
     }
 
@@ -116,6 +149,12 @@ public class SolutionServiceImpl implements SolutionService {
         extractMethod(solutionResps);
         PageInfo<SolutionResp> list = new PageInfo<>(solutionResps);
         return ResultUtils.response(list);
+    }
+
+    @Override
+    public ResultVo listByCus(SolutionReq solutionReq) {
+        List<SolutionResp> solutionResps = solutionMapper.listSolution(solutionReq);
+        return ResultUtils.response(solutionResps);
     }
 
     public List<SolutionResp> extractMethod(List<SolutionResp> list) {

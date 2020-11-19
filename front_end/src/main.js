@@ -38,9 +38,10 @@ import {
   sexFormat,dateFormat,clueStatusFormat,timeFormat,clueTypeFormat,
   ordStateFormat,delStateFormat,planInvoiceFormat,recoReceivableFormat,
   dateTimeFormat,clueHandleResultFormat,productStatusFormat,followCategoryFormat,
-  salePriorLevelFormat,saleStarBeaconFormat
+  salePriorLevelFormat,saleStarBeaconFormat,dateDiff
 } from "./common/formatUtils";
 Vue.filter('dateFormat',dateFormat)
+Vue.filter('dateDiff',dateDiff)
 Vue.filter('timeFormat',timeFormat)
 Vue.filter('sexFormat',sexFormat)
 Vue.filter('clueStatusFormat',clueStatusFormat)

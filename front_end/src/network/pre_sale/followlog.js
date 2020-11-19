@@ -113,5 +113,14 @@ export const followHttp = {
       }
     }
     return postJson(params)
-  }
+  },
+  list_by_cus:function (cusId) {
+    let params = {
+      url:'/follow/list_by_cus',
+      data:{
+        'cusId':cusId
+      }
+    }
+    return get(params)
+  },
 }

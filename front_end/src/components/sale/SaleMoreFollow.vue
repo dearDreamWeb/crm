@@ -7,7 +7,7 @@
   <div>
     <el-dialog title="制定跟进日志" :visible.sync="addDialog"
                @close="addHandleClose">
-      <el-form :model="addForm" ref="addFormRef" size="mini" label-width="80px"
+      <el-form :model="addForm" ref="addSaleFollowFormRef" size="mini" label-width="80px"
                label-position="right" :rules="addFormRules">
         <el-row :gutter="20">
           <el-col :span="20">
@@ -27,7 +27,7 @@
           <el-col :span="12">
             <el-form-item label="跟进类别" prop="followCategory">
               <el-select v-model="addForm.followCategory" clearable
-                         placeholder="请选择">
+                         placeholder="请选择" @change="followCategoryChange">
                 <el-option v-for="item in followCategoryList" :key="item.label"
                            :label="item.value" :value="item.label"></el-option>
               </el-select>
@@ -97,7 +97,7 @@
       <span slot="footer">
         <el-button @click="addDialog = false">取消</el-button>
         <el-button type="primary" :loading="addButtonLoading"
-                   @click="addFormClick">确定</el-button>
+                   @click="addSaleFollowFormClick">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -111,7 +111,7 @@
 
   export default {
     name: "SaleMoreFollow",
-    props:['sale-id','cus-id'],
+    props:['sale-id','cus-id','emp-id'],
     data() {
       return {
         cusName:'',
@@ -131,7 +131,7 @@
           followEndTime:'',
           followContent:'',
           cusId:this.cusId,
-          empId:'',
+          empId:this.empId,
           followPid:''
         },
         addFormRules:{
@@ -147,9 +147,6 @@
           followContent:[
             {required:true,message:'请输入跟进描述',trigger:'blur'}
           ],
-          cusId:[
-            {required:true,message:'请选择客户',trigger:'change'}
-          ]
         },
         addButtonLoading:false,
         followCategoryList: followCategory,
@@ -159,6 +156,11 @@
       }
     },
     methods:{
+      followCategoryChange(value) {
+        if (value == 2) {
+          this.addForm.followEndTime = new Date()
+        }
+      },
       openAddDialog() {
         this.addDialog = true
         for (let i=0;i<this.customerList.length;i++) {
@@ -167,11 +169,29 @@
           }
         }
       },
-      addFormClick() {
-
+      /*到达客户公司实体测量墙体，选定产品，安装数量*/
+      addSaleFollowFormClick() {
+        this.$refs.addSaleFollowFormRef.validate(valid => {
+          if (!valid) return
+          this.addButtonLoading = true
+          followHttp.add(this.addForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.addButtonLoading = false
+              this.addDialog = false
+              this.$emit('init-page')
+            } else {
+              this.$message({
+                message:res.message,
+                type:'error'
+              })
+              this.addButtonLoading = false
+            }
+          })
+        })
       },
       addHandleClose() {
-        this.$refs.addFormRef.resetFields()
+        this.$refs.addSaleFollowFormRef.resetFields()
         this.addButtonLoading = false
       },
       generateFollowTitle() {
@@ -192,6 +212,7 @@
           this.customerList = res.data
         })
       },
+
     },
     created() {
       this.initCustomerList()

@@ -31,4 +31,5 @@ public class SaleResp {
 
     private String cusName;
     private String empName;
+    private String contactsName;
 }

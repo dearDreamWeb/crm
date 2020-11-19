@@ -4,7 +4,7 @@ import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
-import com.example.entity.SanyGuest;
+import com.example.entity.SanGuest;
 import com.example.entity.request.DemandReq;
 import com.example.entity.response.*;
 import com.example.model.mapper.*;
@@ -48,7 +48,7 @@ public class DemandServiceImpl implements DemandService {
     private CustomerRecordMapper recordMapper;
 
     @Autowired
-    private SanyGuestMapper sanyGuestMapper;
+    private SanGuestMapper sanGuestMapper;
 
     @Override
     public ResultVo addDemand(DemandReq demandReq, String token) {
@@ -77,12 +77,12 @@ public class DemandServiceImpl implements DemandService {
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
 
-        SanyGuest sanyGuest = new SanyGuest();
-        sanyGuest.setSanyGuestName("激发需求");
-        sanyGuest.setSanyGuestTime(DateUtils.getDate());
-        sanyGuest.setCusId(cusId);
-        sanyGuest.setSanyGuestEmpId(empByToken.getEmpId());
-        int addSanyGuest = sanyGuestMapper.addSanyGuest(sanyGuest);
+        SanGuest sanGuest = new SanGuest();
+        sanGuest.setSanGuestName("激发需求");
+        sanGuest.setSanGuestTime(DateUtils.getDate());
+        sanGuest.setCusId(cusId);
+        sanGuest.setSanGuestEmpId(empByToken.getEmpId());
+        int addSanyGuest = sanGuestMapper.addSanGuest(sanGuest);
         if (addSanyGuest != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
@@ -157,6 +157,12 @@ public class DemandServiceImpl implements DemandService {
     public ResultVo getBySaleId(Integer saleId) {
         List<DemandResp> bySaleId = demandMapper.getBySaleId(saleId);
         return ResultUtils.response(bySaleId);
+    }
+
+    @Override
+    public ResultVo listByCus(DemandReq demandReq) {
+        List<DemandResp> respList = demandMapper.listDemand(demandReq);
+        return ResultUtils.response(respList);
     }
 
     public List<DemandResp> extractMethod(List<DemandResp> list) {

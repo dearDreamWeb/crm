@@ -75,5 +75,14 @@ export const solutionHttp = {
       }
     }
     return get(params)
+  },
+  list_by_cus:function (cusId) {
+    let params = {
+      url:'/solution/list_by_cus',
+      data:{
+        'cusId':cusId
+      }
+    }
+    return get(params)
   }
 }

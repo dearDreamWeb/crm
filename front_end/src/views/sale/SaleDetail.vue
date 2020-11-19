@@ -5,7 +5,7 @@
 -->
 <template>
   <el-container style="height: 100%">
-    <el-main>
+    <el-main v-loading.fullscreen.lock="fullscreenLoading">
       <el-card>
         <div slot="header">
           <div class="header-left" style="font-size: 20px">
@@ -19,7 +19,7 @@
           <el-row :gutter="20">
             <el-col :span="14">
               <el-card>
-                <el-form>
+                <el-form label-width="100px" label-position="right">
                   <el-row :gutter="20">
                     <el-col :span="8">
                       <el-form-item label="机会主题：">
@@ -33,92 +33,86 @@
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="客户：">
-
+                        <el-tag>{{saleForm.cusName}}</el-tag>
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row :gutter="20">
                     <el-col :span="8">
                       <el-form-item label="状态：">
-
+                        {{saleForm.saleStatus}}
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="客户联系人：">
-
+                        {{saleForm.contactsName}}
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="类型：">
-
+                        {{saleForm.saleType}}
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row :gutter="20">
                     <el-col :span="8">
                       <el-form-item label="发现时间：">
-
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="来源：">
-
+                        {{saleForm.discoveryTime | dateFormat}}
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="负责人：">
-
+                        {{saleForm.empName}}
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="阶段：">
+                        <el-tag>{{saleForm.saleDetailResp.saleStage}}</el-tag>
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row :gutter="20">
                     <el-col :span="8">
-                      <el-form-item label="提供人：">
-
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="预计签单日期：">
-
+                      <el-form-item label="预签日期：">
+                        <el-tag v-if="saleForm.saleDetailResp.saleEstimateDate==null">暂定</el-tag>
+                        <el-tag v-else>{{saleForm.saleDetailResp.saleEstimateDate}}</el-tag>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="预期金额：">
-
+                        <el-tag v-if="saleForm.saleDetailResp.saleExpectMoney==null">暂定</el-tag>
+                        <el-tag v-else>{{saleForm.saleDetailResp.saleEstimateDate}}</el-tag>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="可能性：">
+                        <el-tag v-if="saleForm.saleDetailResp.salePossibility == null">暂定</el-tag>
+                        <el-progress v-else type="circle"
+                                     :percentage="saleForm.saleDetailResp.salePossibility"></el-progress>
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row :gutter="20">
                     <el-col :span="8">
-                      <el-form-item label="可能性：">
-
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
                       <el-form-item label="星标：">
-
+                        <img :src="saleForm.saleDetailResp.saleStarBeacon">
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="优先：">
-
+                        {{saleForm.saleDetailResp.salePriorLevel}}
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row :gutter="20">
                     <el-col :span="8">
-                      <el-form-item label="阶段：">
-
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
                       <el-form-item label="阶段停留：">
-
+                        <el-tag></el-tag>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="竞争：">
-
+                        <el-tag>静态-暂定</el-tag>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -126,66 +120,77 @@
               </el-card>
             </el-col>
             <el-col :span="10">
-              <el-row class="sale_detail_row">
-                <el-col>
-                  <el-card>
-                    <div slot="header">
+              <el-card>
+                <el-collapse v-model="activeNames" accordion>
+                  <el-collapse-item name="1">
+                    <template slot="title">
                       <span>待办任务</span>
-                      <el-button icon="el-icon-circle-plus" size="mini"
+                      <el-button icon="el-icon-circle-plus" size="mini" class="collapse-button"
                                  @click="openFollow" circle></el-button>
-                    </div>
-                  </el-card>
-                </el-col>
-              </el-row>
-              <el-row class="sale_detail_row">
-                <el-col>
-                  <el-card>
-                    <div slot="header">
+                    </template>
+                    <el-table height="260px" :data="followListForm" class="list_form_table">
+                      <el-table-column type="index"></el-table-column>
+                      <el-table-column :label="followListForm.followTitle">
+                        <template slot-scope="scope">
+                          {{scope.row.followContent}}<br>
+                          {{scope.row.createTime | dateTimeFormat}}
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </el-collapse-item>
+                  <el-collapse-item name="2">
+                    <template slot="title">
                       <span>客户需求</span>
-                      <el-button size="mini" icon="el-icon-circle-plus"
+                      <el-button size="mini" icon="el-icon-circle-plus" class="collapse-button"
                                  @click="openDemand" circle></el-button>
-                    </div>
-                  </el-card>
-                </el-col>
-              </el-row>
-              <el-row class="sale_detail_row">
-                <el-col>
-                  <el-card>
-                    <div slot="header">
+                    </template>
+                    <el-table :data="demandListForm" height="260px" class="list_form_table">
+                      <el-table-column type="index"></el-table-column>
+                      <el-table-column :label="demandListForm.demandTitle">
+                        <template slot-scope="scope">
+                          {{scope.row.demandContent}}<br>
+                          {{scope.row.createTime | dateFormat}}
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </el-collapse-item>
+                  <el-collapse-item name="3">
+                    <template slot="title">
                       <span>解决方案</span>
-                      <el-button size="mini" icon="el-icon-circle-plus"
+                      <el-button size="mini" icon="el-icon-circle-plus" class="collapse-button"
                                  @click="openSolution" circle></el-button>
-                    </div>
-                  </el-card>
-                </el-col>
-              </el-row>
-              <el-row class="sale_detail_row">
-                <el-col>
-                  <el-card>
-                    <div slot="header">
-                      <span>报价</span>
-                      <el-button size="mini" icon="el-icon-circle-plus" circle></el-button>
-                    </div>
-                  </el-card>
-                </el-col>
-              </el-row>
-              <el-row class="sale_detail_row">
-                <el-col>
-                  <el-card>
-                    <div slot="header">
-                      <span>竞争</span>
-                      <el-button size="mini" icon="el-icon-circle-plus" circle></el-button>
-                    </div>
-                  </el-card>
-                </el-col>
-              </el-row>
+                    </template>
+                    <el-table :data="solutionListForm" height="260px" class="list_form_table">
+                      <el-table-column type="index"></el-table-column>
+                      <el-table-column :label="solutionListForm.solutionTitle">
+                        <template slot-scope="scope">
+                          {{scope.row.content}}<br>
+                          {{scope.row.createTime | dateFormat}}
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </el-collapse-item>
+                  <el-collapse-item name="4">
+                    <template slot="title">
+                      <span>产品报价</span>
+                      <el-button size="mini" icon="el-icon-circle-plus" circle class="collapse-button"></el-button>
+                    </template>
+                    <el-table>
+                      <el-table-column type="index"></el-table-column>
+                    </el-table>
+                  </el-collapse-item>
+                </el-collapse>
+              </el-card>
             </el-col>
           </el-row>
         </div>
       </el-card>
-      <sale-more-follow ref="saleMoreFollowFef" :sale-id="saleId" :cus-id="cusId"></sale-more-follow>
-      <sale-more-demand ref="saleMoreDemandRef" :sale-id="saleId" :cus-id="cusId"></sale-more-demand>
-      <sale-more-solution ref="saleMoreSolutionRef" :sale-id="saleId" :cus-id="cusId"></sale-more-solution>
+      <sale-more-follow ref="saleMoreFollowFef" :sale-id="saleId" :cus-id="cusId"
+                        :emp-id="empId" v-on:init-page="initSaleDetail"></sale-more-follow>
+      <sale-more-demand ref="saleMoreDemandRef" :sale-id="saleId" :cus-id="cusId"
+                        :emp-id="empId" v-on:init-page="initSaleDetail"></sale-more-demand>
+      <sale-more-solution ref="saleMoreSolutionRef" :sale-id="saleId" :cus-id="cusId"
+                          :emp-id="empId" v-on:init-page="initSaleDetail"></sale-more-solution>
     </el-main>
   </el-container>
 </template>
@@ -195,21 +200,41 @@
   import SaleMoreFollow from "../../components/sale/SaleMoreFollow";
   import SaleMoreDemand from "../../components/sale/SaleMoreDemand";
   import SaleMoreSolution from "../../components/sale/SaleMoreSolution";
+  import {followHttp} from "../../network/pre_sale/followlog";
+  import {demandHttp} from "../../network/pre_sale/demand";
+  import {solutionHttp} from "../../network/pre_sale/solution";
 
   export default {
     name: "SaleDetail",
     components: {SaleMoreSolution, SaleMoreDemand, SaleMoreFollow},
     data() {
       return {
+        fullscreenLoading:false,
+
         saleId:'',
         cusId:'',
-        saleForm:{},
+        empId:'',
+        saleForm:{
+          saleDetailResp:{}
+        },
+
+        followListForm:[],
+        demandListForm:[],
+        solutionListForm:[],
+
+        followListFormLoading:false,
+        activeNames: ['1']
       }
+    },
+    computed:{
+
     },
     methods:{
       initSaleDetail() {
+        this.fullscreenLoading = true
         saleHttp.get_by_id(this.saleId).then(res => {
           this.saleForm = res.data
+          this.fullscreenLoading = false
         })
       },
       openFollow() {
@@ -220,12 +245,31 @@
       },
       openSolution() {
         this.$refs.saleMoreSolutionRef.openAddDialog()
+      },
+      initFollowByCus() {
+        followHttp.list_by_cus(this.cusId).then(res => {
+          this.followListForm = res.data
+        })
+      },
+      initDemandByCus() {
+        demandHttp.list_by_cus(this.cusId).then(res => {
+          this.demandListForm = res.data
+        })
+      },
+      initSolutionByCus() {
+        solutionHttp.list_by_cus(this.cusId).then(res => {
+          this.solutionListForm = res.data
+        })
       }
     },
     created() {
       this.saleId = this.$urlUtil.getQueryVariable("saleId")
       this.cusId = this.$urlUtil.getQueryVariable("cusId")
+      this.empId = this.$urlUtil.getQueryVariable("empId")
       this.initSaleDetail()
+      this.initFollowByCus()
+      this.initDemandByCus()
+      this.initSolutionByCus()
     },
   }
 </script>
@@ -236,5 +280,23 @@
   }
   >>>.el-form .el-form-item__label{
     color: #aabada;
+  }
+  .list_form_table{
+    margin-top: -38px;
+  }
+  ::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  ::-webkit-scrollbar {
+    width: 0 !important;height: 0;
+  }
+  .el-table ::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  .el-table ::-webkit-scrollbar {
+    width: 0 !important;height: 0;
+  }
+  .collapse-button {
+    margin-left: 5px;
   }
 </style>

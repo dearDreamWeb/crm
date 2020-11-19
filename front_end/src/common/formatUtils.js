@@ -162,3 +162,13 @@ export function saleStarBeaconFormat(saleStarBeacon) {
     return 'http://www.eblog.icu/5.png'
   }
 }
+
+export function dateDiff(date) {
+  var argsOne,argsTwo,argsThree,argsFour;
+  argsOne = this.moment(date).format('YYYY-MM-DD').split("-");
+  argsTwo = new Date(argsOne[1] + '-' + argsOne[2] + '-' + argsOne[0]);
+  argsOne = this.moment(new Date()).format('YYYY-MM-DD').split("-");
+  argsThree = new Date(argsOne[1] + '-' + argsOne[2] + '-' + argsOne[0]);
+  argsFour = parseInt(Math.abs(argsTwo - argsThree) / 1000 / 60 / 60 / 24);
+  return argsFour;
+}

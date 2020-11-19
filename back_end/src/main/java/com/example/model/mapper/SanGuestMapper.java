@@ -1,6 +1,6 @@
 package com.example.model.mapper;
 
-import com.example.entity.SanyGuest;
+import com.example.entity.SanGuest;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
  * @description:
  */
 @Repository
-public interface SanyGuestMapper {
-    int addSanyGuest(SanyGuest sanyGuest);
+public interface SanGuestMapper {
+    int addSanGuest(SanGuest sanGuest);
 }
