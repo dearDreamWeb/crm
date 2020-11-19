@@ -95,7 +95,7 @@
         <el-table-column prop="repairGdstae" label="状态"></el-table-column>
 <!--        <el-table-column prop="deptResp.deptName" label="维修部门"></el-table-column>-->
         <el-table-column prop="productResp.productName" label="维修产品"></el-table-column>
-        <el-table-column prop="empResp.empName" label="接单人"></el-table-column>
+<!--        <el-table-column prop="empResp.empName" label="接单人"></el-table-column>-->
         <el-table-column prop="careData" label="日期">
           <template slot-scope="scope">
             {{scope.row.repairDate | dateFormat}}
@@ -173,15 +173,15 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="接单人">
-              <el-select v-model="addform.empId">
-                <el-option v-for="item in edpList" :key="item.empId"
-                           :label="item.empName" :value="item.empId">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="接单人">-->
+<!--              <el-select v-model="addform.empId">-->
+<!--                <el-option v-for="item in edpList" :key="item.empId"-->
+<!--                           :label="item.empName" :value="item.empId">-->
+<!--                </el-option>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
           <el-col :span="8">
             <el-form-item label="状态">
               <el-select v-model="addform.repairGdstae" placeholder="请选择">
@@ -272,13 +272,22 @@
             </el-col>
           </el-row>
           <el-row>
+<!--            <el-col :span="8">-->
+<!--              <el-form-item label="接单人">-->
+<!--                <el-select v-model="updateform.empId">-->
+<!--                  <el-option v-for="item in edpList" :key="item.empId"-->
+<!--                             :label="item.empName" :value="item.empId">-->
+<!--                  </el-option>-->
+<!--                </el-select>-->
+<!--              </el-form-item>-->
+<!--            </el-col>-->
             <el-col :span="8">
-              <el-form-item label="接单人">
-                <el-select v-model="updateform.empId">
-                  <el-option v-for="item in edpList" :key="item.empId"
-                             :label="item.empName" :value="item.empId">
-                  </el-option>
-                </el-select>
+              <el-form-item label="费用">
+                <el-input
+                  placeholder="请输入内容"
+                  v-model="updateform.repairWxfy"
+                  :disabled="true">
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -307,20 +316,20 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="8">
-              <el-form-item label="维修部门">
-                <el-select v-model="updateform.deptId">
-                  <el-option v-for="item in deptList" :key="item.deptId"
-                             :label="item.deptName" :value="item.deptId">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="费用">
-                <el-input v-model="updateform.repairWxfy"></el-input>
-              </el-form-item>
-            </el-col>
+<!--            <el-col :span="8">-->
+<!--              <el-form-item label="维修部门">-->
+<!--                <el-select v-model="updateform.deptId">-->
+<!--                  <el-option v-for="item in deptList" :key="item.deptId"-->
+<!--                             :label="item.deptName" :value="item.deptId">-->
+<!--                  </el-option>-->
+<!--                </el-select>-->
+<!--              </el-form-item>-->
+<!--            </el-col>-->
+<!--            <el-col :span="8">-->
+<!--              <el-form-item label="费用">-->
+<!--                <el-input v-model="updateform.repairWxfy"></el-input>-->
+<!--              </el-form-item>-->
+<!--            </el-col>-->
           </el-row>
         </el-form>
       <div style="text-align: center;">

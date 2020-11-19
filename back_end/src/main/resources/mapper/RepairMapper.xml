@@ -231,6 +231,9 @@
             <if test="repairSfzb != null and repairSfzb != ''">
                 AND s.repair_sfzb LIKE CONCAT('%',#{repairSfzb},'%')
             </if>
+            <if test="repairsjhm != null and repairsjhm != ''">
+                AND s.inventory_seq LIKE CONCAT('%',#{repairsjhm},'%')
+            </if>
             <if test="cusId != null">
                 and s.cus_id=#{cusId}
             </if>
