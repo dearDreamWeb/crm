@@ -47,7 +47,7 @@ public class SzDeliverController {
     }
 
     @SysLog("添加发货单")
-    @PostMapping("/addANDord")
+    @PostMapping("/addDelANDOrd")
     public ResultVo addDelANDOrd(@RequestBody SzDeliver szDeliver) {
         return szdeliverService.addDelANDOrd(szDeliver);
     }
