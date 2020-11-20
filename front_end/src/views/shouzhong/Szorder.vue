@@ -98,6 +98,7 @@
         <el-table-column prop="ordHead" label="负责人" width="140"></el-table-column>
         <el-table-column label="操作" sortable>
           <template slot-scope="scope">
+            <el-button type="text" @click="fahuo(scope.row)">制定发货</el-button>
             <el-button type="text" @click="chakan(scope.row)">查看详情</el-button>
           </template>
         </el-table-column>
@@ -110,6 +111,44 @@
       </el-pagination>
       <el-button  @click="anniu">按钮</el-button>
     </el-card>
+
+    <el-dialog title="发货" :visible.sync="FahuoTableVisible" width="65%" top="40px">
+      <el-card shadow="always" class="card">
+        <div class="mingxi">
+          <span>主题：{{xiangqing.ordTheme}}</span>
+          <span>订单号： {{xiangqing.ordId}}</span>
+          <span>负责人：{{xiangqing.ordHead}}</span>
+          <span>订单状态
+              <i v-if="xiangqing.ordState == 1">已完成</i>
+              <i v-if="xiangqing.ordState == 0">执行中</i>
+            </span>
+          <span>对应客户：{{xiangqing.cusId}}</span>
+        </div>
+      </el-card>
+      <el-tabs type="border-card" >
+        <el-tab-pane label="需发产品">
+          <el-table :data="NeedProduct" >
+            <el-table-column prop="productId" label="产品编号"></el-table-column>
+            <el-table-column prop="productName" label="产品名称"></el-table-column>
+            <el-table-column prop="productModel" label="产品型号"></el-table-column>
+            <el-table-column prop="productBrand" label="产品品牌"></el-table-column>
+            <el-table-column prop="productSize" label="产品尺寸"></el-table-column>
+            <el-table-column prop="productPrice" label="产品价格"></el-table-column>
+            <el-table-column label="操作">
+              选择
+            </el-table-column>
+
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="产品序列">
+          <el-table :data="SeqProduct" >
+            <el-table-column prop="productDetailId" label="产品详情号" width="150"></el-table-column>
+            <el-table-column prop="productId" label="产品编号" width="200"></el-table-column>
+            <el-table-column prop="productBarCode" label="产品序列号" width="200"></el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
 
     <el-dialog title="订单" :visible.sync="dialogTableVisible" width="65%" top="70px">
       <el-card shadow="always" class="card">
@@ -189,7 +228,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="总金额" prop="ordTotalmoney" >
-              <el-input v-model="addForm.ordTotalmoney" size="medium" :disabled="true"/>
+              <el-input v-model="zj" size="medium" :disabled="true"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -346,6 +385,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="总金额" prop="ordTotalmoney">
+
               <el-input v-model="editForm.ordTotalmoney" size="medium" :disabled="true" />
             </el-form-item>
           </el-col>
@@ -405,6 +445,7 @@
   import {customerHttp} from "../../network/pre_sale/customer";
   import {productHttp} from "../../network/system/product";
   import {planHttp} from "../../network/system/plan";
+  import {deliverHttp} from "../../network/system/deliver";
 
   export default {
     name: "Order",
@@ -503,20 +544,21 @@
         editDialog:false,
         editOrderButtonLoading:false,
         dialogTableVisible:false,
-        addOrdButtonLoading:false,
+        FahuoTableVisible:false,
         szrecord:[],
         /*szproduct:[],*/
         szorder:[],
         Detail:[],
         abPlan:[],
         abdeliver:[],
+        NeedProduct:[],
+        SeqProduct:[],
         cusList:[],
         addproplus: [],
         addPlan:[],
         xuanfenqi:[],
         totalmoney:'',
         activeName: 'first',
-        zj:0,
         oid:0,
         xiangqing:{}
       }
@@ -524,20 +566,20 @@
     methods: {
       /*算钱change*/
       ProNumderChange(row){
-        /*productNumber=this.product*/
+      /*  /!*productNumber=this.product*!/
         console.log('数量:',row.productNumber)
         console.log('1价格:',row.productNumber * row.productPrice)
         row.totalmoney=row.productNumber * row.productPrice
         console.log("产品总金额：",row.totalmoney)
-       /* this.zj = this.zj+ row.productPrice
-        console.log(this.zj);*/
+       /!* this.zj = this.zj+ row.productPrice
+        console.log(this.zj);*!/
        let totalzj = 0;
         this.addproplus.forEach(value => {
           totalzj=totalzj + value.totalmoney
         })
         this.addForm.ordTotalmoney = totalzj
         this.zj=totalzj
-        console.log("添加产品后总价：",this.zj)
+        console.log("添加产品后总价：",this.zj)*/
       },
       delpro(index,row){
         var index = this.addproplus.indexOf(row)
@@ -604,22 +646,25 @@
         })
       },
 
-      addpro(val){
+      addpro(row){
        /* this.isDisable=true;*/
         this.addDialog=true;
-          if(this.addproplus.find(item => item.productName === val.productName)){
-            //已存在商品  修改数量
-            alert("改产品已添加")
-        }else{
-            // this.addproplus.productNumber=1;
-            this.addproplus.push(val);
-           /* val.productNumber=1;
-            this.addproplus.push(val);
-            this.ProNumderChange(val);*/
-            for(var i=0,n=this.addproplus.length;i<n;i++){
-              console.log("addproplus啦啦啦啦啦",this.addproplus)
+        let pro={
+          productId:row.productId,
+          productBrand:row.productBrand,
+          productName:row.productName,
+          productModel:row.productModel,
+          productPrice:row.productPrice,
+          productNumber:1
+        }
+        //判断产品是否已经存在，如果存在，数量累加，否则新增选择的商品信息
+        let result = this.addproplus.filter(p=>{return p.productId==pro.productId});
+        if(result && result.length>0){
+          //产品已经选择，修改产品的数量
+          result[0].productNumber= result[0].productNumber+1;
 
-            }
+        }else{
+          this.addproplus.push(pro)
         }
       },
       AddProPage(pageIndex){
@@ -786,13 +831,12 @@
 
         }
       },
-
       /*制定回款*/
       developClick(val){
         /*判断是否完善订单信息*/
         if(this.addproplus.length>0){
           this.addPlanForm.ordTotalmoney=""
-          this.addPlanForm.ordTotalmoney=this.zj
+          this.addPlanForm.ordTotalmoney=this.zj;
           this.addPlanDialog=true;
         }else{
           this.$message({
@@ -800,7 +844,6 @@
             type: 'warning'
           });
         }
-
       },
       /*制定回款的确认按钮*/
       addPlanClick(){
@@ -818,53 +861,108 @@
       },
     /*新增订单（选择产品同时新增订单详情）*/
       addOrderClick(){
-       console.log("this.addproplu:",this.addproplus)
-        var addDetail = [];
-    /*通过循环得到已选取产品的主键、价格、数量*/
-        for(var i=0,n=this.addproplus.length;i<n;i++){
-          console.log("addproplus中价格:",this.addproplus[i].productPrice)
-          var json={
-            productId:this.addproplus[i].productId,
-            odetBuynum:this.addproplus[i].productNumber,
-            odetBuymoney:this.addproplus[i].productPrice,
+        if(this.addproplus.length>0){
+          /*this.addPlanForm.ordTotalmoney=""
+          this.addPlanForm.ordTotalmoney=this.zj
+          this.addPlanDialog=true;*/
+          console.log("this.addproplu:",this.addproplus)
+          var addDetail = [];
+          /*通过循环得到已选取产品的主键、价格、数量*/
+          for(var i=0,n=this.addproplus.length;i<n;i++){
+            console.log("addproplus中价格:",this.addproplus[i].productPrice)
+            var json={
+              productId:this.addproplus[i].productId,
+              odetBuynum:this.addproplus[i].productNumber,
+              odetBuymoney:this.addproplus[i].productPrice,
+            }
+            addDetail.push(json)
           }
-          addDetail.push(json)
-        }
-        console.log(json)
-        console.log("addDetail:",addDetail)
-    /*给文本框绑定需要的值*/
-        let ppp={
-          ordTheme:this.addForm.ordTheme,
-          ordHead:this.$store.state.empName,
-          ordTotalmoney:this.addForm.ordTotalmoney,
-          ordConsignee:this.addForm.ordConsignee,
-          ordProvince:this.selected2[0],
-          ordCity:this.selected2[1],
-          ordCountry:this.selected2[2],
-          ordDetail:this.addForm.ordDetail,
-          ordPhone:this.addForm.ordPhone,
-          cusId:this.addForm.cusId,
-          szOrderDetails:addDetail
-        }
-        orderHttp.addOrder(ppp).then(res => {
-          if (res.code === 20000) {
-            this.$message.success(res.message)
-            this.initList()
-            console.log("O：",res);
-            console.log("Oid：",res.data)
-            this.oid=res.data;
-            this.addDialog = false
-            this.addOrderButtonLoading = false
-          } else {
-            this.$message({
-              message:res.message,
-              type:"error"
+          console.log(json)
+          console.log("addDetail:",addDetail)
+          /*给文本框绑定需要的值*/
+          let ppp={
+            ordTheme:this.addForm.ordTheme,
+            ordHead:this.$store.state.empName,
+            ordTotalmoney:this.addForm.ordTotalmoney,
+            ordConsignee:this.addForm.ordConsignee,
+            ordProvince:this.selected2[0],
+            ordCity:this.selected2[1],
+            ordCountry:this.selected2[2],
+            ordDetail:this.addForm.ordDetail,
+            ordPhone:this.addForm.ordPhone,
+            cusId:this.addForm.cusId,
+            szOrderDetails:addDetail
+          }
+          this.addOrderButtonLoading = false;
+            orderHttp.addOrder(ppp).then(res => {
+              if (res.code === 20000) {
+                this.$message.success(res.message)
+                this.initList()
+                console.log("O：",res);
+                console.log("Oid：",res.data)
+                this.oid=res.data;
+                this.addDialog = false
+                this.addOrderButtonLoading = false
+                let id = this.oid,
+                  $this = this;
+                const h = this.$createElement;
+                console.log(id);
+               /* this.$notify.info({
+                  title: '消息',
+                  message: '这是一条消息的提示消息',
+                  duration: 0,
+                  onClick() {
+                    $this.defineCallBack(id); //自定义回调,message为传的参数
+                    console.log("传递过来的值是：",id);
+                  }
+                });*/
+                this.$notify({
+                  title: '提示',
+                  message: '暂未制定发货单，点击制定！',
+                  duration: 0,
+                  onClick() {
+                    $this.defineCallBack(id); //自定义回调,message为传的参数
+                    console.log("传递过来的值是：",id);
+                    this.FahuoTableVisible = true;
+                    //alert("发货！")
+                    let id=val.ordId;
+                    deliverHttp.addord(id).then(res=>{
+                      console.log(this.ordId)
+                      console.log("发货！")
+                    })
+                  }
+                });
+              } else {
+                this.$message({
+                  message:res.message,
+                  type:"error"
+                })
+              }
             })
-            this.addOrderButtonLoading = false
-          }
+        }else{
+          this.$message({
+            message: '请先完善订单信息',
+            type: 'error'
+          });
+        }
+      },
+      //点击事件回调
+      defineCallBack() {
+        console.log("传递过来的值是：",this.oid);
+        console.log(val.ordId)
+
+      },
+      /*发货*/
+      fahuo(val){
+        this.FahuoTableVisible = true;
+        console.log(val.ordId)
+        //alert("发货！")
+        let id=val.ordId;
+        deliverHttp.addord(id).then(res=>{
+          console.log(this.ordId)
+          console.log("发货！")
         })
       },
-      /*计划回款*/
 
       /*修改订单*/
       editOrderClick(){
@@ -909,6 +1007,18 @@
     created() {
       this.initList()
       this.initCusList()
+    },
+    /*计算属性*/
+    computed:{
+      zj(){
+         //循环所选商品的数据集合
+        let total=0;
+        const totalCount = this.addproplus .reduce((total, cur, i, arr) => {
+          var count = cur.productNumber*cur.productPrice;
+          return total + count;
+        }, 0);
+        return totalCount;
+      }
     }
   }
 </script>
@@ -928,7 +1038,7 @@
   }
 
   .mingxi{
-    margin: 0px 5px 15px 5px;
+    margin: 10px 5px;
   }
   .mingxi span{
     padding: 5px 25px;

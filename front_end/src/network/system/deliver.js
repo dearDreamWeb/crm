@@ -3,12 +3,21 @@ import {postJson,get} from "../request";
 export const deliverHttp = {
   addANDord:function(deliver) {
     let params = {
-      url:'/deliver/addANDord',
+      url:'/deliver/addDelANDOrd',
       data:{
         'ordId':deliver.ordId,
         'delWuliuid':deliver.delWuliuid,
         'delCompany':deliver.delCompany,
         'delPeople':deliver.delPeople
+      }
+    }
+    return postJson(params)
+  },
+  addord:function(ordId) {
+    let params = {
+      url:'/deliver/addDelANDOrd',
+      data:{
+        'ordId':ordId,
       }
     }
     return postJson(params)

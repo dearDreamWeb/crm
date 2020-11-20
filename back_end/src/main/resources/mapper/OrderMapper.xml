@@ -71,7 +71,6 @@
         <result column="ration_id" property="rationId"/>
         <result column="emp_id" property="empId"/>
     </resultMap>
-
     <resultMap id="szDetailsResult" type="com.example.entity.request.SzOrderDetails">
         <id property="odetId" column="odet_id"/>
         <result property="odetBuynum" column="odet_buynum"/>
@@ -79,7 +78,6 @@
         <result property="ordId" column="ord_id"/>
         <result property="productId" column="product_id"/>
     </resultMap>
-
     <resultMap id="szPlanResult" type="com.example.entity.request.SzReceivablePlan">
         <id property="planId" column="plan_id"/>
         <result property="planMoney" column="plan_money"/>
@@ -92,7 +90,6 @@
         <result property="ordId" column="ord_id"/>
         <result property="empId" column="emp_id"/>
     </resultMap>
-
     <resultMap id="szDeliverResult" type="com.example.entity.request.SzDeliver">
         <id property="delId" column="del_id"/>
         <result property="delWuliuid" column="del_wuliuid"/>
@@ -104,7 +101,6 @@
         <result property="delDelete" column="del_delete"/>
         <result property="ordId" column="ord_id"/>
     </resultMap>
-
     <resultMap id="ProductResult" type="com.example.entity.response.ProductResp">
         <id column="product_id" property="productId"/>
         <result column="product_name" property="productName"/>
@@ -152,7 +148,7 @@
             and  ord_delete = 0
         </where>
     </select>
-    <!--查全部-->
+    <!--详情查全部-->
     <select id="orderAll" resultMap="szOrderDetailResult">
         SELECT s.*,cl.*,od.*,r.*,p.*
         FROM sz_order s
@@ -162,6 +158,10 @@
         left join product p on od.product_id=p.product_id
         left join sz_deliver d on od.ord_id=d.ord_id
         where s.ord_id=#{ordId}
+    </select>
+    <!--发货查订单-->
+    <select id="ordANDdel">
+
     </select>
     <!--单条-->
     <select id="getszOrder" resultMap="szOrderResult">

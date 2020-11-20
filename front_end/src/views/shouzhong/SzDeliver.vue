@@ -24,15 +24,15 @@
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column prop="szOrder.ordTheme"  label="对应订单" ></el-table-column>
         <el-table-column prop="delDelivertime" label="发货时间" sortable>
           <template slot-scope="scope">
-            <el-tag>{{scope.row.delDelivertime | dateFormat}}</el-tag>
+            {{scope.row.delDelivertime | dateFormat}}
           </template>
         </el-table-column>
         <el-table-column prop="delWuliuid" label="发货单号" sortable></el-table-column>
         <!--<el-table-column prop="szOrder.ordHead" label="订单" sortable>
         </el-table-column>-->
-        <el-table-column prop="szOrder.ordTheme"  label="对应订单" ></el-table-column>
         <el-table-column prop="delPeople" label="发货人" sortable></el-table-column>
         <el-table-column prop="delState" label="发货状态" sortable>
           <template slot-scope="scope">
