@@ -29,7 +29,6 @@
           size="mini"
           type="danger"
           @click="deleteCare">取消</el-button>
-        <el-button @click="handleClick" type="text" size="small">查看</el-button>
       </template>
     </el-table-column>
   </el-table>

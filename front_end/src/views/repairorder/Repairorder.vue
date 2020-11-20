@@ -90,7 +90,7 @@
         <el-table-column type="index" width="40"></el-table-column>
         <el-table-column prop="szOrder.ordId" label="订单Id"></el-table-column>
         <el-table-column prop="customerResp.cusName" label="对应客户"></el-table-column>
-        <el-table-column prop="repairSfzb" label="联系人"></el-table-column>
+        <el-table-column prop="szOrder.ordConsignee" label="联系人"></el-table-column>
         <el-table-column prop="repairWxfy" label="费用"></el-table-column>
         <el-table-column prop="repairGdstae" label="状态"></el-table-column>
 <!--        <el-table-column prop="deptResp.deptName" label="维修部门"></el-table-column>-->

@@ -36,7 +36,8 @@
             <span>{{$store.state.nickName}}<i class="el-icon-arrow-down el-icon--right"></i></span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="Profile">
-                <i class="el-icon-setting"></i>个人设定
+                <i class="el-icon-setting"></i>
+                <el-button type="text" @click="adminlog">个人设定</el-button>
               </el-dropdown-item>
               <el-dropdown-item command="SignOut">
                 <i class="el-icon-refresh"></i>
@@ -90,6 +91,9 @@
         window.sessionStorage.clear()
         this.$router.push('/login')
         // socketHttp.closeWebSocket()
+      },
+      adminlog(){
+        this.$router.push('/personal')
       },
       getMenuList() {
         userHttp.getMenuList().then(res => {

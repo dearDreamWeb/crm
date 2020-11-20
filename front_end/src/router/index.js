@@ -155,6 +155,10 @@ const routes = [
         path: '/repair_control_desk',
         component: () => import('../views/Maintenance/maintenance')
       },
+      {
+        path: '/personal',
+        component: () => import('../views/personal/PersonalCenter')
+      },
     ]
   }
 ]
