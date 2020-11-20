@@ -60,8 +60,8 @@ public class FollowLogController {
         return logService.listPidFollow();
     }
 
-    @GetMapping("/list_by_cus")
-    public ResultVo listByCus(FollowLogReq followLogReq) {
-        return logService.listByCus(followLogReq);
+    @GetMapping("/list_by_sale")
+    public ResultVo listBySale(FollowLogReq followLogReq) {
+        return logService.listBySale(followLogReq);
     }
 }

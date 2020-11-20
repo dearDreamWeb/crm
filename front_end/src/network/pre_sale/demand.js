@@ -92,11 +92,11 @@ export const demandHttp = {
     }
     return get(params)
   },
-  list_by_cus:function (cusId) {
+  list_by_sale:function (saleId) {
     let params = {
-      url:'/demand/list_by_cus',
+      url:'/demand/list_by_sale',
       data:{
-        'cusId':cusId
+        'saleId':saleId
       }
     }
     return get(params)

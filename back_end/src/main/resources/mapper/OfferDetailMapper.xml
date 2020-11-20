@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.OfferDetailMapper">
+    <resultMap id="OfferDetailResult" type="com.example.entity.response.OfferDetailResp">
+        <id column="offer_detail_id" property="offerDetailId"/>
+        <result column="offer_detail_count" property="offerDetailCount"/>
+        <result column="offer_detail_unit" property="offerDetailUnit"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="amount_money" property="amountMoney"/>
+        <result column="remark" property="remark"/>
+        <result column="offer_id" property="offerId"/>
+        <result column="product_id" property="productId"/>
+    </resultMap>
+
+    <resultMap id="OfferDetailProductResult" type="com.example.entity.response.OfferDetailResp">
+        <id column="offer_detail_id" property="offerDetailId"/>
+        <result column="offer_detail_count" property="offerDetailCount"/>
+        <result column="offer_detail_unit" property="offerDetailUnit"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="amount_money" property="amountMoney"/>
+        <result column="remark" property="remark"/>
+        <result column="offer_id" property="offerId"/>
+        <result column="product_id" property="productId"/>
+        <collection property="productResps" resultMap="ProductResult"/>
+    </resultMap>
+
+    <resultMap id="ProductResult" type="com.example.entity.response.ProductResp">
+        <id column="product_id" property="productId"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_image" property="productImage"/>
+        <result column="product_model" property="productModel"/>
+        <result column="product_price" property="productPrice"/>
+        <result column="product_brand" property="productBrand"/>
+        <result column="product_stock" property="productStock"/>
+        <result column="product_size" property="productSize"/>
+        <result column="product_cost" property="productCost"/>
+        <result column="product_status" property="productStatus"/>
+        <result column="remark" property="remark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+    </resultMap>
+
+    <insert id="addOfferDetail" parameterType="com.example.entity.request.OfferDetailReq">
+        INSERT INTO offer_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="offerDetailCount != null">
+                offer_detail_count,
+            </if>
+            <if test="offerDetailUnit != null and offerDetailUnit != ''">
+                offer_deatil_unit,
+            </if>
+            <if test="unitPrice != null">
+                unit_price,
+            </if>
+            <if test="amountMoney != null">
+                amount_money,
+            </if>
+            <if test="remark != null and remark != ''">
+                remark,
+            </if>
+            <if test="offerId != null">
+                offer_id,
+            </if>
+            <if test="productId != null">
+                product_id,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="offerDetailCount != null">
+                #{offerDetailCount},
+            </if>
+            <if test="offerDetailUnit != null and offerDetailUnit != ''">
+                #{offerDetailUnit},
+            </if>
+            <if test="unitPrice != null">
+                #{unitPrice},
+            </if>
+            <if test="amountMoney != null">
+                #{amountMoney},
+            </if>
+            <if test="remark != null and remark != ''">
+                #{remark},
+            </if>
+            <if test="offerId != null">
+                #{offerId},
+            </if>
+            <if test="productId != null">
+                #{productId},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getOfferDetail" resultMap="OfferDetailProductResult">
+        SELECT od.offer_detail_id,od.offer_detail_count,od.offer_detail_unit,od.unit_price,od.amount_money,
+        od.remark,od.offer_id,d.prodcut_id,d.product_name,d.product_model,d.product_price,d.product_brand,
+        d.product_stock,d.product_size,d.product_cost,d.product_status,d.remark
+        FROM offer_detail od
+        INNER JOIN product d ON od.product_id = d.product_id
+        WHERE od.offer_detail_id = #{offerDetailId}
+    </select>
+</mapper>

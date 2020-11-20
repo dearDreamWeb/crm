@@ -48,7 +48,7 @@
               <el-col :span="8">
                 <el-form-item label="类别" prop="followCategory">
                   <el-select v-model="searchForm.followCategory" clearable
-                             placeholder="请选择">
+                             placeholder="请选择" @change="followCategoryChange">
                     <el-option v-for="item in followCategoryList" :key="item.label"
                                :label="item.value" :value="item.label"></el-option>
                   </el-select>
@@ -145,7 +145,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="followTitle" label="主题" header-align="center"></el-table-column>
-        <el-table-column prop="customerResp.cusName" label="客户" align="center"></el-table-column>
+        <el-table-column prop="saleResp.saleName" label="机会" align="center"></el-table-column>
         <el-table-column prop="followStartTime" label="开始日期">
           <template slot-scope="scope">
             {{scope.row.followStartTime | dateFormat}}
@@ -194,7 +194,7 @@
           <el-col :span="12">
             <el-form-item label="跟进类别" prop="followCategory">
               <el-select v-model="addForm.followCategory" clearable
-                         placeholder="请选择">
+                         placeholder="请选择" @change="followCategoryChange">
                 <el-option v-for="item in followCategoryList" :key="item.label"
                            :label="item.value" :value="item.label"></el-option>
               </el-select>
@@ -231,11 +231,11 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="客户" prop="cusId">
-              <el-select v-model="addForm.cusId" clearable
+            <el-form-item label="销售机会" prop="saleId">
+              <el-select v-model="addForm.saleId" clearable
                          placeholder="请选择">
-                <el-option v-for="item in customerList" :key="item.cusId"
-                           :label="item.cusName" :value="item.cusId">
+                <el-option v-for="item in saleList" :key="item.saleId"
+                           :label="item.saleName" :value="item.saleId">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -343,11 +343,11 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="客户" prop="cusId">
-              <el-select v-model="editForm.cusId" clearable
-                         placeholder="请选择">
-                <el-option v-for="item in customerList" :key="item.cusId"
-                           :label="item.cusName" :value="item.cusId">
+            <el-form-item label="机会" prop="saleId">
+              <el-select v-model="editForm.saleId" clearable
+                         placeholder="请选择" disabled>
+                <el-option v-for="item in saleList" :key="item.saleId"
+                           :label="item.saleName" :value="item.saleId">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -386,6 +386,7 @@
   import {followHttp} from "../../network/pre_sale/followlog";
   import {customerHttp} from "../../network/pre_sale/customer";
   import {dateFormat} from "../../common/formatUtils";
+  import {saleHttp} from "../../network/pre_sale/sale";
 
   export default {
     name: "FollowUp",
@@ -448,10 +449,10 @@
           followCategory:'',
           followType:'',
           followTypeIcon:'',
-          followStartTime: '',
+          followStartTime: dateFormat(new Date()),
           followEndTime:'',
           followContent:'',
-          cusId:'',
+          saleId:'',
           empId:'',
           followPid:''
         },
@@ -479,6 +480,7 @@
 
         followPidList:[],
         customerList: [],
+        saleList:[],
         listForm:[],
         pageNum:1,
         pageSize:10,
@@ -584,6 +586,12 @@
         })
       },
 
+      followCategoryChange(value) {
+        if (value == 2) {
+          let format = dateFormat(new Date());
+          this.addForm.followEndTime = format
+        }
+      },
       followTypeChange(val) {
         this.addForm.followType = val.value
         this.addForm.followTypeIcon = val.icon
@@ -608,8 +616,8 @@
 
       openAddDialog() {
         this.addDialog = true
-        this.initCustomerList()
         this.initFollowPidList()
+        this.initSaleList()
       },
       addHandleClose() {
         this.$refs.addFormRef.resetFields()
@@ -651,6 +659,11 @@
       initCustomerList() {
         customerHttp.listAll().then(res => {
           this.customerList = res.data
+        })
+      },
+      initSaleList() {
+        saleHttp.list_all().then(res => {
+          this.saleList = res.data.list
         })
       },
       initFollowPidList() {

@@ -55,8 +55,8 @@ public class DemandController {
         return demandService.getBySaleId(saleId);
     }
 
-    @GetMapping("/list_by_cus")
-    public ResultVo listByCus(DemandReq demandReq) {
-        return demandService.listByCus(demandReq);
+    @GetMapping("/list_by_sale")
+    public ResultVo listBySale(DemandReq demandReq) {
+        return demandService.listBySale(demandReq);
     }
 }

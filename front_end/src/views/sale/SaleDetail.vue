@@ -9,7 +9,7 @@
       <el-card>
         <div slot="header">
           <div class="header-left" style="font-size: 20px">
-            <span>销售机会视图</span>
+            <span>销售机会视图||根据销售机会确定跟进、需求、方案、报价</span>
             <el-tooltip effect="dark" content="数据日志" placement="bottom">
               <i class="el-icon-menu"></i>
             </el-tooltip>
@@ -75,20 +75,20 @@
                     <el-col :span="8">
                       <el-form-item label="预签日期：">
                         <el-tag v-if="saleForm.saleDetailResp.saleEstimateDate==null">暂定</el-tag>
-                        <el-tag v-else>{{saleForm.saleDetailResp.saleEstimateDate}}</el-tag>
+                        <el-tag v-else>{{saleForm.saleDetailResp.saleEstimateDate | dateFormat}}</el-tag>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="预期金额：">
                         <el-tag v-if="saleForm.saleDetailResp.saleExpectMoney==null">暂定</el-tag>
-                        <el-tag v-else>{{saleForm.saleDetailResp.saleEstimateDate}}</el-tag>
+                        <el-tag v-else>{{saleForm.saleDetailResp.saleEstimateDate | dateFormat}}</el-tag>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="可能性：">
                         <el-tag v-if="saleForm.saleDetailResp.salePossibility == null">暂定</el-tag>
-                        <el-progress v-else type="circle"
-                                     :percentage="saleForm.saleDetailResp.salePossibility"></el-progress>
+                        <el-progress v-else type="circle" :width="50"
+                                     :percentage="parseInt(saleForm.saleDetailResp.salePossibility)"></el-progress>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -130,10 +130,10 @@
                     </template>
                     <el-table height="260px" :data="followListForm" class="list_form_table">
                       <el-table-column type="index"></el-table-column>
-                      <el-table-column :label="followListForm.followTitle">
+                      <el-table-column>
                         <template slot-scope="scope">
-                          {{scope.row.followContent}}<br>
-                          {{scope.row.createTime | dateTimeFormat}}
+                          内容：<el-tag>{{scope.row.followContent}}</el-tag><br>
+                          时间：<el-tag>{{scope.row.createTime | dateTimeFormat}}</el-tag>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -146,10 +146,11 @@
                     </template>
                     <el-table :data="demandListForm" height="260px" class="list_form_table">
                       <el-table-column type="index"></el-table-column>
-                      <el-table-column :label="demandListForm.demandTitle">
+                      <el-table-column>
                         <template slot-scope="scope">
-                          {{scope.row.demandContent}}<br>
-                          {{scope.row.createTime | dateFormat}}
+                          内容：<el-tag>{{scope.row.demandContent}}</el-tag>
+                          <el-tag type="danger">{{scope.row.isSolve | cusIsSolve}}</el-tag><br>
+                          时间：<el-tag>{{scope.row.createTime | dateFormat}}</el-tag>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -162,10 +163,17 @@
                     </template>
                     <el-table :data="solutionListForm" height="260px" class="list_form_table">
                       <el-table-column type="index"></el-table-column>
-                      <el-table-column :label="solutionListForm.solutionTitle">
+                      <el-table-column>
                         <template slot-scope="scope">
-                          {{scope.row.content}}<br>
-                          {{scope.row.createTime | dateFormat}}
+                          内容：{{scope.row.content}}<br>
+                          时间：<el-tag>{{scope.row.createTime | dateFormat}}</el-tag>
+                          机会：<el-tag type="warning">{{scope.row.saleName}}</el-tag>
+                          需求：<el-tag type="info">{{scope.row.demandTitle}}</el-tag>
+                        </template>
+                      </el-table-column>
+                      <el-table-column width="30px">
+                        <template slot-scope="scope">
+                          <el-button icon="el-icon-edit" type="text"></el-button>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -173,7 +181,8 @@
                   <el-collapse-item name="4">
                     <template slot="title">
                       <span>产品报价</span>
-                      <el-button size="mini" icon="el-icon-circle-plus" circle class="collapse-button"></el-button>
+                      <el-button size="mini" icon="el-icon-circle-plus" circle
+                                 class="collapse-button" @click="openOffer"></el-button>
                     </template>
                     <el-table>
                       <el-table-column type="index"></el-table-column>
@@ -191,6 +200,8 @@
                         :emp-id="empId" v-on:init-page="initSaleDetail"></sale-more-demand>
       <sale-more-solution ref="saleMoreSolutionRef" :sale-id="saleId" :cus-id="cusId"
                           :emp-id="empId" v-on:init-page="initSaleDetail"></sale-more-solution>
+      <sale-more-offer ref="saleMoreOfferRef" :sale-id="saleId" :cus-id="cusId"
+                       :emp-id="empId" v-on:init-page="initSaleDetail"></sale-more-offer>
     </el-main>
   </el-container>
 </template>
@@ -203,10 +214,11 @@
   import {followHttp} from "../../network/pre_sale/followlog";
   import {demandHttp} from "../../network/pre_sale/demand";
   import {solutionHttp} from "../../network/pre_sale/solution";
+  import SaleMoreOffer from "../../components/sale/SaleMoreOffer";
 
   export default {
     name: "SaleDetail",
-    components: {SaleMoreSolution, SaleMoreDemand, SaleMoreFollow},
+    components: {SaleMoreOffer, SaleMoreSolution, SaleMoreDemand, SaleMoreFollow},
     data() {
       return {
         fullscreenLoading:false,
@@ -236,6 +248,9 @@
           this.saleForm = res.data
           this.fullscreenLoading = false
         })
+        this.initFollowByCus()
+        this.initDemandByCus()
+        this.initSolutionByCus()
       },
       openFollow() {
         this.$refs.saleMoreFollowFef.openAddDialog()
@@ -246,18 +261,21 @@
       openSolution() {
         this.$refs.saleMoreSolutionRef.openAddDialog()
       },
+      openOffer() {
+        this.$refs.saleMoreOfferRef.openAddDialog()
+      },
       initFollowByCus() {
-        followHttp.list_by_cus(this.cusId).then(res => {
+        followHttp.list_by_sale(this.saleId).then(res => {
           this.followListForm = res.data
         })
       },
       initDemandByCus() {
-        demandHttp.list_by_cus(this.cusId).then(res => {
+        demandHttp.list_by_sale(this.saleId).then(res => {
           this.demandListForm = res.data
         })
       },
       initSolutionByCus() {
-        solutionHttp.list_by_cus(this.cusId).then(res => {
+        solutionHttp.list_by_sale(this.saleId).then(res => {
           this.solutionListForm = res.data
         })
       }

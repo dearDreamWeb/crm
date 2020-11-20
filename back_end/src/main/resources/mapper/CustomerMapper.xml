@@ -283,4 +283,13 @@
         </where>
         ORDER BY cu.update_time DESC
     </select>
+
+    <select id="getBySaleId" resultMap="CustomerResult">
+        SELECT cu.cus_id,cu.cus_name,cu.life_cycle,cu.first_signing_time,cu.abbreviation,cu.credit_id,cu.settlement,cu.sany_guest_id,
+            cu.company_account,cu.province,cu.city,cu.detail_address,cu.cus_remark,cu.cus_dict_source,cu.cus_dict_stage,
+            cu.qualitative_id,cu.grading_id,cu.ration_id,cu.emp_id,cu.create_time
+        FROM customer cu
+        INNER JOIN sale s ON s.cus_id = cu.cus_id
+        WHERE s.sale_id = #{saleId}
+    </select>
 </mapper>

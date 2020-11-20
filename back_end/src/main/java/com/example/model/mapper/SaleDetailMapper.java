@@ -18,4 +18,5 @@ public interface SaleDetailMapper {
     int editSaleDetail(SaleDetailReq saleDetailReq);
     SaleDetailResp getSaleDetail(Integer saleDetailId);
     List<SaleDetailResp> listSaleDetail(SaleDetailReq saleDetailReq);
+    SaleDetailReq getBySale(Integer saleId);
 }

@@ -64,14 +64,8 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="客户" prop="cusId">
-              <!--<el-select v-model="addForm.cusId" clearable
-                         placeholder="请选择">
-                <el-option v-for="item in customerList" :key="item.cusId"
-                           :label="item.cusName" :value="item.cusId">
-                </el-option>
-              </el-select>-->
-              <el-tag>{{cusName}}</el-tag>
+            <el-form-item label="机会" prop="cusId">
+              <el-tag>{{saleName}}</el-tag>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -108,13 +102,14 @@
   import {dateFormat} from "../../common/formatUtils";
   import {followHttp} from "../../network/pre_sale/followlog";
   import {customerHttp} from "../../network/pre_sale/customer";
+  import {saleHttp} from "../../network/pre_sale/sale";
 
   export default {
     name: "SaleMoreFollow",
     props:['sale-id','cus-id','emp-id'],
     data() {
       return {
-        cusName:'',
+        saleName:'',
         pickerOptions:{
           disabledDate(time) {
             return time.getTime() < Date.now() - 8.64e7;//如果没有后面的-8.64e7就是不可以选择今天的
@@ -127,10 +122,10 @@
           followCategory:'',
           followType:'',
           followTypeIcon:'',
-          followStartTime: new Date(),
+          followStartTime: dateFormat(new Date()),
           followEndTime:'',
           followContent:'',
-          cusId:this.cusId,
+          saleId:this.saleId,
           empId:this.empId,
           followPid:''
         },
@@ -152,22 +147,25 @@
         followCategoryList: followCategory,
         followTypeList: followType,
         customerList:[],
-        followPidList:[]
+        followPidList:[],
+        saleList:[]
       }
     },
     methods:{
       followCategoryChange(value) {
         if (value == 2) {
-          this.addForm.followEndTime = new Date()
+          let format = dateFormat(new Date());
+          this.addForm.followEndTime = format
         }
       },
       openAddDialog() {
         this.addDialog = true
-        for (let i=0;i<this.customerList.length;i++) {
-          if (this.customerList[i].cusId == this.cusId) {
-            this.cusName = this.customerList[i].cusName
+        for (let i=0;i<this.saleList.length;i++) {
+          if (this.saleList[i].saleId == this.saleId) {
+            this.saleName = this.saleList[i].saleName
           }
         }
+        console.log(this.saleName)
       },
       /*到达客户公司实体测量墙体，选定产品，安装数量*/
       addSaleFollowFormClick() {
@@ -212,11 +210,16 @@
           this.customerList = res.data
         })
       },
-
+      initSaleList() {
+        saleHttp.list_all().then(res => {
+          this.saleList = res.data.list
+        })
+      }
     },
     created() {
       this.initCustomerList()
       this.initFollowPidList()
+      this.initSaleList()
     }
   }
 </script>

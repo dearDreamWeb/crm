@@ -30,7 +30,7 @@ public class FollowLogReq {
     private Date updateTime;
     private Integer isDelete;
     private Integer empId;
-    private Integer cusId;
+    private Integer saleId;
     private Integer repairId;
     private Integer followPid;
     private Integer pageNum;

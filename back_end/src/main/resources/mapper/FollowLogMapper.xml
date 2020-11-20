@@ -18,7 +18,7 @@
         <result column="update_time" property="updateTime"/>
         <result column="is_delete" property="isDelete"/>
         <result column="emp_id" property="empId"/>
-        <result column="cus_id" property="cusId"/>
+        <result column="sale_id" property="saleId"/>
         <result column="repair_id" property="repairId"/>
         <result column="follow_pid" property="followPid"/>
     </resultMap>
@@ -39,11 +39,11 @@
         <result column="update_time" property="updateTime"/>
         <result column="is_delete" property="isDelete"/>
         <result column="emp_id" property="empId"/>
-        <result column="cus_id" property="cusId"/>
+        <result column="sale_id" property="saleId"/>
         <result column="repair_id" property="repairId"/>
         <result column="follow_pid" property="followPid"/>
         <association property="empResp" resultMap="EmpResult"/>
-        <association property="customerResp" resultMap="CustomerResult"/>
+        <association property="saleResp" resultMap="SaleResult"/>
     </resultMap>
 
     <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
@@ -63,28 +63,18 @@
         <result property="isDelete" column="is_delete"/>
     </resultMap>
 
-    <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
-        <id column="cus_id" property="cusId"/>
-        <result column="cus_name" property="cusName"/>
-        <result column="life_cycle" property="lifeCycle"/>
-        <result column="first_signing_time" property="firstSigningTime"/>
-        <result column="abbreviation" property="abbreviation"/>
-        <result column="credit_id" property="creditId"/>
-        <result column="settlement" property="settlement"/>
-        <result column="company_account" property="companyAccount"/>
-        <result column="province" property="province"/>
-        <result column="city" property="city"/>
-        <result column="detail_address" property="detailAddress"/>
-        <result column="cus_remark" property="cusRemark"/>
+    <resultMap id="SaleResult" type="com.example.entity.response.SaleResp">
+        <id column="sale_id" property="saleId"/>
+        <result column="sale_name" property="saleName"/>
+        <result column="sale_status" property="saleStatus"/>
+        <result column="sale_type" property="saleType"/>
+        <result column="discovery_time" property="discoveryTime"/>
         <result column="version" property="version"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="is_delete" property="isDelete"/>
-        <result column="cus_dict_source" property="cusDictSource"/>
-        <result column="cus_dict_stage" property="cusDictStage"/>
-        <result column="qualitative_id" property="qualitativeId"/>
-        <result column="grading_id" property="gradingId"/>
-        <result column="ration_id" property="rationId"/>
+        <result column="cus_id" property="cusId"/>
+        <result column="contacts_id" property="contactsId"/>
         <result column="emp_id" property="empId"/>
     </resultMap>
 
@@ -93,9 +83,9 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         INSERT INTO follow_log(follow_title,follow_category,follow_content,follow_start_time,follow_end_time,
-            follow_type,follow_type_icon,intention,follow_handle_result,emp_id,cus_id,repair_id,follow_pid)
+            follow_type,follow_type_icon,intention,follow_handle_result,emp_id,sale_id,repair_id,follow_pid)
         VALUES (#{followTitle},#{followCategory},#{followContent},#{followStartTime},#{followEndTime},#{followType},
-            #{followTypeIcon},#{intention},#{followHandleResult},#{empId},#{cusId},#{repairId},#{followPid})
+            #{followTypeIcon},#{intention},#{followHandleResult},#{empId},#{saleId},#{repairId},#{followPid})
     </insert>
 
     <update id="delFollow" parameterType="Integer">
@@ -134,8 +124,8 @@
         <if test="empId != null">
             ,emp_id = #{empId}
         </if>
-        <if test="cusId != null">
-            ,cus_id = #{cusId}
+        <if test="saleId != null">
+            ,sale_id = #{saleId}
         </if>
         <if test="repairId != null">
             ,repair_id = #{repairId}
@@ -148,7 +138,7 @@
 
     <select id="getFollow" resultMap="FollowLogResult">
         SELECT follow_id,follow_title,follow_category,follow_content,follow_start_time,follow_end_time,
-            follow_type,follow_type_icon,intention,follow_handle_result,emp_id,cus_id,repair_id,follow_pid,
+            follow_type,follow_type_icon,intention,follow_handle_result,emp_id,sale_id,repair_id,follow_pid,
             version,create_time,update_time,is_delete
         FROM follow_log
         WHERE follow_id = #{followId}
@@ -157,10 +147,10 @@
     <select id="listFollow" resultMap="FollowDetailResult">
         SELECT  fl.follow_id,fl.follow_title,fl.follow_category,fl.follow_content,fl.follow_start_time,fl.follow_end_time,
                 fl.follow_type,fl.follow_type_icon,fl.intention,fl.follow_handle_result,fl.version,fl.create_time,fl.update_time,fl.is_delete,
-                fl.emp_id,fl.cus_id,fl.repair_id,fl.follow_pid,e.emp_id,e.emp_name,cu.cus_id,cu.cus_name
+                fl.emp_id,fl.sale_id,fl.repair_id,fl.follow_pid,e.emp_id,e.emp_name,cu.sale_id,cu.sale_name
         FROM follow_log fl
         INNER JOIN emp e ON e.emp_id = fl.emp_id
-        INNER JOIN customer cu ON cu.cus_id = fl.cus_id
+        INNER JOIN sale cu ON cu.sale_id = fl.sale_id
         <where>
             <if test="followTitle != null and followTitle != ''">
                 AND fl.follow_title LIKE CONCAT('%',#{followTitle},'%')
@@ -177,8 +167,8 @@
             <if test="empId != null">
                 AND fl.emp_id = #{empId}
             </if>
-            <if test="cusId != null">
-                AND fl.cus_id = #{cusId}
+            <if test="saleId != null">
+                AND fl.sale_id = #{saleId}
             </if>
             AND fl.is_delete = 0
         </where>

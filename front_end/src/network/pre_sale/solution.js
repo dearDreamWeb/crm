@@ -76,11 +76,11 @@ export const solutionHttp = {
     }
     return get(params)
   },
-  list_by_cus:function (cusId) {
+  list_by_sale:function (saleId) {
     let params = {
-      url:'/solution/list_by_cus',
+      url:'/solution/list_by_sale',
       data:{
-        'cusId':cusId
+        'saleId':saleId
       }
     }
     return get(params)

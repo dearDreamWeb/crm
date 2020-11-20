@@ -50,8 +50,8 @@ public class SolutionController {
         return solutionService.listSolution(solutionReq);
     }
 
-    @GetMapping("/list_by_cus")
-    public ResultVo listByCus(SolutionReq solutionReq) {
-        return solutionService.listByCus(solutionReq);
+    @GetMapping("/list_by_sale")
+    public ResultVo listBySale(SolutionReq solutionReq) {
+        return solutionService.listBySale(solutionReq);
     }
 }

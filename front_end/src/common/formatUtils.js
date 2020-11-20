@@ -172,3 +172,11 @@ export function dateDiff(date) {
   argsFour = parseInt(Math.abs(argsTwo - argsThree) / 1000 / 60 / 60 / 24);
   return argsFour;
 }
+
+export function cusIsSolve(isSolve) {
+  if (isSolve == 1) {
+    return '已解决'
+  } else {
+    return '未完成'
+  }
+}

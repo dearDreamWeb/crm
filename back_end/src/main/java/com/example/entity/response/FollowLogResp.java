@@ -30,9 +30,9 @@ public class FollowLogResp {
     private Date updateTime;
     private Integer isDelete;
     private Integer empId;
-    private Integer cusId;
+    private Integer saleId;
     private Integer repairId;
     private Integer followPid;
     private EmpResp empResp;
-    private CustomerResp customerResp;
+    private SaleResp saleResp;
 }

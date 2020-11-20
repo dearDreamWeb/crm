@@ -17,7 +17,7 @@ export const followHttp = {
         'followStartTime':followLog.followStartTime,
         'followEndTime':followLog.followEndTime,
         'followContent':followLog.followContent,
-        'cusId':followLog.cusId,
+        'saleId':followLog.saleId,
         'empId':followLog.empId,
         'followPid':followLog.followPid
       }
@@ -49,7 +49,7 @@ export const followHttp = {
         'followType':followLog.followType,
         'followContent':followLog.followContent,
         'followStartTime':followLog.followStartTime,
-        'cusId':followLog.cusId,
+        'saleId':followLog.saleId,
         'empId':followLog.empId,
         'followPid':followLog.followPid
       }
@@ -85,7 +85,7 @@ export const followHttp = {
         'followType':followLog.followType,
         'followContent':followLog.followContent,
         'followStartTime':followLog.followStartTime,
-        'cusId':followLog.cusId,
+        'saleId':followLog.saleId,
         'followPid':followLog.followPid
       }
     }
@@ -98,7 +98,7 @@ export const followHttp = {
         'followTitle':followLog.followTitle,
         'followCategory':followLog.followCategory,
         'followType':followLog.followType,
-        'cusId':followLog.cusId,
+        'saleId':followLog.saleId,
         'followPid':followLog.followPid,
         'empId':followLog.empId
       }
@@ -114,11 +114,11 @@ export const followHttp = {
     }
     return postJson(params)
   },
-  list_by_cus:function (cusId) {
+  list_by_sale:function (saleId) {
     let params = {
-      url:'/follow/list_by_cus',
+      url:'/follow/list_by_sale',
       data:{
-        'cusId':cusId
+        'saleId':saleId
       }
     }
     return get(params)

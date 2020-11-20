@@ -14,5 +14,5 @@ public interface SolutionService {
     ResultVo editSolution(SolutionReq solutionReq);
     ResultVo getSolution(SolutionReq solutionReq);
     ResultVo listSolution(SolutionReq solutionReq);
-    ResultVo listByCus(SolutionReq solutionReq);
+    ResultVo listBySale(SolutionReq solutionReq);
 }

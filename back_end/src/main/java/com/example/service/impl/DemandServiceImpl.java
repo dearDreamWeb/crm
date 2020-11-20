@@ -6,6 +6,7 @@ import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
 import com.example.entity.SanGuest;
 import com.example.entity.request.DemandReq;
+import com.example.entity.request.SaleDetailReq;
 import com.example.entity.response.*;
 import com.example.model.mapper.*;
 import com.example.service.DemandService;
@@ -39,6 +40,9 @@ public class DemandServiceImpl implements DemandService {
     private SaleMapper saleMapper;
 
     @Autowired
+    private SaleDetailMapper detailMapper;
+
+    @Autowired
     private EmpMapper empMapper;
 
     @Autowired
@@ -57,6 +61,20 @@ public class DemandServiceImpl implements DemandService {
         if (addDemand != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
+        SaleDetailReq bySale = detailMapper.getBySale(demandReq.getSaleId());
+        if (bySale.getSaleStage() != null && "".equals(bySale.getSaleStage())) {
+            bySale.setSaleStage(bySale.getSaleStage());
+        } else {
+            bySale.setSaleStage("需求分析");
+        }
+        bySale.setUpdateTime(DateUtils.getDate());
+        bySale.setVersion(bySale.getVersion());
+        int editSaleDetail = detailMapper.editSaleDetail(bySale);
+        if (editSaleDetail != 1) {
+            throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
+                    ResultEnum.DATA_UPDATE_FAIL.getMessage());
         }
 
         Integer cusId = demandReq.getCusId();
@@ -160,7 +178,7 @@ public class DemandServiceImpl implements DemandService {
     }
 
     @Override
-    public ResultVo listByCus(DemandReq demandReq) {
+    public ResultVo listBySale(DemandReq demandReq) {
         List<DemandResp> respList = demandMapper.listDemand(demandReq);
         return ResultUtils.response(respList);
     }

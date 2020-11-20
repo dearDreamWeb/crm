@@ -5,6 +5,7 @@ import com.example.common.exception.SysException;
 import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
 import com.example.entity.SanGuest;
+import com.example.entity.request.SaleDetailReq;
 import com.example.entity.request.SolutionReq;
 import com.example.entity.response.*;
 import com.example.model.mapper.*;
@@ -39,6 +40,9 @@ public class SolutionServiceImpl implements SolutionService {
     private SaleMapper saleMapper;
 
     @Autowired
+    private SaleDetailMapper detailMapper;
+
+    @Autowired
     private DemandMapper demandMapper;
 
     @Autowired
@@ -58,6 +62,20 @@ public class SolutionServiceImpl implements SolutionService {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
+        SaleDetailReq saleDetail = detailMapper.getBySale(solutionReq.getSaleId());
+        if (saleDetail.getSaleStage() != null && "".equals(saleDetail.getSaleStage())) {
+            saleDetail.setSaleStage(saleDetail.getSaleStage());
+        } else {
+            saleDetail.setSaleStage("方案制定");
+        }
+        saleDetail.setUpdateTime(DateUtils.getDate());
+        saleDetail.setVersion(saleDetail.getVersion());
+        int editSaleDetail = detailMapper.editSaleDetail(saleDetail);
+        if (editSaleDetail != 1) {
+            throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
+                    ResultEnum.DATA_UPDATE_FAIL.getMessage());
+        }
+
         Integer cusId = solutionReq.getCusId();
         EmpResp empByToken = empMapper.getEmpByToken(token);
         CustomerResp customer = customerMapper.getCustomer(cusId);
@@ -76,7 +94,7 @@ public class SolutionServiceImpl implements SolutionService {
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
         SanGuest sanGuest = new SanGuest();
-        sanGuest.setSanGuestName("推荐产品");
+        sanGuest.setSanGuestName("方案制定");
         sanGuest.setSanGuestTime(DateUtils.getDate());
         sanGuest.setCusId(cusId);
         sanGuest.setSanGuestEmpId(empByToken.getEmpId());
@@ -152,8 +170,9 @@ public class SolutionServiceImpl implements SolutionService {
     }
 
     @Override
-    public ResultVo listByCus(SolutionReq solutionReq) {
+    public ResultVo listBySale(SolutionReq solutionReq) {
         List<SolutionResp> solutionResps = solutionMapper.listSolution(solutionReq);
+        extractMethod(solutionResps);
         return ResultUtils.response(solutionResps);
     }
 

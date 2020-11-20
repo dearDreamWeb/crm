@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.OfferMapper">
+    <resultMap id="OfferResult" type="com.example.entity.response.OfferResp">
+        <id column="offer_id" property="offerId"/>
+        <result column="offer_theme" property="offerTheme"/>
+        <result column="offer_numbers" property="offerNumbers"/>
+        <result column="offer_status" property="offerStatus"/>
+        <result column="offer_price" property="offerPrice"/>
+        <result column="examine_person" property="examinePerson"/>
+        <result column="examine_time" property="examineTime"/>
+        <result column="reamrk" property="remark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="contacts_id" property="contactsId"/>
+        <result column="sale_id" property="saleId"/>
+        <result column="emp_id" property="empId"/>
+    </resultMap>
+
+    <resultMap id="OfferDetailAllResult" type="com.example.entity.response.OfferResp">
+        <id column="offer_id" property="offerId"/>
+        <result column="offer_theme" property="offerTheme"/>
+        <result column="offer_numbers" property="offerNumbers"/>
+        <result column="offer_status" property="offerStatus"/>
+        <result column="offer_price" property="offerPrice"/>
+        <result column="examine_person" property="examinePerson"/>
+        <result column="examine_time" property="examineTime"/>
+        <result column="remark" property="remark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="contacts_id" property="contactsId"/>
+        <result column="sale_id" property="saleId"/>
+        <result column="emp_id" property="empId"/>
+        <association property="contactsResp" resultMap="ContactsResult"/>
+        <association property="saleResp" resultMap="SaleResult"/>
+        <association property="empResp" resultMap="EmpResult"/>
+        <association property="offerDetailResp" resultMap="OfferDetailResult"/>
+    </resultMap>
+
+    <resultMap id="ContactsResult" type="com.example.entity.response.ContactsResp">
+        <id column="contacts_id" property="contactsId"/>
+        <result column="contacts_name" property="contactsName"/>
+        <result column="birthday" property="birthday"/>
+        <result column="sex" property="sex"/>
+        <result column="wechat" property="wechat"/>
+        <result column="contacts_phone" property="contactsPhone"/>
+        <result column="qq" property="qq"/>
+        <result column="email" property="email"/>
+        <result column="remark" property="remark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="contacts_dict_type" property="contactsDictType"/>
+        <result column="cus_id" property="cusId"/>
+    </resultMap>
+
+    <resultMap id="SaleResult" type="com.example.entity.response.SaleResp">
+        <id column="sale_id" property="saleId"/>
+        <result column="sale_name" property="saleName"/>
+        <result column="sale_status" property="saleStatus"/>
+        <result column="sale_type" property="saleType"/>
+        <result column="discovery_time" property="discoveryTime"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="cus_id" property="cusId"/>
+        <result column="contacts_id" property="contactsId"/>
+        <result column="emp_id" property="empId"/>
+    </resultMap>
+
+    <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
+        <id property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="sex" column="sex"/>
+        <result property="passWord" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="empStatus" column="emp_status"/>
+        <result property="token" column="token"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <resultMap id="OfferDetailResult" type="com.example.entity.response.OfferDetailResp">
+        <id column="offer_detail_id" property="offerDetailId"/>
+        <result column="offer_detail_count" property="offerDetailCount"/>
+        <result column="offer_detail_unit" property="offerDetailUnit"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="amount_money" property="amountMoney"/>
+        <result column="remark" property="remark"/>
+        <result column="offer_id" property="offerId"/>
+        <result column="product_id" property="productId"/>
+    </resultMap>
+
+    <insert id="addOffer" parameterType="com.example.entity.request.OfferReq">
+        INSERT INTO offer
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="offerTheme != null and offerTheme != ''">
+                offer_theme,
+            </if>
+            <if test="offerNumbers != null and offerNumbers != ''">
+                offer_numbers,
+            </if>
+            <if test="offerStatus != null">
+                offer_status,
+            </if>
+            <if test="offerPrice != null">
+                offer_price,
+            </if>
+            <if test="examinePerson != null and examinePerson != ''">
+                examine_person,
+            </if>
+            <if test="examineTime != null">
+                examine_time,
+            </if>
+            <if test="remark != null and remark != ''">
+                remark,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="contactsId != null">
+                contacts_id,
+            </if>
+            <if test="saleId != null">
+                sale_id,
+            </if>
+            <if test="empId != null">
+                emp_id,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="offerTheme != null and offerTheme != ''">
+                #{offerTheme},
+            </if>
+            <if test="offerNumbers != null and offerNumbers != ''">
+                #{offerNumbers},
+            </if>
+            <if test="offerStatus != null">
+                #{offerStatus},
+            </if>
+            <if test="offerPrice != null">
+                #{offerPrice},
+            </if>
+            <if test="examinePerson != null and examinePerson != ''">
+                #{examinePerson},
+            </if>
+            <if test="examineTime != null">
+                #{examineTime},
+            </if>
+            <if test="remark != null and remark != ''">
+                #{remark},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="contactsId != null">
+                #{contactsId},
+            </if>
+            <if test="saleId != null">
+                #{saleId},
+            </if>
+            <if test="empId != null">
+                #{empId},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getOffer" resultMap="OfferDetailAllResult">
+        SELECT o.offer_id,o.offer_theme,o.offer_numbers,o.offer_status,o.offer_price,o.examine_person,o.examine_time,
+        o.remark,o.create_time,o.update_time,o.is_delete,o.contacts_id,o.sale_id,o.emp_id,con.contacts_name,
+        con.contacts_phone,con.email,s.sale_name,s.sale_status,s.sale_type,s.discovery_time,e.emp_name
+        FROM offer o
+        INNER JOIN contacts con ON o.contacts_id = con.contacts_id
+        INNER JOIN sale s ON o.sale_id = s.sale_id
+        INNER JOIN emp e ON o.emp_id = e.emp_id
+        WHERE o.offer_id = #{offerId}
+    </select>
+</mapper>

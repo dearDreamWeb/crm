@@ -157,8 +157,12 @@
         })
       },
       initDemandList() {
-        demandHttp.getBySaleId(this.saleId).then(res => {
-          this.demandList = res.data
+        demandHttp.list_by_sale(this.saleId).then(res => {
+          for (let i=0;i<res.data.length;i++) {
+            if (res.data[i].isSolve != null && res.data[i].isSolve != 1) {
+              this.demandList.push(res.data[i])
+            }
+          }
         })
       }
     },

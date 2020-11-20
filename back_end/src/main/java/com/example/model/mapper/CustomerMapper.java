@@ -23,4 +23,5 @@ public interface CustomerMapper {
     List<CustomerResp> listAll();
     List<CustomerResp> listCustomerByEmpId(CustomerReq customerReq,
                                            String empName);
+    CustomerResp getBySaleId(Integer saleId);
 }

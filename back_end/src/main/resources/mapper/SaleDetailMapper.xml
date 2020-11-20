@@ -11,6 +11,23 @@
         <result column="sale_prior_level" property="salePriorLevel"/>
         <result column="sale_stage" property="saleStage"/>
         <result column="sale_stage_remark" property="saleStageRemark"/>
+        <result column="sale_id" property="saleId"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+    </resultMap>
+
+    <resultMap id="SaleDetailReqResult" type="com.example.entity.request.SaleDetailReq">
+        <id column="sale_detail_id" property="saleDetailId"/>
+        <result column="sale_estimate_date" property="saleEstimateDate"/>
+        <result column="sale_possibility" property="salePossibility"/>
+        <result column="sale_expect_money" property="saleExpectMoney"/>
+        <result column="sale_star_beacon" property="saleStarBeacon"/>
+        <result column="sale_prior_level" property="salePriorLevel"/>
+        <result column="sale_stage" property="saleStage"/>
+        <result column="sale_stage_remark" property="saleStageRemark"/>
+        <result column="sale_id" property="saleId"/>
         <result column="version" property="version"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
@@ -134,5 +151,11 @@
             AND is_delete = 0
         </where>
         ORDER BY create_time DESC
+    </select>
+
+    <select id="getBySale" resultMap="SaleDetailReqResult">
+        SELECT sale_detail_id,sale_estimate_date,sale_possibility,sale_expect_money,sale_star_beacon,
+            sale_prior_level,sale_stage,sale_stage_remark,sale_id,version,create_time,update_time,is_delete
+        FROM sale_detail where sale_id = #{saleId}
     </select>
 </mapper>

@@ -56,14 +56,14 @@ public class FollowLogServiceImpl implements FollowLogService {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
-        Integer cusId = followLogReq.getCusId();
+        Integer saleId = followLogReq.getSaleId();
         EmpResp empByToken = empMapper.getEmpByToken(token);
-        CustomerResp customer = customerMapper.getCustomer(cusId);
+        CustomerResp customer = customerMapper.getBySaleId(saleId);
 
         SanGuest san = new SanGuest();
         san.setSanGuestName("识别接触");
         san.setSanGuestTime(DateUtils.getDate());
-        san.setCusId(cusId);
+        san.setCusId(customer.getCusId());
         san.setSanGuestEmpId(empByToken.getEmpId());
         int addSanyGuest = sanyGuestMapper.addSanGuest(san);
         if (addSanyGuest != 1) {
@@ -75,7 +75,7 @@ public class FollowLogServiceImpl implements FollowLogService {
         customerRecord.setRecordTitle("三一客推进");
         customerRecord.setRecordType("三一客");
         customerRecord.setRecordTime(DateUtils.getDate());
-        customerRecord.setCusId(cusId);
+        customerRecord.setCusId(customer.getCusId());
         customerRecord.setRecordContent("员工"+empByToken.getEmpName()+
                 "对【"+customer.getCusName()+"】的三一节点推进");
         customerRecord.setEmpId(empByToken.getEmpId());
@@ -155,7 +155,7 @@ public class FollowLogServiceImpl implements FollowLogService {
     }
 
     @Override
-    public ResultVo listByCus(FollowLogReq followLogReq) {
+    public ResultVo listBySale(FollowLogReq followLogReq) {
         List<FollowLogResp> followLogResps = logMapper.listFollow(followLogReq);
         return ResultUtils.response(followLogResps);
     }
