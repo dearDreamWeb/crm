@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.model.mapper.SzDeliverDetailsMapper">
+    <resultMap id="DDetailsResult" type="com.example.entity.request.SzDeliverDetails">
+        <id property="ddetId" column="ddet_id"/>
+        <result property="ddetNum" column="ddet_num"/>
+        <result property="delId" column="del_id"/>
+        <result property="productId" column="product_id"/>
+    </resultMap>
+
+    <resultMap id="Result" type="com.example.entity.request.SzDeliverDetails">
+        <id property="ddetId" column="ddet_id"/>
+        <result property="ddetNum" column="ddet_num"/>
+        <result property="delId" column="del_id"/>
+        <result property="productId" column="product_id"/>
+        <association property="szDeliver" resultMap="szDeliver"/>
+    </resultMap>
+
+    <resultMap id="szDeliverResult" type="com.example.entity.request.SzDeliver">
+        <id property="delId" column="del_id"/>
+        <result property="delWuliuid" column="del_wuliuid"/>
+        <result property="delCompany" column="del_company"/>
+        <result property="delPeople" column="del_people"/>
+        <result property="delDelivertime" column="del_delivertime"/>
+        <result property="delState" column="del_state"/>
+        <result property="delCreatetime" column="del_createtime"/>
+        <result property="delDelete" column="del_delete"/>
+        <result property="ordId" column="ord_id"/>
+    </resultMap>
+</mapper>

@@ -4,6 +4,8 @@ import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
 import com.example.entity.request.SzDeliver;
+import com.example.entity.request.SzDeliverDetails;
+import com.example.model.mapper.SzDeliverDetailsMapper;
 import com.example.model.mapper.SzDeliverMapper;
 import com.example.service.SzDeliverService;
 import com.example.util.DateUtils;
@@ -26,14 +28,31 @@ import java.util.List;
 public class SzDeliverServicelmpl implements SzDeliverService {
     @Autowired
     private SzDeliverMapper szdeliverMapper;
+
+    @Autowired
+    private SzDeliverDetailsMapper deliverDetailsMapper; //addDelANDDdel增
+
     @Override
     public ResultVo addszDeliver(SzDeliver szdeliver) {
         System.out.println("【发货单】新增");
-        int addszDeliver=szdeliverMapper.addszDeliver(szdeliver);
+        szdeliver.setDelState(0);//默认未发
+        int i=1;
+        List<SzDeliverDetails> details=szdeliver.getSzDeliverDetails();
+        szdeliverMapper.addszDeliver(szdeliver);
+        Integer delid = szdeliver.getDelId();
+        System.out.println("获取到的发货单的主键id是："+delid);
+        for (SzDeliverDetails details1 :details){
+            details1.setDelId(delid);
+            deliverDetailsMapper.addDelANDDdel(details1);
+        }
+        return ResultUtils.response(delid);
+        /*int addszDeliver=szdeliverMapper.addszDeliver(szdeliver);
         if (addszDeliver!=1){
             throw new SysException(ResultEnum.Deliver_ADD_FAIL.getCode(),ResultEnum.Deliver_ADD_FAIL.getMessage());
         }
         return ResultUtils.response(addszDeliver);
+        */
+
     }
 
     @Override
