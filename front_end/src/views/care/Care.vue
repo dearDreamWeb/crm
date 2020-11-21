@@ -118,7 +118,7 @@
             </el-form-item>
           </el-col >
           <el-col :span="8">
-            <el-form-item label="联系人">
+            <el-form-item label="联系人" prop="carelxrcontacts">
               <el-input v-model="addform.carelxrcontacts"></el-input>
             </el-form-item>
           </el-col>
@@ -332,8 +332,11 @@
         num: 1,
         rules:{
           careZt:[
-            {required: true, message: '请输入活动名称', trigger: 'blur'},
+            {required: true, message: '请输入主题名称', trigger: 'blur'},
             { min: 4, max: 8, message: '长度在 4 到 8个字符', trigger: 'blur' }
+          ],
+          carelxrcontacts:[
+            {required: true, message: '请输入联系人', trigger: 'blur'},
           ]
 
         }

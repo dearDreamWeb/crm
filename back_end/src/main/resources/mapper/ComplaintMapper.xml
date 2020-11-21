@@ -54,7 +54,27 @@
         <result property="updateTime" column="update_time"/>
         <result property="isDelete" column="is_delete"/>
     </resultMap>
-
+    <resultMap id="szOrderResult" type="com.example.entity.request.SzOrder">
+        <id property="ordId" column="ord_id"/>
+        <result property="ordTheme" column="ord_theme"/>
+        <result property="ordState" column="ord_state"/>
+        <result property="ordHead" column="ord_head"/>
+        <result property="ordTotalmoney" column="ord_totalmoney"/>
+        <result property="ordStarttime" column="ord_starttime"/>
+        <result property="ordDealtime" column="ord_dealtime"/>
+        <result property="ordFahuotime" column="ord_fahuotime"/>
+        <result property="ordHuikuanmoney" column="ord_huikuanmoney"/>
+        <result property="ordConsignee" column="ord_consignee"/>
+        <result property="ordProvince" column="ord_province"/>
+        <result property="ordCity" column="ord_city"/>
+        <result property="ordCountry" column="ord_country"/>
+        <result property="ordDetail" column="ord_detail"/>
+        <result property="ordPhone" column="ord_phone"/>
+        <result property="ordCreatetime" column="ord_createtime"/>
+        <result property="ordDelete" column="ord_delete"/>
+        <result property="cusId" column="cus_id"/>
+        <result property="offerId" column="offer_id"/>
+    </resultMap>
     <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
         <id column="cus_id" property="cusId"/>
         <result column="cus_name" property="cusName"/>
