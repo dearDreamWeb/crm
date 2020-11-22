@@ -15,7 +15,7 @@ export const deliverHttp = {
   },
   addord:function(ordId) {
     let params = {
-      url:'/deliver/addDelANDOrd',
+      url:'/deliver/add',
       data:{
         'ordId':ordId,
       }

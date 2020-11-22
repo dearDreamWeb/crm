@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author: yangqianqian
@@ -23,9 +24,19 @@ public class SzDeliver {
     private Integer delState;//状态（0未发/1已发）
     private Date delCreatetime;//创建时间
     private Integer delDelete;//1是0否删除
+    /*
+    private String ordProvince;//省份
+    private String ordCity;//市
+    private String ordCountry;//区/县
+    private String ordDetail;//详情
+    private Date delExpecttime;//预计发货时间
+    private Date delActualtime;//实际发货时间*/
+
 
     private Integer ordId;//订单编号 (外键 关联订单)
-    private SzOrder szOrder;
+    private SzOrder szOrder;//11
+    private List<SzDeliverDetails> szDeliverDetails;//1n
+    private List<ProductReq> productReq;
 
     private String startDate;
     private String endDate;

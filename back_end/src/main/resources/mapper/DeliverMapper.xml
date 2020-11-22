@@ -47,7 +47,7 @@
         <result property="ordDelete" column="ord_delete"/>
     </resultMap>
 
-    <!--全部-->
+    <!--全部 AND d.del_state = 1-->
     <select id="listszDeliver" resultMap="szDeliverDetailResult">
         SELECT d.*,s.*
         FROM sz_deliver d
@@ -77,7 +77,7 @@
             <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
                 AND date_format(d.del_createtime,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
-            AND d.del_state = 1
+
         </where>
         ORDER BY d.del_createtime DESC
     </select>
