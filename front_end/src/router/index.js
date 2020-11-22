@@ -43,6 +43,10 @@ const routes = [
     component: () => import('../views/sale/SaleDetail')
   },
   {
+    path: '/offer_operation',
+    component: () => import('../views/customer/OfferOperation')
+  },
+  {
     path: '/base',
     component: () => import('../views/layout/Layout'),
     redirect: 'home',
@@ -112,8 +116,8 @@ const routes = [
         component: () => import('../views/customer/Customer')
       },
       {
-        path: '/baojia',
-        component: () => import('../views/customer/BaoJia')
+        path: '/offer',
+        component: () => import('../views/customer/Offer')
       },
       {
         path: '/follow_up',

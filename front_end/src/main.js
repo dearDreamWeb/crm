@@ -7,10 +7,11 @@ import store from "./store";
 import ElementUI from 'element-ui'
 import TreeTable from 'vue-table-with-tree-grid'
 import urlUtils from "./common/urlUtils";
-import "@/style/app.scss"
 import VueAreaLinkage from 'vue-area-linkage'
-import 'vue-area-linkage/dist/index.css'
 import iconPicker from 'e-icon-picker'
+import md5 from 'js-md5'
+import "@/style/app.scss"
+import 'vue-area-linkage/dist/index.css'
 import 'e-icon-picker/dist/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 import './assets/alibaba_icon/icon/iconfont.css'
@@ -32,6 +33,7 @@ Vue.use(VueAreaLinkage)
 Vue.use(onlyNumber); //使用该全局指令
 Vue.component('tree-table', TreeTable)
 Vue.prototype.$urlUtil = urlUtils
+Vue.prototype.$md5 = md5
 
 /*格式化*/
 import {

@@ -8,7 +8,7 @@ const state = {
   empName: '',
   nickName: '',
   token: '',
-  menu: {}
+  menu: {},
 }
 
 const mutations = {
@@ -26,7 +26,7 @@ const mutations = {
   },
   addMenu(state, payload) {
     state.menu = payload
-  }
+  },
 }
 
 const store = new Vuex.Store({

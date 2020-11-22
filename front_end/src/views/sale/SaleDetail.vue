@@ -117,6 +117,7 @@
                     </el-col>
                   </el-row>
                 </el-form>
+                <el-button @click="wulihua">BUTTON</el-button>
               </el-card>
             </el-col>
             <el-col :span="10">
@@ -184,8 +185,22 @@
                       <el-button size="mini" icon="el-icon-circle-plus" circle
                                  class="collapse-button" @click="openOffer"></el-button>
                     </template>
-                    <el-table>
+                    <el-table :data="offerListForm" height="260px" class="list_form_table">
                       <el-table-column type="index"></el-table-column>
+                      <el-table-column>
+                        <template slot-scope="scope">
+                          主题：{{scope.row.offerTheme}}<br>
+                          单号：{{scope.row.offerNumbers}}
+                          状态：<el-tag>{{scope.row.offerStatus}}</el-tag><br>
+                          时间：{{scope.row.createTime | dateFormat}}
+                          <el-button type="text" icon="el-icon-right" size="mini"
+                                     @click="editDetail(scope.row.offerId)">编辑明细</el-button>
+                          <el-button type="text" icon="el-icon-right" size="mini"
+                                     @click="viewDetail(scope.row.offerId)">查看明细</el-button>
+                          <el-button type="text" icon="el-icon-right" size="mini"
+                                     @click="turnOrder">转成订单</el-button>
+                        </template>
+                      </el-table-column>
                     </el-table>
                   </el-collapse-item>
                 </el-collapse>
@@ -200,7 +215,7 @@
                         :emp-id="empId" v-on:init-page="initSaleDetail"></sale-more-demand>
       <sale-more-solution ref="saleMoreSolutionRef" :sale-id="saleId" :cus-id="cusId"
                           :emp-id="empId" v-on:init-page="initSaleDetail"></sale-more-solution>
-      <sale-more-offer ref="saleMoreOfferRef" :sale-id="saleId" :cus-id="cusId"
+      <sale-more-offer ref="saleMoreOfferRef" :sale-id="saleId" :cus-id="cusId" :sale-form="saleForm"
                        :emp-id="empId" v-on:init-page="initSaleDetail"></sale-more-offer>
     </el-main>
   </el-container>
@@ -215,12 +230,15 @@
   import {demandHttp} from "../../network/pre_sale/demand";
   import {solutionHttp} from "../../network/pre_sale/solution";
   import SaleMoreOffer from "../../components/sale/SaleMoreOffer";
+  import {offerHttp} from "../../network/pre_sale/offer";
+  import OfferOperation from "../customer/OfferOperation";
 
   export default {
     name: "SaleDetail",
     components: {SaleMoreOffer, SaleMoreSolution, SaleMoreDemand, SaleMoreFollow},
     data() {
       return {
+
         fullscreenLoading:false,
 
         saleId:'',
@@ -233,24 +251,47 @@
         followListForm:[],
         demandListForm:[],
         solutionListForm:[],
+        offerListForm:[],
 
         followListFormLoading:false,
         activeNames: ['1']
       }
     },
-    computed:{
+    mounted() {
 
     },
     methods:{
+      wulihua() {
+        OfferOperation.methods.pengjia()
+      },
+      editDetail(offerId) {
+        console.log(offerId)
+        let resolve = this.$router.resolve({
+          path:'/offer_operation',
+          query:{
+            saleId:this.saleId,
+            offerId:offerId
+          }
+        });
+        window.open(resolve.href,"_blank")
+      },
+      viewDetail() {
+
+      },
+      turnOrder() {
+
+      },
+
       initSaleDetail() {
         this.fullscreenLoading = true
         saleHttp.get_by_id(this.saleId).then(res => {
           this.saleForm = res.data
           this.fullscreenLoading = false
         })
-        this.initFollowByCus()
-        this.initDemandByCus()
-        this.initSolutionByCus()
+        this.initFollowBySale()
+        this.initDemandBySale()
+        this.initSolutionBySale()
+        this.initOfferBySale()
       },
       openFollow() {
         this.$refs.saleMoreFollowFef.openAddDialog()
@@ -264,19 +305,24 @@
       openOffer() {
         this.$refs.saleMoreOfferRef.openAddDialog()
       },
-      initFollowByCus() {
+      initFollowBySale() {
         followHttp.list_by_sale(this.saleId).then(res => {
           this.followListForm = res.data
         })
       },
-      initDemandByCus() {
+      initDemandBySale() {
         demandHttp.list_by_sale(this.saleId).then(res => {
           this.demandListForm = res.data
         })
       },
-      initSolutionByCus() {
+      initSolutionBySale() {
         solutionHttp.list_by_sale(this.saleId).then(res => {
           this.solutionListForm = res.data
+        })
+      },
+      initOfferBySale() {
+        offerHttp.list_by_sale(this.saleId).then(res => {
+          this.offerListForm = res.data
         })
       }
     },
@@ -285,9 +331,10 @@
       this.cusId = this.$urlUtil.getQueryVariable("cusId")
       this.empId = this.$urlUtil.getQueryVariable("empId")
       this.initSaleDetail()
-      this.initFollowByCus()
-      this.initDemandByCus()
-      this.initSolutionByCus()
+      this.initFollowBySale()
+      this.initDemandBySale()
+      this.initSolutionBySale()
+      this.initOfferBySale()
     },
   }
 </script>

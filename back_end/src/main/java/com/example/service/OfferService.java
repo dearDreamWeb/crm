@@ -11,4 +11,5 @@ import com.example.entity.request.OfferReq;
 public interface OfferService {
     ResultVo addOffer(OfferReq offerReq);
     ResultVo getOffer(Integer offerId);
+    ResultVo listOffer(OfferReq offerReq);
 }

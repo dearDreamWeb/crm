@@ -28,4 +28,9 @@ public class OfferController {
     public ResultVo getOffer(Integer offerId) {
         return offerService.getOffer(offerId);
     }
+
+    @GetMapping("/list")
+    public ResultVo listOffer(OfferReq offerReq) {
+        return offerService.listOffer(offerReq);
+    }
 }

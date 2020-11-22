@@ -107,7 +107,7 @@
             ,sale_expect_money = #{saleExpectMoney}
         </if>
         <if test="saleStarBeacon != null">
-            ,sale_star_beacon = #{sale_star_beacon}
+            ,sale_star_beacon = #{saleStarBeacon}
         </if>
         <if test="salePriorLevel != null">
             ,sale_prior_level = #{salePriorLevel}

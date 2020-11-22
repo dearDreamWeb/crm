@@ -33,6 +33,6 @@ public class OfferReq {
 
     private Integer pageNum;
     private Integer pageSize;
-    private String starDate;
+    private String startDate;
     private String endDate;
 }

@@ -180,3 +180,22 @@ export function cusIsSolve(isSolve) {
     return '未完成'
   }
 }
+
+export function randomString(len) {
+  len = len || 32;
+  var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+  var maxPos = $chars.length
+  var pwd = '';
+  for (let i=0;i<len;i++) {
+    pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+  }
+  return pwd;
+}
+
+export function getWeekDate() {
+  var now = new Date();
+  var day = now.getDay();
+  var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+  var week = weeks[day];
+  return week;
+}
