@@ -58,11 +58,11 @@
             <el-tab-pane label="Account" name="third">
               <div>
               <el-form ref="form" :model="form" label-width="80px">
-                <el-form-item label="Name">
-                  <el-input v-model="form.name"></el-input>
+                <el-form-item label="密码">
+                  <el-input v-model="form.mm"></el-input>
                 </el-form-item>
                 <el-form-item label="Email">
-                  <el-input v-model="form.name"></el-input>
+                  <el-input v-model="form.yx"></el-input>
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" @click="onSubmit">Update</el-button>
@@ -82,7 +82,8 @@
     data() {
       return {
         form: {
-          name: '',
+          mm: '',
+          yx:'',
           region: '',
           date1: '',
           date2: '',
