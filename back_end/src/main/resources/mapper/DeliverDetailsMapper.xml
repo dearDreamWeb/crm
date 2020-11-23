@@ -9,7 +9,7 @@
         <result property="productId" column="product_id"/>
     </resultMap>
 
-    <resultMap id="Result" type="com.example.entity.request.SzDeliverDetails">
+    <resultMap id="addDelANDDdelResult" type="com.example.entity.request.SzDeliverDetails">
         <id property="ddetId" column="ddet_id"/>
         <result property="ddetNum" column="ddet_num"/>
         <result property="delId" column="del_id"/>
@@ -28,4 +28,11 @@
         <result property="delDelete" column="del_delete"/>
         <result property="ordId" column="ord_id"/>
     </resultMap>
+    <insert id="addDelANDDdel" parameterType="java.util.List">
+        <selectKey keyProperty="delId" keyColumn="del_id" resultType="Integer" order="AFTER">
+            SELECT last_insert_id();
+        </selectKey>
+        insert into sz_deliver_details(ddet_num, del_id, product_id) values
+        (#{ddetNum},#{delId},#{productId})
+    </insert>
 </mapper>

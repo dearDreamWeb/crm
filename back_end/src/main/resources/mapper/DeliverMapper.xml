@@ -95,8 +95,8 @@
         <selectKey keyColumn="del_id" keyProperty="delId" resultType="Integer" order="AFTER">
             select last_insert_id();
         </selectKey>
-        insert into sz_deliver(del_wuliuid, del_company, del_people, del_delivertime,del_state)
-        values (#{delWuliuid},#{delCompany},#{delPeople},#{delDelivertime},#{delState})
+        insert into sz_deliver(del_wuliuid, del_company, del_people, del_delivertime,del_state,ord_id)
+        values (#{delWuliuid},#{delCompany},#{delPeople},#{delDelivertime},#{delState},#{ordId})
     </insert>
     <!--删-->
     <update id="delszDeliver" parameterType="Integer">
@@ -134,11 +134,11 @@
         INNER JOIN sz_order o ON o.ord_id= d.ord_id AND d.del_state=0
     </select>-->
     <!--发货单和订单新增-->
-    <insert id="addDelANDOrd" parameterType="com.example.entity.request.SzDeliver">
+<!--   <insert id="addDelANDOrd" parameterType="com.example.entity.request.SzDeliver">
         <selectKey keyColumn="del_id" keyProperty="delId" resultType="Integer" order="AFTER">
             select last_insert_id();
         </selectKey>
         insert into sz_deliver(del_wuliuid, del_company, del_people, del_delivertime,del_state,ord_id)
         values (#{delWuliuid},#{delCompany},#{delPeople},#{delDelivertime},#{delState},#{ordId})
-    </insert>
+    </insert>-->
 </mapper>

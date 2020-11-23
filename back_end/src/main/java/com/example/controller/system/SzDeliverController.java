@@ -37,7 +37,7 @@ public class SzDeliverController {
         System.out.println("1.发货单详情："+ szdeliver.getSzDeliverDetails());
         System.out.println("2.发货单："+ szdeliver);
         for (SzDeliverDetails sd1 : szdeliver.getSzDeliverDetails()) {
-            System.out.println("3.发货详情"+sd1);
+            System.out.println("3.发货详情" + sd1);
         }
         return szdeliverService.addszDeliver(szdeliver);
     }

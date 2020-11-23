@@ -46,15 +46,24 @@ public class SzDeliverServicelmpl implements SzDeliverService {
             deliverDetailsMapper.addDelANDDdel(details1);
         }
         return ResultUtils.response(delid);
-        /*int addszDeliver=szdeliverMapper.addszDeliver(szdeliver);
-        if (addszDeliver!=1){
-            throw new SysException(ResultEnum.Deliver_ADD_FAIL.getCode(),ResultEnum.Deliver_ADD_FAIL.getMessage());
-        }
-        return ResultUtils.response(addszDeliver);
-        */
-
     }
-
+    /*
+        //第一步:获取所有的详情信息
+        List<SzOrderDetails> details = order.getSzOrderDetails();
+        //第二步：调用Mapper方法，新增单条订单
+            szorderMapper.addszOrder(order);
+        //第三步：获取新增的订单编号
+        Integer oid = order.getOrdId();
+            System.out.println("主键编号是："+oid);
+        //第四步：逐条新增订单详情
+            for (SzOrderDetails detail : details) {
+            detail.setOrdId(oid);
+            //第五步：调用详细的新增方法
+            detailsMapper.addOrderANDOrderDet(detail);
+        }
+            return ResultUtils.response(oid);
+    }
+    * */
     @Override
     public ResultVo delszDeliver(SzDeliver szdeliver) {
         System.out.println("【发货单】删除");
