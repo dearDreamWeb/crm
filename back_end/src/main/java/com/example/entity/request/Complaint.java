@@ -1,5 +1,6 @@
 package com.example.entity.request;
 import com.example.entity.response.CustomerResp;
+import com.example.entity.response.DictResp;
 import com.example.entity.response.EmpResp;
 import lombok.AllArgsConstructor;
 
@@ -26,10 +27,12 @@ public class Complaint {
     private String complaintHfvisit;//回访确认
     private String startDate;
     private String endDate;
-    private String cusId;//客户id
+    private Integer cusId;//客户id
     private Integer empId;
+    private Integer dictId;
     private Integer pageNum;
     private Integer pageSize;
     private CustomerResp customerResp;
+    private DictResp dictResp;
     private EmpResp empResp;
 }

@@ -539,6 +539,9 @@
 
       searchInputClick(){
         this.listForm.complaintZt = this.searchInput
+        this.listForm.pageNum = this.pageNum
+        this.listForm.pageSize = this.pageSize
+        console.log("擦汗寻")
         complaintHttp.list(this.listForm).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
@@ -571,11 +574,24 @@
         })
       },
       initList() {
-        complaintHttp.listPage(this.pageNum, this.pageSize).then(res => {
+        // let p = {
+        //   pageNum: this.pageNum,
+        //   pageSize: this.pageSize
+        // }
+        // console.log("shouci")
+        // this.searchForm.pageNum = this.pageNum
+        // this.searchForm.pageSize = this.pageSize
+        // complaintHttp.queryEmp(this.searchForm).then(res => {
+        //   this.listForm = res.data.list
+        //   this.total = res.data.total
+        //   this.pageNum = res.data.pageNum
+        // })
+        complaintHttp.listPage(this.pageNum,this.pageSize).then(res => {
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
+
       },
     },
 

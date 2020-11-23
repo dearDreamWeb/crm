@@ -73,6 +73,7 @@ export default {
 
       searchForm:{
         userId:'',
+        logtjs:'',
         logTitle:'',
         startDate:'',
         endDate:''

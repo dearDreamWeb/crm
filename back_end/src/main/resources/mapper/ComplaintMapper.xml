@@ -16,6 +16,7 @@
         <result property="complaintCustomerfk" column="complaint_customerfk"/>
         <result property="complaintHfvisit" column="complaint_hfvisit"/>
         <result property="cusId" column="cus_id"/>
+        <result property="dictId" column="dict_id"/>
         <result property="empId" column="emp_id"/>
     </resultMap>
 

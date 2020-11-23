@@ -75,6 +75,11 @@ public class RepairServicelmpl implements RepairService {
     }
 
     @Override
+    public Repair getRepairMsg(Integer id){
+        return repairMapper.getRepair(id);
+    }
+
+    @Override
     public ResultVo listRepair(Repair repair) {
         Integer pageNum = repair.getPageNum();
         Integer pageSize = repair.getPageSize();

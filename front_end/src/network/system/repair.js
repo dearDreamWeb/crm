@@ -1,4 +1,4 @@
-import {postJson,get} from "../request";
+import {postJson, get, postForm} from "../request";
 
 export const repairHttp = {
   add:function (repair) {
@@ -80,7 +80,7 @@ export const repairHttp = {
         'repairAppointment':repair.repairAppointment,
         'repairActual':repair.repairActual,
         'repairsjhm':repair.repairsjhm,
-        'repairGdstae':repair.repairGdstae,
+        'repairGdstate':repair.repairGdstate,
         'cusId':repair.cusId,
         'deptId':repair.deptId,
         'orderId':repair.orderId,
@@ -125,5 +125,25 @@ export const repairHttp = {
       }
     }
     return get(params)
+  },
+  updatePaidan:function(repair){
+    let params ={
+      url: '/repair/update',
+      data:{
+        'repairGdstate': repair.repairGdstate,
+        'repairId': repair.repairId,
+        'empId': repair.empId
+      }
+    }
+    return postJson(params)
+  },
+  updateQuxiao:function(repair){
+    let params ={
+      url: '/repair/updateQuxiao',
+      data:{
+        'repairId': repair.repairId,
+      }
+    }
+    return postJson(params)
   }
 }

@@ -20,18 +20,19 @@
     <el-table-column prop="productResp.productName" label="维修产品"></el-table-column>
 <!--    <el-table-column prop="empResp.empName" label="接单人"></el-table-column>-->
     <el-table-column prop="repairsjhm" label="是否在保"></el-table-column>
-    <el-table-column label="操作">
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="openAddDialog">派单</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-          @click="deleteCare">取消</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+    <el-table-column prop="empResp.empName" label="维修人"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button v-if="scope.row.repairGdstate != '已派单'"
+              size="mini"
+              @click="openAddDialog(scope.row.repairId)">派单</el-button>
+            <el-button v-if="scope.row.repairGdstate == '已派单'"
+              size="mini"
+              type="danger"
+              @click="updateCare(scope.row.repairId)">取消</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   <el-pagination background
                  @current-change="handleCurrentChange"
                  :current-page="pageNum" :page-sizes="[1,2,5,10]"
@@ -60,7 +61,7 @@
     </el-form>
     <div style="text-align: center;">
       <el-button @click="addDialog = false">取 消</el-button>
-      <el-button type="primary" @click="addClick"
+      <el-button type="primary" @click="addClick()"
                  :loading="addDictButtonLoading">确 定</el-button>
     </div>
   </el-dialog>
@@ -85,12 +86,13 @@
         isDisable:false,
         addform:{
           empId:'',
+          cusId: '',
           repairDate: '',
           repairProblem:'',
           repairPersonnel:'',
           repairAppointment:'',
           repairActual:'',
-          repairGdstae:'',
+          repairGdstate:'',
           region: '',
           repairsjhm:'',
           repairLxr:'',
@@ -114,7 +116,7 @@
           repairPersonnel:'',
           repairAppointment:'',
           repairActual:'',
-          repairGdstae:'',
+          repairGdstate:'',
           region: '',
           date1: '',
           repairLxr:'',
@@ -166,7 +168,7 @@
           repairPersonnel:'',
           repairAppointment:'',
           repairActual:'',
-          repairGdstae:'',
+          repairGdstate:'',
           region: '',
           date1: '',
           repairLxr:'',
@@ -182,10 +184,13 @@
           resource: '',
           desc: ''
         },
+        repairId:''
       }
     },
     methods: {
-      openAddDialog() {
+      openAddDialog(id) {
+        console.log(id)
+        this.repairId = id
         this.addDialog = true
         this.initEmpList()
         this.initEdpList()
@@ -235,7 +240,10 @@
       },
       addClick(){
         this.addDictButtonLoading = true
-        repairHttp.add(this.addform).then(res => {
+        this.addform.repairGdstate = '已派单'
+        this.addform.repairId =this.repairId;
+        console.log(this.addform)
+        repairHttp.updatePaidan(this.addform).then(res => {
           if (res.code === 20000) {
             this.$message.success(res.message)
             this.initList()
@@ -272,17 +280,19 @@
           })
         })
       },
-      deleteCare() {
+      updateCare(id) {
         this.$confirm('此操作将取消派单，是否继续','提示',{
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          repairHttp.del(this.rowCareId).then(res => {
+          let p = {
+            'repairId': id
+          }
+          repairHttp.updateQuxiao(p).then(res => {
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.initList()
-
             } else {
               this.$message.error(res.message)
             }

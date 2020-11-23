@@ -10,7 +10,7 @@
         <result property="repairPersonnel" column="repair_personnel"/>
         <result property="repairAppointment" column="repair_appointment"/>
         <result property="repairActual" column="repair_actual"/>
-        <result property="repairGdstae" column="repair_gdstate"/>
+        <result property="repairGdstate" column="repair_gdstate"/>
         <result property="repairFault" column="repair_fault"/>
         <result property="repairHfjl" column="repair_hfjl"/>
         <result property="repairWxfy" column="repair_wxfy"/>
@@ -31,13 +31,14 @@
         <result property="repairPersonnel" column="repair_personnel"/>
         <result property="repairAppointment" column="repair_appointment"/>
         <result property="repairActual" column="repair_actual"/>
-        <result property="repairGdstae" column="repair_gdstate"/>
+        <result property="repairGdstate" column="repair_gdstate"/>
         <result property="repairFault" column="repair_fault"/>
         <result property="repairHfjl" column="repair_hfjl"/>
         <result property="repairWxfy" column="repair_wxfy"/>
         <result property="repairLxr" column="repair_lxr"/>
         <result property="repairSfzb" column="repair_sfzb"/>
         <result property="repairsjhm" column="inventory_seq"/>
+        <result property="empName" column="empName"/>
         <result property="cusId" column="cus_id"/>
         <result property="empId" column="emp_id"/>
         <result property="deptId" column="dept_id"/>
@@ -147,13 +148,16 @@
             SELECT last_insert_id();
         </selectKey>
         insert into repair_order(repair_receiving_time,repair_problem,repair_personnel,cus_id,emp_id,dept_id,product_id,order_id,repair_gdstate,repair_fault,repair_wxfy,inventory_seq,repair_lxr,repair_sfzb) VALUES
-        (#{repairDate},#{repairProblem},#{repairPersonnel},#{cusId},#{empId},#{deptId},#{productId},#{orderId},#{repairGdstae},#{repairFault},#{repairWxfy},#{repairSfzb},#{repairsjhm},#{repairLxr})
+        (#{repairDate},#{repairProblem},#{repairPersonnel},#{cusId},#{empId},#{deptId},#{productId},#{orderId},#{repairGdstate},#{repairFault},#{repairWxfy},#{repairSfzb},#{repairsjhm},#{repairLxr})
     </insert>
 
     <update id="updateRepair" parameterType="com.example.entity.request.Repair">
         update repair_order set repair_receiving_time = #{repairDate}
         <if test="empId !=null ">
             ,emp_id = #{empId}
+        </if>
+        <if test="empId == null ">
+            ,emp_id = null
         </if>
         <if test="deptId !=null ">
             ,dept_id = #{deptId}
@@ -170,8 +174,8 @@
         <if test="repairActual !=null and repairActual != ''">
             ,repair_actual = #{repairActual}
         </if>
-        <if test="repairGdstae !=null and repairGdstae != ''">
-            ,repair_gdstate = #{repairGdstae}
+        <if test="repairGdstate !=null and repairGdstate != ''">
+            ,repair_gdstate = #{repairGdstate}
         </if>
         <if test="repairFault !=null and repairFault != ''">
             ,repair_fault = #{repairFault}
@@ -209,7 +213,7 @@
         DELETE FROM repair_order WHERE repair_id = #{repairId}
     </delete>
     <select id="listRepair" resultMap="RepairDetailResult">
-        SELECT s.repair_id,s.repair_person,s.repair_receiving_time,s.repair_problem,s.repair_personnel,s.repair_appointment,s.repair_actual,s.repair_gdstate,s.repair_fault,s.repair_hfjl,s.inventory_seq,s.repair_wxfy,s.repair_sfzb,s.repair_lxr,
+        SELECT s.repair_id,s.repair_person,s.repair_receiving_time,s.repair_problem,s.repair_personnel,s.repair_appointment,s.repair_actual,s.repair_gdstate,s.repair_fault,s.repair_hfjl,s.inventory_seq,s.repair_wxfy,s.repair_sfzb,s.repair_lxr,s.emp_id,
         cu.*,
         e.*,
         d.*,
@@ -225,8 +229,8 @@
             <if test="repairProblem != null and repairProblem != ''">
                 AND s.repair_problem LIKE CONCAT('%',#{repairProblem},'%')
             </if>
-            <if test="repairGdstae != null and repairGdstae != ''">
-                AND s.repair_gdstate LIKE CONCAT('%',#{repairGdstae},'%')
+            <if test="repairGdstate != null and repairGdstate != ''">
+                AND s.repair_gdstate LIKE CONCAT('%',#{repairGdstate},'%')
             </if>
             <if test="repairSfzb != null and repairSfzb != ''">
                 AND s.repair_sfzb LIKE CONCAT('%',#{repairSfzb},'%')
