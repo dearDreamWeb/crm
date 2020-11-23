@@ -182,29 +182,32 @@
         console.log(productId)
       },
       handleSelectionChange(val) {
-        console.log("ISADD",val)
-        this.multipleSelection.push(val)
+        console.log(val)
+        this.multipleSelection = []
+        this.multipleSelection = val
         console.log("ISTABLE",this.tableData)
       },
-      productToOther(value) {
-        for (let i=0;i<value.length;i++) {
-          for (let j=0;j<this.tableData.length;j++) {
-            if (value[i].productId == this.tableData[j].productId) {
-              this.tableData[j].offerDetailCount += 1
-            } else {
-              this.tableData.push(value[i])
-            }
-          }
-        }
+      productToOther() {
         this.drawer = false
       },
       tableDisabled(row,rowIndex) {
+        for (let i=0;i<this.tableData.length;i++) {
+          this.tableData.find(value => {
+            console.log(value)
+            if (value.productId == row.productId) {
+              return false
+            } else {
+              return true
+            }
+          })
+        }
         if (row.productStock <= 0) {
           return false
         } else {
           return true
         }
       },
+
       handleClose() {
         this.$refs.multipleTable.clearSelection();
       },
