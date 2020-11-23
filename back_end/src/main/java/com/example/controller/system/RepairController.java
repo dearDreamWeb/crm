@@ -4,6 +4,7 @@ import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.Repair;
 import com.example.service.RepairService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,9 +34,27 @@ public class RepairController {
     @SysLog("修改")
     @PostMapping("/update")
     public ResultVo editDict(@RequestBody Repair repair) {
+        Repair vo = repairService.getRepairMsg(repair.getRepairId());
+        System.out.println("查询的数据是："+vo);
+        Repair main = new Repair();
+        BeanUtils.copyProperties(vo, main);
+        main.setEmpId(repair.getEmpId());
+        main.setRepairGdstate(repair.getRepairGdstate());
+        System.out.println("待修改的数据是："+main);
+        return repairService.updateRepair(main);
+    }
 
-        System.out.println("待修改的数据是："+repair);
-        return repairService.updateRepair(repair);
+    @SysLog("取消派单")
+    @PostMapping("/updateQuxiao")
+    public ResultVo updateQuxiao(@RequestBody Repair repair) {
+        Repair vo = repairService.getRepairMsg(repair.getRepairId());
+        System.out.println("查询的数据是："+vo);
+        Repair main = new Repair();
+        BeanUtils.copyProperties(vo, main);
+        main.setEmpId(null);
+        main.setRepairGdstate("未派单");
+        System.out.println("待修改的数据是："+main);
+        return repairService.updateRepair(main);
     }
 
     @GetMapping

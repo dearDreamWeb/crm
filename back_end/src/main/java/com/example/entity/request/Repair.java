@@ -26,7 +26,7 @@ public class Repair {
     private String repairPersonnel;
     private String repairAppointment;
     private String repairActual;
-    private String repairGdstae;
+    private String repairGdstate;
     private String repairFault;
     private String repairHfjl;
     private Integer repairWxfy;
@@ -46,4 +46,5 @@ public class Repair {
     private ProductResp productResp;
     private SzOrder szOrder;
     private String cusName;
+    private String empName;
 }

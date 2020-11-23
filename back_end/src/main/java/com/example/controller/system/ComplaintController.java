@@ -44,6 +44,9 @@ public class ComplaintController {
 
     @GetMapping("/list")
     public ResultVo listDict(Complaint complaint) {
+        System.out.println("查询："+complaint);
+        System.out.println("查询cusId："+complaint.getCusId());
+
         return complaintService.listComplaint(complaint);
     }
 }

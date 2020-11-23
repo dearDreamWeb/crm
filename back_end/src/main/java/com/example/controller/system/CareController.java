@@ -48,6 +48,7 @@ public class CareController {
 
     @GetMapping("/list")
     public ResultVo listDict( Care care) {
+        System.out.println("查询care数据："+care);
         return careService.listCare(care);
     }
 

@@ -160,19 +160,20 @@
         </el-row>
 
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="联系人" prop="repairLxr">
-              <el-input v-model="addform.repairLxr"></el-input>
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="联系人" prop="repairLxr">-->
+<!--              <el-input v-model="addform.repairLxr"></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
 
+
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="日期">
               <el-date-picker type="date" placeholder="选择日期" v-model="addform.repairDate" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
 <!--          <el-col :span="8">-->
 <!--            <el-form-item label="接单人">-->
 <!--              <el-select v-model="addform.empId">-->
@@ -238,9 +239,14 @@
       @close="editHandleClose">
       <el-form ref="updateform" :model="updateform" :rules="rules" label-width="80px">
           <el-row>
+<!--            <el-col :span="8">-->
+<!--              <el-form-item label="联系人">-->
+<!--                <el-input v-model="updateform.ordConsignee"></el-input>-->
+<!--              </el-form-item>-->
+<!--            </el-col>-->
             <el-col :span="8">
-              <el-form-item label="联系人">
-                <el-input v-model="updateform.repairSfzb"></el-input>
+              <el-form-item label="故障描述">
+                <el-input type="textarea" v-model="updateform.repairFault"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -307,11 +313,6 @@
                   <el-option label="在保" value="在保"></el-option>
                   <el-option label="出保" value="出保"></el-option>
                 </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="故障描述">
-                <el-input type="textarea" v-model="updateform.repairFault"></el-input>
               </el-form-item>
             </el-col>
           </el-row>

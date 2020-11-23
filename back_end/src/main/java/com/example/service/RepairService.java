@@ -14,4 +14,6 @@ public interface RepairService {
     ResultVo deleteRepair(Integer repairId);
     ResultVo listRepair (Repair repair );
     ResultVo getRepair (Integer repairId);
+
+    Repair getRepairMsg (Integer repairId);
 }
