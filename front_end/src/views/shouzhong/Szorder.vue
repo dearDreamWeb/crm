@@ -98,7 +98,6 @@
         <el-table-column prop="ordHead" label="负责人" width="140"></el-table-column>
         <el-table-column label="操作" sortable>
           <template slot-scope="scope">
-            <el-button type="text" @click="fahuo(scope.row)">制定发货</el-button>
             <el-button type="text" @click="chakan(scope.row)">查看详情</el-button>
           </template>
         </el-table-column>
@@ -111,44 +110,6 @@
       </el-pagination>
       <el-button  @click="anniu">按钮</el-button>
     </el-card>
-
-    <el-dialog title="发货" :visible.sync="FahuoTableVisible" width="65%" top="40px">
-      <el-card shadow="always" class="card">
-        <div class="mingxi">
-          <span>主题：{{xiangqing.ordTheme}}</span>
-          <span>订单号： {{xiangqing.ordId}}</span>
-          <span>负责人：{{xiangqing.ordHead}}</span>
-          <span>订单状态
-              <i v-if="xiangqing.ordState == 1">已完成</i>
-              <i v-if="xiangqing.ordState == 0">执行中</i>
-            </span>
-          <span>对应客户：{{xiangqing.cusId}}</span>
-        </div>
-      </el-card>
-      <el-tabs type="border-card" >
-        <el-tab-pane label="需发产品">
-          <el-table :data="NeedProduct" >
-            <el-table-column prop="productId" label="产品编号"></el-table-column>
-            <el-table-column prop="productName" label="产品名称"></el-table-column>
-            <el-table-column prop="productModel" label="产品型号"></el-table-column>
-            <el-table-column prop="productBrand" label="产品品牌"></el-table-column>
-            <el-table-column prop="productSize" label="产品尺寸"></el-table-column>
-            <el-table-column prop="productPrice" label="产品价格"></el-table-column>
-            <el-table-column label="操作">
-              选择
-            </el-table-column>
-
-          </el-table>
-        </el-tab-pane>
-        <el-tab-pane label="产品序列">
-          <el-table :data="SeqProduct" >
-            <el-table-column prop="productDetailId" label="产品详情号" width="150"></el-table-column>
-            <el-table-column prop="productId" label="产品编号" width="200"></el-table-column>
-            <el-table-column prop="productBarCode" label="产品序列号" width="200"></el-table-column>
-          </el-table>
-        </el-tab-pane>
-      </el-tabs>
-    </el-dialog>
 
     <el-dialog title="订单" :visible.sync="dialogTableVisible" width="65%" top="70px">
       <el-card shadow="always" class="card">
@@ -297,7 +258,7 @@
           <el-input-number
             size="mini"
             v-model.number="scope.row.productNumber"
-            :max="99"
+            :max="scope.row.max"
             :min="1"
             :step="1" @change="ProNumderChange(scope.row)">1</el-input-number>
           </template>
@@ -313,9 +274,9 @@
       <span>总金额: {{zj}}</span>
       <span slot="footer">
         <el-button @click="addDialog = false">取消</el-button>
-        <el-button @click="developClick" :loading="developButtonLoading">制定回款</el-button>
+       <!-- <el-button @click="developClick" :loading="developButtonLoading">制定回款</el-button>-->
         <el-button type="primary" @click="addOrderClick"
-                   :loading="addOrderButtonLoading">确定</el-button>
+                   :loading="addOrderButtonLoading">制定回款</el-button>
       </span>
     </el-dialog>
 
@@ -655,17 +616,24 @@
           productName:row.productName,
           productModel:row.productModel,
           productPrice:row.productPrice,
+          max:row.productStock,
           productNumber:1
         }
         //判断产品是否已经存在，如果存在，数量累加，否则新增选择的商品信息
         let result = this.addproplus.filter(p=>{return p.productId==pro.productId});
         if(result && result.length>0){
-          //产品已经选择，修改产品的数量
-          result[0].productNumber= result[0].productNumber+1;
+          if(result[0].productNumber==row.productStock){
+            alert("等于")
+          }else{
+            //产品已经选择，修改产品的数量
+            result[0].productNumber= result[0].productNumber+1;
+          }
+
 
         }else{
           this.addproplus.push(pro)
         }
+        console.log(this.addproplus)
       },
       AddProPage(pageIndex){
         this.pageNum = pageIndex
@@ -764,33 +732,6 @@
       anniu(){
         alert(this.$store.state.empName)
       },
-      /*addOrderClick(){
-        this.addForm.ordProvince=this.selected2[0];
-        this.addForm.ordCity = this.selected2[1];
-        this.addForm.ordCountry=this.selected2[2];
-        console.log(this.addForm.ordHead)
-        let s = this.addForm.cusId;
-        var product=JSON.stringify({pur:this.addproplus,prod:this.addForm})
-        console.log("pro:"+product);
-        this.$refs.addFormRef.validate(valid => {
-          if (!valid) return
-          this.addOrderButtonLoading = true
-          orderHttp.addOrder(product).then(res =>{
-            if (res.code === 20000) {
-              this.$message.success(res.message)
-              this.initList()
-              this.addOrderButtonLoading = false
-              this.addDialog = false
-            } else {
-              this.addOrderButtonLoading = false
-              this.$message({
-                message:res.message,
-                type:"error"
-              })
-            }
-          })
-        })
-      },*/
       /*选择分期*/
       fenqi(){
         console.log("1分期",this.addPlanForm.planPeriod)
@@ -835,8 +776,7 @@
       developClick(val){
         /*判断是否完善订单信息*/
         if(this.addproplus.length>0){
-          this.addPlanForm.ordTotalmoney=""
-          this.addPlanForm.ordTotalmoney=this.zj;
+
           this.addPlanDialog=true;
         }else{
           this.$message({
@@ -854,17 +794,18 @@
           console.log("jjj",this.addPlanForm.ordId);
           console.log("kkk",this.oid);
           planHttp.addplan(this.addPlanForm).then(res => {
-            console.log("rrr",this.addPlanForm);
-            console.log("O：",res);
-            console.log("Oid：",res.data)
+            if (res.code === 20000) {
+              console.log("rrr",this.addPlanForm);
+              console.log("O：",res);
+              console.log("Oid：",res.data);
+              this.addPlanDialog = false;
+              this.addDialog = false;
+            }
           })
       },
     /*新增订单（选择产品同时新增订单详情）*/
       addOrderClick(){
         if(this.addproplus.length>0){
-          /*this.addPlanForm.ordTotalmoney=""
-          this.addPlanForm.ordTotalmoney=this.zj
-          this.addPlanDialog=true;*/
           console.log("this.addproplu:",this.addproplus)
           var addDetail = [];
           /*通过循环得到已选取产品的主键、价格、数量*/
@@ -901,22 +842,15 @@
                 console.log("O：",res);
                 console.log("Oid：",res.data)
                 this.oid=res.data;
-                this.addDialog = false
-                this.addOrderButtonLoading = false
+                this.addPlanForm.ordTotalmoney="";
+                this.addPlanForm.ordTotalmoney=this.zj;
+                this.addPlanDialog=true;
+                this.addOrderButtonLoading = false;
                 let id = this.oid,
                   $this = this;
                 const h = this.$createElement;
                 console.log(id);
-               /* this.$notify.info({
-                  title: '消息',
-                  message: '这是一条消息的提示消息',
-                  duration: 0,
-                  onClick() {
-                    $this.defineCallBack(id); //自定义回调,message为传的参数
-                    console.log("传递过来的值是：",id);
-                  }
-                });*/
-                this.$notify({
+             /*   this.$notify({
                   title: '提示',
                   message: '暂未制定发货单，点击制定！',
                   duration: 0,
@@ -931,11 +865,11 @@
                       console.log("发货！")
                     })
                   }
-                });
+                });*/
               } else {
                 this.$message({
                   message:res.message,
-                  type:"error"
+                  type:"warning"
                 })
               }
             })
@@ -946,24 +880,11 @@
           });
         }
       },
-      //点击事件回调
+/*      //点击事件回调
       defineCallBack() {
         console.log("传递过来的值是：",this.oid);
         console.log(val.ordId)
-
-      },
-      /*发货*/
-      fahuo(val){
-        this.FahuoTableVisible = true;
-        console.log(val.ordId)
-        //alert("发货！")
-        let id=val.ordId;
-        deliverHttp.addord(id).then(res=>{
-          console.log(this.ordId)
-          console.log("发货！")
-        })
-      },
-
+      },*/
       /*修改订单*/
       editOrderClick(){
         this.editForm.ordProvince=this.selected2[0];

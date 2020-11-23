@@ -3,8 +3,12 @@ package com.example.service.impl;
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
+import com.example.entity.request.SzDeliver;
+import com.example.entity.request.SzDeliverDetails;
 import com.example.entity.request.SzOrder;
 import com.example.entity.request.SzOrderDetails;
+import com.example.model.mapper.SzDeliverDetailsMapper;
+import com.example.model.mapper.SzDeliverMapper;
 import com.example.model.mapper.SzOrderDetailsMapper;
 import com.example.model.mapper.SzOrderMapper;
 import com.example.service.SzOrderService;
@@ -30,6 +34,10 @@ public class SzOrderServicelmpl implements SzOrderService {
     private SzOrderMapper szorderMapper;
     @Autowired
     private SzOrderDetailsMapper detailsMapper;
+    @Autowired
+    private SzDeliverMapper szDeliverMapper;
+    @Autowired
+    private SzDeliverDetailsMapper szDeliverDetailsMapper;
 
     //一次性新增多个详情
     @Override
@@ -46,12 +54,31 @@ public class SzOrderServicelmpl implements SzOrderService {
         //第三步：获取新增的订单编号
         Integer oid = order.getOrdId();
         System.out.println("主键编号是："+oid);
+            //添加发货单
+        SzDeliver deliver=new SzDeliver();
+        deliver.setOrdId(oid);
+        szDeliverMapper.addszDeliver(deliver);
+        System.out.println("发货单的订单编号"+deliver.getOrdId());
+        System.out.println("deliver"+deliver);
+
         //第四步：逐条新增订单详情
         for (SzOrderDetails detail : details) {
             detail.setOrdId(oid);
             //第五步：调用详细的新增方法
             detailsMapper.addOrderANDOrderDet(detail);
+            SzDeliverDetails  szDeliverDetails = new SzDeliverDetails();
+            szDeliverDetails.setDdetNum(detail.getOdetBuynum());//发货数量
+            szDeliverDetails.setProductId(detail.getProductId());//产品编号
+            szDeliverDetails.setDelId(deliver.getDelId());
+            System.out.println("Delid："+deliver.getDelId());
+            System.out.println(("Deliver："+deliver));
+//            //循环外新增的发货单实体对象
+            szDeliverDetails.setSzDeliver(deliver);
+            //添加发货详情
+            szDeliverDetailsMapper.addDelANDDdel(szDeliverDetails);
+            System.out.println("业务层的发货详情"+szDeliverDetails);
         }
+
         return ResultUtils.response(oid);
     }
     @Override
