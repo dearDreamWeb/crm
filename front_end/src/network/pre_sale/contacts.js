@@ -67,5 +67,14 @@ export const contactsHttp = {
       }
     }
     return get(params)
+  },
+  getContacts:function (contactsId) {
+    let params = {
+      url:'/contacts',
+      data:{
+        'contactsId':contactsId
+      }
+    }
+    return get(params)
   }
 }

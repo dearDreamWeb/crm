@@ -18,4 +18,5 @@ public interface OfferDetailMapper {
     int delOfferDetail(Integer offerDetailId);
     OfferDetailResp getOfferDetail(Integer offerDetailId);
     List<OfferDetailResp> listOfferDetail(OfferDetailReq offerDetailReq);
+    List<OfferDetailResp> getOfferDetailByOffer(Integer offerId);
 }

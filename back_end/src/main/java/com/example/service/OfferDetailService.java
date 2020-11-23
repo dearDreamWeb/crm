@@ -11,4 +11,6 @@ import com.example.entity.request.OfferDetailReq;
 public interface OfferDetailService {
     ResultVo addOfferDetail(OfferDetailReq offerDetailReq);
     ResultVo getOfferDetail(Integer offerDetailId);
+    ResultVo listOfferDetail(OfferDetailReq offerDetailReq);
+    ResultVo getOfferDetailByOffer(Integer offerId);
 }

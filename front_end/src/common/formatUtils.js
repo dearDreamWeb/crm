@@ -199,3 +199,11 @@ export function getWeekDate() {
   var week = weeks[day];
   return week;
 }
+
+export function offerStatusFormat(offerStatus) {
+  if (offerStatus == 0) {
+    return '未审核'
+  } else {
+    return '已审核'
+  }
+}

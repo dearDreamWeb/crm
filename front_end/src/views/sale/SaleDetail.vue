@@ -117,7 +117,6 @@
                     </el-col>
                   </el-row>
                 </el-form>
-                <el-button @click="wulihua">BUTTON</el-button>
               </el-card>
             </el-col>
             <el-col :span="10">
@@ -191,7 +190,7 @@
                         <template slot-scope="scope">
                           主题：{{scope.row.offerTheme}}<br>
                           单号：{{scope.row.offerNumbers}}
-                          状态：<el-tag>{{scope.row.offerStatus}}</el-tag><br>
+                          状态：<el-tag>{{scope.row.offerStatus | offerStatusFormat}}</el-tag><br>
                           时间：{{scope.row.createTime | dateFormat}}
                           <el-button type="text" icon="el-icon-right" size="mini"
                                      @click="editDetail(scope.row.offerId)">编辑明细</el-button>
@@ -209,6 +208,61 @@
           </el-row>
         </div>
       </el-card>
+
+      <el-dialog title="查看报价明细" :visible.sync="viewOfferDetailDialog">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <span>主题</span>
+            <el-tag>{{offerForm.offerTheme}}</el-tag>
+          </el-col>
+          <el-col :span="12">
+            <span>报价单号</span>
+            <el-tag>{{offerForm.offerNumbers}}</el-tag>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <span>客户</span>
+            <el-tag>{{customerForm.cusName}}</el-tag>
+          </el-col>
+          <el-col :span="12">
+            <span>销售机会</span>
+            <el-tag>{{saleForm.saleName}}</el-tag>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <span>创建时间</span>
+            <el-tag>{{offerForm.createTime | dateFormat}}</el-tag>
+          </el-col>
+          <el-col :span="12">
+            <span>报价</span>
+            <el-tag>{{saleTotalMoney}}</el-tag>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <span>报价人</span>
+            <el-tag>{{contactsForm.contactsName}}</el-tag>
+          </el-col>
+          <el-col :span="12">
+            <span>报价人联系方式</span>
+            <el-tag>{{contactsForm.contactsPhone}}</el-tag>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <span>审核状态</span>
+            <el-tag>{{offerForm.offerStatus | offerStatusFormat}}</el-tag>
+          </el-col>
+          <el-col :span="12">
+            <span>审核人</span>
+            <el-tag v-if="offerForm.examinePerson == null">未审核</el-tag>
+            <el-tag v-else>{{offerForm.examinePerson}}</el-tag>
+          </el-col>
+        </el-row>
+      </el-dialog>
+
       <sale-more-follow ref="saleMoreFollowFef" :sale-id="saleId" :cus-id="cusId"
                         :emp-id="empId" v-on:init-page="initSaleDetail"></sale-more-follow>
       <sale-more-demand ref="saleMoreDemandRef" :sale-id="saleId" :cus-id="cusId"
@@ -232,13 +286,15 @@
   import SaleMoreOffer from "../../components/sale/SaleMoreOffer";
   import {offerHttp} from "../../network/pre_sale/offer";
   import OfferOperation from "../customer/OfferOperation";
+  import {contactsHttp} from "../../network/pre_sale/contacts";
+  import {customerHttp} from "../../network/pre_sale/customer";
 
   export default {
     name: "SaleDetail",
     components: {SaleMoreOffer, SaleMoreSolution, SaleMoreDemand, SaleMoreFollow},
     data() {
       return {
-
+        viewOfferDetailDialog:false,
         fullscreenLoading:false,
 
         saleId:'',
@@ -247,6 +303,12 @@
         saleForm:{
           saleDetailResp:{}
         },
+
+        offerForm:{},
+        offerDetailForm:[],
+        contactsForm:{},
+        customerForm:{},
+        saleTotalMoney:'',
 
         followListForm:[],
         demandListForm:[],
@@ -261,9 +323,6 @@
 
     },
     methods:{
-      wulihua() {
-        OfferOperation.methods.pengjia()
-      },
       editDetail(offerId) {
         console.log(offerId)
         let resolve = this.$router.resolve({
@@ -275,8 +334,22 @@
         });
         window.open(resolve.href,"_blank")
       },
-      viewDetail() {
-
+      viewDetail(offerId) {
+        this.viewOfferDetailDialog = true
+        offerHttp.getOffer(offerId).then(res => {
+          this.offerForm = res.data
+        })
+        offerHttp.get_detail_by_offerId(offerId).then(res => {
+          this.offerDetailForm = res.data
+          this.saleTotalMoney = res.data.reduce((sum,e) => sum + e.amountMoney,0)
+          console.log(this.saleTotalMoney)
+        })
+        contactsHttp.getContacts(this.saleForm.contactsId).then(res => {
+          this.contactsForm = res.data
+        })
+        customerHttp.getCusById(this.saleForm.cusId).then(res => {
+          this.customerForm = res.data
+        })
       },
       turnOrder() {
 

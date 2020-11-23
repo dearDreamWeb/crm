@@ -37,5 +37,39 @@ export const offerHttp = {
       }
     }
     return get(params)
+  },
+  offer_detail_add:function (offerDetail) {
+    let params = {
+      url:'/offer_detail/add',
+      data:{
+        'offerDetailId':offerDetail.offerDetailId,
+        'offerDetailCount':offerDetail.offerDetailCount,
+        'offerDetailUnit':offerDetail.offerDetailUnit,
+        'unitPrice':offerDetail.unitPrice,
+        'amountMoney':offerDetail.amountMoney,
+        'remark':offerDetail.remark,
+        'offerId':offerDetail.offerId,
+        'productId':offerDetail.productId
+      }
+    }
+    return postJson(params)
+  },
+  get_detail_by_offerId:function (offerId) {
+    let params = {
+      url:'/offer_detail',
+      data:{
+        'offerId':offerId
+      }
+    }
+    return get(params)
+  },
+  getOffer:function (offerId) {
+    let params = {
+      url:'/offer',
+      data:{
+        'offerId':offerId
+      }
+    }
+    return get(params)
   }
 }

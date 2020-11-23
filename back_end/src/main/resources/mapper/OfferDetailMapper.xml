@@ -95,10 +95,54 @@
 
     <select id="getOfferDetail" resultMap="OfferDetailProductResult">
         SELECT od.offer_detail_id,od.offer_detail_count,od.offer_detail_unit,od.unit_price,od.amount_money,
-        od.remark,od.offer_id,d.prodcut_id,d.product_name,d.product_model,d.product_price,d.product_brand,
+        od.remark,od.offer_id,d.product_id,d.product_name,d.product_model,d.product_price,d.product_brand,
         d.product_stock,d.product_size,d.product_cost,d.product_status,d.remark
         FROM offer_detail od
         INNER JOIN product d ON od.product_id = d.product_id
         WHERE od.offer_detail_id = #{offerDetailId}
     </select>
+
+    <select id="listOfferDetail" resultMap="OfferDetailProductResult">
+        SELECT od.offer_detail_id,od.offer_detail_count,od.offer_detail_unit,od.unit_price,od.amount_money,
+        od.remark,od.offer_id,d.product_id,d.product_name,d.product_model,d.product_price,d.product_brand,
+        d.product_stock,d.product_size,d.product_cost,d.product_status,d.remark
+        FROM offer_detail od
+        INNER JOIN product d ON od.product_id = d.product_id
+        <where>
+            <if test="offerId != null">
+                od.offer_id = #{offerId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getOfferDetailByOffer" resultMap="OfferDetailProductResult">
+        SELECT od.offer_detail_id,od.offer_detail_count,od.offer_detail_unit,od.unit_price,od.amount_money,
+        od.remark,od.offer_id,d.product_id,d.product_name,d.product_model,d.product_price,d.product_brand,
+        d.product_stock,d.product_size,d.product_cost,d.product_status,d.remark
+        FROM offer_detail od
+        INNER JOIN product d ON od.product_id = d.product_id
+        WHERE od.offer_id = #{offerId}
+    </select>
+
+    <update id="editOfferDetail" parameterType="com.example.entity.request.OfferDetailReq">
+        UPDATE offer_detail
+        <set>
+            <if test="offerDetailCount != null">
+                offer_detail_count = #{offerDetailCount},
+            </if>
+            <if test="offerDetailUnit != null and offerDetailUnit != ''">
+                offer_detail_unit = #{offerDetailUnit},
+            </if>
+            <if test="unitPrice != null">
+                unit_price = #{unitPrice},
+            </if>
+            <if test="amountMoney != null">
+                amount_money = #{amountMoney},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark}
+            </if>
+        </set>
+        WHERE offer_detail_id = #{offerDetailId}
+    </update>
 </mapper>
