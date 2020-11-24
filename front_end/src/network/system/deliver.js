@@ -8,7 +8,7 @@ export const deliverHttp = {
     }
     return postJson(params)
   },
-  addord:function(ordId) {
+/*  addord:function(ordId) {
     let params = {
       url:'/deliver/add',
       data:{
@@ -16,12 +16,11 @@ export const deliverHttp = {
       }
     }
     return postJson(params)
-  },
+  },*/
   andall:function () {
     let params = {
       url:'/order/and_all',
       data:{
-
       }
     }
     return get(params)
@@ -34,12 +33,10 @@ export const deliverHttp = {
         'delWuliuid':deliver.delWuliuid,
         'delCompany':deliver.delCompany,
         'delPeople':deliver.delPeople
-
       }
     }
     return postJson(params)
   },
-
   getszDeliver:function (delId) {
     let params = {
       url:'/deliver',

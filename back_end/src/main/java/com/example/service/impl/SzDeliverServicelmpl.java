@@ -79,7 +79,7 @@ public class SzDeliverServicelmpl implements SzDeliverService {
     @Override
     public ResultVo editszDeliver(SzDeliver szdeliver) {
         System.out.println("【发货单】修改");
-        SzDeliver deptResp=szdeliverMapper.getszDeliver(szdeliver.getDelId());
+        List<SzDeliver> deptResp=szdeliverMapper.getszDeliver(szdeliver.getDelId());
         if (deptResp == null){
             throw new SysException(ResultEnum.Deliver_UPDATE_FAIL.getCode(),
                     ResultEnum.Deliver_UPDATE_FAIL.getMessage());
@@ -95,7 +95,10 @@ public class SzDeliverServicelmpl implements SzDeliverService {
     @Override
     public ResultVo getszDeliver(Integer delId) {
         System.out.println("【发货单】单条");
-        SzDeliver szdeliver=szdeliverMapper.getszDeliver(delId);
+        List<SzDeliver> szdeliver=szdeliverMapper.getszDeliver(delId);
+        for (SzDeliver szDeliver : szdeliver) {
+            System.out.println("///"+szDeliver);
+        }
         return ResultUtils.response(szdeliver);
     }
 
@@ -118,7 +121,7 @@ public class SzDeliverServicelmpl implements SzDeliverService {
 
     @Override
     public ResultVo addDelANDOrd(SzDeliver szDeliver) {
-        szDeliver.setDelDelivertime(DateUtils.getDate());
+        szDeliver.setDelExpecttime(DateUtils.getDate());
         szDeliver.setDelState(1);
         int addDelANDOrd = szdeliverMapper.addDelANDOrd(szDeliver);
         return  ResultUtils.response(addDelANDOrd);

@@ -41,7 +41,7 @@ public class SzOrderServicelmpl implements SzOrderService {
 
     //一次性新增多个详情
     @Override
-    public ResultVo addszOrder(SzOrder order){
+    public ResultVo addszOrder(SzOrder order) throws Exception {
         order.setOrdState(0);/*执行中0*/
         order.setOrdDelete(0);/*(删除)否0*/
         order.setOrdStarttime(DateUtils.getDate());/*（订单开始时间）订单创建时间*/
@@ -54,9 +54,12 @@ public class SzOrderServicelmpl implements SzOrderService {
         //第三步：获取新增的订单编号
         Integer oid = order.getOrdId();
         System.out.println("主键编号是："+oid);
-            //添加发货单
+        //添加发货单
         SzDeliver deliver=new SzDeliver();
         deliver.setOrdId(oid);
+        deliver.setDelState(0);//未发
+        deliver.setDelExpecttime(DateUtils.strToDate(DateUtils.nextMonth()));//预计发货时间
+        deliver.setDelCreatetime(DateUtils.getDate());//创建时间
         szDeliverMapper.addszDeliver(deliver);
         System.out.println("发货单的订单编号"+deliver.getOrdId());
         System.out.println("deliver"+deliver);

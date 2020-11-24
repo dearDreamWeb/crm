@@ -6,7 +6,7 @@ import com.example.entity.request.SzOrder;
 import java.util.List;
 
 public interface SzOrderService {
-    ResultVo addszOrder(SzOrder szorder);
+    ResultVo addszOrder(SzOrder szorder) throws Exception;
     ResultVo delszOrder(SzOrder szorder);
     ResultVo editszOrder(SzOrder szorder);
     ResultVo getszOrder(Integer ordId);
