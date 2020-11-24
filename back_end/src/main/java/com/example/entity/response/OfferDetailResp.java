@@ -18,8 +18,10 @@ import java.util.List;
 public class OfferDetailResp {
     private Integer offerDetailId;
     private Integer offerDetailCount;
-    private String offerDetailUnit;
-    private BigDecimal unitPrice;
+    private String productName;
+    private String productBrand;
+    private String productModel;
+    private BigDecimal productPrice;
     private BigDecimal amountMoney;
     private String remark;
     private Integer offerId;

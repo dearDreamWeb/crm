@@ -30,7 +30,18 @@ public class OfferDetailController {
     }
 
     @GetMapping
-    public ResultVo getOfferDetail(@RequestParam("offerId") Integer offerId) {
+    public ResultVo getOfferDetailByOffer(@RequestParam("offerId") Integer offerId) {
         return detailService.getOfferDetailByOffer(offerId);
+    }
+
+    @GetMapping("/get_detail")
+    public ResultVo getOfferDetail(Integer offerDetailId) {
+        return detailService.getOfferDetail(offerDetailId);
+    }
+
+    @SysLog("报价详情删除")
+    @PostMapping("/del")
+    public ResultVo delOfferDetail(@RequestBody OfferDetailReq offerDetailReq) {
+        return detailService.delOfferDetail(offerDetailReq);
     }
 }

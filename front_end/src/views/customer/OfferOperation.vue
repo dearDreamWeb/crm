@@ -8,7 +8,7 @@
     <el-main v-loading.fullscreen.lock="fullscreenLoading">
       <el-card>
         <div slot="header">
-          <span>报价单明细 致：【客户】 日期：今天</span>
+          <span>报价单明细  日期：今天</span>
           <el-button @click="drawer = true" type="primary" icon="el-icon-plus"
                      circle style="float: right;margin-top: -10px"></el-button>
         </div>
@@ -38,7 +38,7 @@
             <template slot-scope="scope">
               <el-tooltip content="删除" placement="top" effect="dark">
                 <el-button type="text" icon="el-icon-delete"
-                           @click="removeProduct(scope.row.productId)"></el-button>
+                           @click="removeProduct(scope.row.offerDetailId,scope.row.productId)"></el-button>
               </el-tooltip>
             </template>
           </el-table-column>
@@ -94,7 +94,7 @@
             </el-col>
             <el-col :span="4">
               <el-form-item>
-                <el-button type="primary" icon="el-icon-search"></el-button>
+                <el-button @click="searchProductClick" type="primary" icon="el-icon-search"></el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -134,7 +134,12 @@
 
         drawer: false,
         direction: 'rtl',
-        searchProduct:{},
+        searchProduct:{
+          productName:'',
+          productBrand:'',
+          productSize:'',
+          productModel:''
+        },
         productBrandList:productBrand,
         productSizeList:productSize,
         productModelList:productModel,
@@ -144,25 +149,48 @@
         addForm:{
           offerDetailId:'',
           offerDetailCount:'',
-          offerDetailUnit:'',
-          unitPrice:'',
+          productName:'',
+          productBrand:'',
+          productModel:'',
+          productPrice:'',
           amountMoney:'',
           remark:'',
           offerId:'',
           productId:''
         },
-        multipleSelection: []
+        multipleSelection: [],
+        disabledProduct:[],
       }
     },
 
     methods:{
+      searchProductClick() {
+        productHttp.list(this.searchProduct).then(res => {
+          if (res.code === 20000) {
+            this.productListForm = res.data.list
+          } else {
+            this.$message({
+              message:res.message,
+              type:'error'
+            })
+          }
+        })
+      },
+
       addFormClick() {
         for (let i=0;i<this.tableData.length;i++) {
           this.addForm.offerId = this.offerId
           this.addForm.offerDetailId = this.tableData[i].offerDetailId
           this.addForm.productId = this.tableData[i].productId
-          this.addForm.offerDetailCount = this.tableData[i].offerDetailCount
-          this.addForm.unitPrice = this.tableData[i].productPrice
+          this.addForm.productName = this.tableData[i].productName
+          this.addForm.productBrand = this.tableData[i].productBrand
+          this.addForm.productModel = this.tableData[i].productModel
+          if (this.tableData[i].offerDetailCount == null) {
+            this.addForm.offerDetailCount = 1
+          } else {
+            this.addForm.offerDetailCount = this.tableData[i].offerDetailCount
+          }
+          this.addForm.productPrice = this.tableData[i].productPrice
           this.addForm.amountMoney = this.tableData[i].offerDetailCount * this.tableData[i].productPrice
           this.addForm.remark = this.tableData[i].remark
           this.fullscreenLoading = true
@@ -170,6 +198,7 @@
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.fullscreenLoading = false
+              this.initOfferDetail()
             } else {
               this.$message.error(res.message)
               this.fullscreenLoading = false
@@ -178,30 +207,55 @@
         }
       },
 
-      removeProduct(productId) {
-        console.log(productId)
+      removeProduct(offerDetailId,productId) {
+        this.$confirm('确定删除？','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          offerHttp.get_offer_detail(offerDetailId).then(res => {
+            if (res.data != null) {
+              this.fullscreenLoading = true
+              offerHttp.del_offer_detail(offerDetailId).then(res => {
+                if (res.code === 20000) {
+                  this.$message.success(res.message)
+                  this.fullscreenLoading = false
+                  this.initOfferDetail()
+                  let product = this.disabledProduct.findIndex(item => item === productId);
+                  this.disabledProduct.splice(product,1)
+                } else {
+                  this.fullscreenLoading = false
+                  this.$message.error(res.message)
+                }
+              })
+            } else {
+              let number = this.tableData.findIndex(item => item.offerDetailId === offerDetailId);
+              let product = this.disabledProduct.findIndex(item => item === productId);
+              this.tableData.splice(number,1)
+              this.disabledProduct.splice(product,1)
+              console.log(this.disabledProduct)
+            }
+          })
+        })
       },
       handleSelectionChange(val) {
-        console.log(val)
-        this.multipleSelection = []
         this.multipleSelection = val
-        console.log("ISTABLE",this.tableData)
       },
       productToOther() {
+        if (this.tableData != null) {
+          for (let i=0;i<this.multipleSelection.length;i++) {
+            this.tableData.push(this.multipleSelection[i])
+          }
+        } else {
+          this.tableData = this.multipleSelection
+        }
+        for (let i=0;i<this.multipleSelection.length;i++) {
+          this.disabledProduct.push(this.multipleSelection[i].productId)
+        }
         this.drawer = false
       },
       tableDisabled(row,rowIndex) {
-        for (let i=0;i<this.tableData.length;i++) {
-          this.tableData.find(value => {
-            console.log(value)
-            if (value.productId == row.productId) {
-              return false
-            } else {
-              return true
-            }
-          })
-        }
-        if (row.productStock <= 0) {
+        if ((row.productStock <= 0) || (this.disabledProduct.includes(row.productId))) {
           return false
         } else {
           return true
@@ -210,6 +264,7 @@
 
       handleClose() {
         this.$refs.multipleTable.clearSelection();
+        this.$refs.searchProductFormRef.resetFields()
       },
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'
@@ -233,6 +288,7 @@
               this.tableData[i].productPrice = res.data.productPrice
               this.tableData[i].productStock = res.data.productStock
             })
+            this.disabledProduct.push(this.tableData[i].productId)
           }
         })
       }

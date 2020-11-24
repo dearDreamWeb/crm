@@ -13,4 +13,5 @@ public interface OfferDetailService {
     ResultVo getOfferDetail(Integer offerDetailId);
     ResultVo listOfferDetail(OfferDetailReq offerDetailReq);
     ResultVo getOfferDetailByOffer(Integer offerId);
+    ResultVo delOfferDetail(OfferDetailReq offerDetailReq);
 }
