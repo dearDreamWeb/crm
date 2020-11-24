@@ -17,7 +17,7 @@
         </div>
         <div>
           <el-row :gutter="20">
-            <el-col :span="14">
+            <el-col :span="12">
               <el-card>
                 <el-form label-width="100px" label-position="right">
                   <el-row :gutter="20">
@@ -119,6 +119,15 @@
                 </el-form>
               </el-card>
             </el-col>
+            <el-col :span="2">
+              <el-card style="height: 300px">
+                <el-steps :active="1" direction="vertical">
+                  <el-step title="1" icon="el-icon-edit"></el-step>
+                  <el-step title="2" icon="el-icon-upload"></el-step>
+                  <el-step title="3" icon="el-icon-picture"></el-step>
+                </el-steps>
+              </el-card>
+            </el-col>
             <el-col :span="10">
               <el-card>
                 <el-collapse v-model="activeNames" accordion>
@@ -209,58 +218,86 @@
         </div>
       </el-card>
 
-      <el-dialog title="查看报价明细" :visible.sync="viewOfferDetailDialog">
+      <el-dialog title="查看报价明细" :visible.sync="viewOfferDetailDialog" top="15px" width="70%">
         <el-row :gutter="20">
-          <el-col :span="12">
-            <span>主题</span>
-            <el-tag>{{offerForm.offerTheme}}</el-tag>
+          <el-col :span="16">
+            <el-form label-position="right" label-width="80px">
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <el-form-item label="主题">
+                    <el-tag>{{offerForm.offerTheme}}</el-tag>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="报价单号">
+                    <el-tag>{{offerForm.offerNumbers}}</el-tag>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <el-form-item label="客户">
+                    <el-tag>{{customerForm.cusName}}</el-tag>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="销售机会">
+                    <el-tag>{{saleForm.saleName}}</el-tag>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <el-form-item label="创建时间">
+                    <el-tag>{{offerForm.createTime | dateFormat}}</el-tag>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="报价">
+                    <el-tag>{{saleTotalMoney}}</el-tag>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <el-form-item label="报价人">
+                    <el-tag>{{contactsForm.contactsName}}</el-tag>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="联系方式">
+                    <el-tag>{{contactsForm.contactsPhone}}</el-tag>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <el-form-item label="审核状态">
+                    <el-tag>{{offerForm.offerStatus | offerStatusFormat}}</el-tag>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="审核人">
+                    <el-tag v-if="offerForm.examinePerson == null">未审核</el-tag>
+                    <el-tag v-else>{{offerForm.examinePerson}}</el-tag>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
           </el-col>
-          <el-col :span="12">
-            <span>报价单号</span>
-            <el-tag>{{offerForm.offerNumbers}}</el-tag>
+          <el-col :span="8">
+            mxmx
           </el-col>
         </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <span>客户</span>
-            <el-tag>{{customerForm.cusName}}</el-tag>
-          </el-col>
-          <el-col :span="12">
-            <span>销售机会</span>
-            <el-tag>{{saleForm.saleName}}</el-tag>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <span>创建时间</span>
-            <el-tag>{{offerForm.createTime | dateFormat}}</el-tag>
-          </el-col>
-          <el-col :span="12">
-            <span>报价</span>
-            <el-tag>{{saleTotalMoney}}</el-tag>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <span>报价人</span>
-            <el-tag>{{contactsForm.contactsName}}</el-tag>
-          </el-col>
-          <el-col :span="12">
-            <span>报价人联系方式</span>
-            <el-tag>{{contactsForm.contactsPhone}}</el-tag>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <span>审核状态</span>
-            <el-tag>{{offerForm.offerStatus | offerStatusFormat}}</el-tag>
-          </el-col>
-          <el-col :span="12">
-            <span>审核人</span>
-            <el-tag v-if="offerForm.examinePerson == null">未审核</el-tag>
-            <el-tag v-else>{{offerForm.examinePerson}}</el-tag>
-          </el-col>
-        </el-row>
+        <el-table :data="offerDetailForm">
+          <el-table-column prop="productName" label="名称"></el-table-column>
+          <el-table-column prop="productBrand" label="品牌"></el-table-column>
+          <el-table-column prop="productModel" label="型号"></el-table-column>
+          <el-table-column prop="productPrice" label="单价"></el-table-column>
+          <el-table-column prop="offerDetailCount" label="数量"></el-table-column>
+          <el-table-column prop="amountMoney" label="金额"></el-table-column>
+          <el-table-column prop="remark" label="备注" show-overflow-tooltip></el-table-column>
+        </el-table>
       </el-dialog>
 
       <sale-more-follow ref="saleMoreFollowFef" :sale-id="saleId" :cus-id="cusId"
@@ -308,7 +345,7 @@
         offerDetailForm:[],
         contactsForm:{},
         customerForm:{},
-        saleTotalMoney:'',
+        saleTotalMoney:0,
 
         followListForm:[],
         demandListForm:[],
@@ -339,10 +376,15 @@
         offerHttp.getOffer(offerId).then(res => {
           this.offerForm = res.data
         })
+        this.saleTotalMoney = 0
         offerHttp.get_detail_by_offerId(offerId).then(res => {
           this.offerDetailForm = res.data
-          this.saleTotalMoney = res.data.reduce((sum,e) => sum + e.amountMoney,0)
-          console.log(this.saleTotalMoney)
+          for (let i=0;i<res.data.length;i++) {
+            this.saleTotalMoney = this.saleTotalMoney + res.data[i].amountMoney
+          }
+          if (!isNaN(parseFloat(this.saleTotalMoney))) {
+            this.saleTotalMoney = this.saleTotalMoney.toFixed(2)
+          }
         })
         contactsHttp.getContacts(this.saleForm.contactsId).then(res => {
           this.contactsForm = res.data

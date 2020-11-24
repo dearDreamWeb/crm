@@ -65,4 +65,20 @@ public class OfferDetailServiceImpl implements OfferDetailService {
         List<OfferDetailResp> offerDetailByOffer = detailMapper.getOfferDetailByOffer(offerId);
         return ResultUtils.response(offerDetailByOffer);
     }
+
+    @Override
+    public ResultVo delOfferDetail(OfferDetailReq offerDetailReq) {
+        Integer offerDetailId = offerDetailReq.getOfferDetailId();
+        OfferDetailResp offerDetail = detailMapper.getOfferDetail(offerDetailId);
+        if (offerDetail == null) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+        int delOfferDetail = detailMapper.delOfferDetail(offerDetailId);
+        if (delOfferDetail != 1) {
+            throw new SysException(ResultEnum.DATA_DEL_FAIL.getCode(),
+                    ResultEnum.DATA_DEL_FAIL.getMessage());
+        }
+        return ResultUtils.response(delOfferDetail);
+    }
 }

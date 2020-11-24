@@ -44,8 +44,10 @@ export const offerHttp = {
       data:{
         'offerDetailId':offerDetail.offerDetailId,
         'offerDetailCount':offerDetail.offerDetailCount,
-        'offerDetailUnit':offerDetail.offerDetailUnit,
-        'unitPrice':offerDetail.unitPrice,
+        'productName':offerDetail.productName,
+        'productBrand':offerDetail.productBrand,
+        'productModel':offerDetail.productModel,
+        'productPrice':offerDetail.productPrice,
         'amountMoney':offerDetail.amountMoney,
         'remark':offerDetail.remark,
         'offerId':offerDetail.offerId,
@@ -68,6 +70,24 @@ export const offerHttp = {
       url:'/offer',
       data:{
         'offerId':offerId
+      }
+    }
+    return get(params)
+  },
+  del_offer_detail:function (offerDetailId) {
+    let params = {
+      url:'/offer_detail/del',
+      data:{
+        'offerDetailId':offerDetailId
+      }
+    }
+    return postJson(params)
+  },
+  get_offer_detail:function (offerDetailId) {
+    let params = {
+      url:'/offer_detail/get_detail',
+      data:{
+        'offerDetailId':offerDetailId
       }
     }
     return get(params)
