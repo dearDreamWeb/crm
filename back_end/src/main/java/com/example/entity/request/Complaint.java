@@ -35,4 +35,5 @@ public class Complaint {
     private CustomerResp customerResp;
     private DictResp dictResp;
     private EmpResp empResp;
+
 }
