@@ -57,7 +57,25 @@
     <el-row :gutter="20">
       <el-col :span="12">
         <el-card>
-          销售机会状态默认为【跟踪】，阶段默认为【初期沟通】
+          <el-table :data="repairList" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
+                    highlight-current-row v-loading="tableLoading">
+            <el-table-column type="index" width="40"></el-table-column>
+            <el-table-column prop="customerResp.cusName" label="对应客户"></el-table-column>
+            <!--    <el-table-column prop="repairSfzb" label="联系人"></el-table-column>-->
+            <el-table-column prop="szOrder.ordPhone" label="手机号码"></el-table-column>
+            <el-table-column prop="szOrder.ordConsignee" label="联系人"></el-table-column>
+            <!--        <el-table-column prop="deptResp.deptName" label="维修部门"></el-table-column>-->
+            <el-table-column prop="szOrder.ordTheme" label="维修产品"></el-table-column>
+            <!--    <el-table-column prop="empResp.empName" label="接单人"></el-table-column>-->
+            <el-table-column prop="repairsjhm" label="是否在保"></el-table-column>
+            <el-table-column prop="empResp.empName" label="维修人"></el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button size="mini"
+                           @click="openAddDialog(scope.row.repairId)">付款</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-card>
       </el-col>
     </el-row>
@@ -257,6 +275,7 @@
   import E from 'wangeditor'
   import productBrand from '../common/data/product_date'
   import {pca,pcaa} from 'area-data'
+  import {userHttp} from "../network/system/user";
 
   export default {
     name: "Dashboard",
@@ -264,15 +283,19 @@
       const editor = new E('#demo1')
       editor.create()
       this.editor = editor
+      console.log(this.editor)
+      this.getPaidan();
     },
     data(){
       return{
         isClear:false,
         detail:'',
-
+        repairList:[],
         brand:'',
         icon:'',
+        tableLoading: false,
         shopId:'',
+        edpList:[],
         selected:[],
         selected2:['湖南省','邵阳市','新邵县'],
         pca:pca,
@@ -292,8 +315,25 @@
         // 通过代码获取编辑器内容
         let data = this.editor.txt.text()
         alert(data)
+
+      },
+      //派单信息
+      getPaidan(){
+        let p = {
+          empId: this.$store.state.empId,
+          repairGdstate: '已派单'
+        }
+        this.tableLoading = true
+        userHttp.getPaidan(p).then(res => {
+          console.log(res.data.list)
+          if(res.code == 20000){
+            this.repairList = res.data.list;
+            this.tableLoading = false
+          }
+        });
       }
     },
+
     created() {
 
     }

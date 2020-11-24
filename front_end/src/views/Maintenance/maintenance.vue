@@ -17,7 +17,7 @@
     <el-table-column prop="szOrder.ordPhone" label="手机号码"></el-table-column>
     <el-table-column prop="szOrder.ordConsignee" label="联系人"></el-table-column>
     <!--        <el-table-column prop="deptResp.deptName" label="维修部门"></el-table-column>-->
-    <el-table-column prop="productResp.productName" label="维修产品"></el-table-column>
+    <el-table-column prop="szOrder.ordTheme" label="维修产品"></el-table-column>
 <!--    <el-table-column prop="empResp.empName" label="接单人"></el-table-column>-->
     <el-table-column prop="repairsjhm" label="是否在保"></el-table-column>
     <el-table-column prop="empResp.empName" label="维修人"></el-table-column>
@@ -49,7 +49,7 @@
     <el-form ref="addformRef" :model="addform" :rules="rules" label-width="80px">
      <el-row>
        <el-col :span="8">
-         <el-form-item label="维修人">
+         <el-form-item label="维修人" prop="empId">
            <el-select v-model="addform.empId">
              <el-option v-for="item in edpList" :key="item.empId"
                         :label="item.empName" :value="item.empId">
@@ -184,7 +184,13 @@
           resource: '',
           desc: ''
         },
-        repairId:''
+        repairId:'',
+        rules:{
+          empId:[
+            {required: true, message: '请选择员工', trigger: 'blur'},
+          ]
+
+        }
       }
     },
     methods: {

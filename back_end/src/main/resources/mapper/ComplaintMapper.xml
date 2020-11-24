@@ -34,10 +34,24 @@
         <result property="complaintCustomerfk" column="complaint_customerfk"/>
         <result property="complaintHfvisit" column="complaint_hfvisit"/>
         <result property="empId" column="emp_id"/>
+        <result property="dictId" column="dict_id"/>
         <result property="cusId" column="cus_id"/>
         <association property="customerResp" resultMap="CustomerResult"/>
         <association property="empResp" resultMap="EmpResult"/>
+        <association property="dictResp" resultMap="DictResult"/>
     </resultMap>
+
+    <resultMap id="DictResult" type="com.example.entity.response.DictResp">
+        <id column="dict_id" property="dictId"/>
+        <result column="dict_code" property="dictCode"/>
+        <result column="dict_name" property="dictName"/>
+        <result column="pid" property="pid"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+    </resultMap>
+
 
     <resultMap id="EmpResult" type="com.example.entity.response.EmpResp">
         <id property="empId" column="emp_id"/>

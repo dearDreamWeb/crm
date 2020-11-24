@@ -115,10 +115,20 @@ export const userHttp = {
   logout:function (empName) {
     let params = {
       url: '/emp/logout',
-      data:{
-        'empName':empName
+      data: {
+        'empName': empName
       }
     }
     return postJson(params)
+  },
+  getPaidan(param){
+    let params = {
+      url:'/repair/list',
+      data:{
+        empId: param.empId,
+        repairGdstate: param.repairGdstate
+      }
+    }
+    return get(params)
   }
 }

@@ -30,18 +30,18 @@
               </el-col>
             </el-row>
             <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item prop="careZt" label="部门">
-                  <el-select v-model="searchForm.deptId">
-                    <el-option v-for="item in deptList" :key="item.deptId"
-                               :label="item.deptName" :value="item.deptId">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
+<!--              <el-col :span="8">-->
+<!--                <el-form-item prop="careZt" label="部门">-->
+<!--                  <el-select v-model="searchForm.deptId">-->
+<!--                    <el-option v-for="item in deptList" :key="item.deptId"-->
+<!--                               :label="item.deptName" :value="item.deptId">-->
+<!--                    </el-option>-->
+<!--                  </el-select>-->
+<!--                </el-form-item>-->
+<!--              </el-col>-->
               <el-col :span="8">
                 <el-form-item prop="repairSfzb" label="联系人">
-                  <el-input v-model="searchForm.repairSfzb" size="mini" placeholder="请输入" clearable></el-input>
+                  <el-input v-model="searchForm.ordTheme" size="mini" placeholder="请输入" clearable></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -55,24 +55,24 @@
               </el-col>
             </el-row>
             <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item prop="careexecutor" label="接单人">
-                  <el-select v-model="searchForm.empId">
-                    <el-option v-for="item in edpList" :key="item.empId"
-                               :label="item.empName" :value="item.empId">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="产品">
-                  <el-select v-model="searchForm.productId">
-                    <el-option v-for="item in productList" :key="item.productId"
-                               :label="item.productName" :value="item.productId">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
+<!--              <el-col :span="8">-->
+<!--                <el-form-item prop="careexecutor" label="接单人">-->
+<!--                  <el-select v-model="searchForm.empId">-->
+<!--                    <el-option v-for="item in edpList" :key="item.empId"-->
+<!--                               :label="item.empName" :value="item.empId">-->
+<!--                    </el-option>-->
+<!--                  </el-select>-->
+<!--                </el-form-item>-->
+<!--              </el-col>-->
+<!--              <el-col :span="8">-->
+<!--                <el-form-item label="产品">-->
+<!--                  <el-select v-model="searchForm.productId">-->
+<!--                    <el-option v-for="item in productList" :key="item.productId"-->
+<!--                               :label="item.productName" :value="item.productId">-->
+<!--                    </el-option>-->
+<!--                  </el-select>-->
+<!--                </el-form-item>-->
+<!--              </el-col>-->
               <el-col :span="4">
                 <el-form-item>
                   <el-button size="mini" @click="advancedQueryClick"
@@ -92,9 +92,9 @@
         <el-table-column prop="customerResp.cusName" label="对应客户"></el-table-column>
         <el-table-column prop="szOrder.ordConsignee" label="联系人"></el-table-column>
         <el-table-column prop="repairWxfy" label="费用"></el-table-column>
-        <el-table-column prop="repairGdstae" label="状态"></el-table-column>
+<!--        <el-table-column prop="repairGdstae" label="状态"></el-table-column>-->
 <!--        <el-table-column prop="deptResp.deptName" label="维修部门"></el-table-column>-->
-        <el-table-column prop="productResp.productName" label="维修产品"></el-table-column>
+        <el-table-column prop="szOrder.ordTheme" label="维修产品"></el-table-column>
 <!--        <el-table-column prop="empResp.empName" label="接单人"></el-table-column>-->
         <el-table-column prop="careData" label="日期">
           <template slot-scope="scope">
@@ -183,13 +183,18 @@
 <!--              </el-select>-->
 <!--            </el-form-item>-->
 <!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--          <el-form-item label="状态">-->
+<!--            <el-select v-model="addform.repairGdstae" placeholder="请选择">-->
+<!--              <el-option label="执行中" value="执行中"></el-option>-->
+<!--              <el-option label="结束" value="结束"></el-option>-->
+<!--              <el-option label="未执行" value="未执行"></el-option>-->
+<!--            </el-select>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
           <el-col :span="8">
-            <el-form-item label="状态">
-              <el-select v-model="addform.repairGdstae" placeholder="请选择">
-                <el-option label="执行中" value="执行中"></el-option>
-                <el-option label="结束" value="结束"></el-option>
-                <el-option label="未执行" value="未执行"></el-option>
-              </el-select>
+            <el-form-item label="费用">
+              <el-input v-model="addform.repairWxfy"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -209,20 +214,15 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="维修产品">
-              <el-select v-model="addform.productId">
-                <el-option v-for="item in productList" :key="item.productId"
-                           :label="item.productName" :value="item.productId">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="费用">
-              <el-input v-model="addform.repairWxfy"></el-input>
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="8">-->
+<!--          <el-form-item label="维修产品">-->
+<!--            <el-select v-model="addform.productId">-->
+<!--              <el-option v-for="item in productList" :key="item.productId"-->
+<!--                         :label="item.productName" :value="item.productId">-->
+<!--              </el-option>-->
+<!--            </el-select>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
         </el-row>
       </el-form>
       <div style="text-align: center;">
@@ -249,12 +249,20 @@
                 <el-input type="textarea" v-model="updateform.repairFault"></el-input>
               </el-form-item>
             </el-col>
+<!--            <el-col :span="8">-->
+<!--              <el-form-item label="状态">-->
+<!--                <el-select v-model="updateform.repairGdstae" placeholder="请选择">-->
+<!--                  <el-option label="执行中" value="执行中"></el-option>-->
+<!--                  <el-option label="结束" value="结束"></el-option>-->
+<!--                  <el-option label="未执行" value="未执行"></el-option>-->
+<!--                </el-select>-->
+<!--              </el-form-item>-->
+<!--            </el-col>-->
             <el-col :span="8">
-              <el-form-item label="状态">
-                <el-select v-model="updateform.repairGdstae" placeholder="请选择">
-                  <el-option label="执行中" value="执行中"></el-option>
-                  <el-option label="结束" value="结束"></el-option>
-                  <el-option label="未执行" value="未执行"></el-option>
+              <el-form-item label="保修">
+                <el-select v-model="updateform.repairsjhm" placeholder="请选择">
+                  <el-option label="在保" value="在保"></el-option>
+                  <el-option label="出保" value="出保"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -298,23 +306,15 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="维修产品">
-                <el-select v-model="updateform.productId">
-                  <el-option v-for="item in productList" :key="item.productId"
-                             :label="item.productName" :value="item.productId">
-                  </el-option>
-                </el-select>
+                <el-input
+                  placeholder="请输入内容"
+                  v-model="updateform.ordTheme"
+                  :disabled="true">
+                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="8">
-              <el-form-item label="保修">
-                <el-select v-model="updateform.repairsjhm" placeholder="请选择">
-                  <el-option label="在保" value="在保"></el-option>
-                  <el-option label="出保" value="出保"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
           </el-row>
           <el-row>
 <!--            <el-col :span="8">-->
@@ -354,6 +354,7 @@ import {followHttp} from "../../network/pre_sale/followlog";
       return {
         deptList:[],
         empList:[],
+        orderList:[],
         edpList:[],
         productList:[],
         isDisable:false,
@@ -494,7 +495,11 @@ import {followHttp} from "../../network/pre_sale/followlog";
           this.listDingda = res.data
         })
       },
-
+      initorderList(){
+        orderHttp.list().then(res =>{
+          this.orderList = res.data.list
+        })
+      },
       initEdpList(){
         userHttp.list().then(res =>{
           this.edpList = res.data.list
@@ -618,6 +623,7 @@ import {followHttp} from "../../network/pre_sale/followlog";
           this.updateform.cusName = res.data.customerResp.cusName
           this.updateform.empName = res.data.empResp.empName
           this.updateform.deptName = res.data.deptResp.deptName
+          this.updateform.ordTheme = res.data.szOrder.ordTheme
         })
       },
       editHandleClose() {
