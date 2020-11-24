@@ -2,6 +2,9 @@ package com.example.service;
 
 import com.example.entity.ResultVo;
 import com.example.entity.request.ProductReq;
+import com.example.entity.response.ProductResp;
+
+import java.util.List;
 
 /**
  * @author: pengjia
@@ -15,4 +18,5 @@ public interface ProductService {
     ResultVo getProduct(Integer productId);
     ResultVo listProduct(ProductReq productReq);
     ResultVo getProductByName(String productName);
+    ResultVo getProduct1(Integer productId);
 }

@@ -150,7 +150,7 @@
     </select>
     <!--详情查全部-->
     <select id="orderAll" resultMap="szOrderDetailResult">
-        SELECT s.*,cl.*,od.*,r.*,p.*
+        SELECT s.*,cl.*,od.*,r.*,p.*,d.*
         FROM sz_order s
         left join customer cl on s.cus_id = cl.cus_id
         left join sz_order_details od on s.ord_id=od.ord_id

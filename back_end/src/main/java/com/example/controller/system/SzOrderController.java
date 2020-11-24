@@ -35,7 +35,7 @@ public class SzOrderController {
       }*/
     @SysLog("添加订单")
     @PostMapping("/add")
-    public ResultVo addszOrder(@RequestBody SzOrder szorder){
+    public ResultVo addszOrder(@RequestBody SzOrder szorder) throws Exception {
         System.out.println("1订单详情："+szorder.getSzOrderDetails());
         System.out.println("订单："+szorder);
         for (SzOrderDetails sz1 : szorder.getSzOrderDetails()) {

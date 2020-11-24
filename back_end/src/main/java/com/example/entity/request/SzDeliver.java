@@ -20,7 +20,6 @@ public class SzDeliver {
     private String delWuliuid;//物流编号
     private String delCompany;//物流公司
     private String delPeople;//发货人
-    private Date delDelivertime;//发货时间
     private Integer delState;//状态（0未发/1已发）
     private Date delCreatetime;//创建时间
     private Integer delDelete;//1是0否删除
@@ -28,9 +27,10 @@ public class SzDeliver {
     private String ordProvince;//省份
     private String ordCity;//市
     private String ordCountry;//区/县
-    private String ordDetail;//详情
+    private String ordDetail;//详情地址*/
+
     private Date delExpecttime;//预计发货时间
-    private Date delActualtime;//实际发货时间*/
+    private Date delActualtime;//实际发货时间
 
 
     private Integer ordId;//订单编号 (外键 关联订单)

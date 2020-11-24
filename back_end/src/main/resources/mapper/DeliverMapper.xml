@@ -7,10 +7,11 @@
         <result property="delWuliuid" column="del_wuliuid"/>
         <result property="delCompany" column="del_company"/>
         <result property="delPeople" column="del_people"/>
-        <result property="delDelivertime" column="del_delivertime"/>
         <result property="delState" column="del_state"/>
         <result property="delCreatetime" column="del_createtime"/>
         <result property="delDelete" column="del_delete"/>
+        <result property="delExpecttime" column="del_expecttime"/>
+        <result property="delActualtime" column="del_actualtime"/>
         <result property="ordId" column="ord_id"/>
     </resultMap>
 
@@ -19,12 +20,14 @@
         <result property="delWuliuid" column="del_wuliuid"/>
         <result property="delCompany" column="del_company"/>
         <result property="delPeople" column="del_people"/>
-        <result property="delDelivertime" column="del_delivertime"/>
         <result property="delState" column="del_state"/>
         <result property="delCreatetime" column="del_createtime"/>
         <result property="delDelete" column="del_delete"/>
+        <result property="delExpecttime" column="del_expecttime"/>
+        <result property="delActualtime" column="del_actualtime"/>
         <association property="szOrder" resultMap="szOrderResult"/>
-
+        <association property="szDeliverDetails" resultMap="DDetailsResult"/>
+        <association property="productReq" resultMap="ProductResult"/>
     </resultMap>
 
     <resultMap id="szOrderResult" type="com.example.entity.request.SzOrder">
@@ -47,6 +50,30 @@
         <result property="ordDelete" column="ord_delete"/>
     </resultMap>
 
+    <resultMap id="DDetailsResult" type="com.example.entity.request.SzDeliverDetails">
+        <id property="ddetId" column="ddet_id"/>
+        <result property="ddetNum" column="ddet_num"/>
+        <result property="delId" column="del_id"/>
+        <result property="productId" column="product_id"/>
+    </resultMap>
+
+    <resultMap id="ProductResult" type="com.example.entity.response.ProductResp">
+        <id column="product_id" property="productId"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_image" property="productImage"/>
+        <result column="product_model" property="productModel"/>
+        <result column="product_price" property="productPrice"/>
+        <result column="product_brand" property="productBrand"/>
+        <result column="product_stock" property="productStock"/>
+        <result column="product_size" property="productSize"/>
+        <result column="product_cost" property="productCost"/>
+        <result column="product_status" property="productStatus"/>
+        <result column="remark" property="remark"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+    </resultMap>
     <!--全部 AND d.del_state = 1-->
     <select id="listszDeliver" resultMap="szDeliverDetailResult">
         SELECT d.*,s.*
@@ -62,11 +89,16 @@
             <if test="delPeople != null and delPeople != ''">
                 AND d.del_people LIKE CONCAT('%',#{delPeople},'%')
             </if>
-            <if test="delDelivertime != null and delDelivertime != ''">
-                AND d.del_delivertime LIKE CONCAT('%',#{delDelivertime},'%')
+            <if test="delExpecttime != null">
+                AND d.del_expecttime LIKE CONCAT('%',#{delExpecttime},'%')
+            </if>
+            <if test="delActualtime != null">
+                AND d.del_actualtime LIKE CONCAT('%',#{delActualtime},'%')
             </if>
             <if test="delState != null">
-                AND d.del_state = #{delState}
+                AND d.del_state = #{
+
+                }
             </if>
             <if test="ordId != null">
                 AND d.ord_id = #{ordId}
@@ -83,20 +115,21 @@
     </select>
     <!--单条-->
     <select id="getszDeliver" resultMap="szDeliverDetailResult" parameterType="Integer">
-        SELECT d.del_id,d.del_wuliuid,d.del_company,d.del_people,
-            d.del_delivertime,d.del_state
-            ,o.ord_id,o.ord_theme,o.ord_head
-            from sz_deliver d
-            left join sz_order o on o.ord_id=d.ord_id
-            where d.del_id = #{delId}
+         SELECT d.*,dd.*,p.*
+		 FROM sz_deliver d
+		 LEFT JOIN sz_deliver_details dd on d.del_id=dd.del_id
+		 LEFT JOIN product p ON dd.product_id=p.product_id
+		 WHERE d.del_id= #{delId}
     </select>
     <!--增-->
     <insert id="addszDeliver" parameterType="com.example.entity.request.SzDeliver">
         <selectKey keyColumn="del_id" keyProperty="delId" resultType="Integer" order="AFTER">
             select last_insert_id();
         </selectKey>
-        insert into sz_deliver(del_wuliuid, del_company, del_people, del_delivertime,del_state,ord_id)
-        values (#{delWuliuid},#{delCompany},#{delPeople},#{delDelivertime},#{delState},#{ordId})
+        insert into sz_deliver(del_wuliuid, del_company, del_people, del_state, del_createtime,
+        del_delete, del_expecttime, del_actualtime, ord_id)
+        values (#{delWuliuid},#{delCompany},#{delPeople},#{delState},#{delCreatetime},
+        #{delDelete},#{delExpecttime},#{delActualtime},#{ordId})
     </insert>
     <!--删-->
     <update id="delszDeliver" parameterType="Integer">
@@ -127,18 +160,4 @@
         WHERE del_id = #{delId}
     </update>
 
-    <!--发货单和订单-->
-    <!--<select id="listDeliverANDOrd" resultMap="szDeliverResult">
-        SELECT d.del_id,d.del_state,d.ord_id,o.ord_head,o.ord_theme
-        FROM sz_deliver d
-        INNER JOIN sz_order o ON o.ord_id= d.ord_id AND d.del_state=0
-    </select>-->
-    <!--发货单和订单新增-->
-<!--   <insert id="addDelANDOrd" parameterType="com.example.entity.request.SzDeliver">
-        <selectKey keyColumn="del_id" keyProperty="delId" resultType="Integer" order="AFTER">
-            select last_insert_id();
-        </selectKey>
-        insert into sz_deliver(del_wuliuid, del_company, del_people, del_delivertime,del_state,ord_id)
-        values (#{delWuliuid},#{delCompany},#{delPeople},#{delDelivertime},#{delState},#{ordId})
-    </insert>-->
 </mapper>

@@ -497,7 +497,6 @@
           ]
         },
         editformRules:{
-
         },
         addOrderButtonLoading:false,
         developButtonLoading:false,
@@ -505,7 +504,6 @@
         editDialog:false,
         editOrderButtonLoading:false,
         dialogTableVisible:false,
-        FahuoTableVisible:false,
         szrecord:[],
         /*szproduct:[],*/
         szorder:[],
@@ -623,7 +621,7 @@
         let result = this.addproplus.filter(p=>{return p.productId==pro.productId});
         if(result && result.length>0){
           if(result[0].productNumber==row.productStock){
-            alert("等于")
+            alert("没有更多库存了")
           }else{
             //产品已经选择，修改产品的数量
             result[0].productNumber= result[0].productNumber+1;

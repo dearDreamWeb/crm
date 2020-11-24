@@ -146,4 +146,11 @@
                 version,create_time,update_time,is_delete
         FROM product WHERE product_name = #{productName}
     </select>
+
+    <select id="getProduct1" resultMap="ProductResult">
+        SELECT p.*,pd.*
+        FROM product p
+		LEFT JOIN product_detail pd	 ON p.product_id=pd.product_id
+		WHERE p.product_id=#{productId}
+    </select>
 </mapper>

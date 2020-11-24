@@ -118,6 +118,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ResultVo getProduct1(Integer productId) {
+        List<ProductResp> product = productMapper.getProduct1(productId);
+        if (product == null) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+        return ResultUtils.response(product);
+    }
+
+    @Override
     public ResultVo listProduct(ProductReq productReq) {
         Integer pageNum = productReq.getPageNum();
         Integer pageSize = productReq.getPageSize();
