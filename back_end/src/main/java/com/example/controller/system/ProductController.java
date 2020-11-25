@@ -38,7 +38,7 @@ public class ProductController {
 
     @GetMapping
     public ResultVo getProduct(@RequestParam("productId")Integer productId) {
-        return productService.getProduct1(productId);
+        return productService.getProduct(productId);
     }
 
     @GetMapping("/list")

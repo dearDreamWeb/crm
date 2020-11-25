@@ -1,12 +1,8 @@
 package com.example.controller.system;
 
-import com.alibaba.fastjson.JSONObject;
-import com.example.entity.request.SzOrder;
 import com.example.entity.request.SzOrderDetails;
-import com.example.service.impl.SzOrderDetailsServiceLmpl;
-import com.example.service.impl.SzOrderServicelmpl;
+import com.example.service.impl.SzOrderDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +17,7 @@ import java.util.List;
 @RequestMapping("/details")
 public class SzOrderDetailsController {
     @Autowired
-    private SzOrderDetailsServiceLmpl DetailsServicelmpl;
+    private SzOrderDetailsServiceImpl DetailsServicelmpl;
 
     /*查看订单详情*/
     @RequestMapping("/all")

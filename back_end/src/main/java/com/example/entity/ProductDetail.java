@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.example.entity.request.SzDeliverMingxi;
 import com.example.entity.response.ProductResp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,4 +19,6 @@ public class ProductDetail {
     private Integer productId;
     private String productBarCode;
     private ProductResp productResp;
+
+    private SzDeliverMingxi szDeliverMingxi;
 }

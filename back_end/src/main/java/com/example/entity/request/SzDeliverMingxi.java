@@ -1,5 +1,6 @@
 package com.example.entity.request;
 
+import com.example.entity.ProductDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,7 @@ public class SzDeliverMingxi {
 
     private Integer ddetId;//发货详情编号
     private Integer productDetailId;//产品详情编号-拿序列号
+
+    private SzDeliverDetails szDeliverDetails;//一个发货明细对应一个发货详情
+    private ProductDetail  productDetail;//11
 }

@@ -410,7 +410,6 @@
 
   export default {
     name: "Order",
-
     data() {
       let checkMobile = (rule,value,cb) => {
         const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
@@ -550,7 +549,6 @@
         this.addForm.ordTotalmoney = totalzj
         this.zj=totalzj
         console.log("删除产品后总价：",this.zj)
-        /*this.addproplus.splice(row,1)*/
       },
       areaCascaderChange() {
         console.log("di",this.selected2)
@@ -604,9 +602,7 @@
           this.pageNum = res.data.pageNum
         })
       },
-
       addpro(row){
-       /* this.isDisable=true;*/
         this.addDialog=true;
         let pro={
           productId:row.productId,
@@ -626,8 +622,6 @@
             //产品已经选择，修改产品的数量
             result[0].productNumber= result[0].productNumber+1;
           }
-
-
         }else{
           this.addproplus.push(pro)
         }

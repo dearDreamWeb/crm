@@ -39,7 +39,9 @@
             </el-table-column>
             <el-table-column label="操作" >
               <template slot-scope="scope">
-                <el-button type="success" plain size="mini" @click="fahuo(scope.row.delId)">去发货</el-button>
+                <el-button type="success" plain size="mini" @click="fahuo(scope.row.delId)">
+                  <i class="el-icon-shopping-cart-1 "> </i>去发货
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -57,8 +59,6 @@
               </template>
             </el-table-column>
             <el-table-column prop="delWuliuid" label="发货单号" sortable></el-table-column>
-            <!--<el-table-column prop="szOrder.ordHead" label="订单" sortable>
-            </el-table-column>-->
             <el-table-column prop="delPeople" label="发货人" sortable></el-table-column>
             <el-table-column prop="delState" label="发货状态" sortable>
               <template slot-scope="scope">
@@ -77,13 +77,13 @@
       </el-pagination>
     </el-card>
 
-    <el-dialog title="发货" :visible.sync="FahuoTableVisible" width="65%" top="40px">
-      <el-form :model="addForm" label-width="100px" ref="addFormRef"
+    <el-dialog title="发货" :visible.sync="FahuoTableVisible" width="65%" top="20px" style="padding: 10px 20px;">
+      <el-form :model="fahuoForm" label-width="100px" ref="addFormRef"
                label-position="right" :rules="formRules">
         <el-row>
           <el-col :span="12">
             <el-form-item label="物流公司" prop="delCompany" >
-              <el-select v-model="addForm.delCompany" style="width: 250px"  clearable>
+              <el-select v-model="fahuoForm.delCompany" style="width: 250px"  clearable>
                 <el-option label="中通快递" value="中通"></el-option>
                 <el-option label="韵达快递" value="1"></el-option>
               </el-select>
@@ -91,43 +91,70 @@
           </el-col>
           <el-col :span="10">
             <el-form-item label="发货单号" prop="delWuliuid">
-              <el-input v-model="addForm.delWuliuid" size="middle" placeholder="请输入发货单号" style="width: 250px" clearable/>
+              <el-input v-model="fahuoForm.delWuliuid" size="middle" placeholder="请输入发货单号" style="width: 250px" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-
       <el-tabs type="border-card" >
         <el-tab-pane label="需发产品">
           <el-table :data="szProduct">
-            <el-table-column prop="productId" label="编号"></el-table-column>
-            <el-table-column prop="productName" label="产品名称"></el-table-column>
-            <el-table-column prop="productModel" label="产品型号"></el-table-column>
-            <el-table-column prop="productBrand" label="产品品牌"></el-table-column>
-            <el-table-column prop="productSize" label="产品尺寸"></el-table-column>+
-            <el-table-column label="操作">
+            <el-table-column prop="productId" label="编号" width="70px"></el-table-column>
+            <el-table-column prop="productName" label="产品名称"width="250px"></el-table-column>
+            <el-table-column prop="productModel" label="型号"width="115px"></el-table-column>
+            <el-table-column prop="productBrand" label="品牌" width="80px"></el-table-column>
+            <el-table-column prop="productSize" label="尺寸" width="80px"></el-table-column>
+            <el-table-column label="购买数量" width="80px">
               <template slot-scope="scope">
-                <el-button type="primary" plain size="mini" @click="productxq(scope.row)">产品详情</el-button>
+                <div v-for="x in szProducts" v-if="x.productId == scope.row.productId" >
+                  {{x.ddetNum}}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="100px">
+              <template slot-scope="scope">
+                <div v-for="x in szProducts" v-if="x.productId == scope.row.productId" >
+                  <el-button type="primary" plain size="mini" @click="productxq(scope.row,x.ddetNum)" >
+                    产品详情
+                  </el-button>
+                </div>
               </template>
             </el-table-column>
           </el-table>
-          <span style="margin-top: 20px">产品详情</span>
+          <div style="padding: 15px 10px 10px">产品详情</div>
           <el-table :data="prxq">
-            <el-table-column prop="productDetailId" label="产品详情id"></el-table-column>
-            <el-table-column prop="productName" label="产品名称"></el-table-column>
-            <el-table-column prop="productBarCode" label="产品序列号" ></el-table-column>
-            <el-table-column label="操作" >
+            <el-table-column prop="productDetailId" label="详情编号" width="100px"></el-table-column>
+            <el-table-column label="产品名称">
               <template slot-scope="scope">
-                <el-button type="text" size="mini">添加</el-button>
+                <div v-for="y in szProduct" v-if="y.productId == scope.row.productId" >
+                  {{y.productName}}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="productBarCode" label="产品序列号" ></el-table-column>
+            <el-table-column label="操作" width="100px">
+              <template slot-scope="scope">
+                <el-button type="warning" size="mini" :disabled="scope.row.status ==-1?true:false" @click="addbuy(scope.row)">添加</el-button>
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination background
+                         @current-change="handleCurrentChange_one"
+                         :current-page="pageNum_one" :page-sizes="[1,2,5,10]"
+                         :page-size="pageSize_one" :total="total_one"
+                         layout="prev, pager, next, jumper, total">
+          </el-pagination>
         </el-tab-pane>
         <el-tab-pane label="已选产品">
-          <el-table>
-            <el-table-column prop="productDetailId" label="产品详情号" width="150"></el-table-column>
+          <el-table :data="haspro">
+            <el-table-column prop="productDetailId" label="产品详情编号" width="150"></el-table-column>
             <el-table-column prop="productId" label="产品编号" width="200"></el-table-column>
-            <el-table-column prop="" label="产品序列号" width="200"></el-table-column>
+            <el-table-column prop="productBarCode" label="产品序列号"></el-table-column>
+            <el-table-column label="操作" width="100px">
+              <template slot-scope="scope">
+                <el-button type="warning" size="mini" @click="delhaspro(scope.row.productDetailId)">删除</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>
@@ -205,6 +232,7 @@
         searchInput:'',
         editForm:{
         },
+        quanxian:true,
         DeliverDialog:false,
         FahuoTableVisible:false,
         addDialog:false,
@@ -217,19 +245,31 @@
         pageNum:1,
         pageSize:5,
         total:1,
+        pageNum_one:1,
+        pageSize_one:5,
+        total_one:1,
+        fahuoForm:{
+          delCompany:"",
+          delWuliuid:"",
+        },
         addForm:{
           ordId:"",
           delWuliuid:"",
           delPeople:"",
           delCompany:""
         },
+
         formRules:{},
         DeliverButtonLoading:false,
         editDialog:false,
         addDeliverButtonLoading:false,
+        haspro:[],
+        szProducts:[],
         szProduct:[],
         szorder:[],
-        multipleSelection: []
+        multipleSelection: [],
+        yangNumber:0,
+        ddetNumber:0,
       }
     },
     methods: {
@@ -276,17 +316,76 @@
           }
         })
       },
-      productxq(val){
-        productHttp.getProduct(val.productId).then(res=>{
-          console.log(res.data)
-          this.prxq=res.data;
+      /*删除已选产品*/
+      delhaspro(inedx,row){
+        var index = this.haspro.indexOf(row)
+        this.haspro.splice(index,1)
+      },
+      /*选择产品添加*/
+      addbuy(row){
+        console.log("添加")
+        let seq={
+          productDetailId:row.productDetailId,
+          productBarCode:row.productBarCode,
+          productId:row.productId
+        }
+        console.log(row);
+        console.log(this.haspro);
+        let deta = this.haspro;
+        //已选产品全部数量
+        console.log("deta.length::",deta.length);
+        //购买数量
+        console.log("this.ddetNumber::",this.ddetNumber);
+        let idChangelength = 0 ;
+        let i = 0;
+        if(idChangelength > this.ddetNumber ){
+          console.log(idChangelength,'>=',this.ddetNumber)
+          for (let v of deta) {
+            if (v.productId != row.productId ){
+            }
+          }
+        }else{
+          i++;
+          idChangelength++;
+
+          let result = this.haspro.filter(p=>{
+            return p.productBarCode==seq.productBarCode
+          });
+          if(result && result.length>0){
+            this.$message({
+              message: '该产品序列号已选，可去已选产品中查看',
+              type: 'warning'
+            });
+          }else{
+            console.log("push!!")
+            this.haspro.push(seq)
+          }
+          console.log(idChangelength,'<',this.ddetNumber)
+
+        }
+        console.log(i);
+      },
+      /*产品详情*/
+      productxq(row,num){
+        console.log("购买数量：",num)
+        this.ddetNumber = num;
+        productHttp.getProduct(row.productId).then(res=>{
+          let demo = res.data.slice(0,num);
+          this.prxq=demo;
+          console.log(demo)
         })
       },
+      /*去发货*/
       fahuo(val){
         this.FahuoTableVisible = true;
           deliverHttp.getszDeliver(val).then(res=>{
             this.szProduct=res.data[0].productReq;
             console.log(res.data[0].productReq);
+            console.log(res.data[0].productReq);
+            this.szProducts=res.data[0].szDeliverDetails
+            console.log(res.data[0].szDeliverDetails)
+            this.prxq=[];
+            this.haspro=[];
         })
       },
       handleCurrentChange(pageIndex) {
@@ -298,6 +397,15 @@
           this.pageNum = res.data.pageNum
         })
       },
+      handleCurrentChange_one(pageIndex) {
+        this.pageNum_one = pageIndex
+        this.pageSize_one = this.pageSize_one
+        productHttp.listPage(this.pageNum_one,this.pageSize_one).then(res => {
+          this.listForm = res.data.list
+          this.total_one = res.data.total_one
+          this.pageNum_one = res.data.pageNum_one
+        })
+      },
       handleRowClick(row,event,column) {
         this.rowdelId= row.delId
         if (this.rowDelId != 0) {
@@ -306,6 +414,29 @@
       },
       DeliverClick(){
 
+        /*        for (let i = 0; i <this.multipleSelection.length ; i++) {
+           alert(this.multipleSelection[i].ordId);
+          this.addForm.ordId=this.multipleSelection[i].ordId;
+        }
+        this.$refs.addFormRef.validate(valid => {
+          if (!valid) return
+          this.addDeliverButtonLoading = true
+          deliverHttp.addANDord(this.addForm).then(res =>{
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+              this.addDeliverButtonLoading = false
+              this.addDialog = false
+            } else {
+              this.addDeliverButtonLoading = false
+              this.$message({
+                message:res.message,
+                type:"error"
+              })
+            }
+          })
+        })
+        * */
       },
       addDeliverClick(){
         for (let i = 0; i <this.multipleSelection.length ; i++) {
@@ -330,16 +461,6 @@
             }
           })
         })
-        /*for (let i = 0; i <this.multipleSelection.length ; i++) {
-         /!* alert(this.multipleSelection[i].ordId);*!/
-          this.addFormOrd.ordId=this.multipleSelection[i].ordId;
-          this.addFormOrd.delCompany=this.addForm.delCompany;
-          this.addFormOrd.delPeople=this.addForm.delPeople;
-          this.addFormOrd.delWuliuid=this.addForm.delWuliuid;
-          deliverHttp.addANDord(this.addFormOrd).then(res=>{
-
-          })
-        }*/
       },
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'
@@ -362,5 +483,7 @@
 </script>
 
 <style scoped>
+  .el-dialog__body {
 
+  }
 </style>

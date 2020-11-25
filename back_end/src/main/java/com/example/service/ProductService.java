@@ -18,5 +18,4 @@ public interface ProductService {
     ResultVo getProduct(Integer productId);
     ResultVo listProduct(ProductReq productReq);
     ResultVo getProductByName(String productName);
-    ResultVo getProduct1(Integer productId);
 }

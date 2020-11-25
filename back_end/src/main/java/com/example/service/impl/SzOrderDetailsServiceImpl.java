@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class SzOrderDetailsServiceLmpl implements SzOrderDetailsService {
+public class SzOrderDetailsServiceImpl implements SzOrderDetailsService {
     @Autowired
     SzOrderDetailsMapper szorderDetailsMapper;
     @Autowired

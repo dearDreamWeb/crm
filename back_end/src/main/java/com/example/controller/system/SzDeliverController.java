@@ -19,18 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class SzDeliverController {
     @Autowired
     private SzDeliverService szdeliverService;
-    /*
-    *  @SysLog("添加订单")
-    @PostMapping("/add")
-    public ResultVo addszOrder(@RequestBody SzOrder szorder){
-        System.out.println("1订单详情："+szorder.getSzOrderDetails());
-        System.out.println("订单："+szorder);
-        for (SzOrderDetails sz1 : szorder.getSzOrderDetails()) {
-            System.out.println("2订单详情："+sz1);
-        }
-        return szorderService.addszOrder(szorder);
-    }
-    * */
+
     @SysLog("添加发货单")
     @PostMapping("/add")
     public ResultVo addszDeliver(@RequestBody SzDeliver szdeliver){

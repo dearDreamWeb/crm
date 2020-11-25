@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @author: yangqianqian
  * @date: 2020/11/21
@@ -20,5 +22,6 @@ public class SzDeliverDetails {
     private Integer productId;//产品编号
 
     private SzDeliver szDeliver;//发货单
+    private List<SzDeliverMingxi> szDeliverMingxi;//一个发货详情对应多个明细
 
 }

@@ -18,4 +18,6 @@ public interface ProductDetailMapper {
     ProductDetail getDetail(Integer productDetailId);
     List<ProductDetail> listDetail();
     void batchAddProductDetail(List<ProductDetail> list);
+
+    List<ProductDetail> getDetailByProductId(Integer productId);
 }

@@ -37,7 +37,7 @@ export const productHttp = {
   },
   getProduct:function (productId) {
     let params = {
-      url:'/product',
+      url:'/product_detail/get_by_productId',
       data:{
         'productId':productId
       }
