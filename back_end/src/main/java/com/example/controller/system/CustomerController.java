@@ -69,4 +69,12 @@ public class CustomerController {
         return customerService.listAll();
     }
 
+    @SysLog("客户手动添加")
+    @PostMapping("/insert")
+    public ResultVo insertCusAndCon(@RequestBody CusConReq cusConReq,
+                                    HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return customerService.insertCusAndCon(cusConReq,token);
+    }
+
 }

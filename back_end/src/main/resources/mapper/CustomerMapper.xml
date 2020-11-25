@@ -125,7 +125,7 @@
         <if test="cusRemark != null and cusRemark != ''">
             ,cus_remark = #{cusRemark}
         </if>
-        <if test="cusDictSource != null and cusDictSource != ''">
+        <if test="cusDictSource != null">
             ,cus_dict_source = #{cusDictSource}
         </if>
         <if test="cusDictStage != null and cusDictStage != ''">
@@ -148,8 +148,8 @@
 
     <select id="getCustomer" resultMap="CustomerResult">
         SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest_id,
-            company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
-            qualitative_id,grading_id,ration_id,emp_id
+            company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,create_time,
+            update_time,version,is_delete,qualitative_id,grading_id,ration_id,emp_id
         FROM customer
         WHERE cus_id = #{cusId}
     </select>

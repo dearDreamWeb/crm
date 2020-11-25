@@ -17,4 +17,5 @@ public interface CustomerService {
     ResultVo listCustomer(CustomerReq customerReq,String token);
     ResultVo addCusAndCon(CusConReq cusConReq,String token);
     ResultVo listAll();
+    ResultVo insertCusAndCon(CusConReq cusConReq,String token);
 }

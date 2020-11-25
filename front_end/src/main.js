@@ -42,6 +42,8 @@ import {
   dateTimeFormat,clueHandleResultFormat,productStatusFormat,followCategoryFormat,
   salePriorLevelFormat,saleStarBeaconFormat,dateDiff,cusIsSolve,offerStatusFormat
 } from "./common/formatUtils";
+import {liftCycleFormat} from "./common/customerFormat";
+
 Vue.filter('dateFormat',dateFormat)
 Vue.filter('dateDiff',dateDiff)
 Vue.filter('offerStatusFormat',offerStatusFormat)
@@ -60,6 +62,7 @@ Vue.filter('productStatusFormat',productStatusFormat)
 Vue.filter('followCategoryFormat',followCategoryFormat)
 Vue.filter('salePriorLevelFormat',salePriorLevelFormat)
 Vue.filter('saleStarBeaconFormat',saleStarBeaconFormat)
+Vue.filter('liftCycleFormat',liftCycleFormat)
 
 /* eslint-disable no-new */
 new Vue({

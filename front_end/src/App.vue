@@ -32,7 +32,7 @@ export default {
         this.$router.push({
           path:'/login'
         })
-      },60*60*1000)
+      },60*60*1000*3)
     },
   },
   created() {

@@ -23,4 +23,5 @@ public class CusConReq {
     private String contactsPhone;
     private String qq;
     private String wechat;
+    private String email;
 }

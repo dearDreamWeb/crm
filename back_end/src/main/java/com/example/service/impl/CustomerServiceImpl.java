@@ -8,10 +8,7 @@ import com.example.entity.ResultVo;
 import com.example.entity.request.ClueReq;
 import com.example.entity.request.ContactsReq;
 import com.example.entity.request.CustomerReq;
-import com.example.entity.response.ClueFollowLogResp;
-import com.example.entity.response.ClueResp;
-import com.example.entity.response.CustomerResp;
-import com.example.entity.response.EmpResp;
+import com.example.entity.response.*;
 import com.example.model.mapper.*;
 import com.example.service.CustomerService;
 import com.example.util.CheckUtils;
@@ -23,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,10 +49,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private EmpMapper empMapper;
 
+    @Autowired
+    private DictMapper dictMapper;
+
     @Override
     public ResultVo addCustomer(CustomerReq customerReq,String token) {
         CheckUtils.validate(customerReq);
         EmpResp empByToken = empMapper.getEmpByToken(token);
+        customerReq.setLifeCycle(1);
         int addCustomer = customerMapper.addCustomer(customerReq);
         if (addCustomer != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
@@ -113,6 +115,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResultVo getCustomer(Integer cusId) {
         CustomerResp customer = customerMapper.getCustomer(cusId);
+        EmpResp emp = empMapper.getEmp(customer.getEmpId());
+        customer.setEmpName(emp.getEmpName());
         return ResultUtils.response(customer);
     }
 
@@ -134,6 +138,7 @@ public class CustomerServiceImpl implements CustomerService {
         } else {
             customerResps = customerMapper.listCustomerByEmpId(customerReq,empByToken.getEmpName());
         }
+        customerFormat(customerResps);
         PageInfo<CustomerResp> list = new PageInfo<>(customerResps);
         return ResultUtils.response(list);
     }
@@ -223,6 +228,60 @@ public class CustomerServiceImpl implements CustomerService {
     public ResultVo listAll() {
         List<CustomerResp> customerResps = customerMapper.listAll();
         return ResultUtils.response(customerResps);
+    }
+
+    @Override
+    public ResultVo insertCusAndCon(CusConReq cusConReq, String token) {
+        CustomerReq customerReq = new CustomerReq();
+        ContactsReq contactsReq = new ContactsReq();
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+
+        customerReq.setCusName(cusConReq.getCusName());
+        customerReq.setCusDictSource(cusConReq.getCusDictSource());
+        customerReq.setCusRemark(cusConReq.getCusRemark());
+        customerReq.setLifeCycle(1);
+        customerReq.setEmpId(empByToken.getEmpId());
+        int addCustomer = customerMapper.addCustomer(customerReq);
+        if (addCustomer != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
+        contactsReq.setCusId(customerReq.getCusId());
+        contactsReq.setEmail(cusConReq.getEmail());
+        contactsReq.setContactsName(cusConReq.getContactsName());
+        contactsReq.setContactsPhone(cusConReq.getContactsPhone());
+        int addContacts = contactsMapper.addContacts(contactsReq);
+        if (addContacts != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
+        CustomerRecord customerRecord = new CustomerRecord();
+        customerRecord.setRecordTitle("客户新增");
+        customerRecord.setRecordType("客户操作记录");
+        customerRecord.setRecordTime(DateUtils.getDate());
+        customerRecord.setRecordContent("客户添加，由员工【"+empByToken.getEmpName()+
+                "】手动添加");
+        customerRecord.setCusId(customerReq.getCusId());
+        customerRecord.setEmpId(empByToken.getEmpId());
+        int addCustomerRecord = recordMapper.addCustomerRecord(customerRecord);
+        if (addCustomerRecord  != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+
+        return ResultUtils.response("新增成功");
+    }
+
+    public List<CustomerResp> customerFormat(List<CustomerResp> list) {
+        List<CustomerResp> customerResps = new ArrayList<>();
+        for (int i=0;i<list.size();i++) {
+            DictResp dict = dictMapper.getDict(list.get(i).getCusDictSource());
+            list.get(i).setCusDictSourceName(dict.getDictName());
+            customerResps.add(i,list.get(i));
+        }
+        return customerResps;
     }
 
 }

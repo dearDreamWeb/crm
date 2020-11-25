@@ -32,11 +32,13 @@ public class CustomerResp {
     private Date createTime;
     private Date updateTime;
     private Integer isDelete;
-    private String cusDictSource;
+    private Integer cusDictSource;
     private String cusDictStage;
     private Integer qualitativeId;
     private Integer gradingId;
     private Integer rationId;
     private Integer empId;
+    private String empName;
     private EmpResp empResp;
+    private String cusDictSourceName;
 }

@@ -12,7 +12,11 @@
       </div>
       <div class="header-box">
         <p class="customer_name">{{this.customer.cusName}}</p>
-        <p>创建：{{this.customer.createTime}} 更新：{{this.customer.updateTime}}隶属：</p>
+        <p>
+          创建：{{this.customer.createTime | dateFormat}}
+          更新：{{this.customer.updateTime | dateFormat}}
+          隶属：{{this.customer.empName}}
+        </p>
       </div>
       <el-row :gutter="20">
         <el-col :span="8">
@@ -36,7 +40,7 @@
                     </el-col>
                     <el-col :span="6">
                       <div>
-                        <el-button class="contacts-border">
+                        <el-button class="contacts-border" type="primary">
                           <div class="san-yi-inside-box">
                             <i class="el-icon-search san-yi-top-icon"></i>
                           </div><br>
@@ -110,39 +114,6 @@
             <el-col>
               <el-card>
                 <div slot="header">
-                  <span><i class="el-icon-s-finance"></i> 应收/预付</span>
-                </div>
-                <div>
-                  <el-row type="flex" justify="space-between">
-                    <el-col :span="6">
-                      <div class="align-box">
-                        <span>￥ 3,325.00</span><br>
-                        <span>计划回款</span>
-                      </div>
-                    </el-col>
-                    <el-divider direction="vertical" class="divider-line"></el-divider>
-                    <el-col :span="6">
-                      <div class="align-box">
-                        <span>-￥ 3,417.00</span><br>
-                        <span>智能应收</span>
-                      </div>
-                    </el-col>
-                    <el-divider direction="vertical" class="divider-line"></el-divider>
-                    <el-col :span="6">
-                      <div class="align-box">
-                        <span>￥ 0.00</span><br>
-                        <span>预付余额</span>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </div>
-              </el-card>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-card>
-                <div slot="header">
                   <span><i class="el-icon-s-order"></i> 签约数据</span>
                 </div>
                 <div>
@@ -180,65 +151,45 @@
             <el-col>
               <el-card>
                 <div slot="header">
-                  <span><i class="el-icon-document"></i> 基本信息</span>
-                </div>
-                <div>
-                  <el-form :inline="true" size="mini" label-position="right"
-                           label-width="70px">
-                    <el-form-item label="简称">
-                      简称
-                    </el-form-item>
-                    <el-form-item label="种类">
-                      公司
-                    </el-form-item>
-                    <el-form-item label="来源">
-                      客户介绍
-                    </el-form-item>
-                    <el-form-item label="首次签约">
-                      2020-10-30
-                    </el-form-item>
-                  </el-form>
-                </div>
-              </el-card>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-card>
-                <div slot="header">
                   <span><i class="el-icon-s-custom"></i> 联系人</span>
                 </div>
                 <div>
-                  <el-row :gutter="30">
+                  <!--<el-row :gutter="30">
                     <el-col :span="8">
                       <div class="align-box">
                         <el-button class="contacts-border">
-                          <i class="icon iconfont icon-man"></i><br>
-                          <span>孙杨</span>
+                          &lt;!&ndash;<i v-if="this.contactsList[0].sex === 1" class="icon iconfont icon-man"></i>
+                          <i v-if="this.contactsList[0].sex === 2" class="icon iconfont icon-woman"></i>&ndash;&gt;
+                          &lt;!&ndash;<br><span>{{this.contactsList[0].contactsName}}</span>&ndash;&gt;
                         </el-button>
                       </div>
                     </el-col>
                     <el-col :span="16">
                       <div>
                         <el-form size="mini">
-                          <el-form-item label="手机">
-                            13222225555
+                          <el-form-item label="电话">
+                            {{this.contactsList.get(0).contactsPhone}}
                           </el-form-item>
-                          <el-form-item label="手机2"></el-form-item>
-                          <el-form-item label="电话"></el-form-item>
-                          <el-form-item label="微信"></el-form-item>
-                          <el-form-item label="QQ"></el-form-item>
-                          <el-form-item label="邮箱"></el-form-item>
+                          <el-form-item label="微信">
+                            {{contactsList[0].wechat}}
+                          </el-form-item>
+                          <el-form-item label="QQ">
+                            {{contactsList[0].qq}}
+                          </el-form-item>
+                          <el-form-item label="邮箱">
+                            {{contactsList[0].email}}
+                          </el-form-item>
                         </el-form>
                       </div>
                     </el-col>
-                  </el-row>
+                  </el-row>-->
                   <el-row :gutter="10">
-                    <el-col :span="6" v-for="item in 8" :key="item">
+                    <el-col :span="6" v-for="item in contactsList" :key="item.contactsId">
                       <div class="align-box">
                         <el-button class="contacts-border">
-                          <i class="icon iconfont icon-man"></i><br>
-                          <span>孙杨+{{item}}</span>
+                          <i v-if="item.sex === 1" class="icon iconfont icon-man"></i>
+                          <i v-if="item.sex === 0" class="icon iconfont icon-woman"></i>
+                          <br><span>{{item.contactsName}}</span>
                         </el-button>
                       </div>
                     </el-col>
@@ -256,11 +207,18 @@
                 <div>
                   <el-form :inline="true" size="mini" class="address-box">
                     <el-form-item label="国家或地区:">CN China中国 亚洲</el-form-item>
-                    <el-form-item label="电话:">15197902964</el-form-item>
-                    <el-form-item label="省份:">北京</el-form-item>
-                    <el-form-item label="城市:">北京市</el-form-item>
-                    <el-form-item label="区域:">怀柔区</el-form-item>
-                    <el-form-item label="地址:">北京市怀柔区幸福东园21号楼1层04一杆到底台球厅</el-form-item>
+                    <el-form-item label="省份:">
+                      <span v-if="customer.province != null">{{customer.province}}</span>
+                      <span v-else>暂定</span>
+                    </el-form-item>
+                    <el-form-item label="城市:">
+                      <span v-if="customer.city != null">{{customer.city}}</span>
+                      <span v-else>暂定</span>
+                    </el-form-item>
+                    <el-form-item label="地址:">
+                      <span v-if="customer.detailAddress != null">{{customer.detailAddress}}</span>
+                      <span v-else>暂定</span>
+                    </el-form-item>
                   </el-form>
                 </div>
               </el-card>
@@ -268,14 +226,59 @@
           </el-row>
         </el-col>
         <el-col :span="16">
-          <el-row>
-            <el-col>
+          <el-row :gutter="20">
+            <el-col :span="12">
               <el-card>
                 <div slot="header">
-                  <span><i class="el-icon-s-flag"></i> 跟单里程碑</span>
+                  <span><i class="el-icon-document"></i> 基本信息</span>
                 </div>
                 <div>
-                  BODY
+                  <el-form :inline="true" size="mini" label-position="right"
+                           label-width="50px">
+                    <el-form-item label="简称:">
+                      <span v-if="customer.abbreviation != null">{{customer.abbreviation}}</span>
+                      <span v-else>暂定</span>
+                    </el-form-item>
+                    <el-form-item label="来源:">
+                      <span v-if="customer.cusDictSourceName != null">{{customer.cusDictSourceName}}</span>
+                      <span v-else>暂定</span>
+                    </el-form-item>
+                    <el-form-item label="首签:">
+                      <span v-if="customer.firstSigningTime != null">{{customer.firstSigningTime}}</span>
+                      <span v-else>暂定</span>
+                    </el-form-item>
+                  </el-form>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="12">
+              <el-card>
+                <div slot="header">
+                  <span><i class="el-icon-s-finance"></i> 应收/预付</span>
+                </div>
+                <div>
+                  <el-row type="flex" justify="space-between">
+                    <el-col :span="6">
+                      <div class="align-box">
+                        <span>￥ 3,325.00</span><br>
+                        <span>计划回款</span>
+                      </div>
+                    </el-col>
+                    <el-divider direction="vertical" class="divider-line"></el-divider>
+                    <el-col :span="6">
+                      <div class="align-box">
+                        <span>-￥ 3,417.00</span><br>
+                        <span>智能应收</span>
+                      </div>
+                    </el-col>
+                    <el-divider direction="vertical" class="divider-line"></el-divider>
+                    <el-col :span="6">
+                      <div class="align-box">
+                        <span>￥ 0.00</span><br>
+                        <span>预付余额</span>
+                      </div>
+                    </el-col>
+                  </el-row>
                 </div>
               </el-card>
             </el-col>
@@ -363,6 +366,7 @@
 <script>
   import CustomerMore from "../../components/customer/CustomerMore";
   import {customerHttp} from "../../network/pre_sale/customer";
+  import {contactsHttp} from "../../network/pre_sale/contacts";
   export default {
     name: "CustomerDetail",
     components:{
@@ -370,9 +374,10 @@
     },
     data() {
       return {
-
         customerId:'',
         customer:{},
+        contactsList:{},
+
         activeName: '1',
         activeNameList:['1','2','3','4','5','6','7','8','9','10','11','12'],
 
@@ -397,6 +402,11 @@
       }
     },
     methods:{
+      initContactsList() {
+        contactsHttp.getByCusId(this.customerId).then(res => {
+          this.contactsList = res.data.list
+        })
+      },
 
       sanYiQualitativeRadioChange() {
         this.$refs.customerMoreRef.sanYiQualitativeRadioChange()
@@ -424,6 +434,7 @@
     created() {
       this.customerId = this.$urlUtil.getQueryVariable("customerId")
       this.initCustomerDetail()
+      this.initContactsList()
     }
   }
 </script>
@@ -480,5 +491,11 @@
   }
   >>>.address-box .el-form-item__content{
     font-size: 12px;
+  }
+  ::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  ::-webkit-scrollbar {
+    width: 0 !important;height: 0;
   }
 </style>

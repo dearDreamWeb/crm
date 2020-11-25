@@ -9,7 +9,7 @@
       <el-card>
         <div slot="header">
           <div class="header-left" style="font-size: 20px">
-            <span>销售机会视图||根据销售机会确定跟进、需求、方案、报价</span>
+            <span>销售机会视图</span>
             <el-tooltip effect="dark" content="数据日志" placement="bottom">
               <i class="el-icon-menu"></i>
             </el-tooltip>

@@ -32,7 +32,7 @@ export function dateTimeFormat(time) {
 
 export function timeFormat(time) {
   const date = new Date(time)
-    y = date.getfullyear(),
+    let y = date.getfullyear(),
     m = date.getmonth() + 1,
     d = date.getdate(),
     h = date.gethours(),

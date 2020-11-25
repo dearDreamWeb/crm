@@ -19,7 +19,22 @@ export const customerHttp = {
         'contactsName':cusCon.contactsName,
         'contactsPhone':cusCon.contactsPhone,
         'qq':cusCon.qq,
-        'wechat':cusCon.wechat
+        'wechat':cusCon.wechat,
+        'email':cusCon.email
+      }
+    }
+    return postJson(params)
+  },
+  insertCusAndCon:function(cusCon) {
+    let params = {
+      url:'/customer/insert',
+      data:{
+        'cusName':cusCon.cusName,
+        'cusDictSource':cusCon.cusDictSource,
+        'cusRemark':cusCon.cusRemark,
+        'contactsName':cusCon.contactsName,
+        'contactsPhone':cusCon.contactsPhone,
+        'email':cusCon.email
       }
     }
     return postJson(params)
@@ -56,6 +71,7 @@ export const customerHttp = {
     let params = {
       url:'/customer/list',
       data:{
+        'cusName':customer.cusName,
         'abbreviation':customer.abbreviation,
         'lifeCycle':customer.lifeCycle,
         'sanyGuest':customer.sanyGuest,
