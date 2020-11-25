@@ -192,13 +192,11 @@
 <!--            </el-select>-->
 <!--          </el-form-item>-->
 <!--        </el-col>-->
-          <el-col :span="8">
-            <el-form-item label="费用">
-              <el-input v-model="addform.repairWxfy"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="费用">-->
+<!--              <el-input v-model="addform.repairWxfy"></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
           <el-col :span="8">
             <el-form-item label="保修">
               <el-select v-model="addform.repairSfzb" placeholder="请选择">
@@ -207,6 +205,8 @@
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="故障描述">
               <el-input type="textarea" v-model="addform.repairFault"></el-input>
@@ -295,15 +295,15 @@
 <!--                </el-select>-->
 <!--              </el-form-item>-->
 <!--            </el-col>-->
-            <el-col :span="8">
-              <el-form-item label="费用">
-                <el-input
-                  placeholder="请输入内容"
-                  v-model="updateform.repairWxfy"
-                  :disabled="true">
-                </el-input>
-              </el-form-item>
-            </el-col>
+<!--            <el-col :span="8">-->
+<!--              <el-form-item label="费用">-->
+<!--                <el-input-->
+<!--                  placeholder="请输入内容"-->
+<!--                  v-model="updateform.repairWxfy"-->
+<!--                  :disabled="true">-->
+<!--                </el-input>-->
+<!--              </el-form-item>-->
+<!--            </el-col>-->
             <el-col :span="8">
               <el-form-item label="维修产品">
                 <el-input

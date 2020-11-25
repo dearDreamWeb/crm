@@ -55,7 +55,7 @@
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col :span="12">
+      <el-col :span="24">
         <el-card>
           <el-table :data="repairList" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                     highlight-current-row v-loading="tableLoading">
@@ -66,9 +66,9 @@
             <el-table-column prop="szOrder.ordConsignee" label="联系人"></el-table-column>
             <!--        <el-table-column prop="deptResp.deptName" label="维修部门"></el-table-column>-->
             <el-table-column prop="szOrder.ordTheme" label="维修产品"></el-table-column>
-            <!--    <el-table-column prop="empResp.empName" label="接单人"></el-table-column>-->
+            <el-table-column prop="repairFault" label="故障描述"></el-table-column>
             <el-table-column prop="repairsjhm" label="是否在保"></el-table-column>
-            <el-table-column prop="empResp.empName" label="维修人"></el-table-column>
+<!--            <el-table-column prop="empResp.empName" label="维修人"></el-table-column>-->
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button size="mini"
@@ -76,7 +76,35 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination background
+                         @current-change="handleCurrentChange"
+                         :current-page="pageNum" :page-sizes="[1,2,5,10]"
+                         :page-size="pageSize" :total="total"
+                         layout="prev, pager, next, jumper, total">
+          </el-pagination>
         </el-card>
+        <el-dialog :visible.sync="Changp">
+          <el-table :data="listChangp">
+            <el-table-column prop="ordId" label="订单Id"></el-table-column>
+            <el-table-column prop="ordTheme" label="主题"></el-table-column>
+            <el-table-column prop="customerResp.cusName" label="客户"></el-table-column>
+            <el-table-column prop="ordHead" label="负责人"></el-table-column>
+            <el-table-column prop="ordConsignee" label="收货人"></el-table-column>
+            <!--      <el-table-column prop="productResp.productName" label="产品"></el-table-column>-->
+            <el-table-column prop="ordPhone" label="手机号码"></el-table-column>
+            <el-table-column width="80" label="操作" >
+              <template slot-scope="scope">
+                <el-button type="text" size="small" icon="el-icon-plus" @click="addpro(scope.row.ordId,scope.row.customerResp.cusId)" :disabled="isDisable"></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination background
+                         @current-change="handleCurrentChangedd"
+                         :current-page="pageNum1" :page-sizes="[1,2,5,10]"
+                         :page-size="pageSize1" :total="total1"
+                         layout="prev, pager, next, jumper, total">
+          </el-pagination>
+        </el-dialog>
       </el-col>
     </el-row>
     <el-row :gutter="20">
@@ -276,6 +304,7 @@
   import productBrand from '../common/data/product_date'
   import {pca,pcaa} from 'area-data'
   import {userHttp} from "../network/system/user";
+  import {repairHttp} from "../network/system/repair";
 
   export default {
     name: "Dashboard",
@@ -299,6 +328,9 @@
         selected:[],
         selected2:['湖南省','邵阳市','新邵县'],
         pca:pca,
+        total:0,
+        pageNum:1,
+        pageSize:3,
         pcaa:pcaa,
         value: new Date(),
         productBrandList:productBrand.productBrand
@@ -316,6 +348,15 @@
         let data = this.editor.txt.text()
         alert(data)
 
+      },
+      handleCurrentChange(pageIndex){
+        this.searchForm.pageNum = pageIndex
+        this.searchForm.pageSize = this.pageSize
+        repairHttp.queryEmp(this.searchForm).then(res => {
+          this.repairList = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
       },
       //派单信息
       getPaidan(){

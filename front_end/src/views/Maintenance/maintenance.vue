@@ -18,7 +18,7 @@
     <el-table-column prop="szOrder.ordConsignee" label="联系人"></el-table-column>
     <!--        <el-table-column prop="deptResp.deptName" label="维修部门"></el-table-column>-->
     <el-table-column prop="szOrder.ordTheme" label="维修产品"></el-table-column>
-<!--    <el-table-column prop="empResp.empName" label="接单人"></el-table-column>-->
+    <el-table-column prop="repairFault" label="故障描述"></el-table-column>
     <el-table-column prop="repairsjhm" label="是否在保"></el-table-column>
     <el-table-column prop="empResp.empName" label="维修人"></el-table-column>
         <el-table-column label="操作">
