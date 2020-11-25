@@ -1,6 +1,7 @@
 package com.example.model.mapper;
 
 import com.example.entity.request.SzDeliver;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * @date: 2020/10/19
  * @description:
  */
+@Mapper
 @Repository
 public interface SzDeliverMapper {
     int addszDeliver(SzDeliver szdeliver);//增

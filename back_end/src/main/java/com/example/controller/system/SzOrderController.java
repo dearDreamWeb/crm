@@ -24,15 +24,6 @@ public class SzOrderController {
     @Autowired
     private SzOrderDetailsService detailsService;
 
-    /*  @SysLog("添加订单")
-      @PostMapping("/add")
-      public Integer addszOrder(@RequestBody addproplusVo avo){
-          System.out.println("订单："+avo);
-          for (SzOrderDetails sz1 : avo.getSzOrderDetails()) {
-              System.out.println("订单详情："+sz1);
-          }
-          return 1;
-      }*/
     @SysLog("添加订单")
     @PostMapping("/add")
     public ResultVo addszOrder(@RequestBody SzOrder szorder) throws Exception {
@@ -65,6 +56,7 @@ public class SzOrderController {
     public ResultVo listszOrder(SzOrder szorder){
         return szorderService.listszOrder(szorder);
     }
+
     @GetMapping("/and_all")
     public List<SzOrder> OrdANDDel() {
         return szorderService.OrdANDDel();

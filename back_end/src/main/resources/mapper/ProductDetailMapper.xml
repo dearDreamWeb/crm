@@ -69,10 +69,7 @@
         </foreach>
     </insert>
 
-    <select id="getProduct1" resultMap="ProductDetail_Result">
-        SELECT p.*,pd.*
-        FROM product p
-		LEFT JOIN product_detail pd	 ON p.product_id=pd.product_id
-		WHERE p.product_id=#{productId}
+    <select id="getDetailByProductId" resultMap="ProductDetailResult">
+        SELECT * FROM product_detail WHERE product_id = #{productId}
     </select>
 </mapper>
