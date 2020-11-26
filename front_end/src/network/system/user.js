@@ -126,7 +126,9 @@ export const userHttp = {
       url:'/repair/list',
       data:{
         empId: param.empId,
-        repairGdstate: param.repairGdstate
+        repairGdstate: param.repairGdstate,
+        'pageNum':param.pageNum,
+        'pageSize':param.pageSize
       }
     }
     return get(params)
