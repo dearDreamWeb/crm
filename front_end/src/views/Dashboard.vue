@@ -72,7 +72,7 @@
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button size="mini"
-                           @click="openAddDialog(scope.row.repairId)">付款</el-button>
+                           @click="openAddDialog">付款</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -85,13 +85,13 @@
         </el-card>
         <el-dialog :visible.sync="Changp">
           <el-table :data="listChangp">
-            <el-table-column prop="ordId" label="订单Id"></el-table-column>
-            <el-table-column prop="ordTheme" label="主题"></el-table-column>
-            <el-table-column prop="customerResp.cusName" label="客户"></el-table-column>
-            <el-table-column prop="ordHead" label="负责人"></el-table-column>
-            <el-table-column prop="ordConsignee" label="收货人"></el-table-column>
+            <el-table-column prop="productId" label="产品Id"></el-table-column>
+            <el-table-column prop="productName" label="产品"></el-table-column>
+            <el-table-column prop="productBrand" label="品牌"></el-table-column>
+            <el-table-column prop="productModel" label="型号"></el-table-column>
+            <el-table-column prop="productPrice" label="价格"></el-table-column>
             <!--      <el-table-column prop="productResp.productName" label="产品"></el-table-column>-->
-            <el-table-column prop="ordPhone" label="手机号码"></el-table-column>
+<!--            <el-table-column prop="ordPhone" label="手机号码"></el-table-column>-->
             <el-table-column width="80" label="操作" >
               <template slot-scope="scope">
                 <el-button type="text" size="small" icon="el-icon-plus" @click="addpro(scope.row.ordId,scope.row.customerResp.cusId)" :disabled="isDisable"></el-button>
@@ -104,6 +104,20 @@
                          :page-size="pageSize1" :total="total1"
                          layout="prev, pager, next, jumper, total">
           </el-pagination>
+          <el-table :data="daaChangp">
+            <el-table-column prop="productId" label="产品Id"></el-table-column>
+            <el-table-column prop="productName" label="产品"></el-table-column>
+            <el-table-column prop="productBrand" label="品牌"></el-table-column>
+            <el-table-column prop="productModel" label="型号"></el-table-column>
+            <el-table-column prop="productPrice" label="价格"></el-table-column>
+            <!--      <el-table-column prop="productResp.productName" label="产品"></el-table-column>-->
+            <!--            <el-table-column prop="ordPhone" label="手机号码"></el-table-column>-->
+            <el-table-column width="80" label="操作" >
+              <template slot-scope="scope">
+                <el-button type="danger" icon="el-icon-delete" circle @click="addpro" :disabled="isDisable"></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-dialog>
       </el-col>
     </el-row>
@@ -305,6 +319,8 @@
   import {pca,pcaa} from 'area-data'
   import {userHttp} from "../network/system/user";
   import {repairHttp} from "../network/system/repair";
+  import {orderHttp} from "../network/system/order";
+  import {productHttp} from "../network/system/product";
 
   export default {
     name: "Dashboard",
@@ -320,7 +336,9 @@
         isClear:false,
         detail:'',
         repairList:[],
+        listChangp:[],
         brand:'',
+        Changp:false,
         icon:'',
         tableLoading: false,
         shopId:'',
@@ -349,6 +367,14 @@
         alert(data)
 
       },
+      openAddDialog(){
+        this.Changp = true
+        productHttp.list(this.listChangp).then(res=>{
+          this.listChangp = res.data.list
+          this.total1 = res.data.total1
+          this.pageNum1 = res.data.pageNum1
+        })
+      },
       handleCurrentChange(pageIndex){
         this.searchForm.pageNum = pageIndex
         this.searchForm.pageSize = this.pageSize
@@ -369,6 +395,8 @@
           console.log(res.data.list)
           if(res.code == 20000){
             this.repairList = res.data.list;
+            this.total = res.data.total
+            this.pageNum = res.data.pageNum
             this.tableLoading = false
           }
         });
