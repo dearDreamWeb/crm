@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author: pengjia
@@ -28,8 +29,10 @@ public class SaleResp {
     private Integer contactsId;
     private Integer empId;
     private SaleDetailResp saleDetailResp;
+    private List<DemandResp> demandResps;
 
     private String cusName;
     private String empName;
+
     private String contactsName;
 }

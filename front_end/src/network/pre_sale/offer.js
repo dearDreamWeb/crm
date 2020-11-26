@@ -91,5 +91,14 @@ export const offerHttp = {
       }
     }
     return get(params)
+  },
+  listByCus:function (cusId) {
+    let params = {
+      url:'/offer/list_by_cusId',
+      data:{
+        'cusId':cusId
+      }
+    }
+    return get(params)
   }
 }

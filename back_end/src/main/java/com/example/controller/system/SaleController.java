@@ -60,4 +60,9 @@ public class SaleController {
     public ResultVo editAndDetailEdit(@RequestBody SaleDetailDemand saleDetailDemand) {
         return saleService.editSaleAndDetail(saleDetailDemand);
     }
+
+    @GetMapping("/select_all")
+    public ResultVo selectSaleAndDemandAndSolution(SaleReq saleReq) {
+        return saleService.selectSaleAndDemandAndSolution(saleReq);
+    }
 }

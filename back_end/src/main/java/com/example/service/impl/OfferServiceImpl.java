@@ -104,4 +104,10 @@ public class OfferServiceImpl implements OfferService {
         List<OfferResp> offerResps = offerMapper.listOffer(offerReq);
         return ResultUtils.response(offerResps);
     }
+
+    @Override
+    public ResultVo listOfferByCus(Integer cusId) {
+        List<OfferResp> offerResps = offerMapper.listOfferByCus(cusId);
+        return ResultUtils.response(offerResps);
+    }
 }

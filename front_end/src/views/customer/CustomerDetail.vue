@@ -20,7 +20,7 @@
       </div>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-row>
+          <!--<el-row>
             <el-col>
               <el-card>
                 <div slot="header">
@@ -109,7 +109,7 @@
                 </div>
               </el-card>
             </el-col>
-          </el-row>
+          </el-row>-->
           <el-row>
             <el-col>
               <el-card>
@@ -291,24 +291,125 @@
                 </div>
                 <div>
                   <el-tabs v-model="activeName" @tab-click="handleClick">
-                    <el-tab-pane label="全部" :name="item" v-for="(item,index) in activeNameList" :key="index">
-                      <span slot="label"><i class="el-icon-s-grid">全部</i>
-                        <el-tag size="mini">{{item}}</el-tag>
+                    <el-tab-pane label="全部" name="1">
+                      <span slot="label">
+                        <i class="el-icon-s-grid">客户跟进</i>
                       </span>
                       <div>
-                        {{item}}
                         <el-timeline>
-                          <el-timeline-item
-                            v-for="(activity, index) in activities"
-                            :key="index"
-                            :icon="activity.icon"
-                            :type="activity.type"
-                            :color="activity.color"
-                            :size="activity.size"
-                            :timestamp="activity.timestamp">
-                            {{activity.content}}
+                          <el-timeline-item v-for="item in customerRecordList" :hide-timestamp="true"
+                                            :key="item.recordId" :timestamp="item.recordTime"
+                                            icon="el-icon-more" type="primary" size="large">
+                            <span>标题：{{item.recordTitle}}</span><br>
+                            <span>内容：{{item.recordContent}}</span>
                           </el-timeline-item>
                         </el-timeline>
+                      </div>
+                    </el-tab-pane>
+                    <el-tab-pane label="销售机会" name="2">
+                      <span slot="label">
+                        <i class="el-icon-s-help">销售机会</i>
+                      </span>
+                      <div>
+                        <el-table :data="saleList" :header-row-style="iHeaderRowStyle"
+                                  :header-cell-style="iHeaderCellStyle">
+                          <el-table-column type="expand" prop="demandResps">
+                            <template slot-scope="props">
+                              <el-table :data="props.row.demandResps" :header-row-style="iHeaderRowStyle"
+                                        :header-cell-style="iHeaderCellStyle" style="margin-top: -20px">
+                                <el-table-column type="expand" prop="solutionResps">
+                                  <template slot-scope="scope">
+                                    <el-table :data="scope.row.solutionResps" :header-row-style="iHeaderRowStyle"
+                                              :header-cell-style="iHeaderCellStyle" style="margin-top: -20px">
+                                      <el-table-column prop="solutionTitle" label="方案主题"></el-table-column>
+                                      <el-table-column prop="createTime" label="提交时间">
+                                        <template slot-scope="scope">
+                                          {{scope.row.createTime | dateFormat}}
+                                        </template>
+                                      </el-table-column>
+                                      <el-table-column prop="content" label="内容" show-overflow-tooltip></el-table-column>
+                                    </el-table>
+                                  </template>
+                                </el-table-column>
+                                <el-table-column prop="demandTitle" label="主题"></el-table-column>
+                                <el-table-column prop="demandDegree" label="等级"></el-table-column>
+                                <el-table-column prop="demandContent" label="内容"></el-table-column>
+                                <el-table-column prop="createTime" label="X">
+                                  <template slot-scope="scope">
+                                    {{scope.row.createTime | dateFormat}}
+                                  </template>
+                                </el-table-column>
+                              </el-table>
+                            </template>
+                          </el-table-column>
+                          <el-table-column prop="saleName" label="机会名称"></el-table-column>
+                          <el-table-column prop="saleStatus" label="机会状态"></el-table-column>
+                          <el-table-column prop="saleType" label="机会类型"></el-table-column>
+                          <el-table-column prop="discoveryTime" label="发现时间">
+                            <template slot-scope="scope">
+                              {{scope.row.discoveryTime | dateFormat}}
+                            </template>
+                          </el-table-column>
+                          <el-table-column prop="saleDetailResp.salePriorLevel" label="等级"></el-table-column>
+                          <el-table-column prop="saleDetailResp.saleStarBeacon" label="星标">
+                            <template scope="scope">
+                              <img :src="scope.row.saleDetailResp.saleStarBeacon"></img>
+                            </template>
+                          </el-table-column>
+                          <el-table-column prop="saleDetailResp.saleStage" label="阶段"></el-table-column>
+                          <el-table-column prop="saleDetailResp.saleEstimateDate" label="预签日期">
+                            <template slot-scope="scope">
+                              {{scope.row.saleDetailResp.saleEstimateDate | dateFormat}}
+                            </template>
+                          </el-table-column>
+                          <el-table-column prop="saleDetailResp.saleExpectMoney" label="预签金额"></el-table-column>
+                        </el-table>
+                      </div>
+                    </el-tab-pane>
+                    <el-tab-pane label="报价" name="3">
+                      <span slot="label">
+                        <i class="el-icon-s-management">报价</i>
+                      </span>
+                      <div>
+                        <el-table :data="offerList">
+                          <el-table-column type="expand" prop="offerDetailResp">
+                            <template slot-scope="props">
+                              <el-form label-position="left" inline class="demo-table-expand">
+                                <el-form-item label="产品名称">
+                                  <span>{{ props.row.offerDetailResp.productName }}</span>
+                                </el-form-item>
+                                <el-form-item label="品牌">
+                                  <span>{{ props.row.offerDetailResp.productBrand }}</span>
+                                </el-form-item>
+                                <el-form-item label="型号">
+                                  <span>{{ props.row.offerDetailResp.productModel }}</span>
+                                </el-form-item>
+                                <el-form-item label="价格">
+                                  <span>{{ props.row.offerDetailResp.productPrice }}</span>
+                                </el-form-item>
+                                <el-form-item label="数量">
+                                  <span>{{ props.row.offerDetailResp.offerDetailCount }}</span>
+                                </el-form-item>
+                                <el-form-item label="金额">
+                                  <span>{{ props.row.offerDetailResp.amountMoney }}</span>
+                                </el-form-item>
+                              </el-form>
+                            </template>
+                          </el-table-column>
+                          <el-table-column prop="offerTheme" label="主题"></el-table-column>
+                          <el-table-column prop="offerNumbers" label="单号"></el-table-column>
+                          <el-table-column prop="offerStatus" label="状态">
+                            <template slot-scope="scope">
+                              {{scope.row.offerStatus | offerStatusFormat}}
+                            </template>
+                          </el-table-column>
+                          <el-table-column prop="createTime" label="创建时间">
+                            <template slot-scope="scope">
+                              {{scope.row.createTime | dateFormat}}
+                            </template>
+                          </el-table-column>
+                          <el-table-column prop="remark" label="备注"></el-table-column>
+                        </el-table>
                       </div>
                     </el-tab-pane>
                     <!--<el-tab-pane label="任务行动" name="two">
@@ -358,7 +459,7 @@
           </el-row>
         </el-col>
       </el-row>
-      <customer-more ref="customerMoreRef" :msg="customerId"></customer-more>
+      <customer-more ref="customerMoreRef" :msg="customerId" v-on:init="initCustomerDetail"></customer-more>
     </el-main>
   </el-container>
 </template>
@@ -367,6 +468,9 @@
   import CustomerMore from "../../components/customer/CustomerMore";
   import {customerHttp} from "../../network/pre_sale/customer";
   import {contactsHttp} from "../../network/pre_sale/contacts";
+  import {saleHttp} from "../../network/pre_sale/sale";
+  import {demandHttp} from "../../network/pre_sale/demand";
+  import {offerHttp} from "../../network/pre_sale/offer";
   export default {
     name: "CustomerDetail",
     components:{
@@ -377,28 +481,12 @@
         customerId:'',
         customer:{},
         contactsList:{},
+        customerRecordList:[],
+        saleList:[],
+        demandList:[],
+        offerList:[],
 
         activeName: '1',
-        activeNameList:['1','2','3','4','5','6','7','8','9','10','11','12'],
-
-        activities: [{
-          content: '支持使用图标',
-          timestamp: '2018-04-12 20:46',
-          size: 'large',
-          type: 'primary',
-          icon: 'el-icon-more'
-        }, {
-          content: '支持自定义颜色',
-          timestamp: '2018-04-03 20:46',
-          color: '#0bbd87'
-        }, {
-          content: '支持自定义尺寸',
-          timestamp: '2018-04-03 20:46',
-          size: 'large'
-        }, {
-          content: '默认样式的节点',
-          timestamp: '2018-04-03 20:46'
-        }]
       }
     },
     methods:{
@@ -428,13 +516,37 @@
         customerHttp.getCusById(this.customerId).then(res => {
           this.customer = res.data
         })
-      }
+      },
+      initCustomerRecord() {
+        customerHttp.listRecordById(this.customerId).then(res => {
+          this.customerRecordList = res.data
+        })
+      },
+      initSaleList() {
+        saleHttp.selectAll(this.customerId).then(res => {
+          this.saleList = res.data
+        })
+      },
+      initOfferList() {
+        offerHttp.listByCus(this.customerId).then(res => {
+          this.offerList = res.data
+        })
+      },
 
+      iHeaderRowStyle:function({row,rowIndex}){
+        return 'height:20px'
+      },
+      iHeaderCellStyle:function({row,column,rowIndex,columnIndex}){
+        return 'padding:3px'
+      },
     },
     created() {
       this.customerId = this.$urlUtil.getQueryVariable("customerId")
       this.initCustomerDetail()
       this.initContactsList()
+      this.initCustomerRecord()
+      this.initSaleList()
+      this.initOfferList()
     }
   }
 </script>
@@ -497,5 +609,17 @@
   }
   ::-webkit-scrollbar {
     width: 0 !important;height: 0;
+  }
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
   }
 </style>

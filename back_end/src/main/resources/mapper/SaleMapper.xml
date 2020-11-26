@@ -33,6 +33,54 @@
         <association property="saleDetailResp" resultMap="SaleDetailResult"/>
     </resultMap>
 
+    <resultMap id="DetailAllResult" type="com.example.entity.response.SaleResp">
+        <id column="sale_id" property="saleId"/>
+        <result column="sale_name" property="saleName"/>
+        <result column="sale_status" property="saleStatus"/>
+        <result column="sale_type" property="saleType"/>
+        <result column="discovery_time" property="discoveryTime"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="cus_id" property="cusId"/>
+        <result column="contacts_id" property="contactsId"/>
+        <result column="emp_id" property="empId"/>
+        <association property="saleDetailResp" resultMap="SaleDetailResult"/>
+        <collection property="demandResps" resultMap="DemandResult"/>
+    </resultMap>
+
+    <resultMap id="DemandResult" type="com.example.entity.response.DemandResp">
+        <id column="demand_id" property="demandId"/>
+        <result column="demand_title" property="demandTitle"/>
+        <result column="demand_degree" property="demandDegree"/>
+        <result column="demand_content" property="demandContent"/>
+        <result column="is_solve" property="isSolve"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="contacts_id" property="contactsId"/>
+        <result column="sale_id" property="saleId"/>
+        <result column="emp_id" property="empId"/>
+        <result column="cus_id" property="cusId"/>
+        <collection property="solutionResps" resultMap="SolutionResult"/>
+    </resultMap>
+
+    <resultMap id="SolutionResult" type="com.example.entity.response.SolutionResp">
+        <id column="solution_id" property="solutionId"/>
+        <result column="solution_title" property="solutionTitle"/>
+        <result column="create_time" property="createTime"/>
+        <result column="content" property="content"/>
+        <result column="feedback" property="feedback"/>
+        <result column="version" property="version"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="cus_id" property="cusId"/>
+        <result column="sale_id" property="saleId"/>
+        <result column="demand_id" property="demandId"/>
+    </resultMap>
+
     <resultMap id="SaleDetailResult" type="com.example.entity.response.SaleDetailResp">
         <id column="sale_detail_id" property="saleDetailId"/>
         <result column="sale_estimate_date" property="saleEstimateDate"/>
@@ -148,7 +196,7 @@
         sd.sale_detail_id,sd.sale_estimate_date,sd.sale_possibility,sd.sale_expect_money,sd.sale_star_beacon,
         sd.sale_prior_level,sd.sale_stage,sd.sale_stage_remark,sd.sale_id,sd.version,sd.create_time,sd.update_time,sd.is_delete
         FROM sale sa
-        INNER JOIN sale_detail sd ON sa.sale_id = sd.sale_id
+        LEFT JOIN sale_detail sd ON sa.sale_id = sd.sale_id
         <where>
             <if test="saleName != null and saleName != ''">
                 AND sa.sale_name LIKE CONCAT('%',#{saleName},'%')
@@ -186,5 +234,19 @@
             AND sa.is_delete = 0
         </where>
         ORDER BY sa.create_time DESC
+    </select>
+
+    <select id="selectSaleAndDemandAndSolution" resultMap="DetailAllResult">
+        SELECT sa.sale_id,sa.sale_name,sa.sale_status,sa.sale_type,sa.discovery_time,sa.version,
+        sa.create_time,sa.update_time,sa.is_delete,sa.cus_id,sa.contacts_id,sa.emp_id,
+        sd.sale_detail_id,sd.sale_estimate_date,sd.sale_possibility,sd.sale_expect_money,sd.sale_star_beacon,
+        sd.sale_prior_level,sd.sale_stage,sd.sale_stage_remark,sd.sale_id,sd.version,sd.create_time,sd.update_time,sd.is_delete,
+        de.demand_id,de.demand_title,de.demand_degree,de.demand_content,de.is_solve,de.create_time,
+        so.solution_id,so.solution_title,so.content,so.feedback,so.create_time,so.cus_id,so.sale_id,so.demand_id
+        FROM sale sa
+        LEFT JOIN sale_detail sd ON sa.sale_id = sd.sale_id
+        LEFT JOIN demand de ON de.sale_id = sd.sale_id
+        LEFT JOIN solution so ON so.demand_id = de.demand_id
+        WHERE sa.cus_id = #{cusId}
     </select>
 </mapper>

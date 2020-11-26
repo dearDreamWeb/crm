@@ -6,17 +6,14 @@
 <template>
   <div>
     <el-dialog :visible.sync="customerMoreDialog" top="25px"
-               :show-close="false">
+               :show-close="false" @close="customerMoreDialogClose">
       <span>售前</span>
-      <el-row :gutter="20">
+      <!--<el-row :gutter="20">
         <el-col :span="8">
           <el-button type="text" icon="el-icon-star-on"
                      @click="openSanYiDialog">三一客</el-button>
         </el-col>
-        <el-col :span="8">
-          <el-button type="text" icon="el-icon-coin">报价（暂缓）</el-button>
-        </el-col>
-      </el-row>
+      </el-row>-->
       <el-row :gutter="20">
         <el-col :span="4">
           <el-button type="text" icon="el-icon-office-building"
@@ -31,7 +28,7 @@
                      @click="openSolutionDialog">解决方案</el-button>
         </el-col>
         <el-col :span="4">
-          <el-button type="text" icon="el-icon-warning">竞争关系</el-button>
+          <el-button type="text" icon="el-icon-coin">报价</el-button>
         </el-col>
       </el-row>
       <el-divider></el-divider>
@@ -84,7 +81,8 @@
       <p>$attrs：{{$attrs}}</p>
     </el-dialog>
     <customer-more-san-yi ref="customerMoreSanYiRef" v-bind="$attrs" v-on="$listeners"></customer-more-san-yi>
-    <customer-more-sale ref="customerMoreSaleRef"></customer-more-sale>
+    <customer-more-sale ref="customerMoreSaleRef" v-bind="$attrs" v-on="$listeners"
+                        v-on:moreclose="closeCustomerMore"></customer-more-sale>
     <customer-more-demand ref="customerMoreDemandRef"></customer-more-demand>
     <customer-more-solution ref="customerMoreSolutionRef"></customer-more-solution>
     <customer-more-follow ref="customerMoreFollowRef"></customer-more-follow>
@@ -112,6 +110,10 @@
       }
     },
     methods:{
+      customerMoreDialogClose() {
+        this.$emit('init')
+      },
+
       sanYiQualitativeRadioChange() {
         this.customerMoreSanYiRef.qualitativeRadioChange()
       },
@@ -124,6 +126,9 @@
 
       openCustomerMore() {
         this.customerMoreDialog = true
+      },
+      closeCustomerMore() {
+        this.customerMoreDialog = false
       },
       openSanYiDialog() {
         this.$refs.customerMoreSanYiRef.openSanYiDialog()

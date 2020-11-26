@@ -96,5 +96,26 @@ export const customerHttp = {
       }
     }
     return get(params)
+  },
+  listCustomerRecord:function (customerRecord) {
+    let params = {
+      url:'/customer_record/list',
+      data:{
+        'recordTitle':customerRecord.recordTitle,
+        'recordType':customerRecord.recordType,
+        'cusId':customerRecord.cusId,
+        'empId':customerRecord.empId
+      }
+    }
+    return get(params)
+  },
+  listRecordById:function (cusId) {
+    let params = {
+      url:'/customer_record/list',
+      data:{
+        'cusId':cusId
+      }
+    }
+    return get(params)
   }
 }

@@ -7,7 +7,7 @@
   <div>
     <el-dialog title="机会添加" :visible.sync="addDialog" @close="addDialogClose" top="15px">
       <el-form :model="addForm" ref="addFormRef" :rules="addFormRules"
-               label-width="65px" label-position="right">
+               label-width="65px" label-position="right" size="medium">
         <el-row>
           <el-col>
             <el-form-item label="主题" prop="saleName">
@@ -16,7 +16,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12">
+          <!--<el-col :span="12">
             <el-form-item label="客户" prop="cusId">
               <el-select v-model="addForm.cusId" @change="customerChange"
                          clearable placeholder="请选择">
@@ -24,12 +24,24 @@
                            :label="item.cusName" :value="item.cusId"></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="12">
             <el-form-item label="联系人" prop="contactsId">
               <el-select v-model="addForm.contactsId" clearable placeholder="请选择">
                 <el-option v-for="item in contactsList" :key="item.contactsId"
                            :label="item.contactsName" :value="item.contactsId"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="星标" prop="saleStarBeacon">
+              <el-select v-model="addForm.saleStarBeacon" @change="starBeaconChange"
+                         clearable placeholder="请选择">
+                <el-option v-for="item in starList" :key="item.label"
+                           :label="item.name" :value="item">
+                  <span style="float: left">{{item.name}}</span>
+                  <img style="float: right" :src="item.value"></img>
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -53,28 +65,17 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="星标" prop="saleStarBeacon">
-              <el-select v-model="addForm.saleStarBeacon" @change="starBeaconChange"
-                         clearable placeholder="请选择">
-                <el-option v-for="item in starList" :key="item.label"
-                           :label="item.name" :value="item">
-                  <span style="float: left">{{item.name}}</span>
-                  <img style="float: right" :src="item.value"></img>
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
+
+          <!--<el-col :span="12">
             <el-form-item label="优先级" prop="salePriorLevel">
               <el-select v-model="addForm.salePriorLevel" clearable placeholder="请选择">
                 <el-option v-for="item in starList" :key="item.label"
                            :label="item.level" :value="item.level"></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col>-->
         </el-row>
-        <el-row :gutter="20">
+        <!--<el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="时间" prop="discoveryTime">
               <el-date-picker v-model="addForm.discoveryTime" format="yyyy-MM-dd"
@@ -90,14 +91,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col>
-            <el-form-item label="需求" prop="demandContent">
-              <el-input v-model="addForm.demandContent" type="textarea" clearable placeholder="请输入"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        </el-row>-->
       </el-form>
       <span slot="footer">
         <el-button @click="addDialog = false">取消</el-button>
@@ -113,9 +107,12 @@
   import {contactsHttp} from "../../network/pre_sale/contacts";
   import {customerHttp} from "../../network/pre_sale/customer";
   import {dictHttp} from "../../network/system/dict";
+  import {dateFormat} from "../../common/formatUtils";
+  import {saleHttp} from "../../network/pre_sale/sale";
 
   export default {
     name: "CustomerMoreSale",
+    props:['msg'],
     data() {
       return {
         addDialog:false,
@@ -123,25 +120,18 @@
         addForm:{
           saleName:'',
           saleStatus:'跟踪',
-          cusId:'',
+          cusId:this.msg,
           contactsId:'',
           saleSource:'',
-          discoveryTime:'',
+          discoveryTime:new Date(),
           saleType:'',
           saleStarBeacon:'',
           salePriorLevel:'',
-          demandContent:'',
-          empId:''
         },
+        starBeacon:'',
         addFormRules:{
           saleName:[
             {required:true,message:'请输入机会主题',trigger:'blur'}
-          ],
-          saleStatus:[
-            {required:true,message:'请选择机会状态',trigger:'change'}
-          ],
-          cusId:[
-            {required:true,message:'请选择客户',trigger:'change'}
           ],
           contactsId:[
             {required:true,message:'请选择联系人',trigger:'change'}
@@ -149,15 +139,9 @@
           saleSource:[
             {required:true,message:'请选择来源',trigger:'change'}
           ],
-          discoveryTime:[
-            {required:true,message:'请选择时间',trigger:'change'}
-          ],
           saleType:[
             {required:true,message:'请选择机会类型',trigger:'change'}
           ],
-          demandContent:[
-            {required:true,message:'请输入客户需求',trigger:'blur'}
-          ]
         },
         saleStatusList:saleStatusData,
         saleTypeList:saleTypeData,
@@ -169,6 +153,18 @@
       }
     },
     methods:{
+      initContactsList() {
+        contactsHttp.getByCustomerId(this.msg).then(res => {
+          this.contactsList = res.data
+        })
+        this.addForm.contactsId = ''
+      },
+      initCustomerSourceList() {
+        dictHttp.tree_dict_byId(2).then(res => {
+          this.customerSourceList = res.data
+        })
+      },
+
       openAddDialog() {
         this.addDialog = true
       },
@@ -192,11 +188,26 @@
         this.starBeacon = row.value
       },
       addSaleClick() {
-
+        this.$refs.addFormRef.validate(valid => {
+          if (!valid) return
+          this.addSaleButtonLoading = true
+          saleHttp.add(this.addForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.addSaleButtonLoading = false
+              this.addDialog = false
+              this.$emit('moreclose')
+            } else {
+              this.$message.error(res.message)
+              this.addSaleButtonLoading = false
+            }
+          })
+        })
       }
     },
     created() {
-
+      this.initContactsList()
+      this.initCustomerSourceList()
     }
   }
 </script>

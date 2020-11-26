@@ -18,7 +18,7 @@ export const saleHttp = {
   },
   add:function (sale) {
     let params = {
-      url:'/sale/add/ad',
+      url:'/sale/add',
       data:{
         'saleName':sale.saleName,
         'saleStatus':sale.saleStatus,
@@ -114,5 +114,14 @@ export const saleHttp = {
       }
     }
     return postJson(params)
+  },
+  selectAll:function (cusId) {
+    let params = {
+      url:'/sale/select_all',
+      data:{
+        'cusId':cusId
+      }
+    }
+    return get(params)
   }
 }

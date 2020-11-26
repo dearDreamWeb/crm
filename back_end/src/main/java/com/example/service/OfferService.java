@@ -12,4 +12,5 @@ public interface OfferService {
     ResultVo addOffer(OfferReq offerReq);
     ResultVo getOffer(Integer offerId);
     ResultVo listOffer(OfferReq offerReq);
+    ResultVo listOfferByCus(Integer cusId);
 }

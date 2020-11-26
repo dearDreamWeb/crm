@@ -33,4 +33,9 @@ public class OfferController {
     public ResultVo listOffer(OfferReq offerReq) {
         return offerService.listOffer(offerReq);
     }
+
+    @GetMapping("/list_by_cusId")
+    public ResultVo listOfferByCus(Integer cusId) {
+        return offerService.listOfferByCus(cusId);
+    }
 }

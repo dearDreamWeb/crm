@@ -54,13 +54,14 @@ public class SaleServiceImpl implements SaleService {
     @Override
     public ResultVo addSale(SaleReq saleReq,String token) {
         CheckUtils.validate(saleReq);
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        saleReq.setEmpId(empByToken.getEmpId());
         int addSale = saleMapper.addSale(saleReq);
         if (addSale != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
 
-        EmpResp empByToken = empMapper.getEmpByToken(token);
         CustomerResp customer = customerMapper.getCustomer(saleReq.getCusId());
 
         CustomerRecord customerRecord = new CustomerRecord();
@@ -251,6 +252,12 @@ public class SaleServiceImpl implements SaleService {
                     ResultEnum.DATA_UPDATE_FAIL.getMessage());
         }
         return ResultUtils.response("修改成功");
+    }
+
+    @Override
+    public ResultVo selectSaleAndDemandAndSolution(SaleReq saleReq) {
+        List<SaleResp> saleResps = saleMapper.selectSaleAndDemandAndSolution(saleReq);
+        return ResultUtils.response(saleResps);
     }
 
     public static String degreeRating(String degree) {

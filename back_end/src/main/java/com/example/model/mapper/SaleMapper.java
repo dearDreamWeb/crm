@@ -18,4 +18,5 @@ public interface SaleMapper {
     int editSale(SaleReq saleReq);
     SaleResp getSale(Integer saleId);
     List<SaleResp> listSale(SaleReq saleReq);
+    List<SaleResp> selectSaleAndDemandAndSolution(SaleReq saleReq);
 }

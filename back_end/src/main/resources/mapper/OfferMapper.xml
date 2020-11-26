@@ -95,8 +95,10 @@
     <resultMap id="OfferDetailResult" type="com.example.entity.response.OfferDetailResp">
         <id column="offer_detail_id" property="offerDetailId"/>
         <result column="offer_detail_count" property="offerDetailCount"/>
-        <result column="offer_detail_unit" property="offerDetailUnit"/>
-        <result column="unit_price" property="unitPrice"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_brand" property="productBrand"/>
+        <result column="product_model" property="productModel"/>
+        <result column="product_price" property="productPrice"/>
         <result column="amount_money" property="amountMoney"/>
         <result column="remark" property="remark"/>
         <result column="offer_id" property="offerId"/>
@@ -224,5 +226,16 @@
             AND o.is_delete = 0
         </where>
         ORDER BY o.create_time DESC
+    </select>
+
+    <select id="listOfferByCus" resultMap="OfferDetailAllResult">
+        SELECT o.offer_id,o.offer_theme,o.offer_numbers,o.offer_status,o.offer_price,o.examine_person,
+        o.examine_time,o.remark,o.create_time,o.update_time,o.is_delete,o.contacts_id,o.sale_id,o.emp_id,
+        od.offer_detail_id,od.offer_detail_count,od.product_name,od.product_brand,od.amount_money,od.product_model,
+        od.product_price,od.remark
+        FROM offer o
+        INNER JOIN offer_detail od ON od.offer_id = o.offer_id
+        INNER JOIN sale sa ON sa.sale_id = o.sale_id
+        WHERE sa.cus_id = #{cusId}
     </select>
 </mapper>
