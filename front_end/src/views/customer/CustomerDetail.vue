@@ -459,7 +459,7 @@
           </el-row>
         </el-col>
       </el-row>
-      <customer-more ref="customerMoreRef" :msg="customerId" v-on:init="initCustomerDetail"></customer-more>
+      <customer-more ref="customerMoreRef" :msg="customerId" v-on:init="reloadDetail"></customer-more>
     </el-main>
   </el-container>
 </template>
@@ -539,6 +539,9 @@
       iHeaderCellStyle:function({row,column,rowIndex,columnIndex}){
         return 'padding:3px'
       },
+      reloadDetail() {
+        window.location.reload()
+      }
     },
     created() {
       this.customerId = this.$urlUtil.getQueryVariable("customerId")

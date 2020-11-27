@@ -83,10 +83,14 @@
     <customer-more-san-yi ref="customerMoreSanYiRef" v-bind="$attrs" v-on="$listeners"></customer-more-san-yi>
     <customer-more-sale ref="customerMoreSaleRef" v-bind="$attrs" v-on="$listeners"
                         v-on:moreclose="closeCustomerMore"></customer-more-sale>
-    <customer-more-demand ref="customerMoreDemandRef"></customer-more-demand>
-    <customer-more-solution ref="customerMoreSolutionRef"></customer-more-solution>
-    <customer-more-follow ref="customerMoreFollowRef"></customer-more-follow>
-    <customer-more-contacts ref="customerMoreContactsRef"></customer-more-contacts>
+    <customer-more-demand ref="customerMoreDemandRef" v-bind="$attrs" v-on="$listeners"
+                          v-on:moreclose="closeCustomerMore"></customer-more-demand>
+    <customer-more-solution ref="customerMoreSolutionRef" v-bind="$attrs" v-on="$listeners"
+                            v-on:moreclose="closeCustomerMore"></customer-more-solution>
+    <customer-more-follow ref="customerMoreFollowRef" v-bind="$attrs" v-on="$listeners"
+                          v-on:moreclose="closeCustomerMore"></customer-more-follow>
+    <customer-more-contacts ref="customerMoreContactsRef" v-bind="$attrs" v-on="$listeners"
+                            v-on:moreclose="closeCustomerMore"></customer-more-contacts>
   </div>
 </template>
 

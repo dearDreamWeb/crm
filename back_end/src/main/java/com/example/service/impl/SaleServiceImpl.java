@@ -152,7 +152,11 @@ public class SaleServiceImpl implements SaleService {
             EmpResp emp = empMapper.getEmp(saleResp.getEmpId());
             CustomerResp customer = customerMapper.getCustomer(saleResp.getCusId());
             saleResp.setCusName(customer.getCusName());
-            saleResp.setEmpName(emp.getEmpName());
+            if (emp != null) {
+                saleResp.setEmpName(emp.getEmpName());
+            } else {
+                saleResp.setEmpName(null);
+            }
         }
         PageInfo<SaleResp> list = new PageInfo<>(saleResps);
         return ResultUtils.response(list);

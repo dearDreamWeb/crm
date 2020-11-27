@@ -57,6 +57,11 @@ public class DemandServiceImpl implements DemandService {
     @Override
     public ResultVo addDemand(DemandReq demandReq, String token) {
         CheckUtils.validate(demandReq);
+        Integer cusId = demandReq.getCusId();
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        CustomerResp customer = customerMapper.getCustomer(cusId);
+
+        demandReq.setEmpId(empByToken.getEmpId());
         int addDemand = demandMapper.addDemand(demandReq);
         if (addDemand != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
@@ -77,9 +82,6 @@ public class DemandServiceImpl implements DemandService {
                     ResultEnum.DATA_UPDATE_FAIL.getMessage());
         }
 
-        Integer cusId = demandReq.getCusId();
-        EmpResp empByToken = empMapper.getEmpByToken(token);
-        CustomerResp customer = customerMapper.getCustomer(cusId);
 
         CustomerRecord customerRecord = new CustomerRecord();
         customerRecord.setRecordTitle("新增客户需求");

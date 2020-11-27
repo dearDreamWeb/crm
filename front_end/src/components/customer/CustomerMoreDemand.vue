@@ -16,15 +16,14 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12">
+          <!--<el-col :span="12">
             <el-form-item label="客户" prop="cusId">
-              <el-select v-model="addForm.cusId" @change="addFormCusChange"
-                         clearable placeholder="请选择">
+              <el-select v-model="addForm.cusId" clearable placeholder="请选择">
                 <el-option v-for="item in customerList" :key="item.cusId"
                            :label="item.cusName" :value="item.cusId"></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="12">
             <el-form-item label="对应机会" prop="saleId">
               <el-select v-model="addForm.saleId" clearable placeholder="请选择">
@@ -72,28 +71,27 @@
 <script>
   import {saleHttp} from "../../network/pre_sale/sale";
   import {contactsHttp} from "../../network/pre_sale/contacts";
+  import {demandDegreeData} from '../../common/data/sale_data'
+  import {demandHttp} from "../../network/pre_sale/demand";
 
   export default {
     name: "CustomerMoreDemand",
+    props:['msg'],
     data() {
       return {
         addDialog:false,
         addDemandButtonLoading:false,
         addForm:{
           demandTitle:'',
-          cusId:'',
+          cusId:this.msg,
           contactsId:'',
           saleId:'',
           demandDegree:'一般',
           demandContent:'',
-          empId:''
         },
         addFormRules:{
           demandTitle:[
             {required:true,message:'请输入客户需求',trigger:'blur'}
-          ],
-          cusId:[
-            {required:true,message:'请选择客户',trigger:'change'}
           ],
           contactsId:[
             {required:true,message:'请选择联系人',trigger:'change'}
@@ -111,36 +109,46 @@
         customerList:[],
         saleList:[],
         contactsList:[],
-        demandDegreeList:[]
+        demandDegreeList:demandDegreeData
       }
     },
     methods:{
       openAddDialog() {
         this.addDialog = true
+        this.initSaleList()
+        this.initContactsList()
       },
       addDialogClose() {
         this.$refs.addFormRef.resetFields()
         this.addDemandButtonLoading = false
       },
-      addFormCusChange(val) {
-        this.addForm.saleId = ''
-        this.addForm.contactsId = ''
-        saleHttp.getByCusId(val).then(res => {
-          this.saleList = res.data.list
-          if (res.data.list != null) {
-            this.addForm.saleId = this.saleList[0].saleId
-          }
-        })
-        contactsHttp.getByCusId(val).then(res => {
-          this.contactsList = res.data.list
-          if (res.data.list != null) {
-            this.addForm.contactsId = this.contactsList[0].contactsId
-          }
+      addDemandClick() {
+        this.$refs.addFormRef.validate(valid => {
+          if (!valid) return
+          this.addDemandButtonLoading = true
+          demandHttp.add(this.addForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.addDemandButtonLoading = false
+              this.addDialog = false
+              this.$emit('moreclose')
+            } else {
+              this.$message.error(res.message)
+              this.addDemandButtonLoading = false
+            }
+          })
         })
       },
-      addDemandClick() {
-
-      }
+      initSaleList() {
+        saleHttp.getByCusId(this.msg).then(res => {
+          this.saleList = res.data.list
+        })
+      },
+      initContactsList() {
+        contactsHttp.getByCusId(this.msg).then(res => {
+          this.contactsList = res.data.list
+        })
+      },
     },
     created() {
 
