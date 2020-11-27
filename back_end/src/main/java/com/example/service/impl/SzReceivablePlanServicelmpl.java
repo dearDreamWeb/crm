@@ -42,7 +42,7 @@ public class SzReceivablePlanServicelmpl implements SzReceivablePlanService {
         Integer period= szplan.getPlanPeriod();
         //批量新增从表
         List<SzReceivableRecord> list=new ArrayList<>(period);
-
+        System.out.println(szplan.getPlanCaozuopeople());
         if (szplan.getPlanId() != null){
             SzReceivablePlan plan=szplanMapper.getszPlan(szplan.getPlanId());
             System.out.println("***2.plan****:"+plan);

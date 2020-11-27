@@ -22,13 +22,13 @@ public class SzDeliverController {
     @Autowired
     private SzDeliverService szdeliverService;
 
-    @SysLog("修改产品详表的库存状态")
-    @PostMapping("/mx_editProDetail")
-    public ResultVo mx_editProDetail(@RequestBody ProductDetail productDetail){
-        System.out.println("产品详情id："+productDetail.getProductDetailId());
-        System.out.println("修改产品详表的库存状态："+productDetail.getProductDetailState());
-        return  szdeliverService.mx_editProDetail(productDetail);
-    }
+//    @SysLog("修改产品详表的库存状态")
+//    @PostMapping("/mx_editProDetail")
+//    public ResultVo mx_editProDetail(@RequestBody ProductDetail productDetail){
+//        System.out.println("产品详情id："+productDetail.getProductDetailId());
+//        System.out.println("修改产品详表的库存状态："+productDetail.getProductDetailState());
+//        return  szdeliverService.mx_editProDetail(productDetail);
+//    }
 
     @SysLog("修改发货单")
     @PostMapping("/mx_editszDeliver")
@@ -42,8 +42,9 @@ public class SzDeliverController {
     @SysLog("添加发货明细")
     @PostMapping("/add_mingxi")
     public ResultVo addszDeliver_mx(@RequestBody SzDeliverMingxi mingxi){
-        /*System.out.println("产品详情id:"+mingxi.getProductDetailId());
-        System.out.println("发货详情id:"+mingxi.getDdetId());*/
+        System.out.println("产品详情id:"+mingxi.getProductDetailId());
+        System.out.println("发货详情id:"+mingxi.getDdetId());
+        szdeliverService.mx_editProDetail(mingxi.getProductDetailId());
         return szdeliverService.addszDeliver_mx(mingxi);
     }
 

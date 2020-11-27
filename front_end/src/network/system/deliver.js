@@ -1,7 +1,7 @@
 import {postJson,get} from "../request";
 
 export const deliverHttp = {
-  mx_editProDetail:function(prodetail){
+/*  mx_editProDetail:function(prodetail){
     let params={
       url:'/deliver/mx_editProDetail',
       data:{
@@ -10,7 +10,7 @@ export const deliverHttp = {
       }
     }
     return postJson(params)
-  },
+  },*/
   mx_editszDeliver:function(deliver){
     let params={
       url:'/deliver/mx_editszDeliver',

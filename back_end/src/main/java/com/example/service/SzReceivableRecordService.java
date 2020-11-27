@@ -14,5 +14,5 @@ import java.util.List;
 public interface SzReceivableRecordService {
     List<SzReceivableRecord> listPlanANDReco(Integer recoId);
     ResultVo getszReco(Integer recoId);
-    ResultVo editszReco(SzReceivableRecord record);
+    ResultVo editszRecoHas(SzReceivableRecord record);
 }

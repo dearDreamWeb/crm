@@ -13,6 +13,7 @@
         <result property="timePlan" column="time_plan"/>
         <result property="moneyPlan" column="money_plan"/>
         <result property="recoCreatetime" column="reco_createtime"/>
+        <result property="recoHasmoney" column="reco_hasmoney"/>
         <result property="planId" column="plan_id"/>
     </resultMap>
 
@@ -27,6 +28,7 @@
         <result property="timePlan" column="time_plan"/>
         <result property="moneyPlan" column="money_plan"/>
         <result property="recoCreatetime" column="reco_createtime"/>
+        <result property="recoHasmoney" column="reco_hasmoney"/>
         <result property="planId" column="plan_id"/>
         <association property="szReceivablePlan" resultMap="szReceivablePlan"/>
     </resultMap>
@@ -51,38 +53,39 @@
 
     <!--回款计划和回款记录-->
     <select id="listPlanANDReco" resultMap="RecordResult">
-        SELECT reco_id, reco_receivable, reco_caozuopeople, reco_time, reco_money, reco_liushui, record_plan, time_plan, money_plan,reco_createtime, plan_id
+        SELECT reco_id, reco_receivable, reco_caozuopeople, reco_time, reco_hasmoney,reco_money, reco_liushui, record_plan, time_plan, money_plan,reco_createtime, plan_id
          FROM sz_receivable_record WHERE plan_id=#{recoId}
     </select>
     <!--增-->
-    <!--<insert id="addPlanANDReco" parameterType="java.util.List">
-        <selectKey keyProperty="recoId" keyColumn="reco_id" resultType="Integer" order="AFTER">
-            SELECT last_insert_id();
-        </selectKey>
-        insert into sz_receivable_record(reco_receivable, reco_caozuopeople, reco_time, reco_money, reco_liushui, record_plan, time_plan, money_plan, plan_id) VALUES
-        (#{recoReceivable},#{recoCaozuopeople},#{recoTime},#{recoMoney},#{recoLiushui},#{recordPlan},#{timePlan},#{moneyPlan},#{planId})
-    </insert>-->
-    <!--增-->
     <insert id="addPlanANDReco" parameterType="java.util.List">
         INSERT INTO sz_receivable_record(reco_receivable, reco_caozuopeople, reco_time, reco_money, reco_liushui,
-         record_plan, time_plan, money_plan, plan_id)
+         record_plan, time_plan,reco_hasmoney,money_plan, plan_id)
         VALUES
     <foreach  collection="list" item="item" separator="," >
-        (#{item.recoReceivable},#{item.recoCaozuopeople},#{item.recoTime},#{item.recoMoney},#{item.recoLiushui},#{item.recordPlan},#{item.timePlan},#{item.moneyPlan},#{item.planId})
+        (#{item.recoReceivable},#{item.recoCaozuopeople},#{item.recoTime},#{item.recoMoney},#{item.recoLiushui},#{item.recordPlan},#{item.timePlan},0,#{item.moneyPlan},#{item.planId})
     </foreach>
     </insert>
 <!---->
-    <update id="editszReco" parameterType="com.example.entity.request.SzReceivableRecord">
-        update sz_receivable_record set reco_receivable = 1
+    <update id="editszRecoHas" parameterType="com.example.entity.request.SzReceivableRecord">
+        update sz_receivable_record set reco_id=reco_id
         <if test="recoTime != null">
             ,reco_time = #{recoTime}
         </if>
-        <if test="recoMoney !=null and recoMoney != ''">
-            ,reco_money = #{recoMoney}
-        </if>
+
+        ,reco_hasmoney = reco_hasmoney+#{recoMoney}
+
         <if test="recoLiushui !=null and recoLiushui != ''">
             ,reco_liushui = #{recoLiushui}
         </if>
         where reco_id = #{recoId}
     </update>
+<!--     <update id="editszRecoHas" parameterType="com.example.entity.request.SzReceivableRecord">
+        update sz_receivable_record set reco_id=reco_id
+        <if test="recoTime != null">
+            ,reco_time = #{recoTime}
+        </if>
+        ,reco_hasmoney = reco_hasmoney+#{recoMoney}
+        ,reco_liushui = #{recoLiushui}
+        where reco_id = #{recoId}
+    </update>-->
 </mapper>

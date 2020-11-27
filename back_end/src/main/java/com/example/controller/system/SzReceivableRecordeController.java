@@ -36,8 +36,8 @@ public class SzReceivableRecordeController{
     }
 
     @SysLog("修改订单")
-    @PostMapping("/edit")
-    public ResultVo editszReco(@RequestBody SzReceivableRecord record){
-        return szReceivableRecordService.editszReco(record);
+    @PostMapping("/edit_has")
+    public ResultVo editszRecoHas(@RequestBody SzReceivableRecord record){
+        return szReceivableRecordService.editszRecoHas(record);
     }
 }
