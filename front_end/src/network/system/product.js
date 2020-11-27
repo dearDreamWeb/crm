@@ -73,7 +73,19 @@ export const productHttp = {
         'productEndPrice':product.productEndPrice,
         'productStatus':product.productStatus,
         'startDate':product.startDate,
-        'endDate':product.endDate
+        'endDate':product.endDate,
+        'pageNum':product.pageNum,
+        'pageSize':product.pageSize
+      }
+    }
+    return get(params)
+  },
+  listDialog:function (product) {
+    let params = {
+      url:'/product/list',
+      data:{
+        'pageNum':product.pageNum,
+        'pageSize':product.pageSize
       }
     }
     return get(params)

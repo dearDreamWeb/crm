@@ -83,7 +83,10 @@
                          layout="prev, pager, next, jumper, total">
           </el-pagination>
         </el-card>
-        <el-dialog :visible.sync="Changp">
+        <el-dialog
+          :visible.sync="Changp"
+          @closed="closeDialog"
+        >
           <el-table :data="listChangp">
             <el-table-column prop="productId" label="产品Id"></el-table-column>
             <el-table-column prop="productName" label="产品"></el-table-column>
@@ -94,14 +97,14 @@
 <!--            <el-table-column prop="ordPhone" label="手机号码"></el-table-column>-->
             <el-table-column width="80" label="操作" >
               <template slot-scope="scope">
-                <el-button type="text" size="small" icon="el-icon-plus" @click="addpro(scope.row.ordId,scope.row.customerResp.cusId)" :disabled="isDisable"></el-button>
+                <el-button type="text" size="small" icon="el-icon-plus" @click="addpro(scope.row)" :disabled="isDisable"></el-button>
               </template>
             </el-table-column>
           </el-table>
           <el-pagination background
-                         @current-change="handleCurrentChangedd"
-                         :current-page="pageNum1" :page-sizes="[1,2,5,10]"
-                         :page-size="pageSize1" :total="total1"
+                         @current-change="handleCurrentChange1"
+                         :current-page="fukuan.pageNum" :page-sizes="[1,2,5,10]"
+                         :page-size="fukuan.pageSize" :total="fukuan.total"
                          layout="prev, pager, next, jumper, total">
           </el-pagination>
           <el-table :data="daaChangp">
@@ -114,10 +117,15 @@
             <!--            <el-table-column prop="ordPhone" label="手机号码"></el-table-column>-->
             <el-table-column width="80" label="操作" >
               <template slot-scope="scope">
-                <el-button type="danger" icon="el-icon-delete" circle @click="addpro" :disabled="isDisable"></el-button>
+                <el-button type="danger" icon="el-icon-delete" circle @click="deleteProduct(scope.$index,scope.row.productPrice)" :disabled="isDisable"></el-button>
               </template>
             </el-table-column>
           </el-table>
+          合计：{{payMoney}}
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="closeDialog">取消付款</el-button>
+            <el-button type="primary" @click="sureDialog">确定付款</el-button>
+          </div>
         </el-dialog>
       </el-col>
     </el-row>
@@ -335,8 +343,11 @@
       return{
         isClear:false,
         detail:'',
+        searchForm:{},
         repairList:[],
         listChangp:[],
+        daaChangp:[],
+        isDisable:false,
         brand:'',
         Changp:false,
         icon:'',
@@ -350,6 +361,12 @@
         pageNum:1,
         pageSize:3,
         pcaa:pcaa,
+        payMoney:0.00, // 付款金额
+        fukuan:{
+          total:0,
+          pageNum:1,
+          pageSize:5
+        },
         value: new Date(),
         productBrandList:productBrand.productBrand
       }
@@ -367,21 +384,79 @@
         alert(data)
 
       },
+      // 关闭弹框
+      closeDialog(){
+        this.Changp = false;
+        this.daaChangp = [];
+        this.payMoney = 0;
+      },
+      // 确定付款
+      sureDialog(){
+        this.daaChangp
+        this.closeDialog();
+
+      },
+      // 删除添加的产品
+      deleteProduct(index,productPrice){
+        // 删除产品并重新计算金额
+        console.log("下标=》"+index);
+        console.log("需要减去的金额=》"+productPrice);
+        this.daaChangp.splice(index,1);
+        this.sumMoney();
+      },
+      // 计算金额
+      sumMoney(){
+        let p = 0;
+        this.daaChangp.forEach(function(item,index){
+           p += item.productPrice*100
+        });
+        this.payMoney = parseFloat(p/100).toFixed(2);
+      },
+      addpro(row){
+        console.log(row);
+        let flag = true;
+        this.daaChangp.forEach(function(item,index){
+          if(item.productId == row.productId){
+            flag = false;
+          }
+        })
+        if(flag){
+          console.log(this.payMoney);
+          //添加产品
+          this.daaChangp.push(row);
+          //计算金额
+          this.sumMoney();
+
+        } else{
+          this.$message({
+            message: '该产品已添加',
+            type: 'warning'
+          });
+        }
+      },
       openAddDialog(){
         this.Changp = true
-        productHttp.list(this.listChangp).then(res=>{
+        productHttp.listDialog(this.fukuan).then(res=>{
           this.listChangp = res.data.list
-          this.total1 = res.data.total1
-          this.pageNum1 = res.data.pageNum1
+          this.fukuan.total = res.data.total
+          this.fukuan.pageNum = res.data.pageNum
+        })
+      },
+      handleCurrentChange1(pageIndex){
+        this.fukuan.pageNum = pageIndex
+        productHttp.listDialog(this.fukuan).then(res=>{
+          this.listChangp = res.data.list
+          this.fukuan.total = res.data.total
+          this.fukuan.pageNum = res.data.pageNum
         })
       },
       handleCurrentChange(pageIndex){
-        this.searchForm.pageNum = pageIndex
-        this.searchForm.pageSize = this.pageSize
-        repairHttp.queryEmp(this.searchForm).then(res => {
+        console.log(pageIndex)
+        this.fukuan.pageNum = pageIndex
+        repairHttp.queryEmp(this.fukuan).then(res => {
           this.repairList = res.data.list
-          this.total = res.data.total
-          this.pageNum = res.data.pageNum
+          this.fukuan.total = res.data.total
+          this.fukuan.pageNum = res.data.pageNum
         })
       },
       //派单信息

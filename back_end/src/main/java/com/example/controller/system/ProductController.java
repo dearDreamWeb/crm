@@ -43,6 +43,7 @@ public class ProductController {
 
     @GetMapping("/list")
     public ResultVo listProduct(ProductReq productReq) {
+
         return productService.listProduct(productReq);
     }
 

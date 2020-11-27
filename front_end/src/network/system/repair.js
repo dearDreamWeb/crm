@@ -132,7 +132,8 @@ export const repairHttp = {
       data:{
         'repairGdstate': repair.repairGdstate,
         'repairId': repair.repairId,
-        'empId': repair.empId
+        'empId': repair.empId,
+        'repairProblem':repair.repairProblem
       }
     }
     return postJson(params)
