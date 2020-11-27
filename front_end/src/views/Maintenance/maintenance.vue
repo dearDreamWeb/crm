@@ -21,6 +21,7 @@
     <el-table-column prop="repairFault" label="故障描述"></el-table-column>
     <el-table-column prop="repairsjhm" label="是否在保"></el-table-column>
     <el-table-column prop="empResp.empName" label="维修人"></el-table-column>
+    <el-table-column prop="repairProblem" label="类型"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button v-if="scope.row.repairGdstate != '已派单'"
@@ -54,6 +55,14 @@
              <el-option v-for="item in edpList" :key="item.empId"
                         :label="item.empName" :value="item.empId">
              </el-option>
+           </el-select>
+         </el-form-item>
+       </el-col>
+       <el-col :span="8">
+         <el-form-item label="类型" prop="repairProblem">
+           <el-select v-model="addform.repairProblem">
+             <el-option label="上门" value="上门"></el-option>
+             <el-option label="电话" value="电话"></el-option>
            </el-select>
          </el-form-item>
        </el-col>
