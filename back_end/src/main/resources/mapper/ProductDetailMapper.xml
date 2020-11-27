@@ -75,8 +75,8 @@
     </select>
 
     <!--发货时 新增发货明细 同时 修改 产品详情的库存状态为出库-->
-    <update id="mx_editProDetail" parameterType="com.example.entity.ProductDetail">
+    <update id="mx_editProDetail">
         UPDATE product_detail set product_detail_state =1
-        WHERE product_detail_id = #{productDetailId}
+        WHERE product_detail_id = #{id}
     </update>
 </mapper>

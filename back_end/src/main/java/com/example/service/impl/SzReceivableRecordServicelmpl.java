@@ -36,18 +36,20 @@ public class SzReceivableRecordServicelmpl implements SzReceivableRecordService 
     }
 
     @Override
-    public ResultVo editszReco(SzReceivableRecord record) {
+    public ResultVo editszRecoHas(SzReceivableRecord record) {
         System.out.println("11");
+        System.out.println(record.getRecoMoney());
+        System.out.println(record.getRecoHasmoney());
         SzReceivableRecord deptResp = szRecordMapper.getszReco(record.getRecoId());
         if (deptResp == null) {
             throw new SysException(ResultEnum.ReceivableRecord_UPDATE_FAIL.getCode(),
                     ResultEnum.ReceivableRecord_UPDATE_FAIL.getMessage());
         }
-        int editszReco = szRecordMapper.editszReco(record);
-        if (editszReco != 1) {
+        int editszRecoHas = szRecordMapper.editszRecoHas(record);
+        if (editszRecoHas != 1) {
             throw new SysException(ResultEnum.ReceivableRecord_UPDATE_FAIL.getCode(),
                     ResultEnum.ReceivableRecord_UPDATE_FAIL.getMessage());
         }
-        return ResultUtils.response(editszReco);
+        return ResultUtils.response(editszRecoHas);
     }
 }

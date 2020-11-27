@@ -79,9 +79,9 @@ export const planHttp = {
     }
     return get(params)
   },
-  editrecord:function (record) {
+  editrecordhas:function (record) {
     let params = {
-      url:'/record/edit',
+      url:'/record/edit_has',
       data:{
         'recoId':record.recoId,
         'moneyPlan':record.moneyPlan,

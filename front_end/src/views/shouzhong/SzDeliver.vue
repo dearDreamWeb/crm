@@ -83,15 +83,16 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="物流公司" prop="delCompany" >
-              <el-select v-model="fahuoForm.delCompany" style="width: 250px"  clearable>
-                <el-option label="中通快递" value="中通"></el-option>
+              <el-select v-model="fahuoForm.delCompany" style="width: 250px"  clearable  @change="gaibian">
+                <el-option label="顺丰快递" value="0"></el-option>
                 <el-option label="韵达快递" value="1"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="10">
             <el-form-item label="发货单号" prop="delWuliuid">
-              <el-input v-model="fahuoForm.delWuliuid" size="middle" placeholder="请输入发货单号" style="width: 250px" clearable/>
+              <el-input v-model="fahuoForm.delWuliuid" size="middle" placeholder="请输入发货单号"
+                        style="width: 250px" clearable :readonly="true"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -187,13 +188,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="发货单号" prop="delWuliuid">
-              <el-input v-model="addForm.delWuliuid" size="mini" placeholder="请输入发货单号" clearable/>
+              <el-input v-model="addForm.delWuliuid" size="mini" placeholder="请输入发货单号" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="物流公司" prop="delCompany" >
               <el-select v-model="addForm.delCompany" clearable>
-                <el-option label="中通快递" value="中通"></el-option>
+                <el-option label="中通快递" value="0"></el-option>
                 <el-option label="韵达快递" value="1"></el-option>
               </el-select>
             </el-form-item>
@@ -245,6 +246,7 @@
         listForm:[],
         prxq:[],
         pageNum:1,
+        suijishu:0,
         pageSize:5,
         total:1,
         pageNum_one:1,
@@ -382,6 +384,9 @@
       },
       /*去发货*/
       fahuo(val){
+        this.fahuoForm={};
+        this.prxq=[];
+        this.haspro=[];
         this.fahouid=val.delId;
         this.FahuoTableVisible = true;
           deliverHttp.getszDeliver(val.delId).then(res=>{
@@ -390,10 +395,16 @@
             console.log(res.data[0].productReq);
             this.szProducts=res.data[0].szDeliverDetails
             console.log(res.data[0].szDeliverDetails)
-            this.prxq=[];
-            this.haspro=[];
-            this.fahuoForm={};
         })
+      },
+      /*根据选择物流公司 生成随机数改变快递单号*/
+      gaibian(){
+        this.suijishu=new Date().getTime()
+        if(this.fahuoForm.delCompany==0){
+          this.fahuoForm.delWuliuid="SF"+this.suijishu
+        }else if(this.fahuoForm.delCompany==1){
+          this.fahuoForm.delWuliuid="YD"+this.suijishu
+        }
       },
       handleCurrentChange(pageIndex) {
         this.pageNum = pageIndex
@@ -453,15 +464,15 @@
           deliverHttp.mx_editszDeliver(addinputs).then(res=>{
 
           })
-          let ProDetailId={
+/*          let ProDetailId={
             productDetailId:this.haspro[i].productDetailId,
           }
           hasproId.push(ProDetailId);
-          /*修改产品详表的库存状态*/
+          /!*修改产品详表的库存状态*!/
           deliverHttp.mx_editProDetail(ProDetailId).then(res=>{
             console.log(res)
             console.log("productDetailId",this.productDetailId)
-          })
+          })*/
         }
 
       },

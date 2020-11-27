@@ -721,7 +721,8 @@
         return 'padding:5px'
       },
       anniu(){
-        alert(this.$store.state.empName)
+        //alert(this.$store.state.empName)
+        this.addPlanDialog=true;
       },
       /*选择分期*/
       fenqi(){
@@ -767,7 +768,6 @@
       developClick(val){
         /*判断是否完善订单信息*/
         if(this.addproplus.length>0){
-
           this.addPlanDialog=true;
         }else{
           this.$message({
@@ -784,6 +784,12 @@
           this.addPlanForm.ordId=this.oid;
           console.log("jjj",this.addPlanForm.ordId);
           console.log("kkk",this.oid);
+          //获取当前登录用户 给 操作人
+          this.addPlanForm.planCaozuopeople=this.$store.state.empName;
+          console.log("this.addPlanForm.planCaozuopeople",this.addPlanForm.planCaozuopeople)
+          console.log("操作人",this.$store.state.empName)
+        //ordHead:this.$store.state.empName,
+        console.log("this.addPlanForm:",this.addPlanForm)
           planHttp.addplan(this.addPlanForm).then(res => {
             if (res.code === 20000) {
               console.log("rrr",this.addPlanForm);

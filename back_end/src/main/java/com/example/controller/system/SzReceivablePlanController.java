@@ -38,6 +38,7 @@ public class SzReceivablePlanController {
     @PostMapping("/add")
     public ResultVo addszPlan(@RequestBody SzReceivablePlan szplan) {
         System.out.println("1.记录："+szplan.getSzReceivableRecorde());
+        System.out.println("666"+szplan.getPlanCaozuopeople());
         System.out.println("2.计划："+ szplan);
         for (SzReceivableRecord r1 : szplan.getSzReceivableRecorde()) {
             System.out.println("3。记录："+r1);

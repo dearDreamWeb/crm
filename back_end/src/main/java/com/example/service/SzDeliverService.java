@@ -19,7 +19,7 @@ public interface SzDeliverService {
 
     ResultVo addszDeliver_mx(SzDeliverMingxi mingxi);//增 发货明细
     ResultVo mx_editszDeliver(SzDeliver szdeliver);//改 发货单物流id物流公司发货状态
-    ResultVo mx_editProDetail(ProductDetail productDetail);//改 产品详表的库存状态
+    ResultVo mx_editProDetail(Integer id);//改 产品详表的库存状态
 
 
     /*ResultVo addDelANDOrd(SzDeliver szDeliver);//发货单和订单新增*/
