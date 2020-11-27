@@ -22,20 +22,12 @@ public class SzDeliverController {
     @Autowired
     private SzDeliverService szdeliverService;
 
-//    @SysLog("修改产品详表的库存状态")
-//    @PostMapping("/mx_editProDetail")
-//    public ResultVo mx_editProDetail(@RequestBody ProductDetail productDetail){
-//        System.out.println("产品详情id："+productDetail.getProductDetailId());
-//        System.out.println("修改产品详表的库存状态："+productDetail.getProductDetailState());
-//        return  szdeliverService.mx_editProDetail(productDetail);
-//    }
-
     @SysLog("修改发货单")
     @PostMapping("/mx_editszDeliver")
     public ResultVo mx_editszDeliver(@RequestBody SzDeliver szdeliver){
-        /*System.out.println("发货单id："+szdeliver.getDelId());
+        System.out.println("发货单id："+szdeliver.getDelId());
         System.out.println("物流id："+szdeliver.getDelWuliuid());
-        System.out.println("物流公司："+szdeliver.getDelCompany());*/
+        System.out.println("物流公司："+szdeliver.getDelCompany());
         return  szdeliverService.mx_editszDeliver(szdeliver);
     }
 

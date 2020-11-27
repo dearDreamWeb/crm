@@ -39,13 +39,6 @@ public class SzDeliverServicelmpl implements SzDeliverService {
     @Autowired
     private ProductDetailMapper productDetailMapper;
 
-/*    @Override
-    public ResultVo mx_editProDetail(ProductDetail productDetail) {
-        System.out.println("产品详情库存修改...");
-        int i = productDetailMapper.mx_editProDetail(productDetail);
-        return ResultUtils.response(i);
-    }*/
-
     @Override
     public ResultVo mx_editszDeliver(SzDeliver szdeliver) {
         System.out.println("发货单修改");

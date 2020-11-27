@@ -65,7 +65,7 @@
         (#{item.recoReceivable},#{item.recoCaozuopeople},#{item.recoTime},#{item.recoMoney},#{item.recoLiushui},#{item.recordPlan},#{item.timePlan},0,#{item.moneyPlan},#{item.planId})
     </foreach>
     </insert>
-<!---->
+    <!--改-->
     <update id="editszRecoHas" parameterType="com.example.entity.request.SzReceivableRecord">
         update sz_receivable_record set reco_id=reco_id
         <if test="recoTime != null">
@@ -79,13 +79,4 @@
         </if>
         where reco_id = #{recoId}
     </update>
-<!--     <update id="editszRecoHas" parameterType="com.example.entity.request.SzReceivableRecord">
-        update sz_receivable_record set reco_id=reco_id
-        <if test="recoTime != null">
-            ,reco_time = #{recoTime}
-        </if>
-        ,reco_hasmoney = reco_hasmoney+#{recoMoney}
-        ,reco_liushui = #{recoLiushui}
-        where reco_id = #{recoId}
-    </update>-->
 </mapper>
