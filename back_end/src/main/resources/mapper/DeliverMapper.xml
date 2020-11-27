@@ -160,4 +160,10 @@
         WHERE del_id = #{delId}
     </update>
 
+    <!--新增发货明细时修改发货单-->
+    <update id="mx_editszDeliver" parameterType="com.example.entity.request.SzDeliver">
+        UPDATE sz_deliver set del_wuliuid = #{delWuliuid},del_company = #{delCompany},del_state=1
+        WHERE del_id = #{delId}
+    </update>
+
 </mapper>

@@ -6,6 +6,7 @@
         <id column="product_detail_id" property="productDetailId"/>
         <result column="product_id" property="productId"/>
         <result column="product_bar_code" property="productBarCode"/>
+        <result column="product_detail_state" property="productDetailState"/>
     </resultMap>
 
     <resultMap id="ProductDetail_Result" type="com.example.entity.ProductDetail">
@@ -35,8 +36,8 @@
     </resultMap>
 
     <insert id="addProductDetail" parameterType="com.example.entity.ProductDetail">
-        INSERT INTO product_detail(product_id,product_bar_code) VALUES
-        (#{productId},#{productBarCode})
+        INSERT INTO product_detail(product_id,product_bar_code,product_detail_state) VALUES
+        (#{productId},#{productBarCode},#{productDetailState})
     </insert>
 
     <update id="delProductDetail" parameterType="Integer">
@@ -72,4 +73,10 @@
     <select id="getDetailByProductId" resultMap="ProductDetailResult">
         SELECT * FROM product_detail WHERE product_id = #{productId}
     </select>
+
+    <!--发货时 新增发货明细 同时 修改 产品详情的库存状态为出库-->
+    <update id="mx_editProDetail" parameterType="com.example.entity.ProductDetail">
+        UPDATE product_detail set product_detail_state =1
+        WHERE product_detail_id = #{productDetailId}
+    </update>
 </mapper>

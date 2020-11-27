@@ -1,13 +1,42 @@
 import {postJson,get} from "../request";
 
 export const deliverHttp = {
-  addANDord:function(deliver) {
+  mx_editProDetail:function(prodetail){
+    let params={
+      url:'/deliver/mx_editProDetail',
+      data:{
+        productDetailId:prodetail.productDetailId,
+        productDetailState:prodetail.productDetailState
+      }
+    }
+    return postJson(params)
+  },
+  mx_editszDeliver:function(deliver){
+    let params={
+      url:'/deliver/mx_editszDeliver',
+      data:{
+        delId:deliver.delId,
+        delWuliuid: deliver.delWuliuid,
+        delCompany:deliver.delCompany
+      }
+    }
+    return postJson(params)
+  },
+  add_mingxi:function(deliver){
+    let params={
+      url:'/deliver/add_mingxi',
+      data:deliver
+    }
+    return postJson(params)
+  },
+
+/*  addANDord:function(deliver) {
     let params = {
       url:'/deliver/add',
       data:deliver
     }
     return postJson(params)
-  },
+  },*/
 /*  addord:function(ordId) {
     let params = {
       url:'/deliver/add',
@@ -25,7 +54,7 @@ export const deliverHttp = {
     }
     return get(params)
   },
-  addszDeliver:function(deliver) {
+/*  addszDeliver:function(deliver) {
     let params = {
       url:'/deliver/add',
       data:{
@@ -36,7 +65,7 @@ export const deliverHttp = {
       }
     }
     return postJson(params)
-  },
+  },*/
   getszDeliver:function (delId) {
     let params = {
       url:'/deliver',

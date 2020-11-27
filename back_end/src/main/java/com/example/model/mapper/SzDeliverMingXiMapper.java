@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface SzDeliverMingXiMapper {
-    void addmingxiAndDDet(SzDeliverMingxi szDeliverMingxi);
+    int addszDeliver_mx(SzDeliverMingxi mingxi);
 }

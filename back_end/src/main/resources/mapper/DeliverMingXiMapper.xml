@@ -22,7 +22,7 @@
         <result property="productId" column="product_id"/>
     </resultMap>
 
-    <insert id="addmingxiAndDDet" parameterType="java.util.List">
+    <insert id="addszDeliver_mx" parameterType="com.example.entity.request.SzDeliverMingxi">
         <selectKey keyProperty="mingxiId" keyColumn="mingxi_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
         </selectKey>

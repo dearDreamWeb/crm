@@ -39,7 +39,7 @@
             </el-table-column>
             <el-table-column label="操作" >
               <template slot-scope="scope">
-                <el-button type="success" plain size="mini" @click="fahuo(scope.row.delId)">
+                <el-button type="success" plain size="mini" @click="fahuo(scope.row)">
                   <i class="el-icon-shopping-cart-1 "> </i>去发货
                 </el-button>
               </template>
@@ -114,7 +114,7 @@
             <el-table-column label="操作" width="100px">
               <template slot-scope="scope">
                 <div v-for="x in szProducts" v-if="x.productId == scope.row.productId" >
-                  <el-button type="primary" plain size="mini" @click="productxq(scope.row,x.ddetNum)" >
+                  <el-button type="primary" plain size="mini" @click="productxq(x,x.ddetNum)" >
                     产品详情
                   </el-button>
                 </div>
@@ -227,6 +227,8 @@
     name: "SzDeliver",
     data() {
       return {
+        fahouid:0,
+        fahuoddetId:0,
         /*选项卡默认选中未发货not*/
         activeName: 'not',
         searchInput:'',
@@ -250,7 +252,7 @@
         total_one:1,
         fahuoForm:{
           delCompany:"",
-          delWuliuid:"",
+          delWuliuid:""
         },
         addForm:{
           ordId:"",
@@ -323,6 +325,7 @@
       },
       /*选择产品添加*/
       addbuy(row){
+        alert(row.productDetailId)
         console.log("添加")
         let seq={
           productDetailId:row.productDetailId,
@@ -368,7 +371,9 @@
       /*产品详情*/
       productxq(row,num){
         console.log("购买数量：",num)
+        console.log("id：",row)
         this.ddetNumber = num;
+        this.fahuoddetId =row.ddetId;
         productHttp.getProduct(row.productId).then(res=>{
           let demo = res.data.slice(0,num);
           this.prxq=demo;
@@ -377,8 +382,9 @@
       },
       /*去发货*/
       fahuo(val){
+        this.fahouid=val.delId;
         this.FahuoTableVisible = true;
-          deliverHttp.getszDeliver(val).then(res=>{
+          deliverHttp.getszDeliver(val.delId).then(res=>{
             this.szProduct=res.data[0].productReq;
             console.log(res.data[0].productReq);
             console.log(res.data[0].productReq);
@@ -386,6 +392,7 @@
             console.log(res.data[0].szDeliverDetails)
             this.prxq=[];
             this.haspro=[];
+            this.fahuoForm={};
         })
       },
       handleCurrentChange(pageIndex) {
@@ -413,30 +420,50 @@
         }
       },
       DeliverClick(){
-
-        /*        for (let i = 0; i <this.multipleSelection.length ; i++) {
-           alert(this.multipleSelection[i].ordId);
-          this.addForm.ordId=this.multipleSelection[i].ordId;
-        }
-        this.$refs.addFormRef.validate(valid => {
-          if (!valid) return
-          this.addDeliverButtonLoading = true
-          deliverHttp.addANDord(this.addForm).then(res =>{
-            if (res.code === 20000) {
-              this.$message.success(res.message)
-              this.initList()
-              this.addDeliverButtonLoading = false
-              this.addDialog = false
-            } else {
-              this.addDeliverButtonLoading = false
-              this.$message({
-                message:res.message,
-                type:"error"
-              })
+        //获取已选产品中的数组
+        if(this.haspro.length>0){
+          console.log("this.haspro:",this.haspro)
+          var hasproId=[];
+          var addhaspro=[];
+          var inputs=[];
+          //循环得到（产品详情编号，发货详情编号）
+          for(var i=0,n=this.haspro.length;i<n;i++){
+            console.log("haspro中发货产品详情编号:",this.haspro[i].productDetailId)
+            console.log("haspro中发货详情编号:",this.fahuoddetId)
+            var json={
+              productDetailId:this.haspro[i].productDetailId,
+              ddetId:this.fahuoddetId,
             }
+            addhaspro.push(json)
+            /*新增发货明细*/
+            deliverHttp.add_mingxi(addhaspro[i]).then(res=>{
+              console.log(res);
+            })
+          }
+          console.log(json)
+          console.log("addhaspro:",addhaspro)
+          //给文本框绑定值
+          let addinputs={
+            delWuliuid:this.fahuoForm.delWuliuid,
+            delCompany:this.fahuoForm.delCompany,
+            delId:this.fahouid,
+          }
+          inputs.push(addinputs);
+          /*修改发货单状态等....*/
+          deliverHttp.mx_editszDeliver(addinputs).then(res=>{
+
           })
-        })
-        * */
+          let ProDetailId={
+            productDetailId:this.haspro[i].productDetailId,
+          }
+          hasproId.push(ProDetailId);
+          /*修改产品详表的库存状态*/
+          deliverHttp.mx_editProDetail(ProDetailId).then(res=>{
+            console.log(res)
+            console.log("productDetailId",this.productDetailId)
+          })
+        }
+
       },
       addDeliverClick(){
         for (let i = 0; i <this.multipleSelection.length ; i++) {
