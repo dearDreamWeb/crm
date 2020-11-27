@@ -18,6 +18,7 @@ public class ProductDetail {
     private Integer productDetailId;
     private Integer productId;
     private String productBarCode;
+    private Integer productDetailState;
     private ProductResp productResp;
 
     private SzDeliverMingxi szDeliverMingxi;

@@ -26,7 +26,6 @@ public class ProductDetailServiceImpl implements ProductDetailService{
 
     @Override
     public ResultVo getDetailByProductId(Integer productId) {
-        System.out.println("....进...");
         List<ProductDetail> details = detailMapper.getDetailByProductId(productId);
         if (details == null) {
             throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),

@@ -1,6 +1,7 @@
 package com.example.model.mapper;
 
 import com.example.entity.request.SzDeliver;
+import com.example.entity.request.SzDeliverMingxi;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -19,5 +20,10 @@ public interface SzDeliverMapper {
     int editszDeliver(SzDeliver szdeliver);//改
     List<SzDeliver> getszDeliver(Integer delId);//单条
     List<SzDeliver> listszDeliver(SzDeliver szdeliver);
-    int addDelANDOrd(SzDeliver szDeliver);//发货单和订单新增
+
+/*    int addszDeliver_mx(SzDeliverMingxi mingxi);//增*/
+    int mx_editszDeliver(SzDeliver szdeliver);//改
+
+
+    /* int addDelANDOrd(SzDeliver szDeliver);//发货单和订单新增*/
 }

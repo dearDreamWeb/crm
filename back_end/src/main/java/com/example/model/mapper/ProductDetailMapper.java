@@ -19,5 +19,9 @@ public interface ProductDetailMapper {
     List<ProductDetail> listDetail();
     void batchAddProductDetail(List<ProductDetail> list);
 
+    //根据id联查 （发货单页面用到的）
     List<ProductDetail> getDetailByProductId(Integer productId);
+    //发货时 新增发货明细 同时 修改 产品详情的库存状态
+    int mx_editProDetail(ProductDetail productDetail);
+
 }

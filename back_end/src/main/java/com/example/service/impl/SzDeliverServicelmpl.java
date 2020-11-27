@@ -2,11 +2,15 @@ package com.example.service.impl;
 
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
+import com.example.entity.ProductDetail;
 import com.example.entity.ResultVo;
 import com.example.entity.request.SzDeliver;
 import com.example.entity.request.SzDeliverDetails;
+import com.example.entity.request.SzDeliverMingxi;
+import com.example.model.mapper.ProductDetailMapper;
 import com.example.model.mapper.SzDeliverDetailsMapper;
 import com.example.model.mapper.SzDeliverMapper;
+import com.example.model.mapper.SzDeliverMingXiMapper;
 import com.example.service.SzDeliverService;
 import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
@@ -28,9 +32,35 @@ import java.util.List;
 public class SzDeliverServicelmpl implements SzDeliverService {
     @Autowired
     private SzDeliverMapper szdeliverMapper;
-
     @Autowired
-    private SzDeliverDetailsMapper deliverDetailsMapper; //addDelANDDdel增
+    private SzDeliverMingXiMapper mingXiMapper;
+    @Autowired
+    private SzDeliverDetailsMapper deliverDetailsMapper;
+    @Autowired
+    private ProductDetailMapper productDetailMapper;
+
+    @Override
+    public ResultVo mx_editProDetail(ProductDetail productDetail) {
+        System.out.println("产品详情库存修改...");
+        int i = productDetailMapper.mx_editProDetail(productDetail);
+        return ResultUtils.response(i);
+    }
+
+    @Override
+    public ResultVo mx_editszDeliver(SzDeliver szdeliver) {
+        System.out.println("发货单修改");
+        int i = szdeliverMapper.mx_editszDeliver(szdeliver);
+        return ResultUtils.response(i);
+    }
+
+
+    @Override
+    public ResultVo addszDeliver_mx(SzDeliverMingxi mingxi) {
+        System.out.println("发货明细新增");
+        int i = mingXiMapper.addszDeliver_mx(mingxi);
+        return ResultUtils.response(i);
+    }
+
 
     @Override
     public ResultVo addszDeliver(SzDeliver szdeliver) {
@@ -47,23 +77,7 @@ public class SzDeliverServicelmpl implements SzDeliverService {
         }
         return ResultUtils.response(delid);
     }
-    /*
-        //第一步:获取所有的详情信息
-        List<SzOrderDetails> details = order.getSzOrderDetails();
-        //第二步：调用Mapper方法，新增单条订单
-            szorderMapper.addszOrder(order);
-        //第三步：获取新增的订单编号
-        Integer oid = order.getOrdId();
-            System.out.println("主键编号是："+oid);
-        //第四步：逐条新增订单详情
-            for (SzOrderDetails detail : details) {
-            detail.setOrdId(oid);
-            //第五步：调用详细的新增方法
-            detailsMapper.addOrderANDOrderDet(detail);
-        }
-            return ResultUtils.response(oid);
-    }
-    * */
+
     @Override
     public ResultVo delszDeliver(SzDeliver szdeliver) {
         System.out.println("【发货单】删除");
@@ -119,11 +133,12 @@ public class SzDeliverServicelmpl implements SzDeliverService {
         return ResultUtils.response(list);
     }
 
-    @Override
+/*    @Override
     public ResultVo addDelANDOrd(SzDeliver szDeliver) {
         szDeliver.setDelExpecttime(DateUtils.getDate());
         szDeliver.setDelState(1);
         int addDelANDOrd = szdeliverMapper.addDelANDOrd(szDeliver);
         return  ResultUtils.response(addDelANDOrd);
-    }
+    }*/
+
 }

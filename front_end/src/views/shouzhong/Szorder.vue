@@ -315,7 +315,7 @@
       <span slot="footer">
         <el-button @click="addPlanDialog = false">取消</el-button>
         <el-button type="primary" @click="addPlanClick"
-                   :loading="addPlanButtonLoading">确定</el-button>
+                   :loading="addPlanButtonLoading">立即制定</el-button>
       </span>
     </el-dialog>
 
@@ -469,7 +469,6 @@
           ordCountry:'',
           ordDetail:'',
           cusId: '',
-          addproplus:[],
           szReceivableRecorde:[]
         },
         addPlanForm:{
@@ -826,7 +825,7 @@
             cusId:this.addForm.cusId,
             szOrderDetails:addDetail
           }
-          this.addOrderButtonLoading = false;
+          this.addOrderButtonLoading = true;
             orderHttp.addOrder(ppp).then(res => {
               if (res.code === 20000) {
                 this.$message.success(res.message)
@@ -842,22 +841,6 @@
                   $this = this;
                 const h = this.$createElement;
                 console.log(id);
-             /*   this.$notify({
-                  title: '提示',
-                  message: '暂未制定发货单，点击制定！',
-                  duration: 0,
-                  onClick() {
-                    $this.defineCallBack(id); //自定义回调,message为传的参数
-                    console.log("传递过来的值是：",id);
-                    this.FahuoTableVisible = true;
-                    //alert("发货！")
-                    let id=val.ordId;
-                    deliverHttp.addord(id).then(res=>{
-                      console.log(this.ordId)
-                      console.log("发货！")
-                    })
-                  }
-                });*/
               } else {
                 this.$message({
                   message:res.message,
