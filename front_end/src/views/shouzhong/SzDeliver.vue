@@ -141,8 +141,8 @@
           </el-table>
           <el-pagination background
                          @current-change="handleCurrentChange_one"
-                         :current-page="pageNum_one" :page-sizes="[1,2,5,10]"
-                         :page-size="pageSize_one" :total="total_one"
+                         :current-page="pageNum" :page-sizes="[1,2,5,10]"
+                         :page-size="pageSize" :total="total"
                          layout="prev, pager, next, jumper, total">
           </el-pagination>
         </el-tab-pane>
@@ -162,8 +162,15 @@
 
       <span slot="footer">
         <el-button @click="DeliverDialog = false">取消</el-button>
-        <el-button type="primary" @click="DeliverClick"
-                   :loading="DeliverButtonLoading">确定</el-button>
+
+         <span v-if="buynumber==addnumber">
+                <el-button type="primary" @click="DeliverClick"
+                           :loading="DeliverButtonLoading">确定</el-button>
+        </span>
+        <span v-else>
+                <el-button disabled
+                           :loading="DeliverButtonLoading">确定</el-button>
+        </span>
       </span>
     </el-dialog>
 
@@ -246,12 +253,14 @@
         listForm:[],
         prxq:[],
         pageNum:1,
-        suijishu:0,
-        pageSize:5,
+        pageSize:10,
         total:1,
-        pageNum_one:1,
+        suijishu:0,
+        buynumber:0,
+        addnumber:0,
+        /*pageNum_one:1,
         pageSize_one:5,
-        total_one:1,
+        total_one:1,*/
         fahuoForm:{
           delCompany:"",
           delWuliuid:""
@@ -327,6 +336,7 @@
       },
       /*选择产品添加*/
       addbuy(row){
+
         alert(row.productDetailId)
         console.log("添加")
         let seq={
@@ -343,16 +353,9 @@
         console.log("this.ddetNumber::",this.ddetNumber);
         let idChangelength = 0 ;
         let i = 0;
-        if(idChangelength > this.ddetNumber ){
-          console.log(idChangelength,'>=',this.ddetNumber)
-          for (let v of deta) {
-            if (v.productId != row.productId ){
-            }
-          }
-        }else{
+
           i++;
           idChangelength++;
-
           let result = this.haspro.filter(p=>{
             return p.productBarCode==seq.productBarCode
           });
@@ -364,11 +367,9 @@
           }else{
             console.log("push!!")
             this.haspro.push(seq)
+            this.addnumber++;
           }
-          console.log(idChangelength,'<',this.ddetNumber)
 
-        }
-        console.log(i);
       },
       /*产品详情*/
       productxq(row,num){
@@ -395,7 +396,11 @@
             console.log(res.data[0].productReq);
             this.szProducts=res.data[0].szDeliverDetails
             console.log(res.data[0].szDeliverDetails)
-        })
+            for (let i of this.szProducts) {
+              this.buynumber = i.ddetNum +this.buynumber
+            }
+            console.log(this.buynumber);
+          })
       },
       /*根据选择物流公司 生成随机数改变快递单号*/
       gaibian(){
