@@ -94,6 +94,16 @@ export const orderHttp = {
     }
     return get(params)
   },
+  listDialog:function (order) {
+    let params = {
+      url:'/order/list_all',
+      data:{
+        'pageNum':order.pageNum,
+        'pageSize':order.pageSize
+      }
+    }
+    return get(params)
+  },
   listPage1:function (pageNum1,pageSize1) {
     let params = {
       url:'/order/list_all',

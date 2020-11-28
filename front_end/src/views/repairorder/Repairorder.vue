@@ -129,8 +129,8 @@
     </el-table>
       <el-pagination background
                      @current-change="handleCurrentChangedd"
-                     :current-page="pageNum1" :page-sizes="[1,2,5,10]"
-                     :page-size="pageSize1" :total="total1"
+                     :current-page="fukuan.pageNum" :page-sizes="[1,2,5,10]"
+                     :page-size="fukuan.pageSize" :total="fukuan.total"
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
   </el-dialog>
@@ -412,6 +412,11 @@ import {followHttp} from "../../network/pre_sale/followlog";
           resource: '',
           desc: ''
         },
+        fukuan:{
+          total:0,
+          pageNum:1,
+          pageSize:5
+        },
         advancedSearch:false,
         updateform:{},
         addDialog:false,
@@ -477,10 +482,10 @@ import {followHttp} from "../../network/pre_sale/followlog";
       },
       xians(){
         this.Dingda = true
-        orderHttp.list(this.listDingda).then(res=>{
+        orderHttp.listDialog(this.fukuan).then(res=>{
           this.listDingda = res.data.list
-          this.total1 = res.data.total1
-          this.pageNum1 = res.data.pageNum1
+          this.fukuan.total = res.data.total
+          this.fukuan.pageNum = res.data.pageNum
         })
       },
       addpro(ordId,cusId,productId) {
@@ -668,12 +673,11 @@ import {followHttp} from "../../network/pre_sale/followlog";
         })
       },
       handleCurrentChangedd(pageIndex){
-        this.listDingda.pageNum1 = pageIndex
-        this.listDingda.pageSize1 = this.pageSize
-        orderHttp.list(this.listDingda).then(res => {
+        this.fukuan.pageNum = pageIndex
+        orderHttp.listDialog(this.fukuan).then(res => {
           this.listDingda = res.data.list
-          this.total1 = res.data.total1
-          this.pageNum1 = res.data.pageNum1
+          this.fukuan.total = res.data.total
+          this.fukuan.pageNum = res.data.pageNum
         })
       },
 

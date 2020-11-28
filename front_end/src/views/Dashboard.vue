@@ -73,6 +73,7 @@
               <template slot-scope="scope">
                 <el-button size="mini"
                            @click="openAddDialog">付款</el-button>
+                <el-button @click="handleClick" type="text" size="small">查看</el-button>
               </template>
             </el-table-column>
           </el-table>
