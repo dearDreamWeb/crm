@@ -301,7 +301,8 @@
                                             :key="item.recordId" :timestamp="item.recordTime"
                                             icon="el-icon-more" type="primary" size="large">
                             <span>标题：{{item.recordTitle}}</span><br>
-                            <span>内容：{{item.recordContent}}</span>
+                            <span>内容：{{item.recordContent}}</span><br>
+                            <span>{{item.recordTime | dateFormat}}</span>
                           </el-timeline-item>
                         </el-timeline>
                       </div>
@@ -315,11 +316,13 @@
                                   :header-cell-style="iHeaderCellStyle">
                           <el-table-column type="expand" prop="demandResps">
                             <template slot-scope="props">
-                              <el-table :data="props.row.demandResps" :header-row-style="iHeaderRowStyle"
+                              <el-table
+                                        :data="props.row.demandResps" :header-row-style="iHeaderRowStyle"
                                         :header-cell-style="iHeaderCellStyle" style="margin-top: -20px">
                                 <el-table-column type="expand" prop="solutionResps">
                                   <template slot-scope="scope">
-                                    <el-table :data="scope.row.solutionResps" :header-row-style="iHeaderRowStyle"
+                                    <el-table v-if="scope.row.solutionResps.solutionTitle != null"
+                                              :data="scope.row.solutionResps" :header-row-style="iHeaderRowStyle"
                                               :header-cell-style="iHeaderCellStyle" style="margin-top: -20px">
                                       <el-table-column prop="solutionTitle" label="方案主题"></el-table-column>
                                       <el-table-column prop="createTime" label="提交时间">
@@ -331,10 +334,10 @@
                                     </el-table>
                                   </template>
                                 </el-table-column>
-                                <el-table-column prop="demandTitle" label="主题"></el-table-column>
+                                <el-table-column prop="demandTitle" label="需求主题"></el-table-column>
                                 <el-table-column prop="demandDegree" label="等级"></el-table-column>
                                 <el-table-column prop="demandContent" label="内容"></el-table-column>
-                                <el-table-column prop="createTime" label="X">
+                                <el-table-column prop="createTime" label="时间">
                                   <template slot-scope="scope">
                                     {{scope.row.createTime | dateFormat}}
                                   </template>

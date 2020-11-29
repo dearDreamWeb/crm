@@ -117,14 +117,14 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="7">
+              <!--<el-col :span="7">
                 <el-form-item label="三一节点" prop="sanyGuest">
                   <el-select v-model="searchForm.sanyGuest" clearable size="mini">
                     <el-option v-for="item in sanyGuestList" :key="item.label"
                                :label="item.value" :value="item.value"></el-option>
                   </el-select>
                 </el-form-item>
-              </el-col>
+              </el-col>-->
               <el-col :span="5">
                 <el-form-item>
                   <el-button size="mini" icon="el-icon-zoom-out"
@@ -227,49 +227,48 @@
                label-position="right" label-width="80px">
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="占位符" prop="abc">
-              <el-input v-model="editForm.abc" clearable placeholder="请输入"></el-input>
+            <el-form-item label="客户名称" prop="cusName">
+              <el-input v-model="editForm.cusName" clearable placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="占位符" prop="abc">
-              <el-input v-model="editForm.abc" clearable placeholder="请输入"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="占位符" prop="abc">
-              <el-input v-model="editForm.abc" clearable placeholder="请输入"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="占位符" prop="abc">
-              <el-input v-model="editForm.abc" clearable placeholder="请输入"></el-input>
+            <el-form-item label="简称" prop="abbreviation">
+              <el-input v-model="editForm.abbreviation" clearable placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="占位符" prop="abc">
-              <el-input v-model="editForm.abc" clearable placeholder="请输入"></el-input>
+            <el-form-item label="结款方式" prop="settlement">
+              <el-select v-model="editForm.settlement" clearable placeholder="请选择">
+                <el-option v-for="item in cusSettlementList" :key="item.dictId"
+                           :label="item.dictName" :value="item.dictId"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="占位符" prop="abc">
-              <el-input v-model="editForm.abc" clearable placeholder="请输入"></el-input>
+            <el-form-item label="对公账号" prop="companyAccount">
+              <el-input v-model="editForm.companyAccount" clearable placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="占位符" prop="abc">
-              <el-input v-model="editForm.abc" clearable placeholder="请输入"></el-input>
+            <el-form-item label="地址" prop="location">
+              <area-cascader type='text' v-model="editForm.location" :level='1' :data="pcaa"
+                             @change="areaCascaderChange"></area-cascader>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="占位符" prop="abc">
-              <el-input v-model="editForm.abc" clearable placeholder="请输入"></el-input>
+            <el-form-item label="详细地址" prop="detailAddress">
+              <el-input v-model="editForm.detailAddress" clearable placeholder="请输入"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="备注" prop="cusRemark">
+              <el-input v-model="editForm.cusRemark" clearable placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -289,6 +288,7 @@
   import {creditHttp} from "../../network/system/syscredit";
   import {dictHttp} from "../../network/system/dict";
   import {userHttp} from "../../network/system/user";
+  import {pca,pcaa} from 'area-data'
 
   export default {
     name: "Customer",
@@ -300,10 +300,30 @@
         }
         cb(new Error('请输入合法的手机号'))
       }
+      let checkCompanyAccount = (rule,value,cb) => {
+        const reg = /^([1-9]{1})(\d{14}|\d{18})$/
+        if (reg.test(value)) {
+          return cb()
+        }
+        cb(new Error('请输入合法的对公账号'))
+      }
       return {
+        pca:pca,
+        pcaa:pcaa,
+
         editDialog:false,
-        editForm:{},
-        editFormRules:{},
+        editForm:{
+          location:[]
+        },
+        editFormRules:{
+          cusName:[
+            {required:true,message:'请输入客户名称',trigger:'blur'}
+          ],
+          companyAccount:[
+            {required:true,message:'请输入对公账号',trigger:'blur'},
+            {validator:checkCompanyAccount}
+          ]
+        },
         editButtonLoading:false,
 
         addDialog:false,
@@ -346,7 +366,6 @@
           cusName:'',
           abbreviation:'',
           lifeCycle:'',
-          sanyGuest:'',
           creditId:'',
           cusDictSource:'',
           cusDictStage:'',
@@ -370,18 +389,63 @@
       }
     },
     methods:{
+      areaCascaderChange() {
+        console.log(this.editForm.location)
+        this.editForm.province = this.editForm.location[0]
+        this.editForm.city = this.editForm.location[1]
+        this.editForm.area = this.editForm.location[2]
+      },
       editFormClick() {
-
+        this.$refs.editFormRef.validate(valid => {
+          if (!valid) return
+          this.editButtonLoading = true
+          customerHttp.editCustomer(this.editForm).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.editButtonLoading = false
+              this.editDialog = false
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+              this.editButtonLoading = false
+            }
+          })
+        })
       },
       editDialogClose() {
         this.$refs.editFormRef.resetFields()
+        this.editForm.location = []
+        this.editButtonLoading = false
       },
 
       openEditDialog() {
         this.editDialog = true
+        customerHttp.getCusById(this.rowCustomerId).then(res => {
+          this.editForm = res.data
+          if (res.data.province != null && res.data.city != null
+              && res.data.area != null) {
+            this.editForm.location.push(res.data.province)
+            this.editForm.location.push(res.data.city)
+            this.editForm.location.push(res.data.area)
+          }
+        })
+        this.initDictSettlement()
       },
       delClick() {
-
+        this.$confirm('此操作将删除该用户，是否继续？','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(() => {
+          customerHttp.delCustomer(this.rowCustomerId).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+            }
+          })
+        })
       },
 
       addDialogClose() {
@@ -527,5 +591,7 @@
 </script>
 
 <style scoped>
-
+  >>>.area-select .area-selected-trigger{
+    line-height: 15px;
+  }
 </style>

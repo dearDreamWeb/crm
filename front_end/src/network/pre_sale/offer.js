@@ -100,5 +100,15 @@ export const offerHttp = {
       }
     }
     return get(params)
+  },
+  listPage:function (pageNum,pageSize) {
+    let params = {
+      url:'/offer/list',
+      data:{
+        'pageNum':pageNum,
+        'pageSize':pageSize
+      }
+    }
+    return get(params)
   }
 }

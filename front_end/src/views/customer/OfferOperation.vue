@@ -26,7 +26,7 @@
           <el-table-column prop="productPrice" sortable label="单价"></el-table-column>
           <el-table-column prop="amountMoney" sortable label="金额">
             <template slot-scope="scope">
-              {{scope.row.offerDetailCount * scope.row.productPrice}}
+              {{(scope.row.offerDetailCount * scope.row.productPrice).toFixed(2)}}
             </template>
           </el-table-column>
           <el-table-column prop="remark" label="备注">
@@ -281,13 +281,13 @@
         offerHttp.get_detail_by_offerId(this.offerId).then(res => {
           this.tableData = res.data
           for (let i=0;i<this.tableData.length;i++) {
-            productHttp.getProduct(this.tableData[i].productId).then(res => {
+            /*productHttp.getProduct(this.tableData[i].productId).then(res => {
               this.tableData[i].productName = res.data.productName
               this.tableData[i].productBrand = res.data.productBrand
               this.tableData[i].productModel = res.data.productModel
               this.tableData[i].productPrice = res.data.productPrice
               this.tableData[i].productStock = res.data.productStock
-            })
+            })*/
             this.disabledProduct.push(this.tableData[i].productId)
           }
         })

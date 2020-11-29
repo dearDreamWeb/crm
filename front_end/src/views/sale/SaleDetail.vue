@@ -17,7 +17,7 @@
         </div>
         <div>
           <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :span="13">
               <el-card>
                 <el-form label-width="100px" label-position="right">
                   <el-row :gutter="20">
@@ -119,16 +119,7 @@
                 </el-form>
               </el-card>
             </el-col>
-            <el-col :span="2">
-              <el-card style="height: 300px">
-                <el-steps :active="1" direction="vertical">
-                  <el-step title="1" icon="el-icon-edit"></el-step>
-                  <el-step title="2" icon="el-icon-upload"></el-step>
-                  <el-step title="3" icon="el-icon-picture"></el-step>
-                </el-steps>
-              </el-card>
-            </el-col>
-            <el-col :span="10">
+            <el-col :span="11">
               <el-card>
                 <el-collapse v-model="activeNames" accordion>
                   <el-collapse-item name="1">
@@ -285,9 +276,7 @@
               </el-row>
             </el-form>
           </el-col>
-          <el-col :span="8">
-            mxmx
-          </el-col>
+          <el-col :span="8"></el-col>
         </el-row>
         <el-table :data="offerDetailForm">
           <el-table-column prop="productName" label="名称"></el-table-column>

@@ -67,6 +67,15 @@ export const customerHttp = {
     }
     return get(params)
   },
+  delCustomer:function(cusId) {
+    let params = {
+      url:'/customer/del',
+      data:{
+        'cusId':cusId
+      }
+    }
+    return postJson(params)
+  },
   list:function (customer) {
     let params = {
       url:'/customer/list',
@@ -74,7 +83,6 @@ export const customerHttp = {
         'cusName':customer.cusName,
         'abbreviation':customer.abbreviation,
         'lifeCycle':customer.lifeCycle,
-        'sanyGuest':customer.sanyGuest,
         'creditId':customer.creditId,
         'cusDictSource':customer.cusDictSource,
         'cusDictStage':customer.cusDictStage,
@@ -87,6 +95,23 @@ export const customerHttp = {
       }
     }
     return get(params)
+  },
+  editCustomer:function(customer) {
+    let params = {
+      url:'/customer/edit',
+      data:{
+        'cusId':customer.cusId,
+        'cusName':customer.cusName,
+        'abbreviation':customer.abbreviation,
+        'settlement':customer.settlement,
+        'cusRemark':customer.cusRemark,
+        'province':customer.province,
+        'city':customer.city,
+        'area':customer.area,
+        'detailAddress':customer.detailAddress
+      }
+    }
+    return postJson(params)
   },
   getCusById:function (cusId) {
     let params = {

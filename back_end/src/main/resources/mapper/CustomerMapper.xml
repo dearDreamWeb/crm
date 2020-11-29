@@ -14,6 +14,7 @@
         <result column="company_account" property="companyAccount"/>
         <result column="province" property="province"/>
         <result column="city" property="city"/>
+        <result column="area" property="area"/>
         <result column="detail_address" property="detailAddress"/>
         <result column="cus_remark" property="cusRemark"/>
         <result column="version" property="version"/>
@@ -40,6 +41,7 @@
         <result column="company_account" property="companyAccount"/>
         <result column="province" property="province"/>
         <result column="city" property="city"/>
+        <result column="area" property="area"/>
         <result column="detail_address" property="detailAddress"/>
         <result column="cus_remark" property="cusRemark"/>
         <result column="version" property="version"/>
@@ -77,10 +79,10 @@
             select last_insert_id();
         </selectKey>
         INSERT INTO customer(cus_name,life_cycle,sany_guest_id,first_signing_time,abbreviation,credit_id,settlement,
-            company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
+            company_account,province,city,area,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id) VALUES
         (#{cusName},#{lifeCycle},#{sanyGuestId},#{firstSigningTime},#{abbreviation},#{creditId},#{settlement},#{companyAccount},#{province},
-        #{city},#{detailAddress},#{cusRemark},#{cusDictSource},#{cusDictStage},#{qualitativeId},#{gradingId},#{rationId},#{empId})
+        #{city},#{area},#{detailAddress},#{cusRemark},#{cusDictSource},#{cusDictStage},#{qualitativeId},#{gradingId},#{rationId},#{empId})
     </insert>
 
     <update id="delCustomer" parameterType="Integer">
@@ -108,16 +110,19 @@
             ,credit_id = #{creditId}
         </if>
         <if test="settlement != null">
-            ,settlement != #{settlement}
+            ,settlement = #{settlement}
         </if>
         <if test="companyAccount != null and companyAccount != ''">
             ,company_account = #{companyAccount}
         </if>
-        <if test="province != null">
+        <if test="province != null and province != ''">
             ,province = #{province}
         </if>
-        <if test="city != null">
+        <if test="city != null and city != ''">
             ,city = #{city}
+        </if>
+        <if test="area != null and area != ''">
+            ,area = #{area}
         </if>
         <if test="detailAddress != null and detailAddress != ''">
             ,detail_address = #{detailAddress}
@@ -134,7 +139,7 @@
         <if test="qualitativeId != null">
             ,qualitative_id = #{qualitativeId}
         </if>
-        <if test="gradingId != null and">
+        <if test="gradingId != null">
             ,grading_id = #{gradingId}
         </if>
         <if test="rationId != null">
@@ -148,7 +153,7 @@
 
     <select id="getCustomer" resultMap="CustomerResult">
         SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest_id,
-            company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,create_time,
+            company_account,province,city,area,detail_address,cus_remark,cus_dict_source,cus_dict_stage,create_time,
             update_time,version,is_delete,qualitative_id,grading_id,ration_id,emp_id
         FROM customer
         WHERE cus_id = #{cusId}
@@ -156,7 +161,7 @@
 
     <select id="listCustomer" resultMap="CustomerResult">
         SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest_id,
-            company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
+            company_account,province,city,area,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
         <where>
@@ -217,7 +222,7 @@
 
     <select id="getCustomerByName" resultMap="CustomerResult">
         SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest_id,
-            company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
+            company_account,province,city,area,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
         WHERE cus_name = #{cusName}
@@ -225,14 +230,14 @@
 
     <select id="listAll" resultMap="CustomerResult">
         SELECT cus_id,cus_name,life_cycle,first_signing_time,abbreviation,credit_id,settlement,sany_guest_id,
-            company_account,province,city,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
+            company_account,province,city,area,detail_address,cus_remark,cus_dict_source,cus_dict_stage,
             qualitative_id,grading_id,ration_id,emp_id
         FROM customer
     </select>
 
     <select id="listCustomerByEmpId" resultMap="CustomerResult">
         SELECT cu.cus_id,cu.cus_name,cu.life_cycle,cu.first_signing_time,cu.abbreviation,cu.credit_id,cu.settlement,cu.sany_guest_id,
-            cu.company_account,cu.province,cu.city,cu.detail_address,cu.cus_remark,cu.cus_dict_source,cu.cus_dict_stage,
+            cu.company_account,cu.province,cu.city,cu.area,cu.detail_address,cu.cus_remark,cu.cus_dict_source,cu.cus_dict_stage,
             cu.qualitative_id,cu.grading_id,cu.ration_id,cu.emp_id,cu.create_time
         FROM customer cu
         INNER JOIN emp e ON e.emp_id = cu.emp_id
@@ -286,7 +291,7 @@
 
     <select id="getBySaleId" resultMap="CustomerResult">
         SELECT cu.cus_id,cu.cus_name,cu.life_cycle,cu.first_signing_time,cu.abbreviation,cu.credit_id,cu.settlement,cu.sany_guest_id,
-            cu.company_account,cu.province,cu.city,cu.detail_address,cu.cus_remark,cu.cus_dict_source,cu.cus_dict_stage,
+            cu.company_account,cu.province,cu.city,cu.area,cu.detail_address,cu.cus_remark,cu.cus_dict_source,cu.cus_dict_stage,
             cu.qualitative_id,cu.grading_id,cu.ration_id,cu.emp_id,cu.create_time
         FROM customer cu
         INNER JOIN sale s ON s.cus_id = cu.cus_id

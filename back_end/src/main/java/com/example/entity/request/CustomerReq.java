@@ -24,8 +24,9 @@ public class CustomerReq {
     private Integer creditId;
     private Integer settlement;
     private String companyAccount;
-    private Integer province;
-    private Integer city;
+    private String province;
+    private String city;
+    private String area;
     private String detailAddress;
     private String cusRemark;
     private Integer version;
