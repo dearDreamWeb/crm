@@ -94,12 +94,22 @@ export const orderHttp = {
     }
     return get(params)
   },
-  listPage1:function (pageNum,pageSize) {
+  listDialog:function (order) {
     let params = {
       url:'/order/list_all',
       data:{
-        'pageNum':pageNum,
-        'pageSize':pageSize
+        'pageNum':order.pageNum,
+        'pageSize':order.pageSize
+      }
+    }
+    return get(params)
+  },
+  listPage1:function (pageNum1,pageSize1) {
+    let params = {
+      url:'/order/list_all',
+      data:{
+        'pageNum':pageNum1,
+        'pageSize':pageSize1
       }
     }
     return get(params)
