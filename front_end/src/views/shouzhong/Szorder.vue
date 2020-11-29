@@ -222,30 +222,33 @@
       <el-popover
         placement="right"
         width="650" heigth="350px"
-        trigger="click" >
+        trigger="click":visible.sync="fenyetwoDialog">
 
         <el-input v-model="searchInputpro" size="mini" placeholder="请根据产品名称进行查询" clearable>
           <el-button @click="searchInputClickpro" slot="append" icon="el-icon-search"></el-button>
         </el-input>
 
-        <el-table :data="gridData">
-          <el-table-column width="80" property="productBrand" label="品牌"></el-table-column>
-          <el-table-column width="210" property="productName" label="产品名称" ></el-table-column>
+        <el-table :data="gridData" :row-style="{height:'2px'}"
+                  :cell-style="{padding:'5px 0'}" height="300px">
+          <el-table-column width="80" property="productBrand" label="品牌" ></el-table-column>
+          <el-table-column width="220" property="productName" label="产品名称" ></el-table-column>
           <el-table-column property="productModel" label="型号"></el-table-column>
           <el-table-column property="productStock" label="库存"></el-table-column>
           <el-table-column property="productPrice" label="价格"></el-table-column>
-          <el-table-column width="80" label="操作" >
+          <el-table-column width="70" label="操作" >
             <template slot-scope="scope">
               <el-button type="text" size="small" icon="el-icon-plus" @click="addpro(scope.row)" :disabled="isDisable"></el-button>
             </template>
           </el-table-column>
         </el-table>
+        <!--分页2-->
         <el-pagination background
                        @current-change="handleCurrentChange1"
-                       :current-page="pageNum1" :page-sizes="[1,2,5,10]"
-                       :page-size="pageSize1" :total="total1"
+                       :current-page="kuaun.pageNum" :page-sizes="[1,2,5,10]"
+                       :page-size="kuaun.pageSize" :total="kuaun.total"
                        layout="prev, pager, next, jumper, total">
         </el-pagination>
+
         <el-button slot="reference" icon="el-icon-plus" type="primary" @click="choosepro">选择产品</el-button>
       </el-popover>
       <h3>购物车</h3>
@@ -439,10 +442,9 @@
           ordCountry:'',
           ordDetail:'',
           pageNum:1,
-          pageNum1:1,
-          pageSize:10,
-          pageSize1:1,
+          pageSize:10
         },
+        fenyetwoDialog:false,
         addDialog:false,
         addPlanDialog:false,
         rowordId: 0,
@@ -455,9 +457,12 @@
         pageSize:10,
         total:1,
 /*产品分页*/
-        pageNum1:1,
-        pageSize1:1,
-        total1:1,
+        kuaun:{
+          pageNum:1,
+          pageSize:5,
+          total:0,
+        },
+
         addForm: {
           ordTheme:'',
           ordHead:'',
@@ -594,11 +599,13 @@
         this.addForm.cusIdList = []
         this.addOrderButtonLoading = false
       },
+      /*选择产品*/
       choosepro(){
-        productHttp.listAll(this.gridData).then(res=>{
+        this.fenyetwoDialog = true
+        productHttp.listDialog(this.kuaun).then(res=>{
           this.gridData = res.data.list
-          this.total = res.data.total
-          this.pageNum = res.data.pageNum
+          this.kuaun.total = res.data.total
+          this.kuaun.pageNum = res.data.pageNum
         })
       },
       addpro(row){
@@ -671,12 +678,11 @@
       },
       /*产品分页*/
       handleCurrentChange1(pageIndex) {
-        this.pageNum1=pageIndex
-        thia.pageSize1=this.pageSize1
-        orderHttp.listPage1(this.pageNum1,this.pageSize1).then(res => {
-          this.listForm = res.data.list
-          this.total1 = res.data.total
-          this.pageNum1 = res.data.pageNum
+        this.kuaun.pageNum=pageIndex
+        productHttp.listDialog(this.kuaun).then(res => {
+          this.gridData = res.data.list
+          this.kuaun.total = res.data.total
+          this.kuaun.pageNum = res.data.pageNum
         })
       },
       chakan(val){
@@ -726,6 +732,7 @@
       },
       /*选择分期*/
       fenqi(){
+        this.addPlan=[];
         console.log("1分期",this.addPlanForm.planPeriod)
         let it = this.addPlanForm.planPeriod; //选中的x期次
         let recordplan=0;
@@ -746,11 +753,11 @@
           }
           //分期小于循环
           if(this.addPlanForm.planPeriod<=i){
-            yumoney= parseInt(this.zj - money);
+            yumoney= parseFloat(this.zj - money);
             recordplan=yumoney;
             console.log("最后一期："+yumoney);
             console.log("recordplan",recordplan)
-            this.addPlan.splice(i,0,{recordPlan:i,timePlan:date.year + '-' + ("0" + (date.month)).slice(-2) + '-' + date.day ,moneyPlan:recordplan})
+            this.addPlan.splice(i,0,{recordPlan:i,timePlan:date.year + '-' + ("0" + (date.month)).slice(-2) + '-' + date.day ,moneyPlan:recordplan.toFixed(2)})
             return false;
           }
           money+=parseInt(this.zj/this.addPlanForm.planPeriod);
@@ -760,7 +767,7 @@
           recordplan=parseInt(this.zj/this.addPlanForm.planPeriod);
           qici++;
           qc.push(qici);
-          this.addPlan.splice(i,0,{recordPlan:i,timePlan:date.year+ '-'  + ("0" + (date.month)).slice(-2) + '-'  + date.day , moneyPlan:recordplan})
+          this.addPlan.splice(i,0,{recordPlan:i,timePlan:date.year+ '-'  + ("0" + (date.month)).slice(-2) + '-'  + date.day , moneyPlan:recordplan.toFixed(2)})
 
         }
       },

@@ -135,7 +135,7 @@
             {{scope.row.timePlan | dateFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="recoTime" label="实际回完时间" width="240px">
+        <el-table-column prop="recoTime" label="实际回款时间" width="240px">
           <template slot-scope="scope">
              <span v-if="scope.row.recoHasmoney > 0">
                 <i class="el-icon-time"></i>
