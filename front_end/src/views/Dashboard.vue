@@ -84,10 +84,17 @@
                          layout="prev, pager, next, jumper, total">
           </el-pagination>
         </el-card>
+        <el-dialog :visible.sync="Xianq">
+          <el-table :data="listXianq">
+            <el-table-column prop="" label="客户"></el-table-column>
+            <el-table-column prop="" label="手机号码"></el-table-column>
+            <el-table-column prop="" label="维修产品"></el-table-column>
+            <el-table-column prop="" label="费用"></el-table-column>
+          </el-table>
+        </el-dialog>
         <el-dialog
           :visible.sync="Changp"
-          @closed="closeDialog"
-        >
+          @closed="closeDialog">
           <el-table :data="listChangp">
             <el-table-column prop="productId" label="产品Id"></el-table-column>
             <el-table-column prop="productName" label="产品"></el-table-column>
@@ -347,10 +354,12 @@
         searchForm:{},
         repairList:[],
         listChangp:[],
+        listXianq:[],
         daaChangp:[],
         isDisable:false,
         brand:'',
         Changp:false,
+        Xianq:false,
         icon:'',
         tableLoading: false,
         shopId:'',
@@ -443,6 +452,9 @@
           this.fukuan.pageNum = res.data.pageNum
         })
       },
+      handleClick(){
+        this.Xianq =true
+      },
       handleCurrentChange1(pageIndex){
         this.fukuan.pageNum = pageIndex
         productHttp.listDialog(this.fukuan).then(res=>{
@@ -491,6 +503,16 @@
    /*&:last-child{
      margin-bottom: 0;
    }*/
+ }
+ .card{
+   margin-bottom: 20px;
+ }
+ .mingxi{
+   margin: 10px 5px;
+ }
+ .mingxi span{
+   padding: 5px 25px;
+   color: #909399;
  }
  /* .el-calendar-day{*/
  /*   height: 35px !important;*/

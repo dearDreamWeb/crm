@@ -113,17 +113,17 @@
 
     <el-dialog title="订单" :visible.sync="dialogTableVisible" width="65%" top="70px">
       <el-card shadow="always" class="card">
-        <div class="mingxi">
-          <span>主题：{{xiangqing.ordTheme}}</span>
-          <span>订单号： {{xiangqing.ordId}}</span>
-          <span>负责人：{{xiangqing.ordHead}}</span>
-          <span>订单状态
+      <div class="mingxi">
+        <span>主题：{{xiangqing.ordTheme}}</span>
+        <span>订单号： {{xiangqing.ordId}}</span>
+        <span>负责人：{{xiangqing.ordHead}}</span>
+        <span>订单状态
               <i v-if="xiangqing.ordState == 1">已完成</i>
               <i v-if="xiangqing.ordState == 0">执行中</i>
             </span>
-          <span>对应客户：{{xiangqing.cusId}}</span>
-        </div>
-      </el-card>
+        <span>对应客户：{{xiangqing.cusId}}</span>
+      </div>
+    </el-card>
       <el-tabs type="border-card" >
         <el-tab-pane label="订单明细">
 <!--          <div  v-for="x in szorder">
