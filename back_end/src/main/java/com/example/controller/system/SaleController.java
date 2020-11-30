@@ -52,8 +52,10 @@ public class SaleController {
     }
 
     @PostMapping("/add_reunite")
-    public ResultVo addSaleDetailDemand(@RequestBody SaleDetailDemand saleDetailDemand) {
-        return saleService.addSaleDetailDemand(saleDetailDemand);
+    public ResultVo addSaleDetailDemand(@RequestBody SaleDetailDemand saleDetailDemand,
+                                        HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return saleService.addSaleDetailDemand(saleDetailDemand,token);
     }
 
     @PostMapping("/sale_edit")

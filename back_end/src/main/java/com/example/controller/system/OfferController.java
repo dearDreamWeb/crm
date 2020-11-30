@@ -38,4 +38,9 @@ public class OfferController {
     public ResultVo listOfferByCus(Integer cusId) {
         return offerService.listOfferByCus(cusId);
     }
+
+    @GetMapping("/list_page")
+    public ResultVo listPageOffer(OfferReq offerReq) {
+        return offerService.listPageOffer(offerReq);
+    }
 }

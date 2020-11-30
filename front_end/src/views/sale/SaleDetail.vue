@@ -104,7 +104,7 @@
                       </el-form-item>
                     </el-col>
                   </el-row>
-                  <el-row :gutter="20">
+                  <!--<el-row :gutter="20">
                     <el-col :span="8">
                       <el-form-item label="阶段停留：">
                         <el-tag></el-tag>
@@ -115,7 +115,7 @@
                         <el-tag>静态-暂定</el-tag>
                       </el-form-item>
                     </el-col>
-                  </el-row>
+                  </el-row>-->
                 </el-form>
               </el-card>
             </el-col>

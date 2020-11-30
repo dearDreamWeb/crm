@@ -14,6 +14,8 @@ import com.example.service.OfferService;
 import com.example.util.CheckUtils;
 import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -109,5 +111,21 @@ public class OfferServiceImpl implements OfferService {
     public ResultVo listOfferByCus(Integer cusId) {
         List<OfferResp> offerResps = offerMapper.listOfferByCus(cusId);
         return ResultUtils.response(offerResps);
+    }
+
+    @Override
+    public ResultVo listPageOffer(OfferReq offerReq) {
+        Integer pageNum = offerReq.getPageNum();
+        Integer pageSize = offerReq.getPageSize();
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+        PageHelper.startPage(pageNum,pageSize);
+        List<OfferResp> offerResps = offerMapper.listOffer(offerReq);
+        PageInfo<OfferResp> list = new PageInfo<>(offerResps);
+        return ResultUtils.response(list);
     }
 }

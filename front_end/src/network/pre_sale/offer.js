@@ -103,10 +103,23 @@ export const offerHttp = {
   },
   listPage:function (pageNum,pageSize) {
     let params = {
-      url:'/offer/list',
+      url:'/offer/list_page',
       data:{
         'pageNum':pageNum,
         'pageSize':pageSize
+      }
+    }
+    return get(params)
+  },
+  queryOffer:function (offer) {
+    let params = {
+      url:'/offer/list_page',
+      data:{
+        'offerTheme':offer.offerTheme,
+        'saleId':offer.saleId,
+        'contactsId':offer.contactsId,
+        'startDate':offer.startDate,
+        'endDate':offer.endDate,
       }
     }
     return get(params)

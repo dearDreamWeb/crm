@@ -244,7 +244,7 @@
                       <span v-else>暂定</span>
                     </el-form-item>
                     <el-form-item label="首签:">
-                      <span v-if="customer.firstSigningTime != null">{{customer.firstSigningTime}}</span>
+                      <span v-if="customer.firstSigningTime != null">{{customer.firstSigningTime | dateFormat}}</span>
                       <span v-else>暂定</span>
                     </el-form-item>
                   </el-form>
@@ -291,9 +291,11 @@
                 </div>
                 <div>
                   <el-tabs v-model="activeName" @tab-click="handleClick">
-                    <el-tab-pane label="全部" name="1">
+                    <el-tab-pane name="1">
                       <span slot="label">
-                        <i class="el-icon-s-grid">客户跟进</i>
+                        <el-badge :value="this.customerRecordList.length" class="item">
+                          <i style="margin-top: 20px" class="el-icon-s-grid">客户跟进</i>
+                        </el-badge>
                       </span>
                       <div>
                         <el-timeline>
@@ -307,9 +309,11 @@
                         </el-timeline>
                       </div>
                     </el-tab-pane>
-                    <el-tab-pane label="销售机会" name="2">
+                    <el-tab-pane label="销售机会" name="2" v-if="this.saleList.length > 0">
                       <span slot="label">
-                        <i class="el-icon-s-help">销售机会</i>
+                        <el-badge :value="this.saleList.length" class="item">
+                          <i class="el-icon-s-help">销售机会</i>
+                        </el-badge>
                       </span>
                       <div>
                         <el-table :data="saleList" :header-row-style="iHeaderRowStyle"
@@ -355,7 +359,7 @@
                           </el-table-column>
                           <el-table-column prop="saleDetailResp.salePriorLevel" label="等级"></el-table-column>
                           <el-table-column prop="saleDetailResp.saleStarBeacon" label="星标">
-                            <template scope="scope">
+                            <template slot-scope="scope">
                               <img :src="scope.row.saleDetailResp.saleStarBeacon"></img>
                             </template>
                           </el-table-column>
@@ -369,15 +373,17 @@
                         </el-table>
                       </div>
                     </el-tab-pane>
-                    <el-tab-pane label="报价" name="3">
+                    <el-tab-pane label="报价" name="3" v-if="this.offerList.length > 0">
                       <span slot="label">
-                        <i class="el-icon-s-management">报价</i>
+                        <el-badge :value="this.offerList.length" class="item">
+                          <i class="el-icon-s-management">报价</i>
+                        </el-badge>
                       </span>
                       <div>
                         <el-table :data="offerList">
                           <el-table-column type="expand" prop="offerDetailResp">
                             <template slot-scope="props">
-                              <el-form label-position="left" inline class="demo-table-expand">
+                              <el-form :model="props.row.offerDetailResp" label-position="left" inline class="demo-table-expand">
                                 <el-form-item label="产品名称">
                                   <span>{{ props.row.offerDetailResp.productName }}</span>
                                 </el-form-item>
@@ -627,5 +633,8 @@
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
+  }
+  >>>.el-badge__content.is-fixed{
+    top: 10px;
   }
 </style>

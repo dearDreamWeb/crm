@@ -3,6 +3,9 @@
 @date: 2020/10/19
 @description:
 */
+import Vue from 'vue'
+import ElementUI from 'element-ui'
+
 export const socketHttp = {
   initWebSocket(empName) {
     if ('WebSocket' in window) {
@@ -34,6 +37,10 @@ export const socketHttp = {
   setOnmessageMessage (event) {
     // 根据服务器推送的消息做自己的业务处理
     console.log('服务端返回：' + event.data)
+    ElementUI.Message({
+      message:event.data,
+      type:'success'
+    })
   },
   setOncloseMessage () {
     console.log('WebSocket连接关闭')

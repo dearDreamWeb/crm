@@ -318,6 +318,12 @@
       <div id="demo1"></div>
       <el-button class="btn" @click="getEditorData">获取当前内容</el-button>
     </div>
+    <div>
+      <el-button @click="pushMessage" type="primary">BUTTON</el-button>
+    </div>
+    <div>
+      <div style="width:500px;height:500px" ref="chart"></div>
+    </div>
 <!--    <v-btn large color="primary" @click="getEditorData">Primary</v-btn>-->
   </div>
 </template>
@@ -372,7 +378,36 @@
         productBrandList:productBrand.productBrand
       }
     },
+    mounted() {
+      this.initCharts()
+    },
     methods:{
+      handleClick() {
+
+      },
+      initCharts() {
+        let myChart = this.$echarts.init(this.$refs.chart);
+        myChart.setOption({
+          title:{text:'在vue中使用echarts'},
+          tooltip:{},
+          xAxis:{
+            data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+          },
+          yAxis: {},
+          series:[{
+            name:'销量',
+            type:'bar',
+            data:[5, 20, 36, 10, 10, 20]
+          }]
+        })
+      },
+
+      pushMessage() {
+        userHttp.getEmp(3).then(res => {
+          console.log(res.data)
+        })
+      },
+
       brandChange() {
         console.log("====",this.brand)
       },

@@ -18,6 +18,7 @@ import './assets/alibaba_icon/icon/iconfont.css'
 import 'element-ui/lib/theme-chalk/icon.css'
 import "@/common/font/myfont.css";
 import "@/common/font_cn/myfont.css";
+import echarts from 'echarts'
 
 import onlyNumber from '@/directive/el-input'; //自定义全局指令
 
@@ -34,6 +35,7 @@ Vue.use(onlyNumber); //使用该全局指令
 Vue.component('tree-table', TreeTable)
 Vue.prototype.$urlUtil = urlUtils
 Vue.prototype.$md5 = md5
+Vue.prototype.$echarts = echarts
 
 /*格式化*/
 import {

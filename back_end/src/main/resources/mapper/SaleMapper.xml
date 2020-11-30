@@ -186,7 +186,7 @@
         sd.sale_detail_id,sd.sale_estimate_date,sd.sale_possibility,sd.sale_expect_money,sd.sale_star_beacon,
         sd.sale_prior_level,sd.sale_stage,sd.sale_stage_remark,sd.sale_id,sd.version,sd.create_time,sd.update_time,sd.is_delete
         FROM sale sa
-        INNER JOIN sale_detail sd ON sa.sale_id = sd.sale_id
+        LEFT JOIN sale_detail sd ON sa.sale_id = sd.sale_id
         WHERE sa.sale_id = #{saleId}
     </select>
 

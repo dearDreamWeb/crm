@@ -41,7 +41,6 @@ export const saleHttp = {
         'discoveryTime':saleDetailDemand.discoveryTime,
         'cusId':saleDetailDemand.cusId,
         'contactsId':saleDetailDemand.contactsId,
-        'empId':saleDetailDemand.empId,
         'saleStarBeacon':saleDetailDemand.saleStarBeacon,
         'salePriorLevel':saleDetailDemand.salePriorLevel,
         'demandContent':saleDetailDemand.demandContent

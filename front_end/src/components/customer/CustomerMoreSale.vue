@@ -129,6 +129,7 @@
           salePriorLevel:'',
         },
         starBeacon:'',
+        starBeaconValue:'',
         addFormRules:{
           saleName:[
             {required:true,message:'请输入机会主题',trigger:'blur'}
@@ -186,12 +187,14 @@
       starBeaconChange(row) {
         this.addForm.salePriorLevel = row.level
         this.starBeacon = row.value
+        this.starBeaconValue = row.value
       },
       addSaleClick() {
         this.$refs.addFormRef.validate(valid => {
           if (!valid) return
           this.addSaleButtonLoading = true
-          saleHttp.add(this.addForm).then(res => {
+          this.addForm.saleStarBeacon = this.starBeaconValue
+          saleHttp.addSaleAndDetail(this.addForm).then(res => {
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.addSaleButtonLoading = false

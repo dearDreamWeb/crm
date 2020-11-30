@@ -90,7 +90,7 @@
         this.$store.commit('clearAll')
         window.sessionStorage.clear()
         this.$router.push('/login')
-        // socketHttp.closeWebSocket()
+        socketHttp.closeWebSocket()
       },
       adminlog(){
         this.$router.push('/personal')

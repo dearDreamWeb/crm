@@ -68,7 +68,7 @@
               window.sessionStorage.setItem('token',emp.token)
               this.fullscreenLoading = false
               this.$router.push('/home')
-              // socketHttp.initWebSocket(emp.empName)
+              socketHttp.initWebSocket(emp.empName)
             } else {
               this.fullscreenLoading = false
               this.$message({

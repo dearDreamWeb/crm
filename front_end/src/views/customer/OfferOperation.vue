@@ -18,7 +18,7 @@
           <el-table-column prop="offerDetailCount" sortable label="数量">
             <template slot-scope="scope">
               <el-input-number v-model="scope.row.offerDetailCount" :min="1" size="mini"
-                               :max="scope.row.productStock"></el-input-number>
+                               :max="999"></el-input-number>
             </template>
           </el-table-column>
           <el-table-column prop="productBrand" label="品牌"></el-table-column>
@@ -255,7 +255,7 @@
         this.drawer = false
       },
       tableDisabled(row,rowIndex) {
-        if ((row.productStock <= 0) || (this.disabledProduct.includes(row.productId))) {
+        if ((this.disabledProduct.includes(row.productId))) {
           return false
         } else {
           return true

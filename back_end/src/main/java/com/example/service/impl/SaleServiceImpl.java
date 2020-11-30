@@ -163,10 +163,11 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public ResultVo addSaleDetailDemand(SaleDetailDemand saleDetailDemand) {
+    public ResultVo addSaleDetailDemand(SaleDetailDemand saleDetailDemand,String token) {
         SaleReq saleReq = new SaleReq();
         SaleDetailReq saleDetailReq = new SaleDetailReq();
         DemandReq demandReq = new DemandReq();
+        EmpResp empByToken = empMapper.getEmpByToken(token);
 
         saleReq.setSaleName(saleDetailDemand.getSaleName());
         saleReq.setSaleStatus(saleDetailDemand.getSaleStatus());
@@ -174,7 +175,7 @@ public class SaleServiceImpl implements SaleService {
         saleReq.setContactsId(saleDetailDemand.getContactsId());
         saleReq.setDiscoveryTime(saleDetailDemand.getDiscoveryTime());
         saleReq.setSaleType(saleDetailDemand.getSaleType());
-        saleReq.setEmpId(saleDetailDemand.getEmpId());
+        saleReq.setEmpId(empByToken.getEmpId());
         int addSale = saleMapper.addSale(saleReq);
         Integer saleId = saleReq.getSaleId();
         if (addSale != 1) {
@@ -203,7 +204,7 @@ public class SaleServiceImpl implements SaleService {
             demandReq.setDemandContent(saleDetailDemand.getDemandContent());
             demandReq.setSaleId(saleId);
             demandReq.setDemandDegree(degreeRating(saleDetailDemand.getSalePriorLevel()));
-            demandReq.setEmpId(saleDetailDemand.getEmpId());
+            demandReq.setEmpId(empByToken.getEmpId());
             demandReq.setCusId(saleDetailDemand.getCusId());
             demandReq.setContactsId(saleDetailDemand.getContactsId());
             int addDemand = demandMapper.addDemand(demandReq);
