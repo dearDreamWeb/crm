@@ -8,7 +8,6 @@
           </el-input>
         </el-col>
         <el-col :span="12">
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">添加发货</el-button>
           <el-button type="primary" size="mini" icon="el-icon-zoom-in" @click="advancedSearch = !advancedSearch">高级查询</el-button>
           <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
@@ -23,16 +22,17 @@
         <el-tab-pane label="未发货" name="not">
           <el-table :data="listForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                     :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
-                    highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
+                    highlight-current-row @row-click="handleRowClick" v-loading="tableLoading" >
             <el-table-column prop="delId" width="150" label="发货单编号"></el-table-column>
             <el-table-column prop="szOrder.ordTheme"  label="对应订单" ></el-table-column>
-            <el-table-column prop="szOrder.productReq.productName"  label="对应产品" ></el-table-column>
             <el-table-column prop="delExpecttime" label="预计发货时间" sortable>
               <template slot-scope="scope">
                 {{scope.row.delExpecttime | dateFormat}}
               </template>
             </el-table-column>
+            <el-table-column prop="delState"  label="对应fahuo" ></el-table-column>
             <el-table-column prop="delState" label="发货状态" sortable>
+
               <template slot-scope="scope">
                 {{scope.row.delState | delStateFormat}}
               </template>
@@ -47,12 +47,11 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="已发货" name="has">
-          <el-table :data="listForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
+          <el-table :data="listHasForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                     :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                     highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
             <el-table-column prop="delId" width="150" label="发货单编号"></el-table-column>
             <el-table-column prop="szOrder.ordTheme"  label="对应订单" ></el-table-column>
-            <el-table-column prop="szOrder.productReq.productName"  label="对应产品" ></el-table-column>
             <el-table-column prop="delDelivertime" label="发货时间" sortable>
               <template slot-scope="scope">
                 {{scope.row.delDelivertime | dateFormat}}
@@ -63,6 +62,13 @@
             <el-table-column prop="delState" label="发货状态" sortable>
               <template slot-scope="scope">
                 {{scope.row.delState | delStateFormat}}
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" >
+              <template slot-scope="scope">
+                <el-button type="success" plain size="mini">
+                  <i class="el-icon-view"> </i>查看详情
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -174,61 +180,11 @@
       </span>
     </el-dialog>
 
-
-    <el-dialog title="添加发货" :visible.sync="addDialog" >
-      <el-table
-        ref="multipleTable"
-        :data="szorder"
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange">
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-          <el-table-column property="ordId" label="订单编号" width="180"></el-table-column>
-          <el-table-column property="ordTheme" label="订单主题" width="200"></el-table-column>
-          <el-table-column property="ordHead" label="负责人" width="160"></el-table-column>
-        </el-table>
-      <el-form :model="addForm" label-width="100px" ref="addFormRef"
-               label-position="right" :rules="formRules">
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="发货单号" prop="delWuliuid">
-              <el-input v-model="addForm.delWuliuid" size="mini" placeholder="请输入发货单号" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="物流公司" prop="delCompany" >
-              <el-select v-model="addForm.delCompany" clearable>
-                <el-option label="中通快递" value="0"></el-option>
-                <el-option label="韵达快递" value="1"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="发货人" prop="delPeople">
-              <el-input v-model="addForm.delPeople" size="mini" clearable/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <span slot="footer">
-        <el-button @click="addDialog = false">取消</el-button>
-        <el-button type="primary" @click="addDeliverClick"
-                   :loading="addDeliverButtonLoading">确定</el-button>
-      </span>
-    </el-dialog>
-
   </div>
 </template>
 
 <script>
   import {deliverHttp} from "../../network/system/deliver";
-  import {orderHttp} from "../../network/system/order";
-  import {planHttp} from "../../network/system/plan";
   import {productHttp} from "../../network/system/product";
 
   export default {
@@ -245,12 +201,12 @@
         quanxian:true,
         DeliverDialog:false,
         FahuoTableVisible:false,
-        addDialog:false,
         rowdelId: 0,
         tableLoading:false,
         buttonDisabled:true,
         advancedSearch:false,
         listForm:[],
+        listHasForm:[],
         prxq:[],
         pageNum:1,
         pageSize:10,
@@ -258,9 +214,6 @@
         suijishu:0,
         buynumber:0,
         addnumber:0,
-        /*pageNum_one:1,
-        pageSize_one:5,
-        total_one:1,*/
         fahuoForm:{
           delCompany:"",
           delWuliuid:""
@@ -271,11 +224,13 @@
           delPeople:"",
           delCompany:""
         },
-
-        formRules:{},
+        formRules:{
+          delCompany:[
+            {required:true,message:'请选择物流公司',trigger:'blur'}
+          ]
+        },
         DeliverButtonLoading:false,
         editDialog:false,
-        addDeliverButtonLoading:false,
         haspro:[],
         szProducts:[],
         szProduct:[],
@@ -292,16 +247,6 @@
           this.listForm = res.data.list
           this.total = res.data.total
           this.pageNum = res.data.pageNum
-        })
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      openAddDialog(){
-        this.addDialog = true;
-        deliverHttp.andall().then(res=>{
-          this.szorder=res;
-
         })
       },
       resetForm() {
@@ -421,12 +366,12 @@
         })
       },
       handleCurrentChange_one(pageIndex) {
-        this.pageNum_one = pageIndex
-        this.pageSize_one = this.pageSize_one
-        productHttp.listPage(this.pageNum_one,this.pageSize_one).then(res => {
+        this.pageNum = pageIndex
+        this.pageSize = this.pageSize
+        productHttp.listPage(this.pageNum,this.pageSize).then(res => {
           this.listForm = res.data.list
-          this.total_one = res.data.total_one
-          this.pageNum_one = res.data.pageNum_one
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
         })
       },
       handleRowClick(row,event,column) {
@@ -465,45 +410,7 @@
             delId:this.fahouid,
           }
           inputs.push(addinputs);
-          /*修改发货单状态等....*/
-          deliverHttp.mx_editszDeliver(addinputs).then(res=>{
-
-          })
-/*          let ProDetailId={
-            productDetailId:this.haspro[i].productDetailId,
-          }
-          hasproId.push(ProDetailId);
-          /!*修改产品详表的库存状态*!/
-          deliverHttp.mx_editProDetail(ProDetailId).then(res=>{
-            console.log(res)
-            console.log("productDetailId",this.productDetailId)
-          })*/
         }
-
-      },
-      addDeliverClick(){
-        for (let i = 0; i <this.multipleSelection.length ; i++) {
-           alert(this.multipleSelection[i].ordId);
-          this.addForm.ordId=this.multipleSelection[i].ordId;
-        }
-        this.$refs.addFormRef.validate(valid => {
-          if (!valid) return
-          this.addDeliverButtonLoading = true
-          deliverHttp.addANDord(this.addForm).then(res =>{
-            if (res.code === 20000) {
-              this.$message.success(res.message)
-              this.initList()
-              this.addDeliverButtonLoading = false
-              this.addDialog = false
-            } else {
-              this.addDeliverButtonLoading = false
-              this.$message({
-                message:res.message,
-                type:"error"
-              })
-            }
-          })
-        })
       },
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'
@@ -514,19 +421,34 @@
       initList() {
         deliverHttp.listPage(this.pageNum,this.pageSize).then(res => {
           this.listForm = res.data.list
+          console.log(this.listForm)
           this.total = res.data.total
           this.pageNum = res.data.pageNum
         })
       },
+      initNotState(){
+        this.listForm.delState = 0
+        deliverHttp.listStatus(this.listForm).then(res => {
+          this.listForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
+      },
+     initHasState(){
+        this.listHasForm.delState = 1
+        deliverHttp.listStatus(this.listHasForm).then(res => {
+          this.listHasForm = res.data.list
+          this.total = res.data.total
+          this.pageNum = res.data.pageNum
+        })
+      }
     },
     created() {
-      this.initList()
+      /*this.initList()*/
+      this.initNotState()
+      this.initHasState()
     }
   }
 </script>
-
 <style scoped>
-  .el-dialog__body {
-
-  }
 </style>

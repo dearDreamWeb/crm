@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <el-card>
@@ -50,34 +51,54 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-card>
+    <el-dialog :visible.sync="Dingda">
+      <el-table :data="listDingda">
+        <el-table-column prop="ordId" label="订单Id"></el-table-column>
+        <el-table-column prop="ordTheme" label="主题"></el-table-column>
+        <!--<el-table-column prop="customerResp.cusName" label="客户"></el-table-column>-->
+        <el-table-column prop="ordHead" label="负责人"></el-table-column>
+        <el-table-column prop="ordConsignee" label="收货人"></el-table-column>
+        <!--      <el-table-column prop="productResp.productName" label="产品"></el-table-column>-->
+        <el-table-column prop="ordPhone" label="手机号码"></el-table-column>
+        <el-table-column width="80" label="操作" >
+          <template slot-scope="scope">
+            <el-button type="text" size="small" icon="el-icon-plus"
+                       @click="addpro(scope.row.ordId)" :disabled="isDisable"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination background
+                     @current-change="handleCurrentChangedd"
+                     :current-page="fukuan.pageNum" :page-sizes="[1,2,5,10]"
+                     :page-size="fukuan.pageSize" :total="fukuan.total"
+                     layout="prev, pager, next, jumper, total">
+      </el-pagination>
+    </el-dialog>
     <!---->
-    <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose" size="medium" >
+    <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose" size="medium" top="20px">
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
                label-position="right" :rules="FormRules">
+        <div style="padding-bottom: 20px">
+         <el-button size="mini" type="primary" icon="el-icon-plus" @click="xians">选择订单</el-button>
+        </div>
+<!--          <el-col :span="12">
+            <el-form-item>
+              <el-button size="mini" type="primary" icon="el-icon-plus" @click="xians"></el-button>
+            </el-form-item>
+          </el-col>-->
         <el-row>
           <el-col :span="12">
-            <el-form-item label="关联订单" >
-              <el-select v-model="addForm.ordId" placeholder="请选择订单" size="medium" @change="oidChange">
-                <el-option v-for="(item,i) in ordList" :key="i"
-                           :label="item.ordTheme" :value="item.ordId">
-                </el-option>
-              </el-select>
+            <el-form-item label="关联订单" width="217px" >
+              <el-input v-model="ordTheme" :readonly="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="总金额" size="medium" :disabled=false >
-              <el-input v-model="ordTotalmoney" width="217px"></el-input>
+              <el-input v-model="ordTotalmoney" :readonly="true"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <!--  <el-col :span="12">
-              <el-form-item label="回款日期">
-                <el-date-picker v-model="addForm.planTime" format="yyyy-MM-dd"
-                                value-format="yyyy-MM-dd" type="date"
-                                placeholder="请选择计划回款日期" size="medium" ></el-date-picker>
-              </el-form-item>
-            </el-col>-->
           <el-col :span="12">
             <el-form-item label="分期(可选)" :data="xuanfenqi">
               <el-select v-model="addForm.planPeriod" placeholder="请选择期次"  @change="fenqi" clearable>
@@ -116,10 +137,10 @@
       </span>
     </el-dialog>
     <el-drawer
-               :visible.sync="dialogTableVisible"
-               direction="btt" size="60%"  width="80%"
-               :with-header="false"
-               >
+      :visible.sync="dialogTableVisible"
+      direction="btt" size="60%"  width="80%"
+      :with-header="false"
+    >
       <div class="recordstyle">回款记录</div>
       <el-table :data="szrecord" :row-style="{height:'1px'}"
                 :cell-style="{padding:'1px 0'}" height="300px">
@@ -145,31 +166,31 @@
         </el-table-column>
         <el-table-column prop="moneyPlan" label="应回款金额" width="200">
           <template slot-scope="scope">
-             {{scope.row.moneyPlan}} 元
+            {{scope.row.moneyPlan}} 元
           </template>
         </el-table-column>
         <el-table-column  label="状态" width="200">
-            <template slot-scope="scope">
+          <template slot-scope="scope">
               <span v-if="scope.row.recoHasmoney > 0 && scope.row.moneyPlan > scope.row.recoHasmoney">
                 <el-tag type="warning">回款中</el-tag>
               </span>
-              <span v-if="scope.row.moneyPlan == scope.row.recoHasmoney">
+            <span v-if="scope.row.moneyPlan == scope.row.recoHasmoney">
                 <el-tag type="success">已回款</el-tag>
               </span>
-              <span  v-if="scope.row.recoHasmoney == 0 || scope.row.recoHasmoney==null">
+            <span  v-if="scope.row.recoHasmoney == 0 || scope.row.recoHasmoney==null">
                 <el-tag type="danger">未回款</el-tag>
               </span>
-              </template>
+          </template>
         </el-table-column>
         <el-table-column  label="操作">
-           <template slot-scope="scope">
+          <template slot-scope="scope">
              <span v-if="scope.row.recoHasmoney == 0 || scope.row.recoHasmoney==null">
-                <el-button  @click="like_record(scope.row.recoId)" size="mini" plain @change="gaibian">立即回款</el-button>
+                <el-button  @click="like_record(scope.row.recoId)" size="mini" plain>立即回款</el-button>
               </span>
-             <span v-if="scope.row.moneyPlan == scope.row.recoHasmoney">
+            <span v-if="scope.row.moneyPlan == scope.row.recoHasmoney">
                 <el-button @click="look_record(scope.row.recoId)" size="mini" plain>查看记录</el-button>
               </span>
-             <span v-if="scope.row.recoHasmoney > 0 && scope.row.moneyPlan > scope.row.recoHasmoney">
+            <span v-if="scope.row.recoHasmoney > 0 && scope.row.moneyPlan > scope.row.recoHasmoney">
                 <el-button @click="again_record(scope.row.recoId)" size="mini" plain>继续回款</el-button>
               </span>
           </template>
@@ -275,6 +296,11 @@
         searchInput:'',
         empList:[],
         ordList:[],
+        fukuan:{
+          total:0,
+          pageNum:1,
+          pageSize:5
+        },
         addForm:{
           ordId:'',
           empId:'',
@@ -289,6 +315,8 @@
         ordTotalmoney:0,
         rowplanId: 0,
         rowrecoId: 0,
+        isDisable:false,
+        Dingda:false,
         tableLoading:false,
         buttonDisabled:true,
         /* advancedSearch:false,高级查询*/
@@ -297,6 +325,7 @@
         like_recordButtonLoading:false,
         editPlanButtonLoading:false,
         dialogTableVisible:false,
+        listDingda:[],
         listForm:[],
         ordList:[],
         addrecord:[],
@@ -313,16 +342,39 @@
       }
     },
     methods: {
-      oidChange(val) {
-        console.log(val)
-        //根据选中的id 查询单条即可
-        orderHttp.getOrder(val).then(res=>{
-          //绑定总金额
+      addpro(ordId) {
+        this.addrecord=[]
+        this.Dingda = false
+        console.log(ordId)
+        this.addForm.ordId = ordId
+        orderHttp.getOrder(ordId).then(res => {
+          this.ordTheme=res.data.ordTheme
           this.ordTotalmoney=res.data.ordTotalmoney
-          this.total = res.data.total
-          this.pageNum = res.data.pageNum
+          console.log("2res:",res)
+          console.log("2this.ordTheme:",this.ordTheme)
+          console.log("2res.data.ordTheme:",res.data.ordTheme)
+          this.listDingda = res.data
         })
       },
+      xians(){
+        this.Dingda = true
+        orderHttp.listDialog(this.fukuan).then(res=>{
+          this.listDingda = res.data.list
+          this.fukuan.total = res.data.total
+          this.fukuan.pageNum = res.data.pageNum
+        })
+      },
+      /*      oidChange(val) {
+              console.log("val:",val)
+              //根据选中的id 查询单条即可
+              orderHttp.getOrder(val).then(res=>{
+                //绑定总金额
+                this.ordTotalmoney=res.data.ordTotalmoney
+                console.log("res:",res)
+                console.log("this.ordTotalmoney:",this.ordTotalmoney)
+                console.log("res.data.ordTotalmoney:",res.data.ordTotalmoney)
+              })
+            },*/
       searchInputClick() {
         this.listForm.planCaozuopeople = this.searchInput
         planHttp.list(this.listForm).then(res => {
@@ -335,6 +387,7 @@
         this.multipleSelection = val;
       },
       fenqi(){
+        this.addrecord=[]
         console.log("1分期",this.addForm.planPeriod)
         let it = this.addForm.planPeriod; //选中的x期次
         let recordplan=0;
@@ -357,11 +410,11 @@
           }
           //分期小于循环
           if(this.addForm.planPeriod<=i){
-            yumoney= parseInt(this.ordTotalmoney - money);
+            yumoney= parseFloat(this.ordTotalmoney - money);
             recordplan=yumoney;
             console.log("最后一期："+yumoney);
             console.log("recordplan",recordplan)
-            this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year + '-' + ("0" + (date.month)).slice(-2) + '-' + date.day ,moneyPlan:recordplan})
+            this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year + '-' + ("0" + (date.month)).slice(-2) + '-' + date.day ,moneyPlan:recordplan.toFixed(2)})
             return false;
           }
           money+=parseInt(this.ordTotalmoney/this.addForm.planPeriod);
@@ -371,7 +424,7 @@
           recordplan=parseInt(this.ordTotalmoney/this.addForm.planPeriod);
           qici++;
           qc.push(qici);
-          this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year+ '-'  + ("0" + (date.month)).slice(-2) + '-'  + date.day , moneyPlan:recordplan})
+          this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year+ '-'  + ("0" + (date.month)).slice(-2) + '-'  + date.day , moneyPlan:recordplan.toFixed(2)})
         }
       },
       addPlanClick(){
@@ -396,6 +449,7 @@
         })
       },
       openAddDialog() {
+        this.addForm=[]
         this.addDialog = true
         this.initOrderList()
         this.initEmpList()
@@ -462,7 +516,7 @@
         this.like_recordButtonLoading=true
         console.log(this.likeForm.recoId)
         this.likeForm.recoId=this.likeForm.recoId
-         planHttp.editrecordhas(this.likeForm).then(res=>{
+        planHttp.editrecordhas(this.likeForm).then(res=>{
           console.log("11111",this.likeForm);
           if (res.code === 20000) {
             this.$message.success(res.message)
@@ -480,13 +534,13 @@
           }
         })
       },
-    /*  editPlanClick(){
-        this.editPlanButtonLoading=true
-        /!*this.editForm.cusId=this.rowplanId*!/
-        planHttp.editplan(this.editForm).then(res=>{
-          console.log("111")
-        })
-      },*/
+      /*  editPlanClick(){
+          this.editPlanButtonLoading=true
+          /!*this.editForm.cusId=this.rowplanId*!/
+          planHttp.editplan(this.editForm).then(res=>{
+            console.log("111")
+          })
+        },*/
       chakan_record(val){
         this.dialogTableVisible = true;
         planHttp.chakan_record(val).then(res=>{
@@ -498,8 +552,6 @@
         this.likeDialog = true;
         planHttp.getrecord(val).then(res=>{
           this.likeForm=res.data
-          this.suijishu=new Date().getTime()
-          this.likeForm.recoLiushui=this.suijishu
           this.date=new Date()
           this.likeForm.recoTime=this.date
           console.log("this.likeForm.recoTime",this.likeForm.recoTime)
@@ -518,10 +570,6 @@
           this.likeForm=res.data
           console.log(this.likeForm)
         })
-      },
-      /*根据点击立即回款按钮 生成随机数 改变 交易流水号*/
-      gaibian(){
-
       },
       handleCurrentChange(pageIndex) {
         this.pageNum = pageIndex
@@ -543,6 +591,14 @@
       },
       iHeaderCellStyle:function({row,column,rowIndex,columnIndex}){
         return 'padding:5px'
+      },
+      handleCurrentChangedd(pageIndex){
+        this.fukuan.pageNum = pageIndex
+        orderHttp.listDialog(this.fukuan).then(res => {
+          this.listDingda = res.data.list
+          this.fukuan.total = res.data.total
+          this.fukuan.pageNum = res.data.pageNum
+        })
       },
       initList() {
         planHttp.listPage(this.pageNum,this.pageSize).then(res => {

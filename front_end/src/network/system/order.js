@@ -52,6 +52,17 @@ export const orderHttp = {
     }
     return postJson(params)
   },
+  /*
+  *   listDialog:function (order) {
+    let params = {
+      url:'/order/list_all',
+      data:{
+        'pageNum':order.pageNum,
+        'pageSize':order.pageSize
+      }
+    }
+    return get(params)
+  },*/
   getOrder:function (ordId) {
     let params = {
       url:'/order',

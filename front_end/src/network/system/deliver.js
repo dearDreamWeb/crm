@@ -99,5 +99,14 @@ export const deliverHttp = {
       }
     }
     return get(params)
+  },
+  listStatus:function (deliver) {
+    let params = {
+      url:'/deliver/list_all',
+      data:{
+        'delState':deliver.delState,
+      }
+    }
+    return get(params)
   }
 }

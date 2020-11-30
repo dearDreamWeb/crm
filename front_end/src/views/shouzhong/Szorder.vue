@@ -274,7 +274,7 @@
           <!-- @click="chakan(scope.row.ordId)-->
         </el-table-column>
       </el-table>
-      <span>总金额: {{zj}}</span>
+      <span>总金额: {{zj.toFixed(2)}}</span>
       <span slot="footer">
         <el-button @click="addDialog = false">取消</el-button>
        <!-- <el-button @click="developClick" :loading="developButtonLoading">制定回款</el-button>-->
@@ -828,7 +828,7 @@
           let ppp={
             ordTheme:this.addForm.ordTheme,
             ordHead:this.$store.state.empName,
-            ordTotalmoney:this.addForm.ordTotalmoney,
+            ordTotalmoney:this.zj,
             ordConsignee:this.addForm.ordConsignee,
             ordProvince:this.selected2[0],
             ordCity:this.selected2[1],
@@ -838,8 +838,10 @@
             cusId:this.addForm.cusId,
             szOrderDetails:addDetail
           }
+          console.log(" ordTotalmoney:", ppp.ordTotalmoney)
+          console.log(" this.zj:", this.zj)
           this.addOrderButtonLoading = true;
-            orderHttp.addOrder(ppp).then(res => {
+           orderHttp.addOrder(ppp).then(res => {
               if (res.code === 20000) {
                 this.$message.success(res.message)
                 this.initList()
