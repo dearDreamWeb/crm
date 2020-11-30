@@ -96,12 +96,13 @@
                 AND d.del_actualtime LIKE CONCAT('%',#{delActualtime},'%')
             </if>
             <if test="delState != null">
-                AND d.del_state = #{
-
-                }
+                AND d.del_state = #{delState}
             </if>
             <if test="ordId != null">
                 AND d.ord_id = #{ordId}
+            </if>
+            <if test="delState != null"><!-- 发货状态 -->
+                AND d.del_state= #{delState}
             </if>
             <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
                 AND date_format(d.del_createtime,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
@@ -109,7 +110,6 @@
             <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
                 AND date_format(d.del_createtime,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
-
         </where>
         ORDER BY d.del_createtime DESC
     </select>

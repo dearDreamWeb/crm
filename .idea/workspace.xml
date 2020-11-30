@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="57344c72-d809-4e6a-998c-4fb6d7acf607" name="Default Changelist" comment="yqq第一次" />
+    <list default="true" id="57344c72-d809-4e6a-998c-4fb6d7acf607" name="Default Changelist" comment="yqq第一次">
+      <change beforePath="$PROJECT_DIR$/back_end/src/main/resources/mapper/DeliverMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/back_end/src/main/resources/mapper/DeliverMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_end/src/views/shouzhong/SzDeliver.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front_end/src/views/shouzhong/SzDeliver.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_end/src/views/shouzhong/SzReceivablePlan.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front_end/src/views/shouzhong/SzReceivablePlan.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_end/src/views/shouzhong/Szorder.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front_end/src/views/shouzhong/Szorder.vue" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,7 +39,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -42,18 +47,23 @@
               <item name="crm" type="b2602c69:ProjectViewProjectNode" />
               <item name="crm" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="crm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="crm" type="462c0819:PsiDirectoryNode" />
+              <item name="back_end" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/back_end" />
+    <property name="last_opened_file_path" value="D:/yqqidea/crmgit/springCRM" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -62,6 +72,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -97,16 +108,17 @@
       <workItem from="1600742247186" duration="3356000" />
       <workItem from="1600822859323" duration="1288000" />
       <workItem from="1600927334409" duration="159000" />
+      <workItem from="1606723647963" duration="129000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4803000" />
+    <option name="totallyTimeSpent" value="4932000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2118003" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21482602" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
