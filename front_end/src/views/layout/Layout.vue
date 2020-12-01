@@ -12,6 +12,10 @@
           <i class="el-icon-s-home"></i>
           <span slot="title">首页</span>
         </el-menu-item>
+        <el-menu-item index="/dash_board">
+          <i class="el-icon-s-home"></i>
+          <span slot="title">首页</span>
+        </el-menu-item>
         <el-submenu :index="index + ''" v-for="(item,index) in menuList"
                     :key="item.menuId">
           <template slot="title">

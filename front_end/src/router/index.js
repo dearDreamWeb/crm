@@ -56,6 +56,10 @@ const routes = [
         component: () => import('../views/Dashboard')
       },
       {
+        path: '/dash_board',
+        component: () => import('../views/dashboard/Index')
+      },
+      {
         path: '/user',
         component: () => import('../views/user/User')
       },

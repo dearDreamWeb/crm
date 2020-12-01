@@ -496,6 +496,10 @@
       }
     },
     methods:{
+      clickHandle() {
+        console.log("打印")
+      },
+
       delFollow() {
         this.$confirm('将删除该跟进计划，请谨慎操作','提示',{
           confirmButtonText:'确定',

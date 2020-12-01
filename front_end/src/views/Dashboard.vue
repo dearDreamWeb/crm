@@ -3,15 +3,24 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <el-card>
-          <div slot="header">
-            <span>本周新客户</span>
-          </div>
-          <div>
-            <div id="userChart" style="font-size: 30px">324</div>
-          </div>
-          <div>
-            <span>日新增</span>
-          </div>
+          <el-row :gutter="20">
+            <el-col :span="10">
+              <div>
+                <div id="userChart" style="font-size: 30px">324</div>
+              </div>
+              <div>
+                <span>本周新客户</span>
+              </div>
+            </el-col>
+            <el-col :span="14">
+              <div>
+                <el-image
+                  style="width: 100px; height: 100px"
+                  src="https://gradua.eblog.icu/wallhaven-ym99pl.png"
+                  fit="fill"></el-image>
+              </div>
+            </el-col>
+          </el-row>
         </el-card>
       </el-col>
       <el-col :span="6">
