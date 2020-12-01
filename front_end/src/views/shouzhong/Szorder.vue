@@ -751,6 +751,9 @@
             date.year = date.year+1
             date.month=date.month-12
           }
+          if (date.day<10){
+            date.day="0"+date.day
+          }
           //分期小于循环
           if(this.addPlanForm.planPeriod<=i){
             yumoney= parseFloat(this.zj - money);
