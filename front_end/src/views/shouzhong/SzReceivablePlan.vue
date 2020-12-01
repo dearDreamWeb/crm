@@ -81,26 +81,32 @@
         <div style="padding-bottom: 20px">
          <el-button size="mini" type="primary" icon="el-icon-plus" @click="xians">选择订单</el-button>
         </div>
-<!--          <el-col :span="12">
-            <el-form-item>
-              <el-button size="mini" type="primary" icon="el-icon-plus" @click="xians"></el-button>
-            </el-form-item>
-          </el-col>-->
+        <!--<el-row>
+          <el-col>
+            <el-form-item label="关联订单" >
+              <el-select v-model="addForm.ordId" placeholder="请选择订单" size="medium" @change="oidChange">
+                <el-option v-for="(item,i) in ordList" :key="i"
+                           :label="item.ordTheme" :value="item.ordId">
+                </el-option>
+              </el-select>
+              </el-form-item>
+          </el-col>
+        </el-row>-->
         <el-row>
           <el-col :span="12">
-            <el-form-item label="关联订单" width="217px" >
+            <el-form-item label="关联订单" prop="ordTheme" width="217px" >
               <el-input v-model="ordTheme" :readonly="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="总金额" size="medium" :disabled=false >
+            <el-form-item label="总金额" prop="ordTotalmoney" size="medium" :disabled=false >
               <el-input v-model="ordTotalmoney" :readonly="true"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="分期(可选)" :data="xuanfenqi">
+            <el-form-item label="分期(可选)" :data="xuanfenqi" prop="planPeriod">
               <el-select v-model="addForm.planPeriod" placeholder="请选择期次"  @change="fenqi" clearable>
                 <el-option label="全款" value="1"></el-option>
                 <el-option label="分3期(免手续费)" value="3"></el-option>
@@ -108,7 +114,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12" height="36px">
+          <el-col :span="12" height="36px" prop="empName">
             <el-form-item label="操作人" >
               <el-select v-model="addForm.empId">
                 <el-option v-for="(item,i) in empList" :key="i"
@@ -260,27 +266,6 @@
                    :loading="like_recordButtonLoading">确定</el-button>
       </span>
     </el-dialog>
-    <!--修改-->
-    <!-- <el-dialog
-       title="修改计划"
-       :visible.sync="editDialog"
-       width="50%"
-       @close="editHandleClose">
-       <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="80px">
-         <el-row>
-           <el-col :span="8">
-             <el-form-item label="计划回款时间" prop="planTime">
-               <el-input v-model="editForm.planTime"></el-input>
-             </el-form-item>
-           </el-col >
-         </el-row>
-       </el-form>
-       <span slot="footer">
-         <el-button @click="editDialog = false">取消</el-button>
-         <el-button type="primary" @click="editPlanClick"
-                    :loading="editPlanButtonLoading">确定</el-button>
-       </span>
-     </el-dialog>-->
   </div>
 </template>
 
@@ -342,15 +327,17 @@
       }
     },
     methods: {
-      addpro(ordId) {
+     addpro(ordId) {
         this.addrecord=[]
         this.Dingda = false
         console.log(ordId)
         this.addForm.ordId = ordId
         orderHttp.getOrder(ordId).then(res => {
+          this.ordId=res.data.ordId
           this.ordTheme=res.data.ordTheme
           this.ordTotalmoney=res.data.ordTotalmoney
           console.log("2res:",res)
+          console.log("2this.ordId:",this.ordId)
           console.log("2this.ordTheme:",this.ordTheme)
           console.log("2res.data.ordTheme:",res.data.ordTheme)
           this.listDingda = res.data
@@ -358,23 +345,24 @@
       },
       xians(){
         this.Dingda = true
+        console.log("xians=>addForm:",this.addForm)
         orderHttp.listDialog(this.fukuan).then(res=>{
           this.listDingda = res.data.list
           this.fukuan.total = res.data.total
           this.fukuan.pageNum = res.data.pageNum
         })
       },
-      /*      oidChange(val) {
-              console.log("val:",val)
-              //根据选中的id 查询单条即可
-              orderHttp.getOrder(val).then(res=>{
-                //绑定总金额
-                this.ordTotalmoney=res.data.ordTotalmoney
-                console.log("res:",res)
-                console.log("this.ordTotalmoney:",this.ordTotalmoney)
-                console.log("res.data.ordTotalmoney:",res.data.ordTotalmoney)
-              })
-            },*/
+      /*oidChange(val) {
+        console.log("val:",val)
+        //根据选中的id 查询单条即可
+        orderHttp.getOrder(val).then(res=>{
+          //绑定总金额
+          this.ordTotalmoney=res.data.ordTotalmoney
+          console.log("res:",res)
+          console.log("this.ordTotalmoney:",this.ordTotalmoney)
+          console.log("res.data.ordTotalmoney:",res.data.ordTotalmoney)
+        })
+      },*/
       searchInputClick() {
         this.listForm.planCaozuopeople = this.searchInput
         planHttp.list(this.listForm).then(res => {
@@ -408,6 +396,9 @@
             date.year = date.year+1
             date.month=date.month-12
           }
+          if (date.day<10){
+            date.day="0"+date.day
+          }
           //分期小于循环
           if(this.addForm.planPeriod<=i){
             yumoney= parseFloat(this.ordTotalmoney - money);
@@ -427,6 +418,25 @@
           this.addrecord.splice(i,0,{recordPlan:i,timePlan:date.year+ '-'  + ("0" + (date.month)).slice(-2) + '-'  + date.day , moneyPlan:recordplan.toFixed(2)})
         }
       },
+      /*
+      *  addClick(){
+          this.addDictButtonLoading = true
+          repairHttp.add(this.addform).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+              this.addDialog = false
+              this.addDictButtonLoading = false
+            } else {
+              this.$message({
+                message:res.message,
+                type:"error"
+              })
+              this.addDictButtonLoading = false
+            }
+          })
+
+      },*/
       addPlanClick(){
         console.log("添加确定：",this.addForm)
         //this.addrecord.push(this.addForm.planPeriod);
@@ -449,10 +459,10 @@
         })
       },
       openAddDialog() {
-        this.addForm=[]
         this.addDialog = true
         this.initOrderList()
         this.initEmpList()
+        this.addForm = {}
         console.log("addform：",this.addForm)
       },
       /*添加记录-选择员工*/
