@@ -527,7 +527,7 @@
     },
 
     created() {
-
+      this.getPaidan()
     }
   }
 </script>

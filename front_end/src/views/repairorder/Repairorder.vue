@@ -635,6 +635,67 @@ import {followHttp} from "../../network/pre_sale/followlog";
         this.$refs["updateform"].resetFields()
         this.editDictButtonLoading = false
       },
+      addClick(){
+        this.addDictButtonLoading = true
+        this.addform.repairGdstate = '已派单'
+        this.addform.repairId =this.repairId;
+        console.log(this.addform)
+        repairHttp.updatePaidan(this.addform).then(res => {
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.initList()
+            this.addDialog = false
+            this.addDictButtonLoading = false
+          } else {
+            this.$message({
+              message:res.message,
+              type:"error"
+            })
+            this.addDictButtonLoading = false
+          }
+        })
+
+      },
+      addDid(){
+        console.log(this.$refs)
+        this.$refs["addform"].validate(valid => {
+          if (!valid) return
+          this.Dingddd = true
+          orderHttp.add(this.addform).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+              this.Dingda = false
+              this.Dingddd = false
+            } else {
+              this.$message({
+                message:res.message,
+                type:"error"
+              })
+              this.Dingddd = false
+            }
+          })
+        })
+      },
+      updateCare(id) {
+        this.$confirm('此操作将取消派单，是否继续','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let p = {
+            'repairId': id
+          }
+          repairHttp.updateQuxiao(p).then(res => {
+            if (res.code === 20000) {
+              this.$message.success(res.message)
+              this.initList()
+            } else {
+              this.$message.error(res.message)
+            }
+          })
+        })
+      },
 
       addHandleClose() {
         this.$refs["addform"].resetFields()
