@@ -52,17 +52,6 @@ export const orderHttp = {
     }
     return postJson(params)
   },
-  /*
-  *   listDialog:function (order) {
-    let params = {
-      url:'/order/list_all',
-      data:{
-        'pageNum':order.pageNum,
-        'pageSize':order.pageSize
-      }
-    }
-    return get(params)
-  },*/
   getOrder:function (ordId) {
     let params = {
       url:'/order',
@@ -115,12 +104,13 @@ export const orderHttp = {
     }
     return get(params)
   },
-  listPage1:function (pageNum1,pageSize1) {
+  listDialog1:function (order) {
     let params = {
       url:'/order/list_all',
       data:{
-        'pageNum':pageNum1,
-        'pageSize':pageSize1
+        'ordPlan':order.ordPlan,
+        'pageNum':order.pageNum,
+        'pageSize':order.pageSize
       }
     }
     return get(params)
@@ -141,5 +131,5 @@ export const orderHttp = {
         'productId':id
       }
     }
-  }
+  },
 }

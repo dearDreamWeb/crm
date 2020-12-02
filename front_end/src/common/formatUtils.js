@@ -96,11 +96,13 @@ export function delStateFormat(delState) {
     return '未发货'
   }
 }
-export function planInvoiceFormat(planInvoice) {
-  if (planInvoice === 1){
-    return '已开票'
-  } else {
-    return '未开票'
+export function delCompanyFormat(delCompany) {
+  if (delCompany == 0){
+    return '顺丰快递'
+  }else if(delCompany == 1) {
+    return '中通快递'
+  }else {
+    return '暂未发货'
   }
 }
 export function recoReceivableFormat(recoReceivable) {

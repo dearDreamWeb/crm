@@ -48,6 +48,7 @@
         <result property="ordPhone" column="ord_phone"/>
         <result property="ordCreatetime" column="ord_createtime"/>
         <result property="ordDelete" column="ord_delete"/>
+        <result property="ordPlan" column="ord_plan"/>
         <result property="cusId" column="cus_id"/>
         <result property="offerId" column="offer_id"/>
     </resultMap>
@@ -143,4 +144,14 @@
         where plan_id = #{planId}
     </update>
 
+    <!--新增发货明细时修改发货单-->
+    <!--<update id="mx_editszDeliver" parameterType="com.example.entity.request.SzDeliver">
+        UPDATE sz_deliver set del_wuliuid = #{delWuliuid},del_company = #{delCompany},del_state=1
+        WHERE del_id = #{delId}
+    </update>-->
+    <!--新增计划回款时修改订单回款状态-->
+    <update id="plan_editOrder" parameterType="com.example.entity.request.SzOrder">
+        update sz_order set ord_plan=1
+        where ord_id=#{ordId}
+    </update>
 </mapper>

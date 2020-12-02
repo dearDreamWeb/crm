@@ -20,6 +20,7 @@
     <result property="ordPhone" column="ord_phone"/>
     <result property="ordCreatetime" column="ord_createtime"/>
     <result property="ordDelete" column="ord_delete"/>
+    <result property="ordPlan" column="ord_plan"/>
     <result property="cusId" column="cus_id"/>
     <result property="offerId" column="offer_id"/>
 </resultMap>
@@ -41,6 +42,7 @@
         <result property="ordPhone" column="ord_phone"/>
         <result property="ordCreatetime" column="ord_createtime"/>
         <result property="ordDelete" column="ord_delete"/>
+        <result property="ordPlan" column="ord_plan"/>
         <association property="customerResp" resultMap="CustomerResult"/>
         <association property="SzOrderDetails" resultMap="szDetailsResult"/>
         <association property="SzReceivablePlan" resultMap="szPlanResult"/>
@@ -138,7 +140,9 @@
             <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
                 AND date_format(s.ord_starttime,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
-
+            <if test="ordPlan != null">
+                AND s.ord_plan = #{ordPlan}
+            </if>
             <if test="ordState != null">
                 AND s.ord_state = #{ordState}
             </if>
@@ -149,8 +153,19 @@
         </where>
     </select>
     <!--详情查全部-->
+    <!--
+        SELECT s.*,cl.*,od.*,r.*,rd.*,p.*,d.*,dd.*
+        FROM sz_order s
+        left join customer cl on s.cus_id = cl.cus_id
+        left join sz_order_details od on s.ord_id=od.ord_id
+        left join sz_receivable_plan r on od.ord_id=r.ord_id
+				LEFT JOIN sz_receivable_record rd ON r.plan_id=rd.plan_id
+        left join product p on od.product_id=p.product_id
+        left join sz_deliver d on od.ord_id=d.ord_id
+				LEFT JOIN sz_deliver_details dd ON d.del_id=dd.del_id
+        where s.ord_id=1002-->
     <select id="orderAll" resultMap="szOrderDetailResult">
-        SELECT s.*,cl.*,od.*,r.*,p.*,d.*
+    SELECT s.*,cl.*,od.*,r.*,p.*,d.*
         FROM sz_order s
         left join customer cl on s.cus_id = cl.cus_id
         left join sz_order_details od on s.ord_id=od.ord_id
@@ -173,9 +188,9 @@
             SELECT last_insert_id();
         </selectKey>
         insert into sz_order(ord_theme,ord_state,ord_head,ord_totalmoney,ord_starttime,ord_dealtime,ord_fahuotime,
-        ord_huikuanmoney,ord_consignee,ord_province,ord_city,ord_country,ord_detail,ord_phone,ord_createtime,ord_delete,cus_id) VALUES
+        ord_huikuanmoney,ord_consignee,ord_province,ord_city,ord_country,ord_detail,ord_phone,ord_createtime,ord_delete,ord_plan,cus_id) VALUES
         (#{ordTheme},#{ordState},#{ordHead},#{ordTotalmoney},#{ordStarttime},#{ordDealtime},#{ordFahuotime},
-        #{ordHuikuanmoney},#{ordConsignee},#{ordProvince},#{ordCity},#{ordCountry},#{ordDetail},#{ordPhone},#{ordCreatetime},#{ordDelete},#{cusId})
+        #{ordHuikuanmoney},#{ordConsignee},#{ordProvince},#{ordCity},#{ordCountry},#{ordDetail},#{ordPhone},#{ordCreatetime},#{ordDelete},#{ordPlan},#{cusId})
     </insert>
     <!--删-->
     <!--<delete id="delszOrder" parameterType="Integer">

@@ -3,8 +3,10 @@ package com.example.service.impl;
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
+import com.example.entity.request.SzOrder;
 import com.example.entity.request.SzReceivablePlan;
 import com.example.entity.request.SzReceivableRecord;
+import com.example.model.mapper.SzOrderMapper;
 import com.example.model.mapper.SzReceivablePlanMapper;
 import com.example.model.mapper.SzReceivableRecordMapper;
 import com.example.service.SzReceivablePlanService;
@@ -32,6 +34,22 @@ public class SzReceivablePlanServicelmpl implements SzReceivablePlanService {
     private SzReceivablePlanMapper szplanMapper;
     @Autowired
     private SzReceivableRecordMapper szrecordMapper;
+    @Autowired
+    private SzOrderMapper szOrderMapper;
+/*
+*     @Override
+    public ResultVo mx_editszDeliver(SzDeliver szdeliver) {
+        System.out.println("发货单修改");
+        int i = szdeliverMapper.mx_editszDeliver(szdeliver);
+        return ResultUtils.response(i);
+    }
+* */
+    @Override
+    public ResultVo plan_editOrder(SzOrder szOrder) {
+        System.out.println("订单回款状态修改...");
+        int i = szplanMapper.plan_editOrder(szOrder);
+        return ResultUtils.response(i);
+    }
 
     @Override
     public ResultVo addszPlan(SzReceivablePlan szplan) {
@@ -113,4 +131,5 @@ public class SzReceivablePlanServicelmpl implements SzReceivablePlanService {
         PageInfo<SzReceivablePlan> list = new PageInfo<>(deptResps);
         return ResultUtils.response(list);
     }
+
 }

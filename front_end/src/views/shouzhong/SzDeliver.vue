@@ -30,9 +30,7 @@
                 {{scope.row.delExpecttime | dateFormat}}
               </template>
             </el-table-column>
-            <el-table-column prop="delState"  label="对应fahuo" ></el-table-column>
             <el-table-column prop="delState" label="发货状态" sortable>
-
               <template slot-scope="scope">
                 {{scope.row.delState | delStateFormat}}
               </template>
@@ -91,7 +89,7 @@
             <el-form-item label="物流公司" prop="delCompany" >
               <el-select v-model="fahuoForm.delCompany" style="width: 250px"  clearable  @change="gaibian">
                 <el-option label="顺丰快递" value="0"></el-option>
-                <el-option label="韵达快递" value="1"></el-option>
+                <el-option label="中通快递" value="1"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -346,6 +344,7 @@
             }
             console.log(this.buynumber);
           })
+        console.log("1操作人：",this.$store.state.empName)
       },
       /*根据选择物流公司 生成随机数改变快递单号*/
       gaibian(){
@@ -353,7 +352,7 @@
         if(this.fahuoForm.delCompany==0){
           this.fahuoForm.delWuliuid="SF"+this.suijishu
         }else if(this.fahuoForm.delCompany==1){
-          this.fahuoForm.delWuliuid="YD"+this.suijishu
+          this.fahuoForm.delWuliuid="ZT"+this.suijishu
         }
       },
       handleCurrentChange(pageIndex) {
@@ -398,6 +397,7 @@
             addhaspro.push(json)
             /*新增发货明细*/
             deliverHttp.add_mingxi(addhaspro[i]).then(res=>{
+              this.FahuoTableVisible = false
               console.log(res);
             })
           }
@@ -408,9 +408,16 @@
             delWuliuid:this.fahuoForm.delWuliuid,
             delCompany:this.fahuoForm.delCompany,
             delId:this.fahouid,
+            delPeople: this.$store.state.empName
           }
           inputs.push(addinputs);
+          /*修改发货单状态等....*/
+          deliverHttp.mx_editszDeliver(addinputs).then(res=>{
+            this.FahuoTableVisible = false
+          })
         }
+        this.
+        console.log("操作人：",this.$store.state.empName)
       },
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'
