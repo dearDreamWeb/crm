@@ -134,7 +134,8 @@
           <el-table :data="Detail" border>
             <el-table-column prop="odetId" label="详情编号"></el-table-column>
             <el-table-column prop="productId" label="产品编号" ></el-table-column>
-            <el-table-column  label="产品名称">
+            <el-table-column prop="productReq.productName" label="1产品名称"></el-table-column>
+            <el-table-column prop="productName" label="2产品名称">
 <!--             <div  v-for="x in szorder.productReq">
                 {{x}}
              </div>&ndash;&gt;
@@ -142,11 +143,19 @@
                 {{scope.row.szOrderDetails[0].productName}}
               </template>-->
             </el-table-column>
-            <el-table-column prop="odetBuynum" label="数量"></el-table-column>
-            <el-table-column prop="odetBuymoney" label="单价"></el-table-column>
+            <el-table-column prop="odetBuynum" label="数量">
+              <template slot-scope="scope">
+                {{scope.row.odetBuynum}} 件
+              </template>
+            </el-table-column>
+            <el-table-column prop="odetBuymoney" label="单价">
+              <template slot-scope="scope">
+                {{scope.row.odetBuymoney}} 元
+              </template>
+            </el-table-column>
             <el-table-column label="金额">
               <template slot-scope="scope">
-                {{scope.row.odetBuynum * scope.row.odetBuymoney}}
+                {{scope.row.odetBuynum * scope.row.odetBuymoney}} 元
               </template>
             </el-table-column>
           </el-table>
@@ -161,9 +170,19 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="关于发货">
-          <el-table :data="abdeliver" border>
-            <el-table-column prop="delId" label="发货编号" width="150"></el-table-column>
-            <el-table-column prop="productId" label="产品编号" width="200"></el-table-column>
+          <el-table :data="abdeliver" >
+            <el-table-column prop="delId" label="发货编号"></el-table-column>
+            <el-table-column prop="delCompany" label="物流公司" >
+              <template slot-scope="scope">
+                {{scope.row.delCompany | delCompanyFormat}}
+              </template>
+            </el-table-column>
+            <el-table-column prop="delWuliuid" label="物流单号" ></el-table-column>
+            <el-table-column prop="delActualtime" label="发货时间">
+              <template slot-scope="scope">
+                {{scope.row.delActualtime | dateFormat}}
+              </template>
+            </el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>
@@ -796,6 +815,7 @@
           console.log("kkk",this.oid);
           //获取当前登录用户 给 操作人
           this.addPlanForm.planCaozuopeople=this.$store.state.empName;
+
           console.log("this.addPlanForm.planCaozuopeople",this.addPlanForm.planCaozuopeople)
           console.log("操作人",this.$store.state.empName)
         //ordHead:this.$store.state.empName,
@@ -805,10 +825,18 @@
               console.log("rrr",this.addPlanForm);
               console.log("O：",res);
               console.log("Oid：",res.data);
+              let ppp={
+                ordId : this.addPlanForm.ordId
+              }
+              planHttp.plan_editOrder(ppp).then(res=>{
+                console.log(res.data)
+              })
               this.addPlanDialog = false;
               this.addDialog = false;
             }
           })
+        /*修改订单的回款状态*/
+
       },
     /*新增订单（选择产品同时新增订单详情）*/
       addOrderClick(){
@@ -839,7 +867,8 @@
             ordDetail:this.addForm.ordDetail,
             ordPhone:this.addForm.ordPhone,
             cusId:this.addForm.cusId,
-            szOrderDetails:addDetail
+            szOrderDetails:addDetail,
+            ordPlan : 0
           }
           console.log(" ordTotalmoney:", ppp.ordTotalmoney)
           console.log(" this.zj:", this.zj)

@@ -14,10 +14,10 @@
           <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
         <el-col :span="8">
-          <el-button type="warning" size="mini" icon="el-icon-edit"
+         <!-- <el-button type="warning" size="mini" icon="el-icon-edit"
                      :disabled="buttonDisabled" @click="openEditPlan">修改回款计划</el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete"
-                     :disabled="buttonDisabled" @click="delPlan">删除回款计划</el-button>
+                     :disabled="buttonDisabled" @click="delPlan">删除回款计划</el-button>-->
         </el-col>
       </el-row>
 
@@ -33,11 +33,11 @@
             {{scope.row.planCaozuotime | dateFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="planInvoice" label="开票">
+       <!-- <el-table-column prop="planInvoice" label="开票">
           <template slot-scope="scope">
             {{scope.row.planInvoice | planInvoiceFormat}}
           </template>
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" @click="chakan_record(scope.row.planId),dialogTableVisible = true">操作回款记录</el-button>
@@ -51,15 +51,17 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-card>
-    <el-dialog :visible.sync="Dingda">
-      <el-table :data="listDingda">
-        <el-table-column prop="ordId" label="订单Id"></el-table-column>
+    <el-dialog :visible.sync="Dingda" title="选择订单">
+      <el-table :data="listDingda" :row-style="{height:'2px'}"
+                :cell-style="{padding:'5px 0'}" >
+        <el-table-column prop="ordId" label="订单编号"></el-table-column>
         <el-table-column prop="ordTheme" label="主题"></el-table-column>
         <!--<el-table-column prop="customerResp.cusName" label="客户"></el-table-column>-->
         <el-table-column prop="ordHead" label="负责人"></el-table-column>
         <el-table-column prop="ordConsignee" label="收货人"></el-table-column>
         <!--      <el-table-column prop="productResp.productName" label="产品"></el-table-column>-->
         <el-table-column prop="ordPhone" label="手机号码"></el-table-column>
+        <el-table-column prop="ordPlan" label="zhuangtai"></el-table-column>
         <el-table-column width="80" label="操作" >
           <template slot-scope="scope">
             <el-button type="text" size="small" icon="el-icon-plus"
@@ -114,7 +116,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12" height="36px" prop="empName">
+          <!--<el-col :span="12" height="36px" prop="empName">
             <el-form-item label="操作人" >
               <el-select v-model="addForm.empId">
                 <el-option v-for="(item,i) in empList" :key="i"
@@ -122,7 +124,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col>-->
         </el-row>
       </el-form>
       <!-- 分期表格-->
@@ -284,7 +286,8 @@
         fukuan:{
           total:0,
           pageNum:1,
-          pageSize:5
+          pageSize:5,
+          ordPlan:0
         },
         addForm:{
           ordId:'',
@@ -320,7 +323,7 @@
         pageNum:1,
         pageSize:5,
         total:1,
-        editDialog:false,
+        /*editDialog:false,*/
         likeDialog:false,
         multipleSelection: [],
         suijishu:'',
@@ -343,10 +346,10 @@
           this.listDingda = res.data
         })
       },
+      /*选择未制定（ordplan为0）的订单新增回款计划*/
       xians(){
         this.Dingda = true
-        console.log("xians=>addForm:",this.addForm)
-        orderHttp.listDialog(this.fukuan).then(res=>{
+        orderHttp.listDialog1(this.fukuan).then(res=>{
           this.listDingda = res.data.list
           this.fukuan.total = res.data.total
           this.fukuan.pageNum = res.data.pageNum
@@ -442,6 +445,13 @@
         //this.addrecord.push(this.addForm.planPeriod);
         console.log("1this.addrecord",this.addForm.szReceivableRecorde)  //给planPeriod[]赋值
         this.addForm.szReceivableRecorde=this.addrecord
+        /*ordHead:this.$store.state.empName,*/
+        console.log("planCaozuopeople:",this.planCaozuopeople)
+        /*//获取当前登录用户 给 操作人
+        this.addPlanForm.planCaozuopeople=this.$store.state.empName;*/
+        this.addForm.planCaozuopeople=this.$store.state.empName;
+        console.log("1.planCaozuopeople:", this.addForm.planCaozuopeople)
+        console.log("1.this.$store.state.empName:", this.$store.state.empName)
         planHttp.addplan(this.addForm).then(res => {
           console.log("kkk",this.addForm)
           if (res.code === 20000) {
@@ -489,12 +499,12 @@
         this.addPlanButtonLoading = false
       },
       /*点击修改按钮获取改行id*/
-      openEditPlan(){
+      /*openEditPlan(){
         this.editDialog=true;
         this.getEditPlan()
-      },
+      },*/
       delPlan(planId){
-        this.$confirm('确定删除此订单吗','提示',{
+        this.$confirm('确定删除此回款计划吗','提示',{
           confirmButtonText:'确定',
           cancelButtonText:'取消',
           type:'warning'
@@ -513,13 +523,13 @@
           })
         })
       },
-      getEditPlan(){
+   /*   getEditPlan(){
         planHttp.getplan(this.rowplanId).then(res=>{
           console.log("获得修改数据：",res.data);
-          /*this.editForm.empName=res.data.empResp.empName
-          console.log("this.editForm.empName:",this.editForm)*/
+          /!*this.editForm.empName=res.data.empResp.empName
+          console.log("this.editForm.empName:",this.editForm)*!/
         })
-      },
+      },*/
 
       /*立即回款*/
       like_recordClick(){

@@ -2,8 +2,10 @@ package com.example.controller.system;
 
 import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
+import com.example.entity.request.SzOrder;
 import com.example.entity.request.SzReceivablePlan;
 import com.example.entity.request.SzReceivableRecord;
+import com.example.service.SzOrderService;
 import com.example.service.SzReceivablePlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 public class SzReceivablePlanController {
     @Autowired
     private SzReceivablePlanService szReceivablePlanService;
-
     /*
     *     @SysLog("添加订单")
     @PostMapping("/add")
@@ -45,6 +46,24 @@ public class SzReceivablePlanController {
         }
         return szReceivablePlanService.addszPlan(szplan);
     }
+
+    @SysLog("修改订单状态")
+    @PostMapping("/plan_editOrder")
+    public ResultVo plan_editOrder(@RequestBody SzOrder szOrder){
+        System.out.println("...计划回款新增同时进修改订单状态....");
+        System.out.println(szOrder);
+        System.out.println("状态:"+szOrder.getOrdPlan());
+        return szReceivablePlanService.plan_editOrder(szOrder);
+    }
+    /*
+    * @SysLog("修改发货单")
+    @PostMapping("/mx_editszDeliver")
+    public ResultVo mx_editszDeliver(@RequestBody SzDeliver szdeliver){
+        System.out.println("发货单id："+szdeliver.getDelId());
+        System.out.println("物流id："+szdeliver.getDelWuliuid());
+        System.out.println("物流公司："+szdeliver.getDelCompany());
+        return  szdeliverService.mx_editszDeliver(szdeliver);
+    }*/
 
     @SysLog("删除回款计划")
     @PostMapping("/del")

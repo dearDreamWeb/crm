@@ -1,6 +1,27 @@
 import {postJson,get} from "../request";
 
 export const planHttp = {
+  plan_editOrder:function(plan){
+    let params={
+      url:'/plan/plan_editOrder',
+        data:{
+        ordId:plan.ordId
+        }
+    }
+    return postJson(params)
+  },
+/*  mx_editszDeliver:function(deliver){
+    let params={
+      url:'/deliver/mx_editszDeliver',
+      data:{
+        delId:deliver.delId,
+        delWuliuid: deliver.delWuliuid,
+        delCompany:deliver.delCompany
+      }
+    }
+    return postJson(params)
+  },*/
+
   addplan:function (plan) {
     let params = {
       url:'/plan/add',

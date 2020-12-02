@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.entity.ResultVo;
+import com.example.entity.request.SzOrder;
 import com.example.entity.request.SzReceivablePlan;
 
 /**
@@ -14,4 +15,6 @@ public interface SzReceivablePlanService {
     ResultVo editszPlan(SzReceivablePlan szPlan);
     ResultVo getszPlan(Integer planId);
     ResultVo listPlan(SzReceivablePlan szPlan);
+
+    ResultVo plan_editOrder(SzOrder szOrder);//改 订单表的回款状态
 }

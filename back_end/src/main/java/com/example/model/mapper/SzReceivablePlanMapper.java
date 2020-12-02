@@ -1,5 +1,6 @@
 package com.example.model.mapper;
 
+import com.example.entity.request.SzOrder;
 import com.example.entity.request.SzReceivablePlan;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +18,5 @@ public interface SzReceivablePlanMapper {
     int editszPlan(SzReceivablePlan szPlan);
     SzReceivablePlan getszPlan(Integer ordId);
     List<SzReceivablePlan> listszPlan(SzReceivablePlan szPlan);
+    int plan_editOrder(SzOrder szOrder);//改
 }

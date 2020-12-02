@@ -34,6 +34,7 @@ public class SzOrder {
     private String ordPhone;//收货手机号
     private Date ordCreatetime;//订单创建时间（不是签单时间)
     private Integer ordDelete;//是否删除
+    private Integer ordPlan;//是否添加回款
 
     private Integer cusId;//客户编号
     private Integer offerId;//报价编号
