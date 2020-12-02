@@ -21,6 +21,7 @@
     <el-table-column prop="repairFault" label="故障描述"></el-table-column>
     <el-table-column prop="repairsjhm" label="是否在保"></el-table-column>
     <el-table-column prop="repairProblem" label="类型"></el-table-column>
+    <el-table-column prop="repairAppointment" label="派单时间"></el-table-column>
     <el-table-column prop="empResp.empName" label="维修人"></el-table-column>
 
         <el-table-column label="操作">
@@ -48,7 +49,7 @@
     width="50%"
     @close="handleClose">
 
-    <el-form ref="addformRef" :model="addform" :rules="rules" label-width="80px">
+    <el-form ref="addform" :model="addform" :rules="rules" label-width="80px">
      <el-row>
        <el-col :span="8">
          <el-form-item label="维修人" prop="empId">
@@ -62,8 +63,8 @@
        <el-col :span="8">
          <el-form-item label="类型" prop="repairProblem">
            <el-select v-model="addform.repairProblem">
-             <el-option label="上门" :value="上门"></el-option>
-             <el-option label="电话" :value="电话"></el-option>
+             <el-option label="上门" value="上门"></el-option>
+             <el-option label="电话" value="电话"></el-option>
            </el-select>
          </el-form-item>
        </el-col>
@@ -255,6 +256,7 @@
         })
       },
       addClick(){
+        console.log("打印")
         this.addDictButtonLoading = true
         this.addform.repairGdstate = '已派单'
         this.addform.repairId =this.repairId;
@@ -317,7 +319,9 @@
       },
 
       resetForm(){
-        this.$refs["advancedSearchFormRef"].resetFields()
+        if (this.$refs["addform"]!==undefined) {
+          this.$refs["addform"].resetFields();
+        }
         this.searchInput = ''
         this.initList()
         this.rowCareId = 0

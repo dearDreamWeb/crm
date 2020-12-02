@@ -7,6 +7,7 @@ import com.example.entity.response.ProductResp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -21,6 +22,7 @@ import java.util.Date;
 public class Repair {
     private Integer repairId;
     private Integer empId;//接单人
+    @DateTimeFormat(pattern = "yyyy-MM-dd  HH:mm:ss")
     private Date repairDate;//接单时间
     private String repairProblem;//zhut
     private String repairPersonnel;
