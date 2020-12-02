@@ -44,8 +44,11 @@
           </el-table-column>
         </el-table>
         <el-divider></el-divider>
+        请求审核：<el-switch v-model="addForm.switchValue"
+                        active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         <el-button type="primary" icon="el-icon-plus" size="medium"
                    @click="addFormClick">保存明细</el-button>
+        <el-button type="primary" @click="testWebSocket">BUTTON</el-button>
       </el-card>
 
       <el-drawer :visible.sync="drawer" size="40%" :with-header="false" @close="handleClose">
@@ -126,6 +129,8 @@
     name: "OfferOperation",
     data() {
       return {
+        swithValue:false,
+
         abc:'',
         saleId:'',
         offerId:'',
@@ -156,7 +161,8 @@
           amountMoney:'',
           remark:'',
           offerId:'',
-          productId:''
+          productId:'',
+          switchValue:false
         },
         multipleSelection: [],
         disabledProduct:[],
@@ -164,6 +170,12 @@
     },
 
     methods:{
+      testWebSocket() {
+        offerHttp.testSocket().then(res => {
+          console.log("发送")
+        })
+      },
+
       searchProductClick() {
         productHttp.list(this.searchProduct).then(res => {
           if (res.code === 20000) {

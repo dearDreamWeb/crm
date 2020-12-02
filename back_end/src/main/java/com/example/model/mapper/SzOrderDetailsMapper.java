@@ -16,4 +16,5 @@ import java.util.List;
 public interface SzOrderDetailsMapper {
     List<SzOrderDetails> listOrderANDOrderDet(Integer odetId);
     void addOrderANDOrderDet(SzOrderDetails szOrderDetails);
+    int addOrderDetail(SzOrderDetails szOrderDetails);
 }

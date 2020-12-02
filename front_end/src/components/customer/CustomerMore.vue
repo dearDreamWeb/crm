@@ -27,9 +27,9 @@
           <el-button type="text" icon="el-icon-s-claim"
                      @click="openSolutionDialog">解决方案</el-button>
         </el-col>
-        <el-col :span="4">
+        <!--<el-col :span="4">
           <el-button type="text" icon="el-icon-coin">报价</el-button>
-        </el-col>
+        </el-col>-->
       </el-row>
       <el-divider></el-divider>
       <span>售中</span>

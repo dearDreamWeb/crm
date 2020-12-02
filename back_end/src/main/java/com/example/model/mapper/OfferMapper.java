@@ -19,4 +19,6 @@ public interface OfferMapper {
     OfferResp getOffer(Integer offerId);
     List<OfferResp> listOffer(OfferReq offerReq);
     List<OfferResp> listOfferByCus(Integer cusId);
+    int editOfferTurn(Integer offerId);
+    int editOfferStatus(Integer offerId);
 }

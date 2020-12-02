@@ -7,7 +7,10 @@ import com.example.entity.ResultVo;
 import com.example.entity.SanGuest;
 import com.example.entity.request.OfferReq;
 import com.example.entity.request.SaleDetailReq;
+import com.example.entity.request.SzOrder;
+import com.example.entity.request.SzOrderDetails;
 import com.example.entity.response.CustomerResp;
+import com.example.entity.response.EmpResp;
 import com.example.entity.response.OfferResp;
 import com.example.model.mapper.*;
 import com.example.service.OfferService;
@@ -44,6 +47,15 @@ public class OfferServiceImpl implements OfferService {
 
     @Autowired
     private SanGuestMapper sanGuestMapper;
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Autowired
+    private SzOrderMapper szOrderMapper;
+
+    @Autowired
+    private SzOrderDetailsMapper szOrderDetailsMapper;
 
     @Override
     public ResultVo addOffer(OfferReq offerReq) {
@@ -127,5 +139,33 @@ public class OfferServiceImpl implements OfferService {
         List<OfferResp> offerResps = offerMapper.listOffer(offerReq);
         PageInfo<OfferResp> list = new PageInfo<>(offerResps);
         return ResultUtils.response(list);
+    }
+
+    @Override
+    public ResultVo turnOrder(SzOrder szOrder,String token) {
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        szOrder.setOrdHead(empByToken.getEmpName());
+        szOrder.setOrdStarttime(DateUtils.getDate());
+        szOrder.setOrdState(0);
+        int addszOrder = szOrderMapper.addszOrder(szOrder);
+        if (addszOrder != 1) {
+            throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                    ResultEnum.DATA_ADD_FAIL.getMessage());
+        }
+        List<SzOrderDetails> szOrderDetails = szOrder.getSzOrderDetails();
+        for (int i=0;i<szOrderDetails.size();i++) {
+            szOrderDetails.get(i).setOrdId(szOrder.getOrdId());
+            int addOrderDetail = szOrderDetailsMapper.addOrderDetail(szOrderDetails.get(i));
+            if (addOrderDetail != 1) {
+                throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
+                        ResultEnum.DATA_ADD_FAIL.getMessage());
+            }
+        }
+        int editOfferTurn = offerMapper.editOfferTurn(szOrder.getOfferId());
+        if (editOfferTurn != 1) {
+            throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
+                    ResultEnum.DATA_UPDATE_FAIL.getMessage());
+        }
+        return ResultUtils.response(addszOrder);
     }
 }

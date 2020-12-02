@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author: pengjia
@@ -30,9 +31,10 @@ public class OfferResp {
     private Integer contactsId;
     private Integer saleId;
     private Integer empId;
+    private Integer isTurn;
 
     private ContactsResp contactsResp;
     private SaleResp saleResp;
     private EmpResp empResp;
-    private OfferDetailResp offerDetailResp;
+    private List<OfferDetailResp> offerDetailResp;
 }

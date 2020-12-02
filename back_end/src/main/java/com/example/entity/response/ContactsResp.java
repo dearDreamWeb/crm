@@ -26,7 +26,7 @@ public class ContactsResp {
     private String remark;
     private Integer version;
     private Date createTime;
-    private Date updateTIme;
+    private Date updateTime;
     private Integer isDelete;
     private String contactsDictType;
     private Integer cusId;

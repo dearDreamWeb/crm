@@ -6,6 +6,26 @@
 import {get,postJson} from "../request";
 
 export const offerHttp = {
+  turnOrder:function(turnForm) {
+    let params = {
+      url:'/offer/turn_order',
+      data:{
+        'ordTheme': turnForm.ordTheme,
+        'ordHead':turnForm.ordHead,
+        'ordTotalmoney':turnForm.ordTotalmoney,
+        'ordConsignee':turnForm.ordConsignee,
+        'ordPhone':turnForm.ordPhone,
+        'ordProvince':turnForm.ordProvince,
+        'ordCity':turnForm.ordCity,
+        'ordCountry':turnForm.ordCountry,
+        'ordDetail':turnForm.ordDetail,
+        'cusId': turnForm.cusId,
+        'offerId':turnForm.offerId,
+        'szOrderDetails':turnForm.szOrderDetails
+      }
+    }
+    return postJson(params)
+  },
   add:function (offer) {
     let params = {
       url:'/offer/add',
@@ -51,7 +71,8 @@ export const offerHttp = {
         'amountMoney':offerDetail.amountMoney,
         'remark':offerDetail.remark,
         'offerId':offerDetail.offerId,
-        'productId':offerDetail.productId
+        'productId':offerDetail.productId,
+        'switchValue':offerDetail.switchValue
       }
     }
     return postJson(params)
@@ -121,6 +142,12 @@ export const offerHttp = {
         'startDate':offer.startDate,
         'endDate':offer.endDate,
       }
+    }
+    return get(params)
+  },
+  testSocket:function () {
+    let params = {
+      url:'/socket/test'
     }
     return get(params)
   }

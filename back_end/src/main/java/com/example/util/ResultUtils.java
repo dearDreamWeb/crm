@@ -16,4 +16,12 @@ public class ResultUtils {
         resultVo.setMessage(ResultEnum.SUCCESS.getMessage());
         return resultVo;
     }
+
+    /*public static ResultVo resultActivity(Object object) {
+        ResultVo<Object> resultVo = new ResultVo<>();
+        resultVo.setData(object);
+        resultVo.setCode(ResultEnum.ACTIVITY_AUTH_SUCCESS.getCode());
+        resultVo.setMessage(ResultEnum.ACTIVITY_AUTH_SUCCESS.getMessage());
+        return resultVo;
+    }*/
 }

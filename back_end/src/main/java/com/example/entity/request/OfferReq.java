@@ -30,6 +30,7 @@ public class OfferReq {
     private Integer contactsId;
     private Integer saleId;
     private Integer empId;
+    private Integer isTurn;
 
     private Integer pageNum;
     private Integer pageSize;

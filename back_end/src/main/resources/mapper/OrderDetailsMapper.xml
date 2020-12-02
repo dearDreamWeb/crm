@@ -53,4 +53,9 @@
         insert into sz_order_details(odet_buynum, odet_buymoney, ord_id, product_id) VALUES
         (#{odetBuynum},#{odetBuymoney},#{ordId},#{productId})
     </insert>
+
+    <insert id="addOrderDetail" parameterType="com.example.entity.request.SzOrderDetails">
+        insert into sz_order_details(odet_buynum, odet_buymoney, ord_id, product_id) VALUES
+        (#{odetBuynum},#{odetBuymoney},#{ordId},#{productId})
+    </insert>
 </mapper>

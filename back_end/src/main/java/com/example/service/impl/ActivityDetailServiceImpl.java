@@ -2,13 +2,16 @@ package com.example.service.impl;
 
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
+import com.example.controller.WebSocketController;
 import com.example.entity.ResultVo;
 import com.example.entity.request.ActivityDetailReq;
 import com.example.entity.response.ActivityDetailResp;
 import com.example.entity.response.EmpResp;
 import com.example.model.mapper.ActivityDetailMapper;
+import com.example.model.mapper.EmpMapper;
 import com.example.service.ActivityDetailService;
 import com.example.util.DateUtils;
+import com.example.util.MyGsonUtils;
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -29,6 +32,12 @@ public class ActivityDetailServiceImpl implements ActivityDetailService {
     @Autowired
     private ActivityDetailMapper detailMapper;
 
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Autowired
+    private WebSocketController socketService;
+
     @Override
     public ResultVo addActivityDetail(ActivityDetailReq activityDetailReq) {
         Integer activityId = activityDetailReq.getActivityId();
@@ -43,6 +52,9 @@ public class ActivityDetailServiceImpl implements ActivityDetailService {
                 throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                         ResultEnum.DATA_ADD_FAIL.getMessage());
             }
+            EmpResp emp = empMapper.getEmp(empIdList.get(i));
+            String json = MyGsonUtils.initGson("你获得了一个新的活动，快去分享吧！！");
+            socketService.sendOneMessage(emp.getEmpName(),json);
         }
         return ResultUtils.response("数据添加成功");
     }

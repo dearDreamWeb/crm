@@ -25,4 +25,5 @@ public class OfferDetailReq {
     private String remark;
     private Integer offerId;
     private Integer productId;
+    private Boolean switchValue;
 }

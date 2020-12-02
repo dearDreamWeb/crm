@@ -18,6 +18,7 @@
         <result column="contacts_id" property="contactsId"/>
         <result column="sale_id" property="saleId"/>
         <result column="emp_id" property="empId"/>
+        <result column="is_turn" property="isTurn"/>
     </resultMap>
 
     <resultMap id="OfferDetailAllResult" type="com.example.entity.response.OfferResp">
@@ -36,10 +37,11 @@
         <result column="contacts_id" property="contactsId"/>
         <result column="sale_id" property="saleId"/>
         <result column="emp_id" property="empId"/>
+        <result column="is_turn" property="isTurn"/>
         <association property="contactsResp" resultMap="ContactsResult"/>
         <association property="saleResp" resultMap="SaleResult"/>
         <association property="empResp" resultMap="EmpResult"/>
-        <association property="offerDetailResp" resultMap="OfferDetailResult"/>
+        <collection property="offerDetailResp" resultMap="OfferDetailResult"/>
     </resultMap>
 
     <resultMap id="ContactsResult" type="com.example.entity.response.ContactsResp">
@@ -141,6 +143,9 @@
             <if test="empId != null">
                 emp_id,
             </if>
+            <if test="isTurn != null">
+                is_turn,
+            </if>
         </trim>
         <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
             <if test="offerTheme != null and offerTheme != ''">
@@ -176,24 +181,28 @@
             <if test="empId != null">
                 #{empId},
             </if>
+            <if test="isTurn != null">
+                #{isTurn},
+            </if>
         </trim>
     </insert>
 
     <select id="getOffer" resultMap="OfferDetailAllResult">
         SELECT o.offer_id,o.offer_theme,o.offer_numbers,o.offer_status,o.offer_price,o.examine_person,o.examine_time,
-        o.remark,o.create_time,o.update_time,o.is_delete,o.contacts_id,o.sale_id,o.emp_id,con.contacts_name,
-        con.contacts_phone,con.email,s.sale_name,s.sale_status,s.sale_type,s.discovery_time,e.emp_name
+        o.remark,o.create_time,o.update_time,o.is_delete,o.contacts_id,o.sale_id,o.emp_id,con.contacts_name,con.cus_id,
+        con.contacts_phone,con.email,s.sale_name,s.sale_status,s.sale_type,s.discovery_time,e.emp_name,od.*,o.is_turn
         FROM offer o
-        INNER JOIN contacts con ON o.contacts_id = con.contacts_id
+        LEFT JOIN contacts con ON o.contacts_id = con.contacts_id
         INNER JOIN sale s ON o.sale_id = s.sale_id
         INNER JOIN emp e ON o.emp_id = e.emp_id
+        INNER JOIN offer_detail od ON od.offer_id = o.offer_id
         WHERE o.offer_id = #{offerId}
     </select>
 
     <select id="listOffer" resultMap="OfferDetailAllResult">
         SELECT o.offer_id,o.offer_theme,o.offer_numbers,o.offer_status,o.offer_price,o.examine_person,o.examine_time,
         o.remark,o.create_time,o.update_time,o.is_delete,o.contacts_id,o.sale_id,o.emp_id,con.contacts_name,
-        con.contacts_phone,con.email,s.sale_name,s.sale_status,s.sale_type,s.discovery_time,e.emp_name,od.*
+        con.contacts_phone,con.email,s.sale_name,s.sale_status,s.sale_type,s.discovery_time,e.emp_name,od.*,o.is_turn
         FROM offer o
         INNER JOIN contacts con ON o.contacts_id = con.contacts_id
         INNER JOIN offer_detail od ON od.offer_id = o.offer_id
@@ -233,10 +242,18 @@
         SELECT o.offer_id,o.offer_theme,o.offer_numbers,o.offer_status,o.offer_price,o.examine_person,
         o.examine_time,o.remark,o.create_time,o.update_time,o.is_delete,o.contacts_id,o.sale_id,o.emp_id,
         od.offer_detail_id,od.offer_detail_count,od.product_name,od.product_brand,od.amount_money,od.product_model,
-        od.product_price,od.remark
+        od.product_price,od.remark,o.is_turn
         FROM offer o
         INNER JOIN offer_detail od ON od.offer_id = o.offer_id
         INNER JOIN sale sa ON sa.sale_id = o.sale_id
         WHERE sa.cus_id = #{cusId}
     </select>
+
+    <update id="editOfferTurn">
+        UPDATE offer SET is_turn = 1 WHERE offer_id = #{offerId}
+    </update>
+
+    <update id="editOfferStatus">
+        UPDATE offer SET offer_status = 2 WHERE offer_id = #{offerId}
+    </update>
 </mapper>

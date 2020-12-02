@@ -4,6 +4,7 @@
 @description:
 */
 import Vue from 'vue'
+import router from "../router";
 import ElementUI from 'element-ui'
 
 export const socketHttp = {
@@ -29,18 +30,42 @@ export const socketHttp = {
     window.onbeforeunload = this.onbeforeunload
   },
   setErrorMessage () {
+    ElementUI.Message({
+      message:'WebSocket连接发生错误',
+      type:'error'
+    })
     console.log('WebSocket连接发生错误')
   },
   setOnopenMessage () {
+    ElementUI.Message({
+      message:'WebSocket连接成功',
+      type:'success'
+    })
     console.log('WebSocket连接成功')
   },
   setOnmessageMessage (event) {
     // 根据服务器推送的消息做自己的业务处理
     console.log('服务端返回：' + event.data)
     ElementUI.Message({
-      message:event.data,
+      message:'成功',
       type:'success'
     })
+    let notification = ElementUI.Notification({
+      title:'提示',
+      dangerouslyUseHTMLString:true,
+      /*message:JSON.parse(event.data).offerId,*/
+      message:"<el-button style='cursor: pointer'>"+event.data+"</el-button>",
+      duration:0,
+      type:'success',
+      onClick:function () {
+        console.log("Notification点击")
+        let resolve = router.resolve({
+          path:'/dash_board'
+        });
+        window.open(resolve.href,"_blank")
+      }
+    });
+    setTimeout(() => {notification.close()},5000)
   },
   setOncloseMessage () {
     console.log('WebSocket连接关闭')
@@ -50,5 +75,5 @@ export const socketHttp = {
   },
   closeWebSocket () {
     this.websocket.close()
-  }
+  },
 }

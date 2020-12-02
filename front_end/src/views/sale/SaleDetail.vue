@@ -193,11 +193,13 @@
                           状态：<el-tag>{{scope.row.offerStatus | offerStatusFormat}}</el-tag><br>
                           时间：{{scope.row.createTime | dateFormat}}
                           <el-button type="text" icon="el-icon-right" size="mini"
-                                     @click="editDetail(scope.row.offerId)">编辑明细</el-button>
+                                     @click="editDetail(scope.row.offerId)"
+                                     :disabled="scope.row.offerStatus == 2">编辑明细</el-button>
                           <el-button type="text" icon="el-icon-right" size="mini"
                                      @click="viewDetail(scope.row.offerId)">查看明细</el-button>
                           <el-button type="text" icon="el-icon-right" size="mini"
-                                     @click="turnOrder(scope.row.offerId)">转成订单</el-button>
+                                     @click="turnOrder(scope.row.offerId)"
+                                     :disabled="scope.row.isTurn == 1">转成订单</el-button>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -289,69 +291,62 @@
         </el-table>
       </el-dialog>
 <!--转成订单-->
-      <el-dialog title="转成订单" :visible.sync="viewOrderDetailDialog" top="15px" width="70%">
+      <el-dialog title="转成订单" :visible.sync="viewOrderDetailDialog"
+                 top="15px" width="70%" @close="viewOrderDetailDialogClose">
         <el-row >
           <el-col >
             <el-form label-position="right" label-width="80px">
               <el-row >
-                <el-col :span="8">
+                <el-col :span="6">
                   <el-form-item label="主题">
-                    <el-tag>{{offerForm.offerTheme}}</el-tag>
+                    <el-tag>{{turnOrderForm.ordTheme}}</el-tag>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="客户">
-                    <el-tag>{{customerForm.cusName}}</el-tag>
+                <el-col :span="6">
+                  <el-form-item label="金额">
+                    <el-tag>{{turnOrderForm.ordTotalmoney}}</el-tag>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="创建时间">
-                    <el-tag>{{offerForm.createTime | dateFormat}}</el-tag>
+                <el-col :span="6">
+                  <el-form-item label="收货人">
+                    <el-tag>{{turnOrderForm.ordConsignee}}</el-tag>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="20">
-                <el-col :span="8">
-                  <el-form-item label="报价">
-                    <el-tag>{{saleTotalMoney}}.toFixed(2)</el-tag>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="报价人">
-                    <el-tag>{{contactsForm.contactsName}}</el-tag>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
+                <el-col :span="6">
                   <el-form-item label="联系方式">
-                    <el-tag>{{contactsForm.contactsPhone}}</el-tag>
+                    <el-tag>{{turnOrderForm.ordPhone}}</el-tag>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="12">
-                  <el-form-item label="审核状态">
-                    <el-tag>{{offerForm.offerStatus | offerStatusFormat}}</el-tag>
+                <el-col :span="8">
+                  <el-form-item label="地址">
+                    <area-cascader type='text' v-model="turnLocation" :level='1' :data="pcaa"
+                                   @change="areaCascaderChange"></area-cascader>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
-                  <el-form-item label="审核人">
-                    <el-tag v-if="offerForm.examinePerson == null">未审核</el-tag>
-                    <el-tag v-else>{{offerForm.examinePerson}}</el-tag>
+                <el-col :span="16">
+                  <el-form-item label="详细地址">
+                    <el-input v-model="turnOrderForm.ordDetail" size="mini"
+                              clearable placeholder="请输入"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
             </el-form>
           </el-col>
         </el-row>
-        <el-table :data="OrderDetailForm">
+        <el-table :data="turnOrderForm.szOrderDetails">
           <el-table-column prop="productName" label="名称"></el-table-column>
           <el-table-column prop="productBrand" label="品牌"></el-table-column>
           <el-table-column prop="productModel" label="型号"></el-table-column>
           <el-table-column prop="productPrice" label="单价"></el-table-column>
           <el-table-column prop="offerDetailCount" label="数量"></el-table-column>
           <el-table-column prop="amountMoney" label="金额"></el-table-column>
-          <el-table-column prop="remark" label="备注" show-overflow-tooltip></el-table-column>
         </el-table>
+        <span slot="footer">
+          <el-button type="primary" @click="turnOrderClick"
+                     :loading="turnOrderLoading">确定</el-button>
+        </span>
       </el-dialog>
 
       <sale-more-follow ref="saleMoreFollowFef" :sale-id="saleId" :cus-id="cusId"
@@ -376,15 +371,36 @@
   import {solutionHttp} from "../../network/pre_sale/solution";
   import SaleMoreOffer from "../../components/sale/SaleMoreOffer";
   import {offerHttp} from "../../network/pre_sale/offer";
-  import OfferOperation from "../customer/OfferOperation";
   import {contactsHttp} from "../../network/pre_sale/contacts";
   import {customerHttp} from "../../network/pre_sale/customer";
+  import {pca,pcaa} from 'area-data'
 
   export default {
     name: "SaleDetail",
     components: {SaleMoreOffer, SaleMoreSolution, SaleMoreDemand, SaleMoreFollow},
     data() {
       return {
+        turnOrderLoading:false,
+        turnLocation:[],
+        pca:pca,
+        pcaa:pcaa,
+
+        turnOrderForm:{
+          ordTheme:'',
+          ordHead:'',
+          ordTotalmoney:'',
+          ordConsignee:'',
+          ordPhone:'',
+          ordProvince:'',
+          ordCity:'',
+          ordCountry:'',
+          ordDetail:'',
+          cusId: '',
+          offerId:'',
+          szOrderDetails:[]
+        },
+        turnOrderDetailForm:[],
+
         viewOrderDetailDialog:false,
         viewOfferDetailDialog:false,
         fullscreenLoading:false,
@@ -396,7 +412,6 @@
         },
 
         offerForm:{},
-        OrderDetailForm:[],
         offerDetailForm:[],
         contactsForm:{},
         customerForm:{},
@@ -411,10 +426,30 @@
         activeNames: ['1']
       }
     },
-    mounted() {
-
-    },
     methods:{
+      viewOrderDetailDialogClose() {
+        this.turnOrderLoading = false
+      },
+
+      turnOrderClick() {
+        this.turnOrderLoading = true
+        offerHttp.turnOrder(this.turnOrderForm).then(res => {
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.viewOrderDetailDialog = false
+            this.initSaleDetail()
+          } else {
+            this.$message.error(res.message)
+            this.turnOrderLoading = false
+          }
+        })
+      },
+      areaCascaderChange() {
+        this.turnOrderForm.ordProvince = this.turnLocation[0]
+        this.turnOrderForm.ordCity = this.turnLocation[1]
+        this.turnOrderForm.ordCountry = this.turnLocation[2]
+      },
+
       editDetail(offerId) {
         console.log(offerId)
         let resolve = this.$router.resolve({
@@ -450,11 +485,18 @@
       },
       turnOrder(offerId) {
         this.viewOrderDetailDialog=true
-        offerHttp.get_detail_by_offerId(offerId).then(res => {
-          this.OrderDetailForm = res.data
-          for (let i=0;i<res.data.length;i++) {
-            this.saleTotalMoney = this.saleTotalMoney + res.data[i].amountMoney
+        offerHttp.getOffer(offerId).then(res => {
+          this.turnOrderForm.offerId = offerId
+          this.turnOrderForm.ordTheme = res.data.offerTheme + " 转订单"
+          this.turnOrderForm.cusId = res.data.contactsResp.cusId
+          this.turnOrderForm.ordConsignee = res.data.contactsResp.contactsName
+          this.turnOrderForm.ordPhone = res.data.contactsResp.contactsPhone
+          this.turnOrderForm.szOrderDetails = res.data.offerDetailResp
+          this.turnOrderForm.ordTotalmoney = 0
+          for (let i=0;i<res.data.offerDetailResp.length;i++) {
+            this.turnOrderForm.ordTotalmoney = parseFloat(res.data.offerDetailResp[i].amountMoney)+parseFloat(this.turnOrderForm.ordTotalmoney)
           }
+          this.turnOrderForm.ordTotalmoney = this.turnOrderForm.ordTotalmoney.toFixed(2)
         })
       },
 
@@ -539,5 +581,8 @@
   }
   .collapse-button {
     margin-left: 5px;
+  }
+  >>>.area-select .area-selected-trigger{
+    line-height: 15px;
   }
 </style>

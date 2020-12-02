@@ -3,9 +3,12 @@ package com.example.controller.system;
 import com.example.anno.SysLog;
 import com.example.entity.ResultVo;
 import com.example.entity.request.OfferReq;
+import com.example.entity.request.SzOrder;
 import com.example.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author: pengjia
@@ -42,5 +45,13 @@ public class OfferController {
     @GetMapping("/list_page")
     public ResultVo listPageOffer(OfferReq offerReq) {
         return offerService.listPageOffer(offerReq);
+    }
+
+    @SysLog("报价转化订单")
+    @PostMapping("/turn_order")
+    public ResultVo turnOrder(@RequestBody SzOrder szOrder,
+                              HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return offerService.turnOrder(szOrder,token);
     }
 }

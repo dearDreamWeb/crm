@@ -2,18 +2,23 @@ package com.example.service.impl;
 
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
+import com.example.controller.WebSocketController;
 import com.example.entity.ResultVo;
 import com.example.entity.request.OfferDetailReq;
 import com.example.entity.response.OfferDetailResp;
 import com.example.model.mapper.OfferDetailMapper;
+import com.example.model.mapper.OfferMapper;
 import com.example.service.OfferDetailService;
 import com.example.util.CheckUtils;
 import com.example.util.ResultUtils;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: pengjia
@@ -26,6 +31,12 @@ public class OfferDetailServiceImpl implements OfferDetailService {
     @Autowired
     private OfferDetailMapper detailMapper;
 
+    @Autowired
+    private OfferMapper offerMapper;
+
+    @Autowired
+    private WebSocketController webSocketService;
+
     @Override
     public ResultVo addOfferDetail(OfferDetailReq offerDetailReq) {
         CheckUtils.validate(offerDetailReq);
@@ -37,14 +48,16 @@ public class OfferDetailServiceImpl implements OfferDetailService {
                 throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                         ResultEnum.DATA_ADD_FAIL.getMessage());
             }
+            checkSwitchValue(offerDetailReq.getSwitchValue(),offerDetailReq.getOfferId());
         } else {
             int addOfferDetail = detailMapper.addOfferDetail(offerDetailReq);
             if (addOfferDetail != 1) {
                 throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                         ResultEnum.DATA_ADD_FAIL.getMessage());
             }
-        }
+            checkSwitchValue(offerDetailReq.getSwitchValue(),offerDetailReq.getOfferId());
 
+        }
         return ResultUtils.response("新增成功");
     }
 
@@ -80,5 +93,21 @@ public class OfferDetailServiceImpl implements OfferDetailService {
                     ResultEnum.DATA_DEL_FAIL.getMessage());
         }
         return ResultUtils.response(delOfferDetail);
+    }
+
+    public void checkSwitchValue(boolean switchValue,Integer offerId) {
+        if (switchValue) {
+            int offerStatus = offerMapper.editOfferStatus(offerId);
+            if (offerStatus != 1) {
+                throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
+                        ResultEnum.DATA_UPDATE_FAIL.getMessage());
+            }
+        }
+        Map map = new HashMap();
+        map.put("message","你有一条新的报价待审核！！！");
+        map.put("offerId",offerId);
+        Gson gson = new Gson();
+        String json = gson.toJson(map);
+        webSocketService.sendOneMessage("admin",json);
     }
 }
