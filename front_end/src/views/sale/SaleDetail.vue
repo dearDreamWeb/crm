@@ -197,7 +197,7 @@
                           <el-button type="text" icon="el-icon-right" size="mini"
                                      @click="viewDetail(scope.row.offerId)">查看明细</el-button>
                           <el-button type="text" icon="el-icon-right" size="mini"
-                                     @click="turnOrder">转成订单</el-button>
+                                     @click="turnOrder(scope.row.offerId)">转成订单</el-button>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -208,7 +208,7 @@
           </el-row>
         </div>
       </el-card>
-
+<!--查看报价明细-->
       <el-dialog title="查看报价明细" :visible.sync="viewOfferDetailDialog" top="15px" width="70%">
         <el-row :gutter="20">
           <el-col :span="16">
@@ -288,6 +288,71 @@
           <el-table-column prop="remark" label="备注" show-overflow-tooltip></el-table-column>
         </el-table>
       </el-dialog>
+<!--转成订单-->
+      <el-dialog title="转成订单" :visible.sync="viewOrderDetailDialog" top="15px" width="70%">
+        <el-row >
+          <el-col >
+            <el-form label-position="right" label-width="80px">
+              <el-row >
+                <el-col :span="8">
+                  <el-form-item label="主题">
+                    <el-tag>{{offerForm.offerTheme}}</el-tag>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="客户">
+                    <el-tag>{{customerForm.cusName}}</el-tag>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="创建时间">
+                    <el-tag>{{offerForm.createTime | dateFormat}}</el-tag>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="8">
+                  <el-form-item label="报价">
+                    <el-tag>{{saleTotalMoney}}.toFixed(2)</el-tag>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="报价人">
+                    <el-tag>{{contactsForm.contactsName}}</el-tag>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="联系方式">
+                    <el-tag>{{contactsForm.contactsPhone}}</el-tag>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <el-form-item label="审核状态">
+                    <el-tag>{{offerForm.offerStatus | offerStatusFormat}}</el-tag>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="审核人">
+                    <el-tag v-if="offerForm.examinePerson == null">未审核</el-tag>
+                    <el-tag v-else>{{offerForm.examinePerson}}</el-tag>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </el-col>
+        </el-row>
+        <el-table :data="OrderDetailForm">
+          <el-table-column prop="productName" label="名称"></el-table-column>
+          <el-table-column prop="productBrand" label="品牌"></el-table-column>
+          <el-table-column prop="productModel" label="型号"></el-table-column>
+          <el-table-column prop="productPrice" label="单价"></el-table-column>
+          <el-table-column prop="offerDetailCount" label="数量"></el-table-column>
+          <el-table-column prop="amountMoney" label="金额"></el-table-column>
+          <el-table-column prop="remark" label="备注" show-overflow-tooltip></el-table-column>
+        </el-table>
+      </el-dialog>
 
       <sale-more-follow ref="saleMoreFollowFef" :sale-id="saleId" :cus-id="cusId"
                         :emp-id="empId" v-on:init-page="initSaleDetail"></sale-more-follow>
@@ -320,9 +385,9 @@
     components: {SaleMoreOffer, SaleMoreSolution, SaleMoreDemand, SaleMoreFollow},
     data() {
       return {
+        viewOrderDetailDialog:false,
         viewOfferDetailDialog:false,
         fullscreenLoading:false,
-
         saleId:'',
         cusId:'',
         empId:'',
@@ -331,6 +396,7 @@
         },
 
         offerForm:{},
+        OrderDetailForm:[],
         offerDetailForm:[],
         contactsForm:{},
         customerForm:{},
@@ -382,8 +448,14 @@
           this.customerForm = res.data
         })
       },
-      turnOrder() {
-
+      turnOrder(offerId) {
+        this.viewOrderDetailDialog=true
+        offerHttp.get_detail_by_offerId(offerId).then(res => {
+          this.OrderDetailForm = res.data
+          for (let i=0;i<res.data.length;i++) {
+            this.saleTotalMoney = this.saleTotalMoney + res.data[i].amountMoney
+          }
+        })
       },
 
       initSaleDetail() {
