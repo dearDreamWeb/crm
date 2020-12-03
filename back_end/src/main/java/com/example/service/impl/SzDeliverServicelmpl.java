@@ -41,7 +41,10 @@ public class SzDeliverServicelmpl implements SzDeliverService {
 
     @Override
     public ResultVo mx_editszDeliver(SzDeliver szdeliver) {
+        szdeliver.setDelActualtime(DateUtils.getDate());//发货时间为当前时间
         System.out.println("发货单修改");
+        System.out.println(szdeliver.getDelActualtime());
+        System.out.println(szdeliver.getDelPeople());
         int i = szdeliverMapper.mx_editszDeliver(szdeliver);
         return ResultUtils.response(i);
     }

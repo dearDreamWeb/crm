@@ -71,7 +71,7 @@
     </insert>
 
     <select id="getDetailByProductId" resultMap="ProductDetailResult">
-        SELECT * FROM product_detail WHERE product_id = #{productId}
+        SELECT * FROM product_detail WHERE product_detail_state=0 AND  product_id = #{productId}
     </select>
 
     <!--发货时 新增发货明细 同时 修改 产品详情的库存状态为出库-->

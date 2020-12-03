@@ -50,9 +50,9 @@
                     highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
             <el-table-column prop="delId" width="150" label="发货单编号"></el-table-column>
             <el-table-column prop="szOrder.ordTheme"  label="对应订单" ></el-table-column>
-            <el-table-column prop="delDelivertime" label="发货时间" sortable>
+            <el-table-column prop="delActualtime" label="发货时间" sortable>
               <template slot-scope="scope">
-                {{scope.row.delDelivertime | dateFormat}}
+                {{scope.row.delActualtime | dateFormat}}
               </template>
             </el-table-column>
             <el-table-column prop="delWuliuid" label="发货单号" sortable></el-table-column>
@@ -214,7 +214,8 @@
         addnumber:0,
         fahuoForm:{
           delCompany:"",
-          delWuliuid:""
+          delWuliuid:"",
+          delPeople:''
         },
         addForm:{
           ordId:"",
@@ -279,9 +280,6 @@
       },
       /*选择产品添加*/
       addbuy(row){
-
-        alert(row.productDetailId)
-        console.log("添加")
         let seq={
           productDetailId:row.productDetailId,
           productBarCode:row.productBarCode,
@@ -316,6 +314,7 @@
       },
       /*产品详情*/
       productxq(row,num){
+        /*productDetailState=0*/
         console.log("购买数量：",num)
         console.log("id：",row)
         this.ddetNumber = num;
@@ -399,6 +398,7 @@
             deliverHttp.add_mingxi(addhaspro[i]).then(res=>{
               this.FahuoTableVisible = false
               console.log(res);
+              this.initNotState()
             })
           }
           console.log(json)
@@ -414,10 +414,10 @@
           /*修改发货单状态等....*/
           deliverHttp.mx_editszDeliver(addinputs).then(res=>{
             this.FahuoTableVisible = false
+            this.initNotState()
           })
         }
-        this.
-        console.log("操作人：",this.$store.state.empName)
+
       },
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'

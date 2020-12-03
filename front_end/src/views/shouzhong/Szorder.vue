@@ -121,7 +121,7 @@
               <i v-if="xiangqing.ordState == 1">已完成</i>
               <i v-if="xiangqing.ordState == 0">执行中</i>
             </span>
-        <span>对应客户：{{xiangqing.cusId}}</span>
+        <span>对应客户：{{xiangqing.customerResp.cusName}}</span>
       </div>
     </el-card>
       <el-tabs type="border-card" >
@@ -134,8 +134,7 @@
           <el-table :data="Detail" border>
             <el-table-column prop="odetId" label="详情编号"></el-table-column>
             <el-table-column prop="productId" label="产品编号" ></el-table-column>
-            <el-table-column prop="productReq.productName" label="1产品名称"></el-table-column>
-            <el-table-column prop="productName" label="2产品名称">
+            <el-table-column prop="productName" label="1产品名称">
 <!--             <div  v-for="x in szorder.productReq">
                 {{x}}
              </div>&ndash;&gt;
@@ -188,7 +187,7 @@
       </el-tabs>
     </el-dialog>
 
-    <el-dialog title="订单添加" width="65%" top="20px" :visible.sync="addDialog" @close="addHandleClose">
+    <el-dialog title="订单添加" width="65%" top="20px" :visible.sync="addDialog" @close="addHandleClose" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
                label-position="right" :rules="formRules">
         <el-row>
@@ -248,12 +247,12 @@
         </el-input>
 
         <el-table :data="gridData" :row-style="{height:'2px'}"
-                  :cell-style="{padding:'5px 0'}" height="300px">
+                  :cell-style="{padding:'5px 0'}" height="291px" width="500px">
           <el-table-column width="80" property="productBrand" label="品牌" ></el-table-column>
-          <el-table-column width="220" property="productName" label="产品名称" ></el-table-column>
-          <el-table-column property="productModel" label="型号"></el-table-column>
-          <el-table-column property="productStock" label="库存"></el-table-column>
-          <el-table-column property="productPrice" label="价格"></el-table-column>
+          <el-table-column width="200" property="productName" label="产品名称" ></el-table-column>
+          <el-table-column width="120" property="productModel" label="型号"></el-table-column>
+          <el-table-column width="70" property="productStock" label="库存"></el-table-column>
+          <el-table-column  width="100"  property="productPrice" label="价格"></el-table-column>
           <el-table-column width="70" label="操作" >
             <template slot-scope="scope">
               <el-button type="text" size="small" icon="el-icon-plus" @click="addpro(scope.row)" :disabled="isDisable"></el-button>
@@ -274,8 +273,8 @@
       <el-table :data="addproplus" style="text-align: center;">
         <el-table-column width="100" property="productBrand" label="产品品牌"></el-table-column>
         <el-table-column property="productName" label="产品名称" ></el-table-column>
-        <el-table-column property="productModel" label="产品型号"></el-table-column>
-        <el-table-column width="180" property="productNumber" label="数量" >
+        <el-table-column width="140" property="productModel" label="产品型号"></el-table-column>
+        <el-table-column width="170" property="productNumber" label="数量" >
           <template slot-scope="scope">
           <el-input-number
             size="mini"
@@ -288,7 +287,8 @@
         <el-table-column width="100" property="productPrice" label="产品单价"></el-table-column>
         <el-table-column width="100" property="odetBuymoney" label="操作" >
           <template slot-scope="scope">
-            <el-button type="text" @click="delpro(scope.row.productId)">删除</el-button>
+          <!--  <el-button type="text" @click="delpro(scope.row.productId)">删除</el-button>-->
+            <el-button type="text" @click="delpro(scope.$index)">删除</el-button>
           </template>
           <!-- @click="chakan(scope.row.ordId)-->
         </el-table-column>
@@ -541,7 +541,9 @@
         totalmoney:'',
         activeName: 'first',
         oid:0,
-        xiangqing:{}
+        xiangqing:{
+          customerResp:[]
+        }
       }
     },
     methods: {
@@ -562,8 +564,7 @@
         this.zj=totalzj
         console.log("添加产品后总价：",this.zj)*/
       },
-      delpro(index,row){
-        var index = this.addproplus.indexOf(row)
+      delpro(index){
         this.addproplus.splice(index,1)
         let totalzj = 0;
         this.addproplus.forEach(value => {
@@ -708,6 +709,7 @@
         this.dialogTableVisible = true;
         let id=val.ordId;
         this.xiangqing=val;
+        console.log("val:",val)
         orderHttp.szxiangq(id).then(res=>{
           this.szorder=res;
           this.Detail=res[0].szOrderDetails;
