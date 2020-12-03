@@ -26,4 +26,6 @@ public interface ClueMapper {
     List<ClueResp> listCompany();
     int shareClue(@Param("clueId") Integer clueId, @Param("updateTime") Date updateTime);
     int invalidClue(@Param("clueId") Integer clueId, @Param("updateTime") Date updateTime);
+
+    int newClueCount(ClueReq clueReq);
 }

@@ -189,7 +189,7 @@
 
     <select id="getOffer" resultMap="OfferDetailAllResult">
         SELECT o.offer_id,o.offer_theme,o.offer_numbers,o.offer_status,o.offer_price,o.examine_person,o.examine_time,
-        o.remark,o.create_time,o.update_time,o.is_delete,o.contacts_id,o.sale_id,o.emp_id,con.contacts_name,con.cus_id,
+        o.remark,o.version,o.create_time,o.update_time,o.is_delete,o.contacts_id,o.sale_id,o.emp_id,con.contacts_name,con.cus_id,
         con.contacts_phone,con.email,s.sale_name,s.sale_status,s.sale_type,s.discovery_time,e.emp_name,od.*,o.is_turn
         FROM offer o
         LEFT JOIN contacts con ON o.contacts_id = con.contacts_id
@@ -255,5 +255,43 @@
 
     <update id="editOfferStatus">
         UPDATE offer SET offer_status = 2 WHERE offer_id = #{offerId}
+    </update>
+
+    <select id="listExamine" resultMap="OfferDetailAllResult">
+        SELECT o.offer_id,o.offer_theme,o.offer_numbers,o.offer_status,o.offer_price,o.examine_person,o.examine_time,
+        o.remark,o.create_time,o.update_time,o.is_delete,o.contacts_id,o.sale_id,o.emp_id,con.contacts_name,
+        con.contacts_phone,con.email,s.sale_name,s.sale_status,s.sale_type,s.discovery_time,e.emp_name,od.*,o.is_turn
+        FROM offer o
+        INNER JOIN contacts con ON o.contacts_id = con.contacts_id
+        INNER JOIN offer_detail od ON od.offer_id = o.offer_id
+        INNER JOIN sale s ON o.sale_id = s.sale_id
+        INNER JOIN emp e ON o.emp_id = e.emp_id
+        WHERE o.offer_status = 2 AND o.emp_id = 1
+    </select>
+
+    <update id="editOffer" parameterType="com.example.entity.request.OfferReq">
+        UPDATE offer SET update_time = #{updateTime},version = version + 1
+        <if test="offerTheme != null and offerTheme != ''">
+            ,offer_theme = #{offerTheme}
+        </if>
+        <if test="offerStatus != null">
+            ,offer_status = #{offerStatus}
+        </if>
+        <if test="examinePerson != null and examinePerson != ''">
+            ,examine_person = #{examinePerson}
+        </if>
+        <if test="examineTime != null and examineTime != ''">
+            ,examine_time = #{examineTime}
+        </if>
+        <if test="contactsId != null">
+            ,contacts_id = #{contactsId}
+        </if>
+        <if test="saleId != null">
+            ,sale_id = #{saleId}
+        </if>
+        <if test="empId != null">
+            ,emp_id = #{empId}
+        </if>
+        WHERE offer_id = #{offerId} AND version = #{version}
     </update>
 </mapper>

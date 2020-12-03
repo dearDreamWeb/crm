@@ -10,6 +10,12 @@
         <el-card>
           <div slot="header">
             <span>本周新线索</span>
+            <!--<el-button icon="el-icon-set-up" style="float: right; padding: 3px 0" type="text">切换</el-button>-->
+            <el-select v-model="newClueForm.title" size="mini" clearable
+                       style="float: right;width: 85px;padding: 0 0">
+              <el-option v-for="item in newClueFormData" :key="item.value"
+                         :label="item.label" :value="item.value"></el-option>
+            </el-select>
           </div>
           <div>
             <div id="uvClue" style="font-size: 30px">5325</div>
@@ -22,7 +28,13 @@
       <el-col :span="6">
         <el-card>
           <div slot="header">
-            <span>本周新线索</span>
+            <span>本周新客户</span>
+            <!--<el-button icon="el-icon-set-up" style="float: right; padding: 3px 0" type="text">切换</el-button>-->
+            <el-select v-model="newCustomerForm.title" size="mini" clearable
+                       style="float: right;width: 85px;padding: 0 0">
+              <el-option v-for="item in newCustomerFormData" :key="item.value"
+                         :label="item.label" :value="item.value"></el-option>
+            </el-select>
           </div>
           <div>
             <div id="uvChart" style="font-size: 30px">5325</div>
@@ -36,6 +48,12 @@
         <el-card>
           <div slot="header">
             <span>本周PV</span>
+            <!--<el-button icon="el-icon-set-up" style="float: right; padding: 3px 0" type="text">切换</el-button>-->
+            <el-select v-model="newPageViewForm.title" size="mini" clearable
+                       style="float: right;width: 85px;padding: 0 0">
+              <el-option v-for="item in newPageViewFormData" :key="item.value"
+                         :label="item.label" :value="item.value"></el-option>
+            </el-select>
           </div>
           <div>
             <div id="pvChart" style="font-size: 30px">96546</div>
@@ -49,6 +67,12 @@
         <el-card>
           <div slot="header">
             <span>本周订单</span>
+            <!--<el-button icon="el-icon-set-up" style="float: right; padding: 3px 0" type="text">切换</el-button>-->
+            <el-select v-model="newOrderForm.title" size="mini" clearable
+                       style="float: right;width: 85px;padding: 0 0">
+              <el-option v-for="item in newOrderFormData" :key="item.value"
+                         :label="item.label" :value="item.value"></el-option>
+            </el-select>
           </div>
           <div>
             <div id="orderChart" style="font-size: 30px">¥ 645435</div>
@@ -84,25 +108,144 @@
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col :span="8">
-        <el-card></el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card></el-card>
+      <el-col :span="16" v-if="$store.state.empName == 'admin'">
+        <el-card>
+          <div slot="header">
+            <span>报价审核</span>
+          </div>
+          <div>
+            <el-table :data="offerExamineList" style="width: 100%;margin-top: -10px;margin-bottom: 10px"
+                      :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle">
+              <el-table-column label="主题" prop="offerTheme" width="130"></el-table-column>
+              <el-table-column label="单号" prop="offerNumbers"></el-table-column>
+              <el-table-column label="状态" prop="offerStatus" width="130">
+                <template slot-scope="scope">
+                  {{scope.row.offerStatus | offerStatusFormat}}
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="60" align="center">
+                <template slot-scope="scope">
+                  <el-button type="text" icon="el-icon-edit" size="mini"
+                             @click="handleExamine(scope.row.offerId)"></el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-card>
       </el-col>
       <el-col :span="8">
         <el-card></el-card>
       </el-col>
     </el-row>
+
+    <el-dialog title="处理报价" :visible.sync="offerExamineDialog"
+               @close="offerExamineDialogClose" width="70%">
+      <el-form :model="offerExamineForm" size="mini" label-width="80px"
+               ref="offerExamineRef" label-position="right">
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="主题" prop="offerTheme">
+              <el-tag>{{offerExamineForm.offerTheme}}</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="单号" prop="offerNumbers">
+              <el-tag>{{offerExamineForm.offerNumbers}}</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="状态" prop="offerStatus">
+              <el-tag>{{offerExamineForm.offerStatus | offerStatusFormat}}</el-tag>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-form-item label="联系人">
+              <el-tag>{{contactsName}}</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="销售机会">
+              <el-tag>{{saleName}}</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="负责人">
+              <el-tag>{{empName}}</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="金额">
+              <el-tag>{{amountMoney}}</el-tag>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-table :data="offerExamineForm.offerDetailResp">
+          <el-table-column label="产品名称" prop="productName"></el-table-column>
+          <el-table-column label="产品品牌" prop="productBrand"></el-table-column>
+          <el-table-column label="产品型号" prop="productModel"></el-table-column>
+          <el-table-column label="产品单价" prop="productPrice"></el-table-column>
+          <el-table-column label="产品数量" prop="offerDetailCount"></el-table-column>
+          <el-table-column label="金额" prop="amountMoney"></el-table-column>
+        </el-table>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="offerExamineDialog = false">取消</el-button>
+        <el-button type="primary" :loading="offerExamineLoading"
+                   @click="offerExamineClick">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import {offerHttp} from "../../network/pre_sale/offer";
+  import {getMonth} from "../../common/sanYiDate";
+  import {homeHttp} from "../../network/home";
+  import {newClueFormData,newCustomerFormData,newPageViewFormData,newOrderFormData} from '../../common/data/home_data'
+
   export default {
     name: "Index",
     data() {
       return {
+        offerExamineList:[],
+        offerExamineDialog:false,
+        offerExamineLoading:false,
+        offerExamineForm:{},
+        contactsName:'',
+        saleName:'',
+        empName:'',
+        amountMoney:0,
 
+        newClueForm:{
+          title:'本周',
+          data:'',
+          startDate:getMonth("s",0),
+          endDate:getMonth("e",0)
+        },
+        newClueFormData:newClueFormData,
+        newCustomerForm:{
+          title:'本周',
+          data:'',
+          startDate:getMonth("s",0),
+          endDate:getMonth("e",0)
+        },
+        newCustomerFormData:newCustomerFormData,
+        newPageViewForm:{
+          title:'本周',
+          data:'',
+          startDate:getMonth("s",0),
+          endDate:getMonth("e",0)
+        },
+        newPageViewFormData:newPageViewFormData,
+        newOrderForm:{
+          title:'本周',
+          data:'',
+          startDate:getMonth("s",0),
+          endDate:getMonth("e",0)
+        },
+        newOrderFormData:newOrderFormData
       }
     },
     mounted() {
@@ -112,6 +255,55 @@
       this.initChartThree()
     },
     methods:{
+      initNewClueForm() {
+        console.log(this.newClueForm.startDate)
+        console.log(this.newClueForm.endDate)
+        homeHttp.getNewClue(this.newClueForm).then(res => {
+          this.newClueForm.data = res.data
+        })
+      },
+
+      offerExamineClick() {
+        this.offerExamineLoading = true
+        offerHttp.offer_examine(this.offerExamineForm).then(res => {
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.offerExamineLoading = false
+            this.offerExamineDialog = false
+            this.initOfferExamineList()
+          } else {
+            this.$message.error(res.message)
+            this.offerExamineLoading = false
+          }
+        })
+      },
+      offerExamineDialogClose() {
+        this.$refs.offerExamineRef.resetFields()
+        this.offerExamineLoading = false
+        this.contactsName = ''
+        this.saleName = ''
+        this.empName = ''
+        this.amountMoney = 0
+      },
+      handleExamine(offerId) {
+        this.offerExamineDialog = true
+        offerHttp.getOffer(offerId).then(res => {
+          this.offerExamineForm = res.data
+          this.contactsName = res.data.contactsResp.contactsName
+          this.saleName = res.data.saleResp.saleName
+          this.empName = res.data.empResp.empName
+          for (let i=0;i<res.data.offerDetailResp.length;i++) {
+            this.amountMoney = parseFloat(res.data.offerDetailResp[i].amountMoney) + parseFloat(this.amountMoney)
+          }
+          this.amountMoney = this.amountMoney.toFixed(2)
+        })
+      },
+      initOfferExamineList() {
+        offerHttp.listExamine().then(res => {
+          this.offerExamineList = res.data
+        })
+      },
+
       initCharts() {
         let myChart = this.$echarts.init(this.$refs.chart);
         myChart.setOption({
@@ -296,23 +488,6 @@
                 {value: 40, name: 'rose8'}
               ]
             },
-            /*{
-              name: '面积模式',
-              type: 'pie',
-              radius: [30, 110],
-              center: ['50%', '50%'],
-              roseType: 'area',
-              data: [
-                {value: 10, name: 'rose1'},
-                {value: 5, name: 'rose2'},
-                {value: 15, name: 'rose3'},
-                {value: 25, name: 'rose4'},
-                {value: 20, name: 'rose5'},
-                {value: 35, name: 'rose6'},
-                {value: 30, name: 'rose7'},
-                {value: 40, name: 'rose8'}
-              ]
-            }*/
           ]
         })
       },
@@ -335,9 +510,17 @@
             }
           }]
         })
+      },
+      iHeaderRowStyle:function({row,rowIndex}){
+        return 'height:20px'
+      },
+      iHeaderCellStyle:function({row,column,rowIndex,columnIndex}){
+        return 'padding:5px'
       }
     },
     created() {
+      this.initOfferExamineList()
+      this.initNewClueForm()
     }
   }
 </script>

@@ -21,4 +21,5 @@ public interface ClueService {
     ResultVo shareClue(Integer clueId,String token);
     ResultVo invalidClue(Integer clueId,String token);
     ResultVo getClueFollow(Integer clueId);
+    ResultVo newClueCount(ClueReq clueReq);
 }

@@ -205,7 +205,9 @@ export function getWeekDate() {
 export function offerStatusFormat(offerStatus) {
   if (offerStatus == 0) {
     return '未审核'
-  } else {
+  } else if (offerStatus == 1) {
     return '已审核'
+  } else {
+    return '未审核'
   }
 }

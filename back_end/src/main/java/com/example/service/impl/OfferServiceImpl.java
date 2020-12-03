@@ -168,4 +168,32 @@ public class OfferServiceImpl implements OfferService {
         }
         return ResultUtils.response(addszOrder);
     }
+
+    @Override
+    public ResultVo listExamine() {
+        List<OfferResp> offerResps = offerMapper.listExamine();
+        return ResultUtils.response(offerResps);
+    }
+
+    @Override
+    public ResultVo offerExamine(OfferReq offerReq,String token) {
+        EmpResp empByToken = empMapper.getEmpByToken(token);
+        OfferResp offer = offerMapper.getOffer(offerReq.getOfferId());
+        if (offer == null) {
+            throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
+                    ResultEnum.DATA_NOT_EXIST.getMessage());
+        }
+        offerReq.setOfferStatus(1);
+        offerReq.setExaminePerson(empByToken.getEmpName());
+        offerReq.setExamineTime(DateUtils.getDate());
+        offerReq.setUpdateTime(DateUtils.getDate());
+        offerReq.setVersion(offer.getVersion());
+        int editOffer = offerMapper.editOffer(offerReq);
+        if (editOffer != 1) {
+            throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
+                    ResultEnum.DATA_UPDATE_FAIL.getMessage());
+        }
+
+        return ResultUtils.response(editOffer);
+    }
 }

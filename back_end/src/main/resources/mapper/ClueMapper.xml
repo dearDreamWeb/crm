@@ -226,4 +226,9 @@
         UPDATE clue SET handle_result = 0,update_time = #{updateTime}
         WHERE clue_id = #{clueId}
     </update>
+
+    <select id="newClueCount" resultType="int" parameterType="com.example.entity.request.ClueReq">
+        SELECT count(clue_id)
+        FROM clue WHERE create_time BETWEEN #{startDate} AND #{endDate}
+    </select>
 </mapper>

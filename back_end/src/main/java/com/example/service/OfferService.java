@@ -16,4 +16,16 @@ public interface OfferService {
     ResultVo listOfferByCus(Integer cusId);
     ResultVo listPageOffer(OfferReq offerReq);
     ResultVo turnOrder(SzOrder szOrder,String token);
+
+    /**
+     * 首页报价审核列表
+     * @return
+     */
+    ResultVo listExamine();
+
+    /**
+     * 报价审核
+     * @return
+     */
+    ResultVo offerExamine(OfferReq offerReq,String token);
 }

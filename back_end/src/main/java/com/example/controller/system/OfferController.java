@@ -54,4 +54,17 @@ public class OfferController {
         String token = request.getHeader("X-Token");
         return offerService.turnOrder(szOrder,token);
     }
+
+    @GetMapping("/list_examine")
+    public ResultVo listExamine() {
+        return offerService.listExamine();
+    }
+
+    @SysLog("报价审核")
+    @PostMapping("/offer_examine")
+    public ResultVo offerExamine(@RequestBody OfferReq offerReq,
+                                 HttpServletRequest request) {
+        String token = request.getHeader("X-Token");
+        return offerService.offerExamine(offerReq,token);
+    }
 }

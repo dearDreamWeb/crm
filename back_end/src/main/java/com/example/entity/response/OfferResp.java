@@ -25,6 +25,7 @@ public class OfferResp {
     private String examinePerson;
     private Date examineTime;
     private String remark;
+    private Integer version;
     private Date createTime;
     private Date updateTime;
     private Integer isDelete;

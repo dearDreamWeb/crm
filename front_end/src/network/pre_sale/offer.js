@@ -150,5 +150,20 @@ export const offerHttp = {
       url:'/socket/test'
     }
     return get(params)
+  },
+  listExamine:function () {
+    let params = {
+      url:'/offer/list_examine',
+    }
+    return get(params)
+  },
+  offer_examine:function (offer) {
+    let params = {
+      url:'/offer/offer_examine',
+      data:{
+        offer
+      }
+    }
+    return postJson(params)
   }
 }

@@ -305,6 +305,12 @@ public class ClueServiceImpl implements ClueService {
         return ResultUtils.response(clueFollowLogResps);
     }
 
+    @Override
+    public ResultVo newClueCount(ClueReq clueReq) {
+        int count = clueMapper.newClueCount(clueReq);
+        return ResultUtils.response(count);
+    }
+
     public static String clueHandleResultFormat(Integer clueHandleResult) {
         if (clueHandleResult != null && clueHandleResult == 1) {
             return "公司线索";

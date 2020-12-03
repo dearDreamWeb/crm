@@ -1,5 +1,6 @@
 package com.example.model.mapper;
 
+import com.example.entity.ResultVo;
 import com.example.entity.request.OfferReq;
 import com.example.entity.response.OfferResp;
 import org.springframework.stereotype.Repository;
@@ -21,4 +22,6 @@ public interface OfferMapper {
     List<OfferResp> listOfferByCus(Integer cusId);
     int editOfferTurn(Integer offerId);
     int editOfferStatus(Integer offerId);
+
+    List<OfferResp> listExamine();
 }

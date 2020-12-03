@@ -199,7 +199,7 @@
                                      @click="viewDetail(scope.row.offerId)">查看明细</el-button>
                           <el-button type="text" icon="el-icon-right" size="mini"
                                      @click="turnOrder(scope.row.offerId)"
-                                     :disabled="scope.row.isTurn == 1">转成订单</el-button>
+                                     :disabled="!scope.row.offerStatus == 1">转成订单</el-button>
                         </template>
                       </el-table-column>
                     </el-table>
