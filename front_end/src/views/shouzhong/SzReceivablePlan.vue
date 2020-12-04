@@ -56,12 +56,9 @@
                 :cell-style="{padding:'5px 0'}" >
         <el-table-column prop="ordId" label="订单编号"></el-table-column>
         <el-table-column prop="ordTheme" label="主题"></el-table-column>
-        <!--<el-table-column prop="customerResp.cusName" label="客户"></el-table-column>-->
         <el-table-column prop="ordHead" label="负责人"></el-table-column>
         <el-table-column prop="ordConsignee" label="收货人"></el-table-column>
-        <!--      <el-table-column prop="productResp.productName" label="产品"></el-table-column>-->
         <el-table-column prop="ordPhone" label="手机号码"></el-table-column>
-        <el-table-column prop="ordPlan" label="zhuangtai"></el-table-column>
         <el-table-column width="80" label="操作" >
           <template slot-scope="scope">
             <el-button type="text" size="small" icon="el-icon-plus"
@@ -83,17 +80,6 @@
         <div style="padding-bottom: 20px">
          <el-button size="mini" type="primary" icon="el-icon-plus" @click="xians">选择订单</el-button>
         </div>
-        <!--<el-row>
-          <el-col>
-            <el-form-item label="关联订单" >
-              <el-select v-model="addForm.ordId" placeholder="请选择订单" size="medium" @change="oidChange">
-                <el-option v-for="(item,i) in ordList" :key="i"
-                           :label="item.ordTheme" :value="item.ordId">
-                </el-option>
-              </el-select>
-              </el-form-item>
-          </el-col>
-        </el-row>-->
         <el-row>
           <el-col :span="12">
             <el-form-item label="关联订单" prop="ordTheme" width="217px" >
@@ -147,8 +133,7 @@
     <el-drawer
       :visible.sync="dialogTableVisible"
       direction="btt" size="60%"  width="80%"
-      :with-header="false"
-    >
+      :with-header="false">
       <div class="recordstyle">回款记录</div>
       <el-table :data="szrecord" :row-style="{height:'1px'}"
                 :cell-style="{padding:'1px 0'}" height="300px">
@@ -199,16 +184,16 @@
                 <el-button @click="look_record(scope.row.recoId)" size="mini" plain>查看记录</el-button>
               </span>
             <span v-if="scope.row.recoHasmoney > 0 && scope.row.moneyPlan > scope.row.recoHasmoney">
-                <el-button @click="again_record(scope.row.recoId)" size="mini" plain>继续回款</el-button>
+                <el-button @click="again_record(scope.row)" @change="qian" size="mini" plain>继续回款</el-button>
               </span>
           </template>
         </el-table-column>
       </el-table>
     </el-drawer>
     <!--立刻回款的弹窗-->
-    <el-dialog :visible.sync="likeDialog" @close="likeHandleClose" title="回款记录">
+    <el-dialog :visible.sync="likeDialog" @close="likeHandleClose" title="回款中">
       <el-form :model="likeForm"  label-width="100px" :rules="likeFormRules"
-               label-position="right" ref="likeFormRef">
+               label-position="right" ref="likeForm">
         <el-row>
           <el-col :span="11">
             <el-form-item label="回款记录编号" prop="recoId">
@@ -265,7 +250,54 @@
       <span slot="footer">
         <el-button @click="likeDialog = false">取消</el-button>
         <el-button type="primary" @click="like_recordClick"
-                   :loading="like_recordButtonLoading">确定</el-button>
+                   :loading="like_recordButtonLoading">确定1</el-button>
+      </span>
+    </el-dialog>
+    <!--查看记录的弹窗-->
+    <el-dialog :visible.sync="lookDialog" @close="likeHandleClose" title="查看回款记录">
+      <el-form :model="lookForm"  label-width="100px" :rules="lookFormRules"
+               label-position="right" ref="likeFormRef">
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="回款记录编号" prop="recoId">
+              <el-input v-model="lookForm.recoId" size="medium " :disabled="true" style="border: 0px"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="应回款金额" prop="moneyPlan">
+              <el-input v-model="lookForm.moneyPlan" size="medium" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="回款期次" prop="recordPlan">
+              <el-input v-model="lookForm.recordPlan" size="medium " :disabled="true" style="border: 0px"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="已回款金额" prop="recoHasmoney">
+              <el-input v-model="lookForm.recoHasmoney" size="medium " style="border: 0px" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="交易流水号" prop="recoLiushui" >
+              <el-input v-model="lookForm.recoLiushui" size="medium" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="回款时间" prop="recoTime">
+              <el-date-picker type="date" placeholder="选择日期"
+                              v-model="lookForm.recoTime" style="width: 100%;" :disabled="true">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer">
+        <el-button type="primary" @click="lookDialog = false">关闭</el-button>
       </span>
     </el-dialog>
   </div>
@@ -295,11 +327,33 @@
           planMoney:'',
           szReceivableRecorde:[]
         },
+        lookForm:{},
         likeForm:{},
-        likeFormRules:{},
+        lookFormRules:{},
+        likeFormRules:{
+          recoMoney:[
+            {required:true,message:'请填写回款金额',trigger:'blur'},
+            {min:1,max:20,message:'请输入有效数字'}
+          ],
+          recoLiushui:[
+            {required:true,message:'请填写交易流水号',trigger:'blur'},
+            {min:7,max:25,message:'请输入有效数字'}
+          ],
+          recoTime:[
+            {type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+          ],
+        },
         editForm:{},
         editFormRules:{},
-        FormRules:{},
+        FormRules:{
+          ordTheme:[
+            {required:true}
+          ],
+          ordTotalmoney:[
+            {required:true}
+          ]
+        },
+        ordTheme:"",
         ordTotalmoney:0,
         rowplanId: 0,
         rowrecoId: 0,
@@ -324,6 +378,7 @@
         pageSize:5,
         total:1,
         /*editDialog:false,*/
+        lookDialog:false,
         likeDialog:false,
         multipleSelection: [],
         suijishu:'',
@@ -534,16 +589,38 @@
       /*立即回款*/
       like_recordClick(){
         this.like_recordButtonLoading=true
-        console.log(this.likeForm.recoId)
+        console.log("1所有参数：",this.likeForm.planId)
         this.likeForm.recoId=this.likeForm.recoId
-        planHttp.editrecordhas(this.likeForm).then(res=>{
-          console.log("11111",this.likeForm);
-          if (res.code === 20000) {
-            this.$message.success(res.message)
-            /*this.initList()*/
-            /*this.chakan_record()*/
+        this.likeForm.planId=this.likeForm.planId
+        planHttp.editrecordhas2(this.likeForm).then(res=>{
+          console.log("获取陈 ....",res);
+          if(res && res.length > 0){
+            //成功了，且返回了修改之后的数据信息
+            this.szrecord = res
             this.like_recordButtonLoading = false
             this.likeDialog = false
+            this.$message({
+              message:"回款成功",
+              type:'success'
+            })
+          }else{
+            //没有成功
+            this.$message({
+              message:res.message,
+              type:'error'
+            })
+            this.like_recordButtonLoading = false
+          }
+          console.log("11111",this.likeForm);
+       /*   if (res.code === 20000) {
+            console.log("222",res.data);
+            this.$message.success(res.message)
+            /!*this.initList()*!/
+            /!*this.chakan_record()*!/
+            this.like_recordButtonLoading = false
+            this.likeDialog = false
+
+            this.dialogTableVisible = true
           }else {
             this.$message({
               message:res.message,
@@ -551,16 +628,9 @@
             })
             this.like_recordButtonLoading = false
             window.console.log(this.likeDialog)
-          }
+          }*/
         })
       },
-      /*  editPlanClick(){
-          this.editPlanButtonLoading=true
-          /!*this.editForm.cusId=this.rowplanId*!/
-          planHttp.editplan(this.editForm).then(res=>{
-            console.log("111")
-          })
-        },*/
       chakan_record(val){
         this.dialogTableVisible = true;
         planHttp.chakan_record(val).then(res=>{
@@ -578,17 +648,28 @@
         })
       },
       look_record(val){
-        this.likeDialog = true;
+        this.lookDialog = true;
         planHttp.getrecord(val).then(res=>{
-          this.likeForm=res.data
-          console.log(this.likeForm)
+          this.lookForm=res.data
+          console.log(this.lookForm)
         })
       },
+      qian(val){
+        let moneyPlan = val.moneyPlan
+        let recoHasmoney = val.recoHasmoney
+        this.likeForm.recoMoney = moneyPlan - recoHasmoney
+        console.log("1qian", this.likeForm.recoMoney)
+      },
       again_record(val){
+        //moneyPlan应回款-已回款recoHasmoney=回款recoMoney
+        let moneyPlan = val.moneyPlan
+        let recoHasmoney = val.recoHasmoney
         this.likeDialog = true;
-        planHttp.getrecord(val).then(res=>{
+        planHttp.getrecord(val.recoId).then(res=>{
           this.likeForm=res.data
           console.log(this.likeForm)
+          this.likeForm.recoMoney = moneyPlan - recoHasmoney
+          console.log("2qian", this.likeForm.recoMoney)
         })
       },
       handleCurrentChange(pageIndex) {

@@ -50,11 +50,14 @@
     <select id="getszReco" resultMap="RecordResult">
         SELECT * FROM sz_receivable_record WHERE reco_id = #{recoId}
     </select>
-
+<!--SELECT reco_id, reco_receivable, reco_caozuopeople, reco_time, reco_hasmoney,reco_money, reco_liushui, record_plan, time_plan, money_plan,reco_createtime, plan_id
+         FROM sz_receivable_record WHERE plan_id=#{recoId}-->
     <!--回款计划和回款记录-->
     <select id="listPlanANDReco" resultMap="RecordResult">
-        SELECT reco_id, reco_receivable, reco_caozuopeople, reco_time, reco_hasmoney,reco_money, reco_liushui, record_plan, time_plan, money_plan,reco_createtime, plan_id
-         FROM sz_receivable_record WHERE plan_id=#{recoId}
+        SELECT  rr.*,rp.*
+        from sz_receivable_record rr
+        left join sz_receivable_plan rp on rr.plan_id=rp.plan_id
+        where rr.plan_id=#{recoId}
     </select>
     <!--增-->
     <insert id="addPlanANDReco" parameterType="java.util.List">

@@ -115,6 +115,22 @@ export const planHttp = {
     }
     return postJson(params)
   },
+  editrecordhas2:function (record) {
+    let params = {
+      url:'/record/edit_has2',
+      data:{
+        'recoId':record.recoId,
+        'moneyPlan':record.moneyPlan,
+        'timePlan':record.timePlan,
+        'recordPlan':record.recordPlan,
+        'recoMoney':record.recoMoney,
+        'recoLiushui':record.recoLiushui,
+        'recoTime':record.recoTime,
+        'planId':record.planId
+      }
+    }
+    return postJson(params)
+  },
   listPage:function (pageNum,pageSize) {
     let params = {
       url:'/plan/list_all',

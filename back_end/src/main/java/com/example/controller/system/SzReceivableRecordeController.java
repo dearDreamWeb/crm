@@ -40,4 +40,29 @@ public class SzReceivableRecordeController{
     public ResultVo editszRecoHas(@RequestBody SzReceivableRecord record){
         return szReceivableRecordService.editszRecoHas(record);
     }
+
+    @SysLog("修改订单2")
+    @PostMapping("/edit_has2")
+    public List<SzReceivableRecord> editszRecoHas2(@RequestBody SzReceivableRecord record){
+        System.out.println("我是接受"+record);
+        ResultVo vo = szReceivableRecordService.editszRecoHas(record);
+        System.out.println("修改的结果是："+vo);
+        System.out.println(record.getSzReceivablePlan());
+        if (vo.getCode() == 20000){
+            System.out.println("修改计划回款planId:"+record.getPlanId());
+            return recordServicelmpl.listPlanANDReco(record.getPlanId());
+        }else {
+            System.out.println("修改失败");
+            return null;
+        }
+        /*
+        * int i = 调用修改的方法
+        * if(i>=1){
+        *   return recordServicelmpl.listPlanANDReco(recoId);
+        * }else{
+        *   return null
+        * }
+        *
+        * */
+    }
 }
