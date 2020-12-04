@@ -43,14 +43,14 @@
             </el-row>
             <el-row :gutter="20">
               <el-col :span="10">
-                <el-form-item label="选择日期段">
+                <el-form-item label="选择日期">
                   <el-date-picker v-model="searchForm.startDate" format="yyyy-MM-dd"
                                   value-format="yyyy-MM-dd" type="date" style="width: 46%"
-                                  placeholder="请输入"></el-date-picker>
+                                  placeholder="请选择日期"></el-date-picker>
                   <span>-</span>
                   <el-date-picker v-model="searchForm.endDate" format="yyyy-MM-dd"
                                   value-format="yyyy-MM-dd" type="date" style="width: 46%"
-                                  placeholder="请输入"></el-date-picker>
+                                  placeholder="请选择日期"></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
@@ -197,7 +197,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8" width="600px">
-            <el-form-item label="客户" size="medium" style="margin-top: 4px">
+            <el-form-item label="客户" size="medium" style="margin-top: 4px" prop="cusId">
               <el-select v-model="addForm.cusId" placeholder="请选择客户" >
                 <el-option v-for="item in cusList" :key="item.cusId"
                            :label="item.cusName" :value="item.cusId">
@@ -502,8 +502,8 @@
             {required:true,message:'请输入主题',trigger:'blur'},
             {min:3,max:12,message:'长度在3~12个字符之间'}
           ],
-          ordHead:[
-            {required:true,message:'请选择客户,还没改ordHead',trigger:'blur'}
+          cusId:[
+            {required: true, message: '请选择客户', trigger: 'change'}
           ],
           ordConsignee:[
             {required:true,message:'请输入收货人姓名',trigger:'blur'},
