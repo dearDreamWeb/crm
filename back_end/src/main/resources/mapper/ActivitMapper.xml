@@ -131,4 +131,8 @@
     <update id="addViews">
         UPDATE activity SET views = views + 1 WHERE activity_id = #{activityId}
     </update>
+
+    <select id="pageViewCount" resultType="int">
+        SELECT SUM(views) FROM activity;
+    </select>
 </mapper>

@@ -160,6 +160,10 @@
         </el-pagination>
       </el-card>
 
+      <el-divider></el-divider>
+
+      <sale-chart></sale-chart>
+
       <el-dialog title="机会添加" :visible.sync="addDialog" @close="addDialogClose" top="30px">
         <el-form :model="addForm" ref="addFormRef" :rules="addFormRules"
                  label-width="80px" label-position="right" size="mini">
@@ -338,11 +342,17 @@
   import {contactsHttp} from "../../network/pre_sale/contacts";
   import {dictHttp} from "../../network/system/dict";
   import {userHttp} from "../../network/system/user";
+  import SaleChart from "../../components/statistics/SaleChart";
+  import {noRepeat, unique} from "../../common/sanYiDate";
 
   export default {
     name: "Sale",
+    components: {SaleChart},
     data() {
       return {
+        saleStageCountData:[],//阶段数量label数组
+        saleStageCountStringData:[],//阶段数量对象数组
+
         editForm:{
           saleId:'',
           saleName:'',
@@ -630,17 +640,27 @@
           this.empList = res.data.list
         })
       },
+      initAllSaleList() {
+        saleHttp.all_sale_list().then(res => {
+          /*for (let i=0;i<res.data.length;i++) {
+            if (res.data[i].saleDetailResp.saleStage != null) {
+              this.saleStageCountStringData.push(res.data[i].saleDetailResp.saleStage)
+            }
+          }*/
+        })
+      },
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'
       },
       iHeaderCellStyle:function({row,column,rowIndex,columnIndex}){
         return 'padding:5px'
-      }
+      },
     },
     created() {
       this.initList()
       this.initEmpList()
       this.initCustomerList()
+      this.initAllSaleList()
     }
   }
 </script>

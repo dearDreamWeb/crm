@@ -274,6 +274,12 @@ public class CustomerServiceImpl implements CustomerService {
         return ResultUtils.response("新增成功");
     }
 
+    @Override
+    public ResultVo newCustomerCount(CustomerReq customerReq) {
+        int count = customerMapper.newCustomerCount(customerReq);
+        return ResultUtils.response(count);
+    }
+
     public List<CustomerResp> customerFormat(List<CustomerResp> list) {
         List<CustomerResp> customerResps = new ArrayList<>();
         for (int i=0;i<list.size();i++) {

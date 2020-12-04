@@ -28,4 +28,5 @@ public interface ClueMapper {
     int invalidClue(@Param("clueId") Integer clueId, @Param("updateTime") Date updateTime);
 
     int newClueCount(ClueReq clueReq);
+    int clueCount();
 }

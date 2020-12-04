@@ -297,4 +297,9 @@
         INNER JOIN sale s ON s.cus_id = cu.cus_id
         WHERE s.sale_id = #{saleId}
     </select>
+
+    <select id="newCustomerCount" resultType="int" parameterType="com.example.entity.request.CustomerReq">
+        SELECT count(cus_id)
+        FROM customer WHERE create_time BETWEEN #{startDate} AND #{endDate}
+    </select>
 </mapper>

@@ -75,3 +75,74 @@ export const getMonth = (type,months) => {
   };
   return day;
 }
+
+export const homeChange = (num) => {
+  if (num == 1) {
+    let starMonth = getMonth("s",-1);
+    let endMonth = getMonth("e",-1);
+    return starMonth+','+endMonth;
+  } else if (num == 2) {
+    let starMonday = getMonday("s",-1);
+    let endMonday = getMonday("e",-1);
+    return starMonday+','+endMonday;
+  } else if (num == 3) {
+    let starMonday = getMonday("s",0);
+    let endMonday = getMonday("e",0);
+    return starMonday+','+endMonday;
+  } else if (num == 4) {
+    var curYearStartDate = getCurYearStartDate();
+    var curYearEndDate = getCurYearEndDate();
+    return curYearStartDate+','+curYearEndDate;
+  } else {
+    let starMonday = getMonday("s",0);
+    let endMonday = getMonday("e",0);
+    return starMonday+','+endMonday;
+  }
+}
+
+var date = new Date();
+function formatDate(curDate) {
+  var getCurYear = curDate.getFullYear();
+  var month = curDate.getMonth() + 1;
+  var curDate = curDate.getDate();
+
+  if (month > 0 && month < 10) {
+    month = "0" + month;
+  }
+  if (curDate > 0 && curDate < 10) {
+    curDate = "0" + curDate;
+  }
+  return getCurYear + "-" + month + "-" + curDate;
+}
+
+function getCurYearStartDate() {
+  var curYear = date.getFullYear();
+  return formatDate(new Date(curYear,0,1));
+}
+
+function getCurYearEndDate() {
+  var curtYear = date.getFullYear();
+  return formatDate(new Date(curtYear,11,31));
+}
+
+export function Percentage(num, total) {
+  if (num == 0 || total == 0){
+    return 0;
+  }
+  return (Math.round(num / total * 10000) / 100.00 + "%");// 小数点后两位百分比
+}
+
+export function noRepeat(arr){
+  // 准备一个空箱子
+  var lsArr = [];
+  // 逐个拿到老箱子中的所有商品
+  for(var i=0;i<arr.length;i++){
+    // 在新箱子中查看,是否有这个商品
+    if(!lsArr.includes(arr[i])){
+      // 如果没有,放进去
+      lsArr.push(arr[i]);
+    }
+  }
+  // 返回去重之后的新箱子
+  return lsArr;
+}

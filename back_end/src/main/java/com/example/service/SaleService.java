@@ -18,4 +18,6 @@ public interface SaleService {
     ResultVo addSaleDetailDemand(SaleDetailDemand saleDetailDemand,String token);
     ResultVo editSaleAndDetail(SaleDetailDemand saleDetailDemand);
     ResultVo selectSaleAndDemandAndSolution(SaleReq saleReq);
+
+    ResultVo listAllSale();
 }

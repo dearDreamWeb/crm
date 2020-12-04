@@ -5,6 +5,7 @@ import com.example.common.exception.SysException;
 import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
 import com.example.entity.SaleDetailDemand;
+import com.example.entity.StatisticsEntity;
 import com.example.entity.request.DemandReq;
 import com.example.entity.request.SaleDetailReq;
 import com.example.entity.request.SaleReq;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -263,6 +265,20 @@ public class SaleServiceImpl implements SaleService {
     public ResultVo selectSaleAndDemandAndSolution(SaleReq saleReq) {
         List<SaleResp> saleResps = saleMapper.selectSaleAndDemandAndSolution(saleReq);
         return ResultUtils.response(saleResps);
+    }
+
+    @Override
+    public ResultVo listAllSale() {
+        List<SaleResp> saleResps = saleMapper.listAllSale();
+        String[] arrs = new String[saleResps.size()];
+        for (int i = 0; i < arrs.length; i++) {
+            arrs[i] = saleResps.get(i).getSaleDetailResp().getSaleStage();
+            System.out.print(arrs[i]+",");
+        }
+        System.out.println();
+        List<StatisticsEntity> list = new ArrayList<>();
+        StatisticsEntity entity = new StatisticsEntity();
+        return ResultUtils.response(list);
     }
 
     public static String degreeRating(String degree) {

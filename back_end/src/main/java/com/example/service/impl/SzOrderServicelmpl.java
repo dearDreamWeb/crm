@@ -143,5 +143,11 @@ public class SzOrderServicelmpl implements SzOrderService {
     public List<SzOrder> orderAll(Integer ordId) {
         return szorderMapper.orderAll(ordId);
     }
+
+    @Override
+    public ResultVo newOrderCount(SzOrder szOrder) {
+        int count = szorderMapper.newOrderCount(szOrder);
+        return ResultUtils.response(count);
+    }
 }
 

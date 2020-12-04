@@ -7,21 +7,25 @@ module.exports = {
   newClueFormData : [
     {label:'上月',value:1},
     {label:'上周',value:2},
-    {label:'本周',value:3}
+    {label:'本周',value:3},
+    {label:'今年',value:4}
   ],
   newCustomerFormData : [
     {label:'上月',value:1},
     {label:'上周',value:2},
-    {label:'本周',value:3}
+    {label:'本周',value:3},
+    {label:'今年',value:4}
   ],
   newPageViewFormData : [
     {label:'上月',value:1},
     {label:'上周',value:2},
-    {label:'本周',value:3}
+    {label:'本周',value:3},
+    {label:'今年',value:4}
   ],
   newOrderFormData : [
     {label:'上月',value:1},
     {label:'上周',value:2},
-    {label:'本周',value:3}
+    {label:'本周',value:3},
+    {label:'今年',value:4}
   ]
 }

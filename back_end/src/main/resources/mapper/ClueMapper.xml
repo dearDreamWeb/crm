@@ -231,4 +231,8 @@
         SELECT count(clue_id)
         FROM clue WHERE create_time BETWEEN #{startDate} AND #{endDate}
     </select>
+
+    <select id="clueCount" resultType="int">
+        SELECT COUNT(clue_id) FROM clue;
+    </select>
 </mapper>

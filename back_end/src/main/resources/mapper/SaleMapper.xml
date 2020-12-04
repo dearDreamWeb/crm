@@ -249,4 +249,16 @@
         LEFT JOIN solution so ON so.demand_id = de.demand_id
         WHERE sa.cus_id = #{cusId}
     </select>
+
+    <select id="listAllSale" resultMap="DetailResult">
+        SELECT sa.*,sd.*
+        FROM sale sa
+        LEFT JOIN sale_detail sd ON sa.sale_id = sd.sale_id
+    </select>
+
+    <select id="getCountBySaleStage" resultType="int">
+        SELECT count(sa.sale_id) FROM sale sa
+        LEFT JOIN sale_detail sd ON sa.sale_id = sd.sale_id
+        WHERE sd.sale_stage = #{saleStage}
+    </select>
 </mapper>

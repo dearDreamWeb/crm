@@ -9,77 +9,113 @@
       <el-col :span="6">
         <el-card>
           <div slot="header">
-            <span>本周新线索</span>
+            <span>新线索</span>
             <!--<el-button icon="el-icon-set-up" style="float: right; padding: 3px 0" type="text">切换</el-button>-->
-            <el-select v-model="newClueForm.title" size="mini" clearable
-                       style="float: right;width: 85px;padding: 0 0">
+            <el-select v-model="newClueForm.title" size="mini" clearable @change="newClueChange"
+                       style="float: right;width: 85px;padding: 0 0" @clear="newClueClear">
               <el-option v-for="item in newClueFormData" :key="item.value"
                          :label="item.label" :value="item.value"></el-option>
             </el-select>
           </div>
-          <div>
-            <div id="uvClue" style="font-size: 30px">5325</div>
-          </div>
-          <div>
-            <span>日新增 180</span>
-          </div>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <div>
+                <div id="uvClue" style="font-size: 30px">{{newClueForm.data}}</div>
+              </div>
+              <div>
+                <span>日新增 180</span>
+              </div>
+            </el-col>
+            <el-col :span="8" :offset="4">
+              <div>
+                <i style="font-size: 50px" class="el-icon-s-ticket"></i>
+              </div>
+            </el-col>
+          </el-row>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card>
           <div slot="header">
-            <span>本周新客户</span>
+            <span>新客户</span>
             <!--<el-button icon="el-icon-set-up" style="float: right; padding: 3px 0" type="text">切换</el-button>-->
-            <el-select v-model="newCustomerForm.title" size="mini" clearable
-                       style="float: right;width: 85px;padding: 0 0">
+            <el-select v-model="newCustomerForm.title" size="mini" clearable @change="newCustomerChange"
+                       style="float: right;width: 85px;padding: 0 0" @clear="newCustomerClear">
               <el-option v-for="item in newCustomerFormData" :key="item.value"
                          :label="item.label" :value="item.value"></el-option>
             </el-select>
           </div>
-          <div>
-            <div id="uvChart" style="font-size: 30px">5325</div>
-          </div>
-          <div>
-            <span>日新增 180</span>
-          </div>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <div>
+                <div id="uvChart" style="font-size: 30px">{{newCustomerForm.data}}</div>
+              </div>
+              <div>
+                <span>日新增 180</span>
+              </div>
+            </el-col>
+            <el-col :span="8" :offset="4">
+              <div>
+                <i style="font-size: 50px" class="el-icon-s-custom"></i>
+              </div>
+            </el-col>
+          </el-row>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card>
           <div slot="header">
-            <span>本周PV</span>
-            <!--<el-button icon="el-icon-set-up" style="float: right; padding: 3px 0" type="text">切换</el-button>-->
+            <span>活动PV</span>
+            <!--<el-button icon="el-icon-set-up" style="float: right; padding: 3px 0" type="text">切换</el-button>
             <el-select v-model="newPageViewForm.title" size="mini" clearable
                        style="float: right;width: 85px;padding: 0 0">
               <el-option v-for="item in newPageViewFormData" :key="item.value"
                          :label="item.label" :value="item.value"></el-option>
-            </el-select>
+            </el-select>-->
           </div>
-          <div>
-            <div id="pvChart" style="font-size: 30px">96546</div>
-          </div>
-          <div>
-            <span>转化率 78%</span>
-          </div>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <div>
+                <div id="pvChart" style="font-size: 30px">{{newPageViewForm.data}}</div>
+              </div>
+              <div>
+                <span>转化率{{conversionRate}}</span>
+              </div>
+            </el-col>
+            <el-col :span="8" :offset="4">
+              <div>
+                <i style="font-size: 50px" class="el-icon-view"></i>
+              </div>
+            </el-col>
+          </el-row>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card>
           <div slot="header">
-            <span>本周订单</span>
+            <span>新订单</span>
             <!--<el-button icon="el-icon-set-up" style="float: right; padding: 3px 0" type="text">切换</el-button>-->
-            <el-select v-model="newOrderForm.title" size="mini" clearable
-                       style="float: right;width: 85px;padding: 0 0">
+            <el-select v-model="newOrderForm.title" size="mini" clearable @change="newOrderChange"
+                       style="float: right;width: 85px;padding: 0 0" @clear="newOrderClear">
               <el-option v-for="item in newOrderFormData" :key="item.value"
                          :label="item.label" :value="item.value"></el-option>
             </el-select>
           </div>
-          <div>
-            <div id="orderChart" style="font-size: 30px">¥ 645435</div>
-          </div>
-          <div>
-            <span>日新增 6</span>
-          </div>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <div>
+                <div id="orderChart" style="font-size: 30px">{{newOrderForm.data}}</div>
+              </div>
+              <div>
+                <span>日新增 6</span>
+              </div>
+            </el-col>
+            <el-col :span="8" :offset="4">
+              <div>
+                <i style="font-size: 50px" class="el-icon-document"></i>
+              </div>
+            </el-col>
+          </el-row>
         </el-card>
       </el-col>
     </el-row>
@@ -201,9 +237,10 @@
 
 <script>
   import {offerHttp} from "../../network/pre_sale/offer";
-  import {getMonth} from "../../common/sanYiDate";
+  import {getMonth, homeChange} from "../../common/sanYiDate";
   import {homeHttp} from "../../network/home";
   import {newClueFormData,newCustomerFormData,newPageViewFormData,newOrderFormData} from '../../common/data/home_data'
+  import {Percentage} from "../../common/sanYiDate";
 
   export default {
     name: "Index",
@@ -225,6 +262,8 @@
           endDate:getMonth("e",0)
         },
         newClueFormData:newClueFormData,
+        clueCount:0,//所有线索的数量
+        conversionRate:'',//转化率
         newCustomerForm:{
           title:'本周',
           data:'',
@@ -255,11 +294,77 @@
       this.initChartThree()
     },
     methods:{
-      initNewClueForm() {
-        console.log(this.newClueForm.startDate)
-        console.log(this.newClueForm.endDate)
+      newClueClear() {
+        this.newClueForm.title = 3
+        this.newClueChange(3)
+      },
+      newClueChange(value) {
+        let clueChange = homeChange(value);
+        var strings;
+        if (clueChange != null) {
+          strings = clueChange.split(",");
+          this.newClueForm.startDate = strings[0];
+          this.newClueForm.endDate = strings[1];
+        }
         homeHttp.getNewClue(this.newClueForm).then(res => {
           this.newClueForm.data = res.data
+        })
+      },
+      newCustomerClear() {
+        this.newCustomerForm.title = 3
+        this.newCustomerChange(3)
+      },
+      newCustomerChange(value) {
+        let clueChange = homeChange(value);
+        var strings;
+        if (clueChange != null) {
+          strings = clueChange.split(",");
+          this.newCustomerForm.startDate = strings[0];
+          this.newCustomerForm.endDate = strings[1];
+        }
+        homeHttp.getNewCustomer(this.newCustomerForm).then(res => {
+          this.newCustomerForm.data = res.data
+        })
+      },
+      newOrderClear() {
+        this.newOrderForm.title = 3
+        this.newOrderChange(3)
+      },
+      newOrderChange(value) {
+        let clueChange = homeChange(value);
+        var strings;
+        if (clueChange != null) {
+          strings = clueChange.split(",");
+          this.newOrderForm.startDate = strings[0];
+          this.newOrderForm.endDate = strings[1];
+        }
+        homeHttp.getNewOrder(this.newOrderForm).then(res => {
+          this.newOrderForm.data = res.data
+        })
+      },
+
+      initNewClueForm() {
+        homeHttp.getNewClue(this.newClueForm).then(res => {
+          this.newClueForm.data = res.data
+        })
+        homeHttp.getClueCount().then(res => {
+          var data = res.data;
+          this.conversionRate = Percentage(data,this.newPageViewForm.data);
+        })
+      },
+      initNewCustomer() {
+        homeHttp.getNewCustomer(this.newCustomerForm).then(res => {
+          this.newCustomerForm.data = res.data
+        })
+      },
+      initPageView() {
+        homeHttp.getPageView().then(res => {
+          this.newPageViewForm.data = res.data
+        })
+      },
+      initNewOrder() {
+        homeHttp.getNewOrder(this.newOrderForm).then(res => {
+          this.newOrderForm.data = res.data
         })
       },
 
@@ -521,6 +626,9 @@
     created() {
       this.initOfferExamineList()
       this.initNewClueForm()
+      this.initNewCustomer()
+      this.initPageView()
+      this.initNewOrder()
     }
   }
 </script>
