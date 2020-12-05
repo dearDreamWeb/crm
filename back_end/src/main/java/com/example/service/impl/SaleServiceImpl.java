@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: pengjia
@@ -271,13 +273,21 @@ public class SaleServiceImpl implements SaleService {
     public ResultVo listAllSale() {
         List<SaleResp> saleResps = saleMapper.listAllSale();
         String[] arrs = new String[saleResps.size()];
+        List<StatisticsEntity> list = new ArrayList<>();
+        Set set = new HashSet();
         for (int i = 0; i < arrs.length; i++) {
             arrs[i] = saleResps.get(i).getSaleDetailResp().getSaleStage();
-            System.out.print(arrs[i]+",");
         }
-        System.out.println();
-        List<StatisticsEntity> list = new ArrayList<>();
-        StatisticsEntity entity = new StatisticsEntity();
+        for (int i=0;i<arrs.length;i++) {
+            set.add(arrs[i]);
+        }
+        for (Object arr : set) {
+            StatisticsEntity entity = new StatisticsEntity();
+            int countBySaleStage = saleMapper.getCountBySaleStage((String) arr);
+            entity.setName((String)arr);
+            entity.setValue(countBySaleStage);
+            list.add(entity);
+        }
         return ResultUtils.response(list);
     }
 

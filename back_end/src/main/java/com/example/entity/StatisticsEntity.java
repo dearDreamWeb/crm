@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StatisticsEntity {
-    private String saleName;
-    private Integer saleValue;
+    private String name;
+    private Integer value;
 }

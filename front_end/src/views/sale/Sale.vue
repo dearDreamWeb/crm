@@ -162,7 +162,9 @@
 
       <el-divider></el-divider>
 
-      <sale-chart></sale-chart>
+      <!--<sale-chart ref="saleChartRef" v-bind="$attrs" v-on="$listeners"
+                  v-bind:salestagecount="saleStageCount"
+                  v-bind:salestagecountname="saleStageCountName"></sale-chart>-->
 
       <el-dialog title="机会添加" :visible.sync="addDialog" @close="addDialogClose" top="30px">
         <el-form :model="addForm" ref="addFormRef" :rules="addFormRules"
@@ -342,7 +344,7 @@
   import {contactsHttp} from "../../network/pre_sale/contacts";
   import {dictHttp} from "../../network/system/dict";
   import {userHttp} from "../../network/system/user";
-  import SaleChart from "../../components/statistics/SaleChart";
+  import SaleChart from "../../components/echarts/SaleChart";
   import {noRepeat, unique} from "../../common/sanYiDate";
 
   export default {
@@ -350,8 +352,8 @@
     components: {SaleChart},
     data() {
       return {
-        saleStageCountData:[],//阶段数量label数组
-        saleStageCountStringData:[],//阶段数量对象数组
+        saleStageCount:[],
+        saleStageCountName:[],
 
         editForm:{
           saleId:'',
@@ -642,11 +644,10 @@
       },
       initAllSaleList() {
         saleHttp.all_sale_list().then(res => {
-          /*for (let i=0;i<res.data.length;i++) {
-            if (res.data[i].saleDetailResp.saleStage != null) {
-              this.saleStageCountStringData.push(res.data[i].saleDetailResp.saleStage)
-            }
-          }*/
+          this.saleStageCount = res.data
+          for (let i=0;i<res.data.length;i++) {
+            this.saleStageCountName.push(res.data[i].name)
+          }
         })
       },
       iHeaderRowStyle:function({row,rowIndex}){
@@ -661,7 +662,7 @@
       this.initEmpList()
       this.initCustomerList()
       this.initAllSaleList()
-    }
+    },
   }
 </script>
 

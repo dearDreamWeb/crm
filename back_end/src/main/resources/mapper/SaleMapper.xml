@@ -253,7 +253,7 @@
     <select id="listAllSale" resultMap="DetailResult">
         SELECT sa.*,sd.*
         FROM sale sa
-        LEFT JOIN sale_detail sd ON sa.sale_id = sd.sale_id
+        INNER JOIN sale_detail sd ON sa.sale_id = sd.sale_id
     </select>
 
     <select id="getCountBySaleStage" resultType="int">

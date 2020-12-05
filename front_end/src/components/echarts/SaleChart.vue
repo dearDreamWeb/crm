@@ -8,12 +8,29 @@
     <el-row :gutter="20">
       <el-col :span="12">
         <el-card>
-          <div style="width: 100%;height: 500px" ref="saleStageCountChartRef"></div>
+          <div slot="header" class="clearfix">
+            <span>销售机会统计</span>
+          </div>
+          <div>
+            <div style="width: 100%;height: 500px" ref="saleStageCountChartRef"></div>
+          </div>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card>
-          <div style="width: 100%;height: 500px" ref="saleStageChartRef"></div>
+          <div slot="header" class="clearfix">
+            <span>销售机会统计</span>
+            <el-select v-model="distribution" clearable placeholder="请选择"
+                       size="mini" style="float: right; padding: 3px 0">
+              <el-option v-for="item in distributionData" :key="item.value"
+                         :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <div style="width: 100%;height: 500px" ref="saleStageChartRef"></div>
+          </div>
+          {{salestagecount}}
+          {{salestagecountname}}
         </el-card>
       </el-col>
     </el-row>
@@ -21,11 +38,26 @@
 </template>
 
 <script>
+  import {distributionSelectData} from '../../common/data/home_data'
   export default {
     name: "SaleChart",
+    props:{
+      salestagecountname:{
+        type: Array,
+        required: true
+      },
+      salestagecount:{
+        type: Array,
+        required: true
+      },
+    },
     data() {
       return {
+        distribution:'',
+        distributionData:distributionSelectData,
 
+        countNameData:[],
+        countListData:[],
       }
     },
     mounted() {
@@ -33,6 +65,19 @@
       this.initSaleStageMoney()
     },
     methods:{
+      initData() {
+        console.log(this.salestagecount)
+        this.countNameData = this.salestagecountname
+        console.log("AA",this.countNameData)
+        for (let i=0;i<this.salestagecount.length;i++) {
+          var object = {
+            name:this.salestagecount[i].name,
+            value:this.salestagecount[i].value
+          }
+          this.countListData.push(object)
+        }
+        console.log("BB",this.countListData)
+      },
       initSaleStageCount() {
         let saleStageCount = this.$echarts.init(this.$refs.saleStageCountChartRef);
         saleStageCount.setOption({
@@ -41,7 +86,7 @@
           },
           tooltip: {
             trigger: 'item',
-            formatter: "{a} <br/>{b} : {c}%",
+            formatter: "{a} <br/>{b} : {c}",
           },
           toolbox: {
             feature: {
@@ -51,7 +96,7 @@
             }
           },
           legend: {
-            data: ['展现','点击','访问','咨询','订单'],
+            data: this.countNameData,
             orient: 'vertical',
             bottom: 'bottom',
           },
@@ -61,10 +106,8 @@
               type:'funnel',
               left: '10%',
               top: 60,
-              //x2: 80,
               bottom: 60,
               width: '70%',
-              // height: {totalHeight} - y - y2,
               min: 0,
               max: 100,
               minSize: '0%',
@@ -91,13 +134,7 @@
                   fontSize: 20
                 }
               },
-              data: [
-                {value: 160, name: '访问'},
-                {value: 40, name: '咨询'},
-                {value: 32, name: '订单'},
-                {value: 80, name: '点击'},
-                {value: 100, name: '展现'}
-              ]
+              data: this.countListData
             }
           ]
         })
@@ -106,40 +143,52 @@
         let saleStage = this.$echarts.init(this.$refs.saleStageChartRef);
         saleStage.setOption({
           title: {
-            text: '某站点用户访问来源',
+            text: '分布',
             left: 'center'
           },
           tooltip: {
             trigger: 'item',
-            /*formatter: '{a} <br/>{b} : {c} ({d}%)'*/
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          toolbox: {
+            left: 'left',
+            feature: {
+              dataView: {readOnly: false},
+              restore: {},
+              saveAsImage: {}
+            }
           },
           legend: {
             orient: 'vertical',
-            left: 'left',
+            bottom: 'bottom'
           },
           series: [
             {
-              name: '访问来源',
+              name: '分布',
               type: 'pie',
               radius: '50%',
-              data: [
-                {value: 1048, name: '搜索引擎'},
-                {value: 735, name: '直接访问'},
-                {value: 580, name: '邮件营销'},
-                {value: 484, name: '联盟广告'},
-                {value: 300, name: '视频广告'}
-              ],
+              top: -60,
               emphasis: {
                 itemStyle: {
                   shadowBlur: 10,
                   shadowOffsetX: 0,
                   shadowColor: 'rgba(0, 0, 0, 0.5)'
                 }
-              }
+              },
+              data: [
+                {value: 1048, name: '搜索引擎'},
+                {value: 735, name: '直接访问'},
+                {value: 580, name: '邮件营销'},
+                {value: 484, name: '联盟广告'},
+                {value: 300, name: '视频广告'}
+              ]
             }
           ]
         })
       }
+    },
+    created() {
+      this.initData()
     }
   }
 </script>
