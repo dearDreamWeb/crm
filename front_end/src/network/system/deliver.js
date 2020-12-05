@@ -17,7 +17,8 @@ export const deliverHttp = {
       data:{
         delId:deliver.delId,
         delWuliuid: deliver.delWuliuid,
-        delCompany:deliver.delCompany
+        delCompany:deliver.delCompany,
+        delPeople:deliver.delPeople
       }
     }
     return postJson(params)

@@ -167,4 +167,11 @@
         WHERE del_id = #{delId}
     </update>
 
+    <!--通过订单获取发货状态 1已发货 0未发货-->
+    <select id="getDelState" resultMap="szDeliverDetailResult" parameterType="Integer">
+        SELECT d.del_state,s.ord_id
+        FROM sz_deliver d
+        LEFT JOIN sz_order s on d.ord_id=s.ord_id
+				WHERE d.ord_id = #{id}
+    </select>
 </mapper>

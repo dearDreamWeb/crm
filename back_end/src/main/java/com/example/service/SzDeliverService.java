@@ -5,6 +5,8 @@ import com.example.entity.ResultVo;
 import com.example.entity.request.SzDeliver;
 import com.example.entity.request.SzDeliverMingxi;
 
+import java.util.List;
+
 /**
  * @author: yangqianqian
  * @date: 2020/10/20
@@ -20,6 +22,9 @@ public interface SzDeliverService {
     ResultVo addszDeliver_mx(SzDeliverMingxi mingxi);//增 发货明细
     ResultVo mx_editszDeliver(SzDeliver szdeliver);//改 发货单物流id物流公司发货状态
     ResultVo mx_editProDetail(Integer id);//改 产品详表的库存状态
+
+    ResultVo getDelState(Integer id);//根据订单查发货状态
+
 
 
     /*ResultVo addDelANDOrd(SzDeliver szDeliver);//发货单和订单新增*/

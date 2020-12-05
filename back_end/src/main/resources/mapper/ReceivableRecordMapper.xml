@@ -74,9 +74,8 @@
         <if test="recoTime != null">
             ,reco_time = #{recoTime}
         </if>
-
         ,reco_hasmoney = reco_hasmoney+#{recoMoney}
-
+        ,reco_receivable=1
         <if test="recoLiushui !=null and recoLiushui != ''">
             ,reco_liushui = #{recoLiushui}
         </if>
