@@ -39,12 +39,18 @@ public class SzDeliverServicelmpl implements SzDeliverService {
     @Autowired
     private ProductDetailMapper productDetailMapper;
 
+    //根据订单查发货状态
+    @Override
+    public ResultVo getDelState(Integer id) {
+        System.out.println("根据订单查发货状态");
+        List<SzDeliver> szdeliver=szdeliverMapper.getDelState(id);
+        return ResultUtils.response(szdeliver);
+    }
+
     @Override
     public ResultVo mx_editszDeliver(SzDeliver szdeliver) {
         szdeliver.setDelActualtime(DateUtils.getDate());//发货时间为当前时间
         System.out.println("发货单修改");
-        System.out.println(szdeliver.getDelActualtime());
-        System.out.println(szdeliver.getDelPeople());
         int i = szdeliverMapper.mx_editszDeliver(szdeliver);
         return ResultUtils.response(i);
     }
@@ -54,14 +60,12 @@ public class SzDeliverServicelmpl implements SzDeliverService {
         return ResultUtils.response(productDetailMapper.mx_editProDetail(id));
     }
 
-
     @Override
     public ResultVo addszDeliver_mx(SzDeliverMingxi mingxi) {
         System.out.println("发货明细新增");
         int i = mingXiMapper.addszDeliver_mx(mingxi);
         return ResultUtils.response(i);
     }
-
 
     @Override
     public ResultVo addszDeliver(SzDeliver szdeliver) {

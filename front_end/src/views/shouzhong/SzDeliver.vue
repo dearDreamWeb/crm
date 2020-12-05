@@ -23,7 +23,7 @@
           <el-table :data="listForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                     :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                     highlight-current-row @row-click="handleRowClick" v-loading="tableLoading" >
-            <el-table-column prop="delId" width="150" label="发货单编号"></el-table-column>
+            <el-table-column prop="delId" width="120" label="发货单编号"></el-table-column>
             <el-table-column prop="szOrder.ordTheme"  label="对应订单" ></el-table-column>
             <el-table-column prop="delExpecttime" label="预计发货时间" sortable>
               <template slot-scope="scope">
@@ -48,23 +48,23 @@
           <el-table :data="listHasForm" style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                     :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                     highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
-            <el-table-column prop="delId" width="150" label="发货单编号"></el-table-column>
+            <el-table-column prop="delId" width="120" label="发货单编号"></el-table-column>
             <el-table-column prop="szOrder.ordTheme"  label="对应订单" ></el-table-column>
             <el-table-column prop="delActualtime" label="发货时间" sortable>
               <template slot-scope="scope">
                 {{scope.row.delActualtime | dateFormat}}
               </template>
             </el-table-column>
-            <el-table-column prop="delWuliuid" label="发货单号" sortable></el-table-column>
-            <el-table-column prop="delPeople" label="发货人" sortable></el-table-column>
-            <el-table-column prop="delState" label="发货状态" sortable>
+            <el-table-column prop="delWuliuid" width="180" label="发货单号" sortable></el-table-column>
+            <el-table-column prop="delPeople" width="140" label="发货人" sortable></el-table-column>
+            <el-table-column prop="delState" width="120" label="发货状态" sortable>
               <template slot-scope="scope">
                 {{scope.row.delState | delStateFormat}}
               </template>
             </el-table-column>
             <el-table-column label="操作" >
               <template slot-scope="scope">
-                <el-button type="success" plain size="mini">
+                <el-button type="success" plain size="mini" @click="lookDeliver">
                   <i class="el-icon-view"> </i>查看详情
                 </el-button>
               </template>
@@ -80,6 +80,70 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-card>
+
+    <el-dialog title="查看发货详情" :visible.sync="lookDeliverDialog" top="15px" width="70%">
+      <el-form  label-width="100px" label-position="right" >
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="发货单编号">
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="对应订单主题" >
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="发货时间" >
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="物流公司">
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="发货单号" >
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="发货人">
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="收货人">
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="联系电话">
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="省市县" >
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="详细地址">
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table>
+        <el-table-column prop="productName" label="名称"></el-table-column>
+        <el-table-column prop="productBrand" label="品牌"></el-table-column>
+        <el-table-column prop="productModel" label="型号"></el-table-column>
+        <el-table-column prop="productPrice" label="单价"></el-table-column>
+        <el-table-column prop="offerDetailCount" label="数量"></el-table-column>
+        <el-table-column prop="amountMoney" label="金额"></el-table-column>
+      </el-table>
+      <span slot="footer">
+        <el-button type="primary" @click="lookDeliverDialog = false">关闭</el-button>
+      </span>
+    </el-dialog>
 
     <el-dialog title="发货" :visible.sync="FahuoTableVisible" width="65%" top="20px" style="padding: 10px 20px;">
       <el-form :model="fahuoForm" label-width="100px" ref="addFormRef"
@@ -196,7 +260,9 @@
         searchInput:'',
         editForm:{
         },
+        lookDeliverForm:{},
         quanxian:true,
+        lookDeliverDialog:false,
         DeliverDialog:false,
         FahuoTableVisible:false,
         rowdelId: 0,
@@ -262,6 +328,10 @@
       },
       openEditDeliver(){
         /*修改*/
+      },
+      /*已发货的查看详情*/
+      lookDeliver(){
+        this.lookDeliverDialog = true
       },
       delDeliver(){
         /*删除*/
@@ -379,6 +449,7 @@
         }
       },
       DeliverClick(){
+        console.log("2确定操作人：",this.$store.state.empName)
         //获取已选产品中的数组
         if(this.haspro.length>0){
           console.log("this.haspro:",this.haspro)
@@ -411,8 +482,10 @@
             delPeople: this.$store.state.empName
           }
           inputs.push(addinputs);
+          console.log("addinputs:",addinputs)
           /*修改发货单状态等....*/
           deliverHttp.mx_editszDeliver(addinputs).then(res=>{
+            this.fahuoForm.delPeople = this.$store.state.empName
             this.FahuoTableVisible = false
             this.initNotState()
           })

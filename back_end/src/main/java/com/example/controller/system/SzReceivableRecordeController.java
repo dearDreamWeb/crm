@@ -44,7 +44,7 @@ public class SzReceivableRecordeController{
     @SysLog("修改订单2")
     @PostMapping("/edit_has2")
     public List<SzReceivableRecord> editszRecoHas2(@RequestBody SzReceivableRecord record){
-        System.out.println("我是接受"+record);
+        System.out.println("我是接受"+record.getRecoReceivable());
         ResultVo vo = szReceivableRecordService.editszRecoHas(record);
         System.out.println("修改的结果是："+vo);
         System.out.println(record.getSzReceivablePlan());

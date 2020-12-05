@@ -612,23 +612,6 @@
             this.like_recordButtonLoading = false
           }
           console.log("11111",this.likeForm);
-       /*   if (res.code === 20000) {
-            console.log("222",res.data);
-            this.$message.success(res.message)
-            /!*this.initList()*!/
-            /!*this.chakan_record()*!/
-            this.like_recordButtonLoading = false
-            this.likeDialog = false
-
-            this.dialogTableVisible = true
-          }else {
-            this.$message({
-              message:res.message,
-              type:'error'
-            })
-            this.like_recordButtonLoading = false
-            window.console.log(this.likeDialog)
-          }*/
         })
       },
       chakan_record(val){
