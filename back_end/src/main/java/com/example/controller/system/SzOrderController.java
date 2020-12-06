@@ -67,4 +67,11 @@ public class SzOrderController {
         System.out.println("新的查询"+ordId);
         return szorderService.orderAll(ordId);
     }
+
+    @SysLog("回款完成后修改订单状态")
+    @PostMapping("/editOrdState")
+    public ResultVo editOrdState(@RequestBody SzOrder szorder){
+        System.out.println("回款完成后修改订单状态"+szorder);
+        return  szorderService.editOrdState(szorder);
+    }
 }

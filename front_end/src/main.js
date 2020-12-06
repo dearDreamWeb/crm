@@ -40,7 +40,7 @@ Vue.prototype.$echarts = echarts
 /*格式化*/
 import {
   sexFormat,dateFormat,clueStatusFormat,timeFormat,clueTypeFormat,
-  ordStateFormat,delStateFormat,delCompanyFormat,recoReceivableFormat,
+  ordStateFormat,delStateFormat,delCompanyFormat,recoReceivableFormat,planInvoiceFormat,
   dateTimeFormat,clueHandleResultFormat,productStatusFormat,followCategoryFormat,
   salePriorLevelFormat,saleStarBeaconFormat,dateDiff,cusIsSolve,offerStatusFormat
 } from "./common/formatUtils";
@@ -57,6 +57,7 @@ Vue.filter('clueTypeFormat',clueTypeFormat)
 Vue.filter('ordStateFormat',ordStateFormat)
 Vue.filter('delStateFormat',delStateFormat)
 Vue.filter('delCompanyFormat',delCompanyFormat)
+Vue.filter('planInvoiceFormat',planInvoiceFormat)
 Vue.filter('recoReceivableFormat',recoReceivableFormat)
 Vue.filter('dateTimeFormat',dateTimeFormat)
 Vue.filter('clueHandleResultFormat',clueHandleResultFormat)
