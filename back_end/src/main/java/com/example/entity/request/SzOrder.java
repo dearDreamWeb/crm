@@ -50,4 +50,5 @@ public class SzOrder {
     private Integer pageNum;
     private Integer pageSize;
     private List<ProductReq> addproplus;
+    private List<SzReceivableRecord> szReceivableRecords;
 }

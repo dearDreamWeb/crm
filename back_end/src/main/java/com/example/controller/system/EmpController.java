@@ -80,4 +80,11 @@ public class EmpController {
     public ResultVo logout(@RequestParam("empName")String empName) {
         return empService.logout(empName);
     }
+
+    /*查部门*/
+    @GetMapping("/deptname")
+    public ResultVo getdeptName(@RequestParam("empId")Integer empId) {
+        return empService.getdeptName(empId);
+    }
+
 }

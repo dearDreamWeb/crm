@@ -40,7 +40,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" @click="chakan_record(scope.row.planId,scope.row.szOrder.ordId),dialogTableVisible = true">操作回款记录</el-button>
+            <el-button :disabled="nz=='财务部'||nz=='董事长'?false:true" type="text" @click="chakan_record(scope.row.planId,scope.row.szOrder.ordId),dialogTableVisible = true">操作回款记录</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -73,17 +73,7 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-dialog>
-<!--    <el-dialog
-      title="提示"
-      :visible.sync="queding"
-      width="20%">
-      <span>是否确定将本次回款状态修改为已完成</span>
-      <span slot="footer" class="dialog-footer">
-    <el-button @click="queding = false">取 消</el-button>
-    <el-button type="primary" @click="queding = false">确 定</el-button>
-  </span>
-    </el-dialog>-->
-    <!---->
+
     <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose" size="medium" top="20px">
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
                label-position="right" :rules="FormRules">
@@ -145,27 +135,18 @@
       direction="btt" size="60%"  width="80%"
       :with-header="false">
       <div class="recordstyle">回款记录</div>
-      <!--<el-popconfirm
-        cancel-button-text='取消'
-        confirm-button-text='确定'
-        icon="el-icon-info"
-        title="将本次回款状态修改为[已完成]">
-        <el-button slot="reference" style="float: right;margin-right: 50px " size="small">确定回款</el-button>
-      </el-popconfirm>-->
-
       <span v-if="panduanover==1">
-
-                     <el-popover placement="top" width="160" v-model="visible">
-                  <p>这是一段内容这是一段内容确定删除吗？</p>
-                  <div style="text-align: right; margin: 0">
-                    <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-                    <el-button type="primary" size="mini" @click="queding">确定</el-button>
-                  </div>
-                      <el-button slot="reference" style="float: right;margin-right: 50px " size="small">确定回款</el-button>
-                </el-popover>
+        <el-popover placement="top" width="160" v-model="visible">
+          <p>这是一段内容这是一段内容确定删除吗？</p>
+          <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+            <el-button type="primary" size="mini" @click="queding">确定</el-button>
+          </div>
+            <el-button slot="reference" style="float: right;margin-right: 50px " size="small">确定回款</el-button>
+        </el-popover>
         </span>
         <span v-else>
-                  <el-button slot="reference" style="float: right;margin-right: 50px " disabled size="small">确定回款</el-button>
+            <el-button slot="reference" style="float: right;margin-right: 50px " disabled size="small">确定回款</el-button>
         </span>
 
         <el-table :data="szrecord" :row-style="{height:'1px'}"
@@ -425,6 +406,7 @@
         planids:'',
         ordids:'',
         panduanover:0,
+        nz:"",
       }
     },
     methods: {
@@ -645,38 +627,41 @@
         })
       },
       chakan_record(val,ordId){
-        this.dialogTableVisible = true;
-        this.planids = val;
-        this.ordids = ordId;
-        console.log("ordid:",ordId)
-        planHttp.chakan_record(val).then(res=>{
-          this.szrecord=res
-          console.log("asdasdsad:",this.szrecord)
-          let over = 0;
-          for (let i = 0; i < res.length; i++) {
-            console.log("recordPlan::",this.szrecord[i].recoReceivable)
-            if(this.szrecord[i].recoReceivable ==  1){
-              over++;
+          this.dialogTableVisible = true;
+          this.planids = val;
+          this.ordids = ordId;
+          console.log("ordid:",ordId)
+          planHttp.chakan_record(val).then(res=>{
+            this.szrecord=res
+            console.log("asdasdsad:",this.szrecord)
+            let over = 0;
+            for (let i = 0; i < res.length; i++) {
+              console.log("recordPlan::",this.szrecord[i].recoReceivable)
+              if(this.szrecord[i].recoReceivable ==  1){
+                over++;
+              }
             }
-          }
-          console.log("thisover",over);
-          console.log("res.length",res.length);
-          if(over == res.length){
-            this.panduanover = 1
-            console.log("over",this.panduanover)
-          }else{
-            this.panduanover = 0
-            console.log("none",this.panduanover)
-          }
-        })
+            console.log("thisover",over);
+            console.log("res.length",res.length);
+            if(over == res.length){
+              this.panduanover = 1
+              console.log("over",this.panduanover)
+            }else{
+              this.panduanover = 0
+              console.log("none",this.panduanover)
+            }
+          })
       },
       queding(){
         console.log("id:",this.planids)
+        console.log("oid:",this.ordids)
         this.addForm.planId = this.planids
         this.addForm.ordId = this.ordids
-        /*planHttp.editPlanInvoice(this.addForm).then(res=>{
+        /*修改回款计划表的状态为1*/
+        planHttp.editPlanInvoice(this.addForm).then(res=>{
           console.log(res);
-        })*/
+        })
+        /*修改订单表的状态为1*/
         planHttp.editOrdState(this.addForm).then(res=>{
 
         })
@@ -761,6 +746,13 @@
       },
     },
     created() {
+      planHttp.getdeptname(this.$store.state.empId).then(res=>{
+        var aa={};
+        console.log("查询的数据",res)
+        aa=res.data.dept;
+        this.nz=aa.deptName;
+        console.log("当前登录员工的部门：",this.nz)
+      })
       this.initList()
       this.initEmpList()
     }

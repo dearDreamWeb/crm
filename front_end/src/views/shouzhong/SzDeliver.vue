@@ -214,7 +214,9 @@
                          layout="prev, pager, next, jumper, total">
           </el-pagination>
         </el-tab-pane>
-        <el-tab-pane label="已选产品">
+        <el-tab-pane>
+            <span slot="label">已选产品
+      <el-badge class="mark" :value="cpdd" /></span>
           <el-table :data="haspro">
             <el-table-column prop="productDetailId" label="产品详情编号" width="150"></el-table-column>
             <el-table-column prop="productId" label="产品编号" width="200"></el-table-column>
@@ -303,6 +305,7 @@
         multipleSelection: [],
         yangNumber:0,
         ddetNumber:0,
+        cpdd:0
       }
     },
     methods: {
@@ -364,7 +367,6 @@
         console.log("this.ddetNumber::",this.ddetNumber);
         let idChangelength = 0 ;
         let i = 0;
-
           i++;
           idChangelength++;
           let result = this.haspro.filter(p=>{
@@ -376,8 +378,12 @@
               type: 'warning'
             });
           }else{
-            console.log("push!!")
+            this.$message({
+              message: '添加成功！',
+              type: 'success'
+            });
             this.haspro.push(seq)
+            this.cpdd+=this.haspro.length
             this.addnumber++;
           }
 

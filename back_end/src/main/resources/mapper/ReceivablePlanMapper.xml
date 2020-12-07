@@ -27,7 +27,7 @@
         <result property="ordId" column="ord_id"/>
         <association property="szOrder" resultMap="szOrderResult"/>
         <association property="empResp" resultMap="EmpResult"/>
-
+        <collection property="szReceivableRecorde" resultMap="RecordResult"/>
     </resultMap>
 
     <resultMap id="szOrderResult" type="com.example.entity.request.SzOrder">
@@ -70,6 +70,20 @@
         <result property="isDelete" column="is_delete"/>
     </resultMap>
 
+    <resultMap id="RecordResult" type="com.example.entity.request.SzReceivableRecord">
+        <id property="recoId" column="reco_id"/>
+        <result property="recoReceivable" column="reco_receivable"/>
+        <result property="recoCaozuopeople" column="reco_caozuopeople"/>
+        <result property="recoTime" column="reco_time"/>
+        <result property="recoMoney" column="reco_money"/>
+        <result property="recoLiushui" column="reco_liushui"/>
+        <result property="recordPlan" column="record_plan"/>
+        <result property="timePlan" column="time_plan"/>
+        <result property="moneyPlan" column="money_plan"/>
+        <result property="recoCreatetime" column="reco_createtime"/>
+        <result property="recoHasmoney" column="reco_hasmoney"/>
+        <result property="planId" column="plan_id"/>
+    </resultMap>
 <!--连表的（查询）resultMap返回 连接表szPlanDetailResult-->
     <select id="listszPlan" resultMap="szPlanDetailResult">
         SELECT p.*,s.*,e.*

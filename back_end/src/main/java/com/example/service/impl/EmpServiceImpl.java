@@ -203,4 +203,10 @@ public class EmpServiceImpl implements EmpService {
         List<EmpResp> empResps = empMapper.listNotAuthActivity(activityId);
         return ResultUtils.response(empResps);
     }
+
+    @Override
+    public ResultVo getdeptName(Integer empId) {
+        EmpResp emp=empMapper.getdeptName(empId);
+        return ResultUtils.response(emp);
+    }
 }
