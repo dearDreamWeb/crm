@@ -19,4 +19,6 @@ public interface SzReceivablePlanMapper {
     SzReceivablePlan getszPlan(Integer ordId);
     List<SzReceivablePlan> listszPlan(SzReceivablePlan szPlan);
     int plan_editOrder(SzOrder szOrder);//改
+    int editPlanInvoice(SzReceivablePlan szPlan);//修改回款计划的状态
+
 }

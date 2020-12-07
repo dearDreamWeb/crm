@@ -96,6 +96,13 @@ export function delStateFormat(delState) {
     return '未发货'
   }
 }
+export function planInvoiceFormat(planInvoice) {
+  if (planInvoice === 1){
+    return '已完成'
+  } else {
+    return '执行中'
+  }
+}
 export function delCompanyFormat(delCompany) {
   if (delCompany == 0){
     return '顺丰快递'

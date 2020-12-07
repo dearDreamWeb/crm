@@ -24,7 +24,7 @@ public class SzReceivablePlan {
     private Integer planPeriod;//回款期次
     private String planCaozuopeople;//操作人
     private Date planCaozuotime;//操作时间
-    private Integer planInvoice;//是1否0开具发票
+    private Integer planInvoice;//回款状态
     private Integer planDel;//是1否0删除
 
     private Integer ordId;

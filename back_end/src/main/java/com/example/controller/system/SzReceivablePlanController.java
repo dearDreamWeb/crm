@@ -87,5 +87,13 @@ public class SzReceivablePlanController {
         return szReceivablePlanService.listPlan(szplan);
     }
 
+    @SysLog("修改回款计划的状态")
+    @PostMapping("/editPlanInvoice")
+    public ResultVo editPlanInvoice(@RequestBody SzReceivablePlan szplan){
+        System.out.println(szplan);
+        System.out.println("修改计划回款planId:"+szplan.getPlanId());
+        System.out.println("进修改回款计划状态的方法....");
+        return szReceivablePlanService.editPlanInvoice(szplan);
+    }
 
 }

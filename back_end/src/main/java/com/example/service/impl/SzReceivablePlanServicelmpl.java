@@ -11,7 +11,6 @@ import com.example.model.mapper.SzReceivablePlanMapper;
 import com.example.model.mapper.SzReceivableRecordMapper;
 import com.example.service.SzReceivablePlanService;
 import com.example.util.DateUtils;
-import com.example.util.MyUtils;
 import com.example.util.ResultUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -52,9 +51,18 @@ public class SzReceivablePlanServicelmpl implements SzReceivablePlanService {
     }
 
     @Override
+    public ResultVo editPlanInvoice(SzReceivablePlan szPlan) {
+        System.out.println(szPlan.getPlanId());
+        System.out.println("状态"+ szPlan.getPlanInvoice());
+        int i = szplanMapper.editPlanInvoice(szPlan);
+        return ResultUtils.response(i);
+    }
+
+    @Override
     public ResultVo addszPlan(SzReceivablePlan szplan) {
         szplan.setPlanCaozuotime(DateUtils.getDate());
         szplan.setPlanDel(0);//(删除)否0
+        szplan.setPlanInvoice(0);//执行中
         szplanMapper.addszPlan(szplan);//调用szplan的新增方法
         //获取回款计划期次
         Integer period= szplan.getPlanPeriod();

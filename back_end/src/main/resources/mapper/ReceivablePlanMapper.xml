@@ -154,4 +154,10 @@
         update sz_order set ord_plan=1
         where ord_id=#{ordId}
     </update>
+
+    <!--修改回款计划的状态-->
+    <update id="editPlanInvoice" parameterType="SzReceivablePlan">
+        update sz_receivable_plan set plan_invoice=1
+        where plan_id = #{planId}
+    </update>
 </mapper>

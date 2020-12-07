@@ -39,6 +39,13 @@ public class SzOrderServicelmpl implements SzOrderService {
     @Autowired
     private SzDeliverDetailsMapper szDeliverDetailsMapper;
 
+    @Override
+    public ResultVo editOrdState(SzOrder szorder) {
+        System.out.println(szorder);
+        int i = szorderMapper.editOrdState(szorder);
+        return ResultUtils.response(i);
+    }
+
     //一次性新增多个详情
     @Override
     public ResultVo addszOrder(SzOrder order) throws Exception {
@@ -149,5 +156,6 @@ public class SzOrderServicelmpl implements SzOrderService {
         int count = szorderMapper.newOrderCount(szOrder);
         return ResultUtils.response(count);
     }
+
 }
 
