@@ -635,27 +635,7 @@ import {followHttp} from "../../network/pre_sale/followlog";
         this.$refs["updateform"].resetFields()
         this.editDictButtonLoading = false
       },
-      addClick(){
-        this.addDictButtonLoading = true
-        this.addform.repairGdstate = '已派单'
-        this.addform.repairId =this.repairId;
-        console.log(this.addform)
-        repairHttp.updatePaidan(this.addform).then(res => {
-          if (res.code === 20000) {
-            this.$message.success(res.message)
-            this.initList()
-            this.addDialog = false
-            this.addDictButtonLoading = false
-          } else {
-            this.$message({
-              message:res.message,
-              type:"error"
-            })
-            this.addDictButtonLoading = false
-          }
-        })
 
-      },
       addDid(){
         console.log(this.$refs)
         this.$refs["addform"].validate(valid => {

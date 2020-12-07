@@ -42,13 +42,25 @@ public class RepairController {
         vo.setEmpId(repair.getEmpId());
         vo.setRepairGdstate(repair.getRepairGdstate());
         vo.setRepairProblem(repair.getRepairProblem());
+        vo.setRepairHfjl(repair.getRepairHfjl());
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         vo.setRepairAppointment(sdf.format(new Date()));
         System.out.println("待修改的数据是："+vo);
         return repairService.updateRepair(vo);
     }
+    @SysLog("修改")
+    @PostMapping("/updatefuk")
+    public ResultVo fuk(@RequestBody Repair repair) {
+        Repair vo = repairService.getRepairMsg(repair.getRepairId());
+        System.out.println("查询的数据是："+vo);
+        vo.setRepairHfjl(repair.getRepairHfjl());
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        vo.setRepairAppointment(sdf.format(new Date()));
+        System.out.println("待修改的数据是："+vo);
+        return repairService.updateRepair(vo);
+    }
     @SysLog("取消派单")
     @PostMapping("/updateQuxiao")
     public ResultVo updateQuxiao(@RequestBody Repair repair) {
@@ -58,6 +70,7 @@ public class RepairController {
         BeanUtils.copyProperties(vo, main);
         main.setEmpId(null);
         main.setRepairGdstate("未派单");
+        main.setRepairHfjl("未付款");
         System.out.println("待修改的数据是："+main);
         return repairService.updateRepair(main);
     }

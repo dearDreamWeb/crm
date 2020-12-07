@@ -130,10 +130,22 @@ export const repairHttp = {
     let params ={
       url: '/repair/update',
       data:{
+        'repairHfjl':repair.repairHfjl,
         'repairGdstate': repair.repairGdstate,
         'repairId': repair.repairId,
         'empId': repair.empId,
         'repairProblem':repair.repairProblem
+      }
+    }
+    return postJson(params)
+  },
+  updatefuk:function(repair){
+    let params ={
+      url: '/repair/updatefuk',
+      data:{
+        'repairId':repair.repairId,
+        'repairHfjl':repair.repairHfjl,
+        'repairWxfy':repair.repairWxfy,
       }
     }
     return postJson(params)

@@ -147,8 +147,8 @@
         <selectKey keyProperty="repairId" keyColumn="repair_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
         </selectKey>
-        insert into repair_order(repair_receiving_time,repair_problem,repair_personnel,cus_id,emp_id,dept_id,product_id,order_id,repair_gdstate,repair_fault,repair_wxfy,inventory_seq,repair_lxr,repair_sfzb) VALUES
-        (#{repairDate},#{repairProblem},#{repairPersonnel},#{cusId},#{empId},#{deptId},#{productId},#{orderId},#{repairGdstate},#{repairFault},#{repairWxfy},#{repairSfzb},#{repairsjhm},#{repairLxr})
+        insert into repair_order(repair_receiving_time,repair_problem,repair_personnel,cus_id,emp_id,dept_id,product_id,order_id,repair_gdstate,repair_fault,repair_wxfy,repair_hfjl,inventory_seq,repair_lxr,repair_sfzb) VALUES
+        (#{repairDate},#{repairProblem},#{repairPersonnel},#{cusId},#{empId},#{deptId},#{productId},#{orderId},#{repairGdstate},#{repairFault},#{repairWxfy},#{repairHfjl},#{repairSfzb},#{repairsjhm},#{repairLxr})
     </insert>
 
     <update id="updateRepair" parameterType="com.example.entity.request.Repair">
@@ -179,12 +179,6 @@
         </if>
         <if test="repairFault !=null and repairFault != ''">
             ,repair_fault = #{repairFault}
-        </if>
-        <if test="repairHfjl !=null and repairHfjl != ''">
-            ,repair_hfjl = #{repairHfjl}
-        </if>
-        <if test="repairHfjl !=null and repairHfjl != ''">
-            ,repair_hfjl = #{repairHfjl}
         </if>
         <if test="repairHfjl !=null and repairHfjl != ''">
             ,repair_hfjl = #{repairHfjl}
@@ -231,6 +225,9 @@
             </if>
             <if test="repairGdstate != null and repairGdstate != ''">
                 AND s.repair_gdstate LIKE CONCAT('%',#{repairGdstate},'%')
+            </if>
+            <if test="repairHfjl != null and repairHfjl != ''">
+                AND s.repair_hfjl LIKE CONCAT('%',#{repairHfjl},'%')
             </if>
             <if test="repairSfzb != null and repairSfzb != ''">
                 AND s.repair_sfzb LIKE CONCAT('%',#{repairSfzb},'%')
