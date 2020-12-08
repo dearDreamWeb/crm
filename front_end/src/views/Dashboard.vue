@@ -82,7 +82,7 @@
               <template slot-scope="scope">
                 <el-button v-if="scope.row.repairGdstate == '已派单'" :disabled="scope.row.repairHfjl != null && scope.row.repairHfjl == '已付款'"
                            @click="openAddDialog(scope.row.repairId)">付款</el-button>
-                <el-button @click="handleClick" type="text" size="small">查看</el-button>
+<!--                <el-button @click="handleClick" type="text" size="small">查看</el-button>-->
               </template>
             </el-table-column>
           </el-table>
@@ -477,9 +477,9 @@
         this.closeDialog();
         this.addform.repairHfjl = '已付款'
         this.addform.repairId =this.repairId;
-        this.addform.repairWxfy = this.sumMoney()
-        console.log("this.addform.repairWxfy",this.addform.repairWxfy)
-        /*repairHttp.updatefuk(this.addform).then(res => {
+        // this.addform.repairWxfy = this.sumMoney()
+        // console.log("this.addform.repairWxfy",this.addform.repairWxfy)
+        repairHttp.updatefuk(this.addform).then(res => {
           if (res.code === 20000) {
             this.$message.success(res.message)
             this.initList()
@@ -490,7 +490,7 @@
               type:"error"
             })
           }
-        })*/
+        })
       },
       // 删除添加的产品
       deleteProduct(index,productPrice){
