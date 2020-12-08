@@ -130,4 +130,10 @@ public class ActivityServiceImpl implements ActivityService {
         int addViews = activityMapper.addViews(activityId);
         return ResultUtils.response(addViews);
     }
+
+    @Override
+    public ResultVo pageViewCount() {
+        int count = activityMapper.pageViewCount();
+        return ResultUtils.response(count);
+    }
 }

@@ -15,4 +15,9 @@ public interface SzOrderMapper {
     List<SzOrder> listszOrder(SzOrder szorder);//全部
     List<SzOrder> OrdANDDel();
     List<SzOrder> orderAll(Integer ordId);//详情全部
+
+    int newOrderCount(SzOrder szOrder);
+
+    int editOrdState(SzOrder szorder);//回款完成后修改订单状态
+
 }

@@ -1,6 +1,21 @@
 import {postJson,get} from "../request";
 
 export const planHttp = {
+  editOrdState:function(order){
+    let params={
+      url:'/order/editOrdState',
+      data:order
+    }
+    return postJson(params)
+  },
+/*修改回款计划的状态*/
+  editPlanInvoice:function(plan){
+    let params={
+      url:'/plan/editPlanInvoice',
+      data:plan
+    }
+    return postJson(params)
+  },
   plan_editOrder:function(plan){
     let params={
       url:'/plan/plan_editOrder',
@@ -10,28 +25,10 @@ export const planHttp = {
     }
     return postJson(params)
   },
-/*  mx_editszDeliver:function(deliver){
-    let params={
-      url:'/deliver/mx_editszDeliver',
-      data:{
-        delId:deliver.delId,
-        delWuliuid: deliver.delWuliuid,
-        delCompany:deliver.delCompany
-      }
-    }
-    return postJson(params)
-  },*/
-
   addplan:function (plan) {
     let params = {
       url:'/plan/add',
       data:plan
-      /*data:{
-        'planTime':plan.planTime,
-        'planMoney':plan.planMoney,
-        'ordId':plan.ordId,
-        'empId':plan.empId
-      }*/
     }
     return postJson(params)
   },
@@ -100,9 +97,9 @@ export const planHttp = {
     }
     return get(params)
   },
-  editrecordhas:function (record) {
+  editrecordhas2:function (record) {
     let params = {
-      url:'/record/edit_has',
+      url:'/record/edit_has2',
       data:{
         'recoId':record.recoId,
         'moneyPlan':record.moneyPlan,
@@ -111,6 +108,7 @@ export const planHttp = {
         'recoMoney':record.recoMoney,
         'recoLiushui':record.recoLiushui,
         'recoTime':record.recoTime,
+        'planId':record.planId
       }
     }
     return postJson(params)

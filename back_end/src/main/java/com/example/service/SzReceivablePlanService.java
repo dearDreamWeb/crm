@@ -17,4 +17,6 @@ public interface SzReceivablePlanService {
     ResultVo listPlan(SzReceivablePlan szPlan);
 
     ResultVo plan_editOrder(SzOrder szOrder);//改 订单表的回款状态
+    ResultVo editPlanInvoice(SzReceivablePlan szPlan);//修改回款计划的状态
+
 }

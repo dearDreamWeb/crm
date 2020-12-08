@@ -5,6 +5,7 @@ import com.example.common.exception.SysException;
 import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
 import com.example.entity.SaleDetailDemand;
+import com.example.entity.StatisticsEntity;
 import com.example.entity.request.DemandReq;
 import com.example.entity.request.SaleDetailReq;
 import com.example.entity.request.SaleReq;
@@ -20,7 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: pengjia
@@ -263,6 +267,28 @@ public class SaleServiceImpl implements SaleService {
     public ResultVo selectSaleAndDemandAndSolution(SaleReq saleReq) {
         List<SaleResp> saleResps = saleMapper.selectSaleAndDemandAndSolution(saleReq);
         return ResultUtils.response(saleResps);
+    }
+
+    @Override
+    public ResultVo listAllSale() {
+        List<SaleResp> saleResps = saleMapper.listAllSale();
+        String[] arrs = new String[saleResps.size()];
+        List<StatisticsEntity> list = new ArrayList<>();
+        Set set = new HashSet();
+        for (int i = 0; i < arrs.length; i++) {
+            arrs[i] = saleResps.get(i).getSaleDetailResp().getSaleStage();
+        }
+        for (int i=0;i<arrs.length;i++) {
+            set.add(arrs[i]);
+        }
+        for (Object arr : set) {
+            StatisticsEntity entity = new StatisticsEntity();
+            int countBySaleStage = saleMapper.getCountBySaleStage((String) arr);
+            entity.setName((String)arr);
+            entity.setValue(countBySaleStage);
+            list.add(entity);
+        }
+        return ResultUtils.response(list);
     }
 
     public static String degreeRating(String degree) {

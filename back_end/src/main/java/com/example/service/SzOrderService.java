@@ -13,4 +13,6 @@ public interface SzOrderService {
     ResultVo listszOrder(SzOrder szorder);
     List<SzOrder> OrdANDDel();
     List<SzOrder> orderAll(Integer ordId);//详情全部
+    ResultVo newOrderCount(SzOrder szOrder);
+    ResultVo editOrdState(SzOrder szorder);//回款完成后修改订单状态
 }

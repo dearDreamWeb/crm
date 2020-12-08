@@ -311,6 +311,12 @@ public class ClueServiceImpl implements ClueService {
         return ResultUtils.response(count);
     }
 
+    @Override
+    public ResultVo clueCount() {
+        int clueCount = clueMapper.clueCount();
+        return ResultUtils.response(clueCount);
+    }
+
     public static String clueHandleResultFormat(Integer clueHandleResult) {
         if (clueHandleResult != null && clueHandleResult == 1) {
             return "公司线索";

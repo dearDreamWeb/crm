@@ -33,14 +33,14 @@
             {{scope.row.planCaozuotime | dateFormat}}
           </template>
         </el-table-column>
-       <!-- <el-table-column prop="planInvoice" label="开票">
+        <el-table-column prop="planInvoice" label="回款状态">
           <template slot-scope="scope">
             {{scope.row.planInvoice | planInvoiceFormat}}
           </template>
-        </el-table-column>-->
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" @click="chakan_record(scope.row.planId),dialogTableVisible = true">操作回款记录</el-button>
+            <el-button type="text" @click="chakan_record(scope.row.planId,scope.row.szOrder.ordId),dialogTableVisible = true">操作回款记录</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -56,12 +56,9 @@
                 :cell-style="{padding:'5px 0'}" >
         <el-table-column prop="ordId" label="订单编号"></el-table-column>
         <el-table-column prop="ordTheme" label="主题"></el-table-column>
-        <!--<el-table-column prop="customerResp.cusName" label="客户"></el-table-column>-->
         <el-table-column prop="ordHead" label="负责人"></el-table-column>
         <el-table-column prop="ordConsignee" label="收货人"></el-table-column>
-        <!--      <el-table-column prop="productResp.productName" label="产品"></el-table-column>-->
         <el-table-column prop="ordPhone" label="手机号码"></el-table-column>
-        <el-table-column prop="ordPlan" label="zhuangtai"></el-table-column>
         <el-table-column width="80" label="操作" >
           <template slot-scope="scope">
             <el-button type="text" size="small" icon="el-icon-plus"
@@ -76,6 +73,16 @@
                      layout="prev, pager, next, jumper, total">
       </el-pagination>
     </el-dialog>
+<!--    <el-dialog
+      title="提示"
+      :visible.sync="queding"
+      width="20%">
+      <span>是否确定将本次回款状态修改为已完成</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="queding = false">取 消</el-button>
+    <el-button type="primary" @click="queding = false">确 定</el-button>
+  </span>
+    </el-dialog>-->
     <!---->
     <el-dialog title="回款计划添加" :visible.sync="addDialog" @close="addHandleClose" size="medium" top="20px">
       <el-form :model="addForm" label-width="80px" ref="addFormRef"
@@ -83,17 +90,6 @@
         <div style="padding-bottom: 20px">
          <el-button size="mini" type="primary" icon="el-icon-plus" @click="xians">选择订单</el-button>
         </div>
-        <!--<el-row>
-          <el-col>
-            <el-form-item label="关联订单" >
-              <el-select v-model="addForm.ordId" placeholder="请选择订单" size="medium" @change="oidChange">
-                <el-option v-for="(item,i) in ordList" :key="i"
-                           :label="item.ordTheme" :value="item.ordId">
-                </el-option>
-              </el-select>
-              </el-form-item>
-          </el-col>
-        </el-row>-->
         <el-row>
           <el-col :span="12">
             <el-form-item label="关联订单" prop="ordTheme" width="217px" >
@@ -147,24 +143,46 @@
     <el-drawer
       :visible.sync="dialogTableVisible"
       direction="btt" size="60%"  width="80%"
-      :with-header="false"
-    >
+      :with-header="false">
       <div class="recordstyle">回款记录</div>
-      <el-table :data="szrecord" :row-style="{height:'1px'}"
+      <!--<el-popconfirm
+        cancel-button-text='取消'
+        confirm-button-text='确定'
+        icon="el-icon-info"
+        title="将本次回款状态修改为[已完成]">
+        <el-button slot="reference" style="float: right;margin-right: 50px " size="small">确定回款</el-button>
+      </el-popconfirm>-->
+
+      <span v-if="panduanover==1">
+
+                     <el-popover placement="top" width="160" v-model="visible">
+                  <p>这是一段内容这是一段内容确定删除吗？</p>
+                  <div style="text-align: right; margin: 0">
+                    <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+                    <el-button type="primary" size="mini" @click="queding">确定</el-button>
+                  </div>
+                      <el-button slot="reference" style="float: right;margin-right: 50px " size="small">确定回款</el-button>
+                </el-popover>
+        </span>
+        <span v-else>
+                  <el-button slot="reference" style="float: right;margin-right: 50px " disabled size="small">确定回款</el-button>
+        </span>
+
+        <el-table :data="szrecord" :row-style="{height:'1px'}"
                 :cell-style="{padding:'1px 0'}" height="300px">
-        <el-table-column prop="recoId" label="回款记录编号" width="150" height="100px"></el-table-column>
-        <el-table-column  label="回款期次" width="180px">
+        <el-table-column prop="recoId" label="回款记录编号" width="130" height="100px"></el-table-column>
+        <el-table-column  label="回款期次" width="130px">
           <template slot-scope="recordPlans">
             第{{recordPlans.row.recordPlan}}期
           </template>
         </el-table-column>
-        <el-table-column  label="最晚回款时间"  width="240px">
+        <el-table-column  label="最晚回款时间"  width="210px">
           <template slot-scope="scope">
             <i class="el-icon-time"></i>
             {{scope.row.timePlan | dateFormat}}
           </template>
         </el-table-column>
-        <el-table-column prop="recoTime" label="实际回款时间" width="240px">
+        <el-table-column prop="recoTime" label="实际回款时间" width="210px">
           <template slot-scope="scope">
              <span v-if="scope.row.recoHasmoney > 0">
                 <i class="el-icon-time"></i>
@@ -177,7 +195,12 @@
             {{scope.row.moneyPlan}} 元
           </template>
         </el-table-column>
-        <el-table-column  label="状态" width="200">
+        <el-table-column prop="recoHasmoney" label="已回款金额" width="200">
+          <template slot-scope="scope">
+            {{scope.row.recoHasmoney}} 元
+          </template>
+        </el-table-column>
+        <el-table-column  label="状态" width="150">
           <template slot-scope="scope">
               <span v-if="scope.row.recoHasmoney > 0 && scope.row.moneyPlan > scope.row.recoHasmoney">
                 <el-tag type="warning">回款中</el-tag>
@@ -199,16 +222,17 @@
                 <el-button @click="look_record(scope.row.recoId)" size="mini" plain>查看记录</el-button>
               </span>
             <span v-if="scope.row.recoHasmoney > 0 && scope.row.moneyPlan > scope.row.recoHasmoney">
-                <el-button @click="again_record(scope.row.recoId)" size="mini" plain>继续回款</el-button>
+                <el-button @click="again_record(scope.row)" @change="qian" size="mini" plain>继续回款</el-button>
               </span>
           </template>
         </el-table-column>
       </el-table>
+
     </el-drawer>
     <!--立刻回款的弹窗-->
-    <el-dialog :visible.sync="likeDialog" @close="likeHandleClose" title="回款记录">
+    <el-dialog :visible.sync="likeDialog" @close="likeHandleClose" title="回款中">
       <el-form :model="likeForm"  label-width="100px" :rules="likeFormRules"
-               label-position="right" ref="likeFormRef">
+               label-position="right" ref="likeForm">
         <el-row>
           <el-col :span="11">
             <el-form-item label="回款记录编号" prop="recoId">
@@ -265,7 +289,54 @@
       <span slot="footer">
         <el-button @click="likeDialog = false">取消</el-button>
         <el-button type="primary" @click="like_recordClick"
-                   :loading="like_recordButtonLoading">确定</el-button>
+                   :loading="like_recordButtonLoading">确定1</el-button>
+      </span>
+    </el-dialog>
+    <!--查看记录的弹窗-->
+    <el-dialog :visible.sync="lookDialog" @close="likeHandleClose" title="查看回款记录">
+      <el-form :model="lookForm"  label-width="100px" :rules="lookFormRules"
+               label-position="right" ref="likeFormRef">
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="回款记录编号" prop="recoId">
+              <el-input v-model="lookForm.recoId" size="medium " :disabled="true" style="border: 0px"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="应回款金额" prop="moneyPlan">
+              <el-input v-model="lookForm.moneyPlan" size="medium" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="回款期次" prop="recordPlan">
+              <el-input v-model="lookForm.recordPlan" size="medium " :disabled="true" style="border: 0px"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="已回款金额" prop="recoHasmoney">
+              <el-input v-model="lookForm.recoHasmoney" size="medium " style="border: 0px" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="交易流水号" prop="recoLiushui" >
+              <el-input v-model="lookForm.recoLiushui" size="medium" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="回款时间" prop="recoTime">
+              <el-date-picker type="date" placeholder="选择日期"
+                              v-model="lookForm.recoTime" style="width: 100%;" :disabled="true">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer">
+        <el-button type="primary" @click="lookDialog = false">关闭</el-button>
       </span>
     </el-dialog>
   </div>
@@ -295,11 +366,33 @@
           planMoney:'',
           szReceivableRecorde:[]
         },
+        lookForm:{},
         likeForm:{},
-        likeFormRules:{},
+        lookFormRules:{},
+        likeFormRules:{
+          recoMoney:[
+            {required:true,message:'请填写回款金额',trigger:'blur'},
+            {min:1,max:20,message:'请输入有效数字'}
+          ],
+          recoLiushui:[
+            {required:true,message:'请填写交易流水号',trigger:'blur'},
+            {min:7,max:25,message:'请输入有效数字'}
+          ],
+          recoTime:[
+            {type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+          ],
+        },
         editForm:{},
         editFormRules:{},
-        FormRules:{},
+        FormRules:{
+          ordTheme:[
+            {required:true}
+          ],
+          ordTotalmoney:[
+            {required:true}
+          ]
+        },
+        ordTheme:"",
         ordTotalmoney:0,
         rowplanId: 0,
         rowrecoId: 0,
@@ -313,6 +406,7 @@
         like_recordButtonLoading:false,
         editPlanButtonLoading:false,
         dialogTableVisible:false,
+        /*queding:false,*/
         listDingda:[],
         listForm:[],
         ordList:[],
@@ -321,12 +415,16 @@
         szrecord:[],
         record:[],
         pageNum:1,
-        pageSize:5,
+        pageSize:10,
         total:1,
         /*editDialog:false,*/
+        lookDialog:false,
         likeDialog:false,
         multipleSelection: [],
         suijishu:'',
+        planids:'',
+        ordids:'',
+        panduanover:0,
       }
     },
     methods: {
@@ -498,11 +596,6 @@
         this.$refs.addFormRef.resetFields()
         this.addPlanButtonLoading = false
       },
-      /*点击修改按钮获取改行id*/
-      /*openEditPlan(){
-        this.editDialog=true;
-        this.getEditPlan()
-      },*/
       delPlan(planId){
         this.$confirm('确定删除此回款计划吗','提示',{
           confirmButtonText:'确定',
@@ -523,49 +616,69 @@
           })
         })
       },
-   /*   getEditPlan(){
-        planHttp.getplan(this.rowplanId).then(res=>{
-          console.log("获得修改数据：",res.data);
-          /!*this.editForm.empName=res.data.empResp.empName
-          console.log("this.editForm.empName:",this.editForm)*!/
-        })
-      },*/
-
       /*立即回款*/
       like_recordClick(){
         this.like_recordButtonLoading=true
-        console.log(this.likeForm.recoId)
+        console.log("1所有参数：",this.likeForm.planId)
         this.likeForm.recoId=this.likeForm.recoId
-        planHttp.editrecordhas(this.likeForm).then(res=>{
-          console.log("11111",this.likeForm);
-          if (res.code === 20000) {
-            this.$message.success(res.message)
-            /*this.initList()*/
-            /*this.chakan_record()*/
+        this.likeForm.planId=this.likeForm.planId
+        planHttp.editrecordhas2(this.likeForm).then(res=>{
+          console.log("获取陈 ....",res);
+          if(res && res.length > 0){
+            //成功了，且返回了修改之后的数据信息
+            this.szrecord = res
             this.like_recordButtonLoading = false
             this.likeDialog = false
-          }else {
+            this.$message({
+              message:"回款成功",
+              type:'success'
+            })
+          }else{
+            //没有成功
             this.$message({
               message:res.message,
               type:'error'
             })
             this.like_recordButtonLoading = false
-            window.console.log(this.likeDialog)
           }
+          console.log("11111",this.likeForm);
         })
       },
-      /*  editPlanClick(){
-          this.editPlanButtonLoading=true
-          /!*this.editForm.cusId=this.rowplanId*!/
-          planHttp.editplan(this.editForm).then(res=>{
-            console.log("111")
-          })
-        },*/
-      chakan_record(val){
+      chakan_record(val,ordId){
         this.dialogTableVisible = true;
+        this.planids = val;
+        this.ordids = ordId;
+        console.log("ordid:",ordId)
         planHttp.chakan_record(val).then(res=>{
           this.szrecord=res
           console.log("asdasdsad:",this.szrecord)
+          let over = 0;
+          for (let i = 0; i < res.length; i++) {
+            console.log("recordPlan::",this.szrecord[i].recoReceivable)
+            if(this.szrecord[i].recoReceivable ==  1){
+              over++;
+            }
+          }
+          console.log("thisover",over);
+          console.log("res.length",res.length);
+          if(over == res.length){
+            this.panduanover = 1
+            console.log("over",this.panduanover)
+          }else{
+            this.panduanover = 0
+            console.log("none",this.panduanover)
+          }
+        })
+      },
+      queding(){
+        console.log("id:",this.planids)
+        this.addForm.planId = this.planids
+        this.addForm.ordId = this.ordids
+        /*planHttp.editPlanInvoice(this.addForm).then(res=>{
+          console.log(res);
+        })*/
+        planHttp.editOrdState(this.addForm).then(res=>{
+
         })
       },
       like_record(val){
@@ -578,17 +691,28 @@
         })
       },
       look_record(val){
-        this.likeDialog = true;
+        this.lookDialog = true;
         planHttp.getrecord(val).then(res=>{
-          this.likeForm=res.data
-          console.log(this.likeForm)
+          this.lookForm=res.data
+          console.log(this.lookForm)
         })
       },
+      qian(val){
+        let moneyPlan = val.moneyPlan
+        let recoHasmoney = val.recoHasmoney
+        this.likeForm.recoMoney = moneyPlan - recoHasmoney
+        console.log("1qian", this.likeForm.recoMoney)
+      },
       again_record(val){
+        //moneyPlan应回款-已回款recoHasmoney=回款recoMoney
+        let moneyPlan = val.moneyPlan
+        let recoHasmoney = val.recoHasmoney
         this.likeDialog = true;
-        planHttp.getrecord(val).then(res=>{
+        planHttp.getrecord(val.recoId).then(res=>{
           this.likeForm=res.data
           console.log(this.likeForm)
+          this.likeForm.recoMoney = moneyPlan - recoHasmoney
+          console.log("2qian", this.likeForm.recoMoney)
         })
       },
       handleCurrentChange(pageIndex) {

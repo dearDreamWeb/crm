@@ -160,6 +160,12 @@
         </el-pagination>
       </el-card>
 
+      <el-divider></el-divider>
+
+      <!--<sale-chart ref="saleChartRef" v-bind="$attrs" v-on="$listeners"
+                  v-bind:salestagecount="saleStageCount"
+                  v-bind:salestagecountname="saleStageCountName"></sale-chart>-->
+
       <el-dialog title="机会添加" :visible.sync="addDialog" @close="addDialogClose" top="30px">
         <el-form :model="addForm" ref="addFormRef" :rules="addFormRules"
                  label-width="80px" label-position="right" size="mini">
@@ -338,11 +344,17 @@
   import {contactsHttp} from "../../network/pre_sale/contacts";
   import {dictHttp} from "../../network/system/dict";
   import {userHttp} from "../../network/system/user";
+  import SaleChart from "../../components/echarts/SaleChart";
+  import {noRepeat, unique} from "../../common/sanYiDate";
 
   export default {
     name: "Sale",
+    components: {SaleChart},
     data() {
       return {
+        saleStageCount:[],
+        saleStageCountName:[],
+
         editForm:{
           saleId:'',
           saleName:'',
@@ -630,18 +642,27 @@
           this.empList = res.data.list
         })
       },
+      initAllSaleList() {
+        saleHttp.all_sale_list().then(res => {
+          this.saleStageCount = res.data
+          for (let i=0;i<res.data.length;i++) {
+            this.saleStageCountName.push(res.data[i].name)
+          }
+        })
+      },
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'
       },
       iHeaderCellStyle:function({row,column,rowIndex,columnIndex}){
         return 'padding:5px'
-      }
+      },
     },
     created() {
       this.initList()
       this.initEmpList()
       this.initCustomerList()
-    }
+      this.initAllSaleList()
+    },
   }
 </script>
 

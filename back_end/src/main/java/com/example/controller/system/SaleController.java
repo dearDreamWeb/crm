@@ -51,6 +51,11 @@ public class SaleController {
         return saleService.listSale(saleReq);
     }
 
+    @GetMapping("/list_all")
+    public ResultVo listAll() {
+        return saleService.listAllSale();
+    }
+
     @PostMapping("/add_reunite")
     public ResultVo addSaleDetailDemand(@RequestBody SaleDetailDemand saleDetailDemand,
                                         HttpServletRequest request) {

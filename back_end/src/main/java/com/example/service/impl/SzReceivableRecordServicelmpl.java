@@ -40,13 +40,14 @@ public class SzReceivableRecordServicelmpl implements SzReceivableRecordService 
         System.out.println("11");
         System.out.println(record.getRecoMoney());
         System.out.println(record.getRecoHasmoney());
+        record.setRecoReceivable(1);
         SzReceivableRecord deptResp = szRecordMapper.getszReco(record.getRecoId());
         if (deptResp == null) {
             throw new SysException(ResultEnum.ReceivableRecord_UPDATE_FAIL.getCode(),
                     ResultEnum.ReceivableRecord_UPDATE_FAIL.getMessage());
         }
         int editszRecoHas = szRecordMapper.editszRecoHas(record);
-        if (editszRecoHas != 1) {
+        if (editszRecoHas <1) {
             throw new SysException(ResultEnum.ReceivableRecord_UPDATE_FAIL.getCode(),
                     ResultEnum.ReceivableRecord_UPDATE_FAIL.getMessage());
         }

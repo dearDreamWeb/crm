@@ -23,7 +23,7 @@ public interface SzDeliverMapper {
 
 /*    int addszDeliver_mx(SzDeliverMingxi mingxi);//增*/
     int mx_editszDeliver(SzDeliver szdeliver);//改
-
+    List<SzDeliver> getDelState(Integer id);//根据订单查发货状态
 
     /* int addDelANDOrd(SzDeliver szDeliver);//发货单和订单新增*/
 }

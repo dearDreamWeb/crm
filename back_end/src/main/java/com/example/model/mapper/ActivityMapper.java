@@ -22,4 +22,5 @@ public interface ActivityMapper {
     List<ActivityResp> listByEmp(Integer empId);
     int checkActivity(String activityTitle);
     int addViews(Integer activityId);
+    int pageViewCount();
 }

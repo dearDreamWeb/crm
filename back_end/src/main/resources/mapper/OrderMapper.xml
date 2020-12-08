@@ -221,4 +221,15 @@
     <select id="OrdANDDel" resultMap="szOrderResult">
         select * from sz_order where ord_state=1
     </select>
+
+    <select id="newOrderCount" resultType="int" parameterType="com.example.entity.request.SzOrder">
+        SELECT count(ord_id)
+        FROM sz_order WHERE ord_starttime BETWEEN #{startDate} AND #{endDate}
+    </select>
+
+    <!--回款完成后修改订单状态-->
+    <update id="editOrdState" parameterType="SzOrder">
+        update sz_order set ord_state=1
+        where ord_id = #{id}
+    </update>
 </mapper>

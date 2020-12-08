@@ -54,6 +54,12 @@ export const saleHttp = {
     }
     return get(params)
   },
+  all_sale_list:function() {
+    let params = {
+      url:'/sale/list_all'
+    }
+    return get(params)
+  },
   getByCusId:function (cusId) {
     let params = {
       url:'/sale/list',

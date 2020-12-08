@@ -19,4 +19,7 @@ public interface SaleMapper {
     SaleResp getSale(Integer saleId);
     List<SaleResp> listSale(SaleReq saleReq);
     List<SaleResp> selectSaleAndDemandAndSolution(SaleReq saleReq);
+
+    List<SaleResp> listAllSale();
+    int getCountBySaleStage(String saleStage);
 }
