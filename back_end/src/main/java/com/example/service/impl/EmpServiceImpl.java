@@ -209,4 +209,10 @@ public class EmpServiceImpl implements EmpService {
         EmpResp empByPersonal = empMapper.getEmpByPersonal(empId);
         return ResultUtils.response(empByPersonal);
     }
+
+    @Override
+    public ResultVo getdeptName(Integer empId) {
+        EmpResp emp=empMapper.getdeptName(empId);
+        return ResultUtils.response(emp);
+    }
 }

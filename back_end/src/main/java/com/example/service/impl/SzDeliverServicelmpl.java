@@ -4,13 +4,11 @@ import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ProductDetail;
 import com.example.entity.ResultVo;
+import com.example.entity.request.ProductReq;
 import com.example.entity.request.SzDeliver;
 import com.example.entity.request.SzDeliverDetails;
 import com.example.entity.request.SzDeliverMingxi;
-import com.example.model.mapper.ProductDetailMapper;
-import com.example.model.mapper.SzDeliverDetailsMapper;
-import com.example.model.mapper.SzDeliverMapper;
-import com.example.model.mapper.SzDeliverMingXiMapper;
+import com.example.model.mapper.*;
 import com.example.service.SzDeliverService;
 import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
@@ -38,6 +36,8 @@ public class SzDeliverServicelmpl implements SzDeliverService {
     private SzDeliverDetailsMapper deliverDetailsMapper;
     @Autowired
     private ProductDetailMapper productDetailMapper;
+    @Autowired
+    private com.example.model.mapper.ProductMapper ProductMapper;
 
     //根据订单查发货状态
     @Override
@@ -52,6 +52,17 @@ public class SzDeliverServicelmpl implements SzDeliverService {
         szdeliver.setDelActualtime(DateUtils.getDate());//发货时间为当前时间
         System.out.println("发货单修改");
         int i = szdeliverMapper.mx_editszDeliver(szdeliver);
+        List<ProductReq> productReq = szdeliver.getProductReq();
+        for (int j = 0; j < productReq.size(); j++) {
+            int productStock = ProductMapper.getProductStock(productReq.get(j).getProductId());
+            productReq.get(j).setProductStock(productStock);
+            productReq.get(j).setUpdateTime(DateUtils.getDate());
+            int editProduct = ProductMapper.editProduct(productReq.get(j));
+            if (editProduct != 1) {
+                throw new SysException(ResultEnum.DATA_UPDATE_FAIL.getCode(),
+                        ResultEnum.DATA_UPDATE_FAIL.getMessage());
+            }
+        }
         return ResultUtils.response(i);
     }
 

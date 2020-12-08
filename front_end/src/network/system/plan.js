@@ -64,6 +64,15 @@ export const planHttp = {
     }
     return get(params)
   },
+  getdeptname:function (empId) {
+    let params = {
+      url:'/emp/deptname',
+      data:{
+        'empId':empId
+      }
+    }
+    return get(params)
+  },
   list:function (plan) {
     let params = {
       url:'/plan/list_all',

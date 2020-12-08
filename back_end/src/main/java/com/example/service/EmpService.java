@@ -21,4 +21,5 @@ public interface EmpService {
     ResultVo logout(String empName);
     ResultVo listNotAuthActivity(Integer activityId);
     ResultVo getEmpByPersonal(Integer empId);
+    ResultVo getdeptName(Integer empId);//查部门
 }

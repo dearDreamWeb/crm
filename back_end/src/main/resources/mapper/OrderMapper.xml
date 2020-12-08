@@ -48,7 +48,9 @@
         <association property="SzReceivablePlan" resultMap="szPlanResult"/>
         <association property="szDeliver" resultMap="szDeliverResult"/>
         <association property="productReq" resultMap="ProductResult"/>
+        <collection property="szReceivableRecords" resultMap="RecordResult"/>
     </resultMap>
+
     <resultMap id="CustomerResult" type="com.example.entity.response.CustomerResp">
         <id column="cus_id" property="cusId"/>
         <result column="cus_name" property="cusName"/>
@@ -100,6 +102,8 @@
         <result property="delDelivertime" column="del_delivertime"/>
         <result property="delState" column="del_state"/>
         <result property="delCreatetime" column="del_createtime"/>
+        <result property="delExpecttime" column="del_expecttime"/>
+        <result property="delActualtime" column="del_actualtime"/>
         <result property="delDelete" column="del_delete"/>
         <result property="ordId" column="ord_id"/>
     </resultMap>
@@ -119,6 +123,20 @@
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="is_delete" property="isDelete"/>
+    </resultMap>
+    <resultMap id="RecordResult" type="com.example.entity.request.SzReceivableRecord">
+        <id property="recoId" column="reco_id"/>
+        <result property="recoReceivable" column="reco_receivable"/>
+        <result property="recoCaozuopeople" column="reco_caozuopeople"/>
+        <result property="recoTime" column="reco_time"/>
+        <result property="recoMoney" column="reco_money"/>
+        <result property="recoLiushui" column="reco_liushui"/>
+        <result property="recordPlan" column="record_plan"/>
+        <result property="timePlan" column="time_plan"/>
+        <result property="moneyPlan" column="money_plan"/>
+        <result property="recoCreatetime" column="reco_createtime"/>
+        <result property="recoHasmoney" column="reco_hasmoney"/>
+        <result property="planId" column="plan_id"/>
     </resultMap>
 
     <!--查全部-->
@@ -151,20 +169,10 @@
             </if>
             and  ord_delete = 0
         </where>
+        ORDER BY ord_createtime DESC
     </select>
     <!--详情查全部-->
     <!--
-        SELECT s.*,cl.*,od.*,r.*,rd.*,p.*,d.*,dd.*
-        FROM sz_order s
-        left join customer cl on s.cus_id = cl.cus_id
-        left join sz_order_details od on s.ord_id=od.ord_id
-        left join sz_receivable_plan r on od.ord_id=r.ord_id
-				LEFT JOIN sz_receivable_record rd ON r.plan_id=rd.plan_id
-        left join product p on od.product_id=p.product_id
-        left join sz_deliver d on od.ord_id=d.ord_id
-				LEFT JOIN sz_deliver_details dd ON d.del_id=dd.del_id
-        where s.ord_id=1002-->
-    <select id="orderAll" resultMap="szOrderDetailResult">
     SELECT s.*,cl.*,od.*,r.*,p.*,d.*
         FROM sz_order s
         left join customer cl on s.cus_id = cl.cus_id
@@ -173,6 +181,17 @@
         left join product p on od.product_id=p.product_id
         left join sz_deliver d on od.ord_id=d.ord_id
         where s.ord_id=#{ordId}
+        -->
+    <select id="orderAll" resultMap="szOrderDetailResult">
+        SELECT s.*,cl.*,od.*,r.*,p.*,d.*,rr.*
+            FROM sz_order s
+            left join customer cl on s.cus_id = cl.cus_id
+            left join sz_order_details od on s.ord_id=od.ord_id
+            left join sz_receivable_plan r on od.ord_id=r.ord_id
+            left join sz_receivable_record rr ON rr.plan_id=r.plan_id
+            left join product p on od.product_id=p.product_id
+            left join sz_deliver d on od.ord_id=d.ord_id
+            where s.ord_id=#{ordId}
     </select>
     <!--发货查订单-->
     <select id="ordANDdel">
@@ -230,6 +249,6 @@
     <!--回款完成后修改订单状态-->
     <update id="editOrdState" parameterType="SzOrder">
         update sz_order set ord_state=1
-        where ord_id = #{id}
+        where ord_id = #{ordId}
     </update>
 </mapper>

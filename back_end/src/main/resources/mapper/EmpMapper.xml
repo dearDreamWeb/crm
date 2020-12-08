@@ -237,4 +237,13 @@
             WHERE ad.emp_id = e.emp_id AND a.activity_id = #{activityId})
         = 0 AND e.emp_name != 'admin' AND d.dept_id = 2
     </select>
+
+    <!--查部门-->
+    <select id="getdeptName" resultMap="EmpDetailResult" parameterType="Integer">
+        SELECT e.emp_id,e.emp_name,d.dept_name
+        FROM emp e
+        INNER JOIN emp_dept ed ON e.emp_id = ed.emp_id
+        INNER JOIN dept d ON d.dept_id = ed.dept_id
+        WHERE e.emp_id = #{empId}
+    </select>
 </mapper>

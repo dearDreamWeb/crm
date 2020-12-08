@@ -62,13 +62,13 @@
                 {{scope.row.delState | delStateFormat}}
               </template>
             </el-table-column>
-            <el-table-column label="操作" >
+            <!--<el-table-column label="操作" >
               <template slot-scope="scope">
                 <el-button type="success" plain size="mini" @click="lookDeliver">
                   <i class="el-icon-view"> </i>查看详情
                 </el-button>
               </template>
-            </el-table-column>
+            </el-table-column>-->
           </el-table>
         </el-tab-pane>
       </el-tabs>
@@ -214,7 +214,9 @@
                          layout="prev, pager, next, jumper, total">
           </el-pagination>
         </el-tab-pane>
-        <el-tab-pane label="已选产品">
+        <el-tab-pane>
+            <span slot="label">已选产品
+      <el-badge class="mark" :value="cpdd" /></span>
           <el-table :data="haspro">
             <el-table-column prop="productDetailId" label="产品详情编号" width="150"></el-table-column>
             <el-table-column prop="productId" label="产品编号" width="200"></el-table-column>
@@ -303,6 +305,7 @@
         multipleSelection: [],
         yangNumber:0,
         ddetNumber:0,
+        cpdd:0
       }
     },
     methods: {
@@ -330,9 +333,9 @@
         /*修改*/
       },
       /*已发货的查看详情*/
-      lookDeliver(){
+     /* lookDeliver(){
         this.lookDeliverDialog = true
-      },
+      },*/
       delDeliver(){
         /*删除*/
         deliverHttp.getszDeliver(this.rowdelId).then(res=>{
@@ -364,7 +367,6 @@
         console.log("this.ddetNumber::",this.ddetNumber);
         let idChangelength = 0 ;
         let i = 0;
-
           i++;
           idChangelength++;
           let result = this.haspro.filter(p=>{
@@ -376,8 +378,12 @@
               type: 'warning'
             });
           }else{
-            console.log("push!!")
+            this.$message({
+              message: '添加成功！',
+              type: 'success'
+            });
             this.haspro.push(seq)
+            this.cpdd+=this.haspro.length
             this.addnumber++;
           }
 
@@ -449,7 +455,6 @@
         }
       },
       DeliverClick(){
-        console.log("2确定操作人：",this.$store.state.empName)
         //获取已选产品中的数组
         if(this.haspro.length>0){
           console.log("this.haspro:",this.haspro)
@@ -463,6 +468,8 @@
             var json={
               productDetailId:this.haspro[i].productDetailId,
               ddetId:this.fahuoddetId,
+              productId:this.haspro[i].productId,
+              productBarCode:this.haspro[i].productBarCode
             }
             addhaspro.push(json)
             /*新增发货明细*/
@@ -479,7 +486,8 @@
             delWuliuid:this.fahuoForm.delWuliuid,
             delCompany:this.fahuoForm.delCompany,
             delId:this.fahouid,
-            delPeople: this.$store.state.empName
+            delPeople: this.$store.state.empName,
+            productReq : addhaspro
           }
           inputs.push(addinputs);
           console.log("addinputs:",addinputs)

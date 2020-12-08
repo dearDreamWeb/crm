@@ -89,6 +89,7 @@ export function ordStateFormat(ordState) {
     return '执行中'
   }
 }
+
 export function delStateFormat(delState) {
   if (delState === 1){
     return '已发货'
@@ -96,6 +97,7 @@ export function delStateFormat(delState) {
     return '未发货'
   }
 }
+
 export function planInvoiceFormat(planInvoice) {
   if (planInvoice === 1){
     return '已完成'
@@ -103,6 +105,17 @@ export function planInvoiceFormat(planInvoice) {
     return '执行中'
   }
 }
+
+export function recoReceivableFormat(recoReceivable) {
+  if (recoReceivable == 0){
+    return '未回款'
+  }else if(recoReceivable == 1) {
+    return '已回款'
+  }else {
+    return '回款中'
+  }
+}
+
 export function delCompanyFormat(delCompany) {
   if (delCompany == 0){
     return '顺丰快递'
@@ -110,13 +123,6 @@ export function delCompanyFormat(delCompany) {
     return '中通快递'
   }else {
     return '暂未发货'
-  }
-}
-export function recoReceivableFormat(recoReceivable) {
-  if (recoReceivable === 1){
-    return '已回款'
-  } else {
-    return '未回款'
   }
 }
 

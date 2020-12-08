@@ -85,4 +85,11 @@ public class EmpController {
     public ResultVo getEmpByPersonal(@RequestParam("empId")Integer empId) {
         return empService.getEmpByPersonal(empId);
     }
+
+    /*查部门*/
+    @GetMapping("/deptname")
+    public ResultVo getdeptName(@RequestParam("empId")Integer empId) {
+        return empService.getdeptName(empId);
+    }
+
 }

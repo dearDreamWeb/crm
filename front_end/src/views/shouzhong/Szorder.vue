@@ -163,9 +163,44 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="关于回款">
-          <el-table :data="abPlan" border>
-            <el-table-column prop="planId" label="计划回款编号" width="150"></el-table-column>
-            <el-table-column prop="planPeriod" label="回款期次" width="150"></el-table-column>
+          <el-table :data="abPlan">
+            <el-table-column prop="recoId" label="记录编号" width="80px"></el-table-column>
+            <el-table-column label="最晚回款时间" >
+              <template slot-scope="scope">
+                <i class="el-icon-time"></i>
+                {{scope.row.timePlan | dateFormat}}
+              </template>
+            </el-table-column>
+            <el-table-column prop="moneyPlan" label="应回款金额" >
+              <template slot-scope="scope">
+                {{scope.row.moneyPlan}} 元
+              </template>
+            </el-table-column>
+            <el-table-column prop="recoLiushui" label="交易流水号"></el-table-column>
+            <el-table-column prop="recoReceivable" label="回款状态" width="90px">
+              <template slot-scope="scope">
+              <span v-if="scope.row.recoHasmoney > 0 && scope.row.moneyPlan > scope.row.recoHasmoney">
+                <el-tag type="warning">回款中</el-tag>
+              </span>
+                <span v-if="scope.row.moneyPlan == scope.row.recoHasmoney">
+                <el-tag type="success">已回款</el-tag>
+              </span>
+                <span  v-if="scope.row.recoHasmoney == 0 || scope.row.recoHasmoney==null">
+                <el-tag type="danger">未回款</el-tag>
+              </span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="recoTime" label="实际回款时间" >
+              <template slot-scope="scope">
+                <i class="el-icon-time"></i>
+                {{scope.row.recoTime | dateFormat}}
+              </template>
+            </el-table-column>
+            <el-table-column prop="recoHasmoney" label="已回款金额">
+              <template slot-scope="scope">
+                {{scope.row.recoHasmoney}} 元
+              </template>
+            </el-table-column>
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="关于发货">
@@ -212,7 +247,6 @@
           </el-col>
         </el-row>
         <el-row>
-
           <el-col :span="8">
             <el-form-item label="收货人" prop="ordConsignee">
               <el-input v-model="addForm.ordConsignee" size="medium" placeholder="请填写收货人姓名" clearable/>
@@ -395,7 +429,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="地址">
+            <el-form-item label="地址" size="mini" style="margin-top: 6px">
               <area-cascader type='text' v-model="selected2" :level='1' :data="pcaa" @change="areaCascaderChange"></area-cascader>
             </el-form-item>
           </el-col>
@@ -443,7 +477,7 @@
       return {
         input: '',
         searchInput:'',
-        selected2:['湖南省','株洲市','荷塘区'],
+        selected2:[],
         pca:pca,
         pcaa:pcaa,
         gridData:[],
@@ -706,6 +740,7 @@
         })
       },
       chakan(val){
+        this.abdeliver=[]
         this.dialogTableVisible = true;
         let id=val.ordId;
         this.xiangqing=val;
@@ -713,13 +748,14 @@
         orderHttp.szxiangq(id).then(res=>{
           this.szorder=res;
           this.Detail=res[0].szOrderDetails;
-          this.abPlan.splice(0,0,res[0].szReceivablePlan)
+          this.abPlan=res[0].szReceivableRecords;
           this.abdeliver.splice(0,0,res[0].szDeliver)
           console.log("all查看详情:",res)
           console.log("订单，查看详情：",res[0].szOrderDetails);
-          console.log("回款，查看详情：",res[0].szReceivablePlan);
           console.log("发货，查看详情：",res[0].szDeliver);
+          console.log("回款，查看计划：",res[0].szReceivableRecords);
         })
+       /* this.dialogTableVisible = false*/
       },
       getOrderDetail() {
         orderHttp.getOrder(this.rowordId).then(res => {
@@ -730,6 +766,9 @@
           }
           this.editDialog = true;
           this.editForm = res.data
+          this.selected2[0] = res.data.ordProvince
+          this.selected2[1] = res.data.ordCity
+          this.selected2[2] = res.data.ordCountry
         })
       },
       openAddDialog() {
@@ -833,8 +872,12 @@
               planHttp.plan_editOrder(ppp).then(res=>{
                 console.log(res.data)
               })
+              this.addPlanButtonLoading = false;
+              this.addOrderButtonLoading = false;
               this.addPlanDialog = false;
               this.addDialog = false;
+              /*this.editOrderButtonLoading = false
+              this.editDialog = false*/
             }
           })
         /*修改订单的回款状态*/
@@ -948,6 +991,12 @@
           this.pageNum = res.data.pageNum
         })
       },
+    },
+    // 弹框关闭时清空信息
+    closeDialog () {
+      this.$nextTick(() => {
+        this.$refs['dialogTableVisible'].clearValidate()
+      })
     },
     created() {
       this.initList()

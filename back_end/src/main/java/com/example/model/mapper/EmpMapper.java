@@ -32,4 +32,5 @@ public interface EmpMapper {
                        @Param("newPassWordMd5")String newPassWordMd5);
     List<EmpResp> listNotAuthActivity(Integer activityId);
     EmpResp getEmpByPersonal(Integer empId);
+    EmpResp getdeptName(Integer empId);//查部门
 }
