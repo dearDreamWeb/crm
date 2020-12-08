@@ -66,7 +66,7 @@
     <el-row :gutter="20">
       <el-col :span="24">
         <el-card>
-          <el-table :data="repairList" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
+          <el-table :data="repairList" :model="addform" border style="width: 100%;margin-top: 10px;margin-bottom: 10px"
                     highlight-current-row v-loading="tableLoading">
             <el-table-column type="index" width="40"></el-table-column>
             <el-table-column prop="customerResp.cusName" label="对应客户"></el-table-column>
@@ -80,9 +80,9 @@
 <!--            <el-table-column prop="empResp.empName" label="维修人"></el-table-column>-->
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button size="mini"
-                           @click="openAddDialog">付款</el-button>
-                <el-button @click="handleClick" type="text" size="small">查看</el-button>
+                <el-button v-if="scope.row.repairGdstate == '已派单'" :disabled="scope.row.repairHfjl != null && scope.row.repairHfjl == '已付款'"
+                           @click="openAddDialog(scope.row.repairId)">付款</el-button>
+<!--                <el-button @click="handleClick" type="text" size="small">查看</el-button>-->
               </template>
             </el-table-column>
           </el-table>
@@ -95,9 +95,7 @@
         </el-card>
         <el-dialog :visible.sync="Xianq">
           <el-table :data="listXianq">
-            <el-table-column prop="" label="客户"></el-table-column>
-            <el-table-column prop="" label="手机号码"></el-table-column>
-            <el-table-column prop="" label="维修产品"></el-table-column>
+            <el-table-column prop="" label="时间"></el-table-column>
             <el-table-column prop="" label="费用"></el-table-column>
           </el-table>
         </el-dialog>
@@ -364,12 +362,41 @@
     },
     data(){
       return{
+        stringText:'付款',
+
         isClear:false,
         detail:'',
         searchForm:{},
         repairList:[],
+        addform:{
+          empId:'',
+          cusId: '',
+          repairDate: '',
+          repairProblem:'',
+          repairPersonnel:'',
+          repairAppointment:'',
+          repairActual:'',
+          repairGdstate:'',
+          region: '',
+          repairsjhm:'',
+          repairLxr:'',
+          date1: '',
+          repairFault: '',
+          repairHfjl:'',
+          repairWxfy:'',
+          repairSfzb:'',
+          cusId:'',
+          deptId:'',
+          productId:'',
+          orderId:'',
+          region: '',
+          repairHfjl:'',
+          repairId:'',
+          date1: '',
+        },
         listChangp:[],
         listXianq:[],
+
         daaChangp:[],
         isDisable:false,
         brand:'',
@@ -448,7 +475,22 @@
       sureDialog(){
         this.daaChangp
         this.closeDialog();
-
+        this.addform.repairHfjl = '已付款'
+        this.addform.repairId =this.repairId;
+        // this.addform.repairWxfy = this.sumMoney()
+        // console.log("this.addform.repairWxfy",this.addform.repairWxfy)
+        repairHttp.updatefuk(this.addform).then(res => {
+          if (res.code === 20000) {
+            this.$message.success(res.message)
+            this.getPaidan()
+            this.addDialog = false
+          } else {
+            this.$message({
+              message:res.message,
+              type:"error"
+            })
+          }
+        })
       },
       // 删除添加的产品
       deleteProduct(index,productPrice){
@@ -488,7 +530,9 @@
           });
         }
       },
-      openAddDialog(){
+      openAddDialog(id){
+        console.log(id)
+        this.repairId = id
         this.Changp = true
         productHttp.listDialog(this.fukuan).then(res=>{
           this.listChangp = res.data.list
@@ -537,6 +581,7 @@
 
     created() {
       this.getPaidan()
+      this.sureDialog()
     }
   }
 </script>
