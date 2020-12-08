@@ -482,7 +482,7 @@
         repairHttp.updatefuk(this.addform).then(res => {
           if (res.code === 20000) {
             this.$message.success(res.message)
-            this.initList()
+            this.getPaidan()
             this.addDialog = false
           } else {
             this.$message({
@@ -581,6 +581,7 @@
 
     created() {
       this.getPaidan()
+      this.sureDialog()
     }
   }
 </script>
