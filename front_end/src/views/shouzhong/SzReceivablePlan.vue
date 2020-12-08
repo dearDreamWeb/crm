@@ -351,10 +351,6 @@
         likeForm:{},
         lookFormRules:{},
         likeFormRules:{
-          recoMoney:[
-            {required:true,message:'请填写回款金额',trigger:'blur'},
-            {min:1,max:20,message:'请输入有效数字'}
-          ],
           recoLiushui:[
             {required:true,message:'请填写交易流水号',trigger:'blur'},
             {min:7,max:25,message:'请输入有效数字'}
@@ -689,16 +685,20 @@
         console.log("1qian", this.likeForm.recoMoney)
       },
       again_record(val){
-        //moneyPlan应回款-已回款recoHasmoney=回款recoMoney
-        let moneyPlan = val.moneyPlan
-        let recoHasmoney = val.recoHasmoney
-        this.likeDialog = true;
-        planHttp.getrecord(val.recoId).then(res=>{
-          this.likeForm=res.data
-          console.log(this.likeForm)
-          this.likeForm.recoMoney = moneyPlan - recoHasmoney
-          console.log("2qian", this.likeForm.recoMoney)
-        })
+        if (this.likeForm.recoMoney == null || this.likeForm.recoMoney === 0){
+          alert("12332afadfd")
+        }else {
+          //moneyPlan应回款-已回款recoHasmoney=回款recoMoney
+          let moneyPlan = val.moneyPlan
+          let recoHasmoney = val.recoHasmoney
+          this.likeDialog = true;
+          planHttp.getrecord(val.recoId).then(res=>{
+            this.likeForm=res.data
+            console.log(this.likeForm)
+            this.likeForm.recoMoney = moneyPlan - recoHasmoney
+            console.log("2qian", this.likeForm.recoMoney)
+          })
+        }
       },
       handleCurrentChange(pageIndex) {
         this.pageNum = pageIndex

@@ -5,10 +5,7 @@ import com.example.common.exception.SysException;
 import com.example.entity.CustomerRecord;
 import com.example.entity.ResultVo;
 import com.example.entity.SanGuest;
-import com.example.entity.request.OfferReq;
-import com.example.entity.request.SaleDetailReq;
-import com.example.entity.request.SzOrder;
-import com.example.entity.request.SzOrderDetails;
+import com.example.entity.request.*;
 import com.example.entity.response.CustomerResp;
 import com.example.entity.response.EmpResp;
 import com.example.entity.response.OfferResp;
@@ -23,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -56,6 +54,12 @@ public class OfferServiceImpl implements OfferService {
 
     @Autowired
     private SzOrderDetailsMapper szOrderDetailsMapper;
+
+    @Autowired
+    private SzDeliverMapper szDeliverMapper;
+
+    @Autowired
+    private SzDeliverDetailsMapper szDeliverDetailsMapper;
 
     @Override
     public ResultVo addOffer(OfferReq offerReq) {
@@ -146,13 +150,31 @@ public class OfferServiceImpl implements OfferService {
         EmpResp empByToken = empMapper.getEmpByToken(token);
         szOrder.setOrdHead(empByToken.getEmpName());
         szOrder.setOrdStarttime(DateUtils.getDate());
+        szOrder.setOrdDelete(0);/*(删除)否0*/
         szOrder.setOrdState(0);
+        szOrder.setOrdPlan(0);
         int addszOrder = szOrderMapper.addszOrder(szOrder);
         if (addszOrder != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                     ResultEnum.DATA_ADD_FAIL.getMessage());
         }
         List<SzOrderDetails> szOrderDetails = szOrder.getSzOrderDetails();
+
+        //添加发货单
+        SzDeliver deliver=new SzDeliver();
+        deliver.setOrdId(szOrder.getOrdId());
+        deliver.setDelState(0);//未发
+        try {
+            deliver.setDelExpecttime(DateUtils.strToDate(DateUtils.nextMonth()));//预计发货时间
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        deliver.setDelCreatetime(DateUtils.getDate());//创建时间
+        szDeliverMapper.addszDeliver(deliver);
+        System.out.println("发货单的订单编号"+deliver.getOrdId());
+        System.out.println("deliver"+deliver);
+
+        /*新增订单详情*/
         for (int i=0;i<szOrderDetails.size();i++) {
             szOrderDetails.get(i).setOrdId(szOrder.getOrdId());
             int addOrderDetail = szOrderDetailsMapper.addOrderDetail(szOrderDetails.get(i));
@@ -160,6 +182,19 @@ public class OfferServiceImpl implements OfferService {
                 throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
                         ResultEnum.DATA_ADD_FAIL.getMessage());
             }
+            //新增发货详情
+            SzDeliverDetails  szDeliverDetails = new SzDeliverDetails();
+            szDeliverDetails.setDdetNum(szOrderDetails.get(i).getOdetBuynum());//发货数量
+            szDeliverDetails.setProductId(szOrderDetails.get(i).getProductId());//产品编号
+            szDeliverDetails.setDelId(deliver.getDelId());
+            System.out.println("Delid："+deliver.getDelId());
+            System.out.println(("Deliver："+deliver));
+//            //循环外新增的发货单实体对象
+            szDeliverDetails.setSzDeliver(deliver);
+            //添加发货详情
+            szDeliverDetailsMapper.addDelANDDdel(szDeliverDetails);
+            System.out.println("业务层的发货详情"+szDeliverDetails);
+
         }
         int editOfferTurn = offerMapper.editOfferTurn(szOrder.getOfferId());
         if (editOfferTurn != 1) {

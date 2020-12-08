@@ -102,6 +102,8 @@
         <result property="delDelivertime" column="del_delivertime"/>
         <result property="delState" column="del_state"/>
         <result property="delCreatetime" column="del_createtime"/>
+        <result property="delExpecttime" column="del_expecttime"/>
+        <result property="delActualtime" column="del_actualtime"/>
         <result property="delDelete" column="del_delete"/>
         <result property="ordId" column="ord_id"/>
     </resultMap>
@@ -167,6 +169,7 @@
             </if>
             and  ord_delete = 0
         </where>
+        ORDER BY ord_createtime DESC
     </select>
     <!--详情查全部-->
     <!--

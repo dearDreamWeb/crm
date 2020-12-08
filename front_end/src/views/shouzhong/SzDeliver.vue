@@ -62,13 +62,13 @@
                 {{scope.row.delState | delStateFormat}}
               </template>
             </el-table-column>
-            <el-table-column label="操作" >
+            <!--<el-table-column label="操作" >
               <template slot-scope="scope">
                 <el-button type="success" plain size="mini" @click="lookDeliver">
                   <i class="el-icon-view"> </i>查看详情
                 </el-button>
               </template>
-            </el-table-column>
+            </el-table-column>-->
           </el-table>
         </el-tab-pane>
       </el-tabs>
@@ -333,9 +333,9 @@
         /*修改*/
       },
       /*已发货的查看详情*/
-      lookDeliver(){
+     /* lookDeliver(){
         this.lookDeliverDialog = true
-      },
+      },*/
       delDeliver(){
         /*删除*/
         deliverHttp.getszDeliver(this.rowdelId).then(res=>{
@@ -455,7 +455,6 @@
         }
       },
       DeliverClick(){
-        console.log("2确定操作人：",this.$store.state.empName)
         //获取已选产品中的数组
         if(this.haspro.length>0){
           console.log("this.haspro:",this.haspro)
@@ -469,6 +468,8 @@
             var json={
               productDetailId:this.haspro[i].productDetailId,
               ddetId:this.fahuoddetId,
+              productId:this.haspro[i].productId,
+              productBarCode:this.haspro[i].productBarCode
             }
             addhaspro.push(json)
             /*新增发货明细*/
@@ -485,7 +486,8 @@
             delWuliuid:this.fahuoForm.delWuliuid,
             delCompany:this.fahuoForm.delCompany,
             delId:this.fahouid,
-            delPeople: this.$store.state.empName
+            delPeople: this.$store.state.empName,
+            productReq : addhaspro
           }
           inputs.push(addinputs);
           console.log("addinputs:",addinputs)

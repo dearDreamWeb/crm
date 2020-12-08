@@ -14,12 +14,7 @@ export const deliverHttp = {
   mx_editszDeliver:function(deliver){
     let params={
       url:'/deliver/mx_editszDeliver',
-      data:{
-        delId:deliver.delId,
-        delWuliuid: deliver.delWuliuid,
-        delCompany:deliver.delCompany,
-        delPeople:deliver.delPeople
-      }
+      data:deliver
     }
     return postJson(params)
   },
