@@ -12,6 +12,7 @@
         <result property="phone" column="phone"/>
         <result property="empStatus" column="emp_status"/>
         <result property="token" column="token"/>
+        <result property="headImage" column="head_image"/>
         <result property="remark" column="remark"/>
         <result property="version" column="version"/>
         <result property="createTime" column="create_time"/>
@@ -29,6 +30,7 @@
         <result property="phone" column="phone"/>
         <result property="empStatus" column="emp_status"/>
         <result property="token" column="token"/>
+        <result property="headImage" column="head_image"/>
         <result property="remark" column="remark"/>
         <result property="version" column="version"/>
         <result property="createTime" column="create_time"/>
@@ -68,8 +70,8 @@
         <selectKey keyColumn="emp_id" keyProperty="empId" resultType="Integer" order="AFTER">
             select last_insert_id();
         </selectKey>
-        INSERT INTO emp(emp_name,nick_name,email,sex,password,phone,emp_status,remark,token)
-        VALUES (#{empName},#{nickName},#{email},#{sex},#{passWord},#{phone},#{empStatus},#{remark},#{token})
+        INSERT INTO emp(emp_name,nick_name,email,sex,password,phone,emp_status,remark,token,head_image)
+        VALUES (#{empName},#{nickName},#{email},#{sex},#{passWord},#{phone},#{empStatus},#{remark},#{token},#{headImage})
     </insert>
 
     <update id="editEmp" parameterType="com.example.entity.request.EmpReq">
@@ -95,13 +97,24 @@
         <if test="remark != null and remark != ''">
             ,remark = #{remark}
         </if>
+        <if test="headImage != null and headImage != ''">
+            ,head_image = #{headImage}
+        </if>
         WHERE emp_id = #{empId} AND version = #{version}
     </update>
 
     <select id="getEmp" resultMap="EmpDetailResult" parameterType="Integer">
         SELECT e.emp_id,e.emp_name,e.nick_name,e.email,e.phone,e.sex,
             e.emp_status,e.remark,e.version,e.create_time,e.update_time,
-            e.is_delete,d.dept_id,d.dept_name,d.dept_key,e.token
+            e.is_delete,d.dept_id,d.dept_name,d.dept_key,e.token,e.head_image
+        FROM emp e
+        LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id
+        LEFT JOIN dept d ON d.dept_id = ed.dept_id
+        WHERE e.emp_id = #{empId}
+    </select>
+
+    <select id="getEmpByPersonal" resultMap="EmpDetailResult">
+        SELECT e.*,d.*
         FROM emp e
         LEFT JOIN emp_dept ed ON e.emp_id = ed.emp_id
         LEFT JOIN dept d ON d.dept_id = ed.dept_id
@@ -109,7 +122,8 @@
     </select>
 
     <select id="listEmp" resultMap="EmpResult" parameterType="com.example.entity.request.EmpReq">
-        SELECT DISTINCT e.emp_name,e.emp_id,e.nick_name,e.sex,e.email,e.phone,e.emp_status,e.remark,e.create_time
+        SELECT DISTINCT e.emp_name,e.emp_id,e.nick_name,e.sex,e.email,e.phone,
+        e.emp_status,e.remark,e.create_time,e.head_image
         FROM emp e
         LEFT JOIN emp_dept ed ON ed.emp_id = e.emp_id
         LEFT JOIN dept d ON ed.dept_id = d.dept_id

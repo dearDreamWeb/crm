@@ -20,5 +20,14 @@ export const syslogHttp = {
       url:'/syslog/list'
     }
     return get(params)
+  },
+  listByEmpId:function (empId) {
+    let params = {
+      url:'/syslog/list',
+      data:{
+        'userId':empId
+      }
+    }
+    return get(params)
   }
 }

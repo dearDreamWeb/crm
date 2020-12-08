@@ -93,12 +93,23 @@
     </select>
 
     <select id="listActivity" resultMap="ActivityResult">
-        SELECT activity_id,activity_title,content,activity_link,views,create_by,
-            start_time,end_time,version,create_time,update_time,is_delete
-        FROM activity
+        SELECT ac.*,ad.*
+        FROM activity ac
+        INNER JOIN activity_detail ad ON ad.activity_id = ac.activity_id
         <where>
             <if test="activityTitle != null and activityTitle != ''">
-                AND activity_title LIKE CONCAT('%',#{activityTitle},'%')
+                AND ac.activity_title LIKE CONCAT('%',#{activityTitle},'%')
+            </if>
+            AND ac.is_delete = 0
+        </where>
+        ORDER BY ac.create_time DESC
+    </select>
+
+    <select id="listPage" resultMap="ActivityResult" parameterType="com.example.entity.request.ActivityReq">
+        SELECT * FROM activity
+        <where>
+            <if test="activityTitle != null and activityTitle != ''">
+                AND aactivity_title LIKE CONCAT('%',#{activityTitle},'%')
             </if>
             AND is_delete = 0
         </where>

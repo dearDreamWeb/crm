@@ -161,7 +161,12 @@ export const offerHttp = {
     let params = {
       url:'/offer/offer_examine',
       data:{
-        offer
+        'offerId':offer.offerId,
+        'offerTheme':offer.offerTheme,
+        'offerNumbers':offer.offerNumbers,
+        'offerStatus':offer.offerStatus,
+        'offerPrice':offer.offerPrice,
+        'remark':offer.remark,
       }
     }
     return postJson(params)

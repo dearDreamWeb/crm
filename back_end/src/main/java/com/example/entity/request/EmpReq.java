@@ -25,6 +25,7 @@ public class EmpReq {
     private String phone;
     private Integer empStatus;
     private String token;
+    private String headImage;
     private String remark;
     private Integer version;
     private Date createTime;

@@ -87,5 +87,15 @@ export const activityHttp = {
       }
     }
     return get(params)
+  },
+  listPage:function (pageNum,pageSize) {
+    let params = {
+      url:'/activity/list_page',
+      data:{
+        'pageNum':pageNum,
+        'pageSize':pageSize
+      }
+    }
+    return get(params)
   }
 }

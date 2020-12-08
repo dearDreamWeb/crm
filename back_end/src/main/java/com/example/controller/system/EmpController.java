@@ -80,4 +80,9 @@ public class EmpController {
     public ResultVo logout(@RequestParam("empName")String empName) {
         return empService.logout(empName);
     }
+
+    @GetMapping("/get_personal")
+    public ResultVo getEmpByPersonal(@RequestParam("empId")Integer empId) {
+        return empService.getEmpByPersonal(empId);
+    }
 }

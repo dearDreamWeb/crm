@@ -131,7 +131,11 @@ public class SaleServiceImpl implements SaleService {
         EmpResp emp = empMapper.getEmp(sale.getEmpId());
         sale.setCusName(customer.getCusName());
         sale.setContactsName(contacts.getContactsName());
-        sale.setEmpName(emp.getEmpName());
+        if (emp != null) {
+            sale.setEmpName(emp.getEmpName());
+        } else {
+            sale.setEmpName(null);
+        }
         if (sale == null) {
             throw new SysException(ResultEnum.DATA_NOT_EXIST.getCode(),
                     ResultEnum.DATA_NOT_EXIST.getMessage());

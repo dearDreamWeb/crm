@@ -17,8 +17,8 @@
                    @click="openAddDialog">添加活动</el-button>
         <el-button type="primary" size="mini" icon="el-icon-refresh"
                    @click="refreshClick"></el-button>
-        <el-button type="primary" size="mini" icon="el-icon-brush"
-                   @click="linkCustomActivity" tag="a">自定义活动</el-button>
+        <!--<el-button type="primary" size="mini" icon="el-icon-brush"
+                   @click="linkCustomActivity" tag="a">自定义活动</el-button>-->
       </el-col>
       <el-col :span="8">
         <el-button type="warning" size="mini" icon="el-icon-edit"
@@ -52,13 +52,20 @@
       <el-table-column width="50px" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="详情" placement="top">
-            <el-button @click="toDetailDuplicate(scope.row.activityId)" type="text" icon="el-icon-thumb"></el-button>
+            <el-button @click="toDetailDuplicate(scope.row.activityId)"
+                       type="text" icon="el-icon-thumb"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-row :gutter="20">
+    <el-pagination background :page-size="pageSize" :total="total"
+                   :current-page="pageNum" :page-sizes="[1,2,5,10]"
+                   @current-change="handleCurrentChange"
+                   layout="prev, pager, next, jumper, total">
+    </el-pagination>
+
+    <!--<el-row :gutter="20">
       <el-col :span="6" v-for="item in listForm" :key="item.activityId">
         <el-card shadow="hover" style="margin-top: 10px">
           <el-row type="flex" justify="space-between">
@@ -68,7 +75,7 @@
             </el-col>
           </el-row>
           <hr>
-          <!--          <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">-->
+          &lt;!&ndash;          <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">&ndash;&gt;
           <div>
             <hr>
             <span style="font-family: 楷体">{{item.content}}</span>
@@ -82,7 +89,7 @@
           </div>
         </el-card>
       </el-col>
-    </el-row>
+    </el-row>-->
   </el-card>
 
   <el-dialog title="活动添加" :visible.sync="addDialog" @close="addHandleClose">
@@ -253,6 +260,9 @@
         editDialog:false,
         editActivityLoading:false,
         editForm:{},
+        pageNum:1,
+        pageSize:10,
+        total:1,
 
         addDialog:false,
         addForm:{
@@ -286,6 +296,26 @@
       }
     },
     methods:{
+      handleCurrentChange(pageIndex) {
+        this.tableLoading = true
+        this.pageNum = pageIndex
+        activityHttp.listPage(this.pageNum,this.pageSize).then(res => {
+          this.listForm = res.data.list
+          this.pageNum = res.data.pageNum
+          this.total = res.data.total
+          this.tableLoading = false
+        })
+      },
+      initList() {
+        this.tableLoading = true
+        activityHttp.listPage(this.pageNum,this.pageSize).then(res => {
+          this.tableLoading = false
+          this.pageNum = res.data.pageNum
+          this.total = res.data.total
+          this.listForm = res.data.list
+        })
+      },
+
       toDetailDuplicate(activityId) {
         let resolve = this.$router.resolve({
           path: '/activity_detail_duplicate',
@@ -452,13 +482,13 @@
           this.buttonDisabled = false
         }
       },
-      initList() {
+      /*initList() {
         this.tableLoading = true
         activityHttp.list(this.listForm).then(res => {
           this.listForm = res.data
           this.tableLoading = false
         })
-      },
+      },*/
       iHeaderRowStyle:function({row,rowIndex}){
         return 'height:20px'
       },

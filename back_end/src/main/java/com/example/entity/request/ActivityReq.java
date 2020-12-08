@@ -29,4 +29,9 @@ public class ActivityReq {
     private Date updateTime;
     private Integer isDelete;
     private List<Integer> empIdList;
+
+    private Integer pageNum;
+    private Integer pageSize;
+
+
 }

@@ -65,4 +65,9 @@ public class ActivityController {
         System.err.println(activityId);
         return activityService.addViews(activityId);
     }
+
+    @GetMapping("/list_page")
+    public ResultVo listPage(ActivityReq activityReq) {
+        return activityService.listPage(activityReq);
+    }
 }

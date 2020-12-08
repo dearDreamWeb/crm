@@ -208,7 +208,7 @@
           this.fullscreenLoading = true
           offerHttp.offer_detail_add(this.addForm).then(res => {
             if (res.code === 20000) {
-              this.$message.success(res.message)
+              /*this.$message.success(res.message)*/
               this.fullscreenLoading = false
               this.initOfferDetail()
             } else {

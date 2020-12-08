@@ -13,6 +13,8 @@ import com.example.service.ActivityService;
 import com.example.util.CheckUtils;
 import com.example.util.DateUtils;
 import com.example.util.ResultUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,7 +114,8 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public ResultVo listActivity(ActivityReq activityReq) {
         List<ActivityResp> activityResps = activityMapper.listActivity(activityReq);
-        return ResultUtils.response(activityResps);
+        PageInfo<ActivityResp> list = new PageInfo<>(activityResps);
+        return ResultUtils.response(list);
     }
 
     @Override
@@ -135,5 +138,21 @@ public class ActivityServiceImpl implements ActivityService {
     public ResultVo pageViewCount() {
         int count = activityMapper.pageViewCount();
         return ResultUtils.response(count);
+    }
+
+    @Override
+    public ResultVo listPage(ActivityReq activityReq) {
+        Integer pageNum = activityReq.getPageNum();
+        Integer pageSize = activityReq.getPageSize();
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+        PageHelper.startPage(pageNum,pageSize);
+        List<ActivityResp> activityResps = activityMapper.listPage(activityReq);
+        PageInfo<ActivityResp> list = new PageInfo<>(activityResps);
+        return ResultUtils.response(list);
     }
 }

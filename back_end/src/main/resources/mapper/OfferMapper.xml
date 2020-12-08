@@ -280,7 +280,7 @@
         <if test="examinePerson != null and examinePerson != ''">
             ,examine_person = #{examinePerson}
         </if>
-        <if test="examineTime != null and examineTime != ''">
+        <if test="examineTime != null">
             ,examine_time = #{examineTime}
         </if>
         <if test="contactsId != null">

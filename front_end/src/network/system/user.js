@@ -20,6 +20,15 @@ export const userHttp = {
     }
     return get(params)
   },
+  getEmpByPersonal:function(empId) {
+    let params = {
+      url:'/emp/get_personal',
+      data:{
+        'empId':empId
+      }
+    }
+    return get(params)
+  },
   listPage:function (pageNum,pageSize) {
     let params = {
       url:'/emp/list',
@@ -132,5 +141,16 @@ export const userHttp = {
       }
     }
     return get(params)
+  },
+  editPassword:function (editPassword) {
+    let params = {
+      url:'/emp/edit_password',
+      data:{
+        'oldPassword':editPassword.oldPassword,
+        'newPassword':editPassword.newPassword,
+        'enterPassword':editPassword.enterPassword
+      }
+    }
+    return postJson(params)
   }
 }

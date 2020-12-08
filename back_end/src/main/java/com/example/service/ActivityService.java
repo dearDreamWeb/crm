@@ -19,4 +19,5 @@ public interface ActivityService {
     ResultVo listByEmp(Integer empId);
     ResultVo addViews(Integer activityId);
     ResultVo pageViewCount();
+    ResultVo listPage(ActivityReq activityReq);
 }

@@ -19,6 +19,7 @@ public interface ActivityMapper {
     int editActivity(ActivityReq activityReq);
     ActivityResp getActivity(Integer activityId);
     List<ActivityResp> listActivity(ActivityReq activityReq);
+    List<ActivityResp> listPage(ActivityReq activityReq);
     List<ActivityResp> listByEmp(Integer empId);
     int checkActivity(String activityTitle);
     int addViews(Integer activityId);

@@ -20,4 +20,5 @@ public interface EmpService {
     ResultVo pwd(EmpReq empReq);
     ResultVo logout(String empName);
     ResultVo listNotAuthActivity(Integer activityId);
+    ResultVo getEmpByPersonal(Integer empId);
 }

@@ -162,9 +162,9 @@
 
       <el-divider></el-divider>
 
-      <!--<sale-chart ref="saleChartRef" v-bind="$attrs" v-on="$listeners"
+      <sale-chart ref="saleChartRef" v-bind="$attrs" v-on="$listeners"
                   v-bind:salestagecount="saleStageCount"
-                  v-bind:salestagecountname="saleStageCountName"></sale-chart>-->
+                  v-bind:salestagecountname="saleStageCountName"></sale-chart>
 
       <el-dialog title="机会添加" :visible.sync="addDialog" @close="addDialogClose" top="30px">
         <el-form :model="addForm" ref="addFormRef" :rules="addFormRules"
@@ -648,6 +648,8 @@
           for (let i=0;i<res.data.length;i++) {
             this.saleStageCountName.push(res.data[i].name)
           }
+          console.log("xxx")
+          console.log("xxsdsad")
         })
       },
       iHeaderRowStyle:function({row,rowIndex}){

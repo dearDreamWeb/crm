@@ -311,14 +311,14 @@
       </el-form>
       <span slot="footer">
         <el-row :gutter="20">
-          <el-col :span="6">
+          <el-col :span="12">
             <el-tooltip class="item" effect="dark" content="转为客户" placement="top">
               <el-button type="warning" icon="el-icon-s-custom" circle
                          @click="openCustomerDialog"
                          :disabled="this.manipulateForm.clueStatus === 1"></el-button>
             </el-tooltip>
           </el-col>
-          <el-col :span="6">
+          <!--<el-col :span="6">
             <el-tooltip class="item" effect="dark" content="加入代办" placement="top">
               <el-button type="success" icon="el-icon-timer" circle></el-button>
             </el-tooltip>
@@ -327,8 +327,8 @@
             <el-tooltip class="item" effect="dark" content="转成订单" placement="top">
               <el-button type="primary" icon="el-icon-tickets" circle></el-button>
             </el-tooltip>
-          </el-col>
-          <el-col :span="6">
+          </el-col>-->
+          <el-col :span="12">
             <el-tooltip class="item" effect="dark" content="设为无效" placement="top">
               <el-button type="danger" icon="el-icon-error" circle
                          @click="invalidClueClick"
