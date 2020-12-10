@@ -77,4 +77,9 @@ public class CustomerController {
         return customerService.insertCusAndCon(cusConReq,token);
     }
 
+    @GetMapping("/list_by_name")
+    public ResultVo listByName(@RequestParam("cusName")String cusName) {
+        return customerService.listByName(cusName);
+    }
+
 }

@@ -280,6 +280,12 @@ public class CustomerServiceImpl implements CustomerService {
         return ResultUtils.response(count);
     }
 
+    @Override
+    public ResultVo listByName(String cusName) {
+        CustomerResp customerResp = customerMapper.listByName(cusName);
+        return ResultUtils.response(customerResp);
+    }
+
     public List<CustomerResp> customerFormat(List<CustomerResp> list) {
         List<CustomerResp> customerResps = new ArrayList<>();
         for (int i=0;i<list.size();i++) {

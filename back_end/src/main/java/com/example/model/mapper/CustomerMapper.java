@@ -2,6 +2,7 @@ package com.example.model.mapper;
 
 import com.example.entity.request.CustomerReq;
 import com.example.entity.response.CustomerResp;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,9 +22,11 @@ public interface CustomerMapper {
     int addCustomerAndContacts(CustomerReq customerReq);
     CustomerResp getCustomerByName(String cusName);
     List<CustomerResp> listAll();
-    List<CustomerResp> listCustomerByEmpId(CustomerReq customerReq,
-                                           String empName);
+    List<CustomerResp> listCustomerByEmpId(@Param("customerReq") CustomerReq customerReq,
+                                           @Param("empName") String empName);
     CustomerResp getBySaleId(Integer saleId);
 
     int newCustomerCount(CustomerReq customerReq);
+
+    CustomerResp listByName(String cusName);
 }

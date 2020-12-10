@@ -96,6 +96,15 @@ export const customerHttp = {
     }
     return get(params)
   },
+  listByCusName:function(cusName) {
+    let params = {
+      url:'/customer/list_by_name',
+      data:{
+        'cusName':cusName
+      }
+    }
+    return get(params)
+  },
   editCustomer:function(customer) {
     let params = {
       url:'/customer/edit',

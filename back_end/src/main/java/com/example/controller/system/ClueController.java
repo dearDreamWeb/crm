@@ -91,8 +91,9 @@ public class ClueController {
     }
 
     @PostMapping("/clue_share")
-    public ResultVo clueShare(@RequestParam("clueId")Integer clueId,
+    public ResultVo clueShare(@RequestBody ClueReq clueReq,
                               HttpServletRequest request) {
+        Integer clueId = clueReq.getClueId();
         String token = request.getHeader("X-Token");
         return clueService.shareClue(clueId,token);
     }

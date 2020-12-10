@@ -118,7 +118,8 @@ export const clueHttp = {
       url:'/clue/transfer',
       data:{
         'clueId':clue.clueId,
-        'empId':clue.empId
+        'empId':clue.empId,
+        'transferId':clue.transferId
       }
     }
     return postJson(params)

@@ -34,5 +34,7 @@ public class ClueReq {
     private Integer pageSize;
     private String startDate;
     private String endDate;
+
+    private Integer transferId;
     private List<Integer> clueIdList;
 }

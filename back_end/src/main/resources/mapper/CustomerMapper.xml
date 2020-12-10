@@ -242,46 +242,46 @@
         FROM customer cu
         INNER JOIN emp e ON e.emp_id = cu.emp_id
         <where>
-            <if test="cusName != null and cusName != ''">
+            <if test="customerReq.cusName != null and customerReq.cusName != ''">
                 AND cu.cus_name LIKE CONCAT('%',#{cusName},'%')
             </if>
-            <if test="lifeCycle != null">
+            <if test="customerReq.lifeCycle != null">
                 AND cu.life_cycle = #{lifeCycle}
             </if>
-            <if test="sanyGuestId != null">
+            <if test="customerReq.sanyGuestId != null">
                 AND cu.sany_guest_id = #{sanyGuestId}
             </if>
-            <if test="abbreviation != null and abbreviation != ''">
+            <if test="customerReq.abbreviation != null and customerReq.abbreviation != ''">
                 AND cu.abbreviation LIKE CONCAT('%',#{abbreviation},'%')
             </if>
-            <if test="creditId != null">
+            <if test="customerReq.creditId != null">
                 AND cu.credit_id = #{creditId}
             </if>
-            <if test="settlement != null">
+            <if test="customerReq.settlement != null">
                 AND cu.settlement = #{settlement}
             </if>
-            <if test="companyAccount != null and companyAccount != ''">
+            <if test="customerReq.companyAccount != null and customerReq.companyAccount != ''">
                 AND cu.company_account LIKE CONCAT('%',#{companyAccount},'%')
             </if>
-            <if test="empId != null">
+            <if test="customerReq.empId != null">
                 AND cu.emp_id = #{empId}
             </if>
-            <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+            <if test="customerReq.startDate != null and customerReq.startDate != ''"><!-- 开始时间检索 -->
                 AND date_format(cu.create_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
             </if>
-            <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+            <if test="customerReq.endDate != null and customerReq.endDate != ''"><!-- 结束时间检索 -->
                 AND date_format(cu.create_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
             </if>
-            <if test="starSigningDate != null and starSigningDate != ''">
+            <if test="customerReq.starSigningDate != null and customerReq.starSigningDate != ''">
                 AND date_format(cu.first_signing_time,'%y%m%d') &gt;= date_format(#{starSigningDate},'%y%m%d')
             </if>
-            <if test="endSigningDate != null and endSigningDate != ''">
+            <if test="customerReq.endSigningDate != null and customerReq.endSigningDate != ''">
                 AND date_format(cu.first_signing_time,'%y%m%d') &lt;= date_format(#{endSigningDate},'%y%m%d')
             </if>
-            <if test="cusDictSource != null">
+            <if test="customerReq.cusDictSource != null">
                 AND cu.cus_dict_source = #{cusDictSource}
             </if>
-            <if test="cusDictStage != null">
+            <if test="customerReq.cusDictStage != null">
                 AND cu.cus_dict_stage = #{cusDictStage}
             </if>
             AND cu.is_delete = 0 AND e.emp_name = #{empName}
@@ -301,5 +301,9 @@
     <select id="newCustomerCount" resultType="int" parameterType="com.example.entity.request.CustomerReq">
         SELECT count(cus_id)
         FROM customer WHERE create_time BETWEEN #{startDate} AND #{endDate}
+    </select>
+
+    <select id="listByName" resultMap="CustomerResult">
+        SELECT * FROM customer WHERE cus_name = #{cusName}
     </select>
 </mapper>

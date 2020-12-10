@@ -199,7 +199,7 @@ public class ClueServiceImpl implements ClueService {
     @Override
     public ResultVo transferCustomer(ClueReq clueReq,String token) {
         EmpResp empByToken = empMapper.getEmpByToken(token);
-        if (clueReq.getEmpId() == empByToken.getEmpId()) {
+        if (clueReq.getTransferId() != empByToken.getEmpId()) {
             throw new SysException(ResultEnum.CLUE_TRANSFER_NOT_OWN.getCode(),
                     ResultEnum.CLUE_TRANSFER_NOT_OWN.getMessage());
         }

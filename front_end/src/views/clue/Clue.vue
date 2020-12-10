@@ -26,9 +26,9 @@
                      :disabled="buttonDisabled" @click="delClue">删除</el-button>
           <el-button type="info" size="mini" icon="el-icon-view"
                      :disabled="buttonDisabled" @click="getClueDetailButton">详情</el-button>
-          <el-button type="success" size="mini" icon="el-icon-edit-outline"
+          <!--<el-button type="success" size="mini" icon="el-icon-edit-outline"
                      :disabled="this.multipleClueIdList.length == 0"
-                     @click="openClueTypeEdit">批量</el-button>
+                     @click="openClueTypeEdit">批量</el-button>-->
         </el-col>
       </el-row>
 
@@ -362,7 +362,8 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="公司名称" prop="cusName">
-              <el-select v-model="addCusAndConForm.cusName" style="width: 550px" filterable allow-create>
+              <el-select v-model="addCusAndConForm.cusName" style="width: 550px"
+                         filterable allow-create @change="transferCusChange">
                 <el-option v-for="item in companyList" :key="item.clueId"
                            :label="item.clueName" :value="item.clueName">
                 </el-option>
@@ -390,7 +391,8 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="来源" prop="cusDictSource">
-              <el-select v-model="addCusAndConForm.cusDictSource">
+              <el-select v-model="addCusAndConForm.cusDictSource"
+                         :disabled="cusDisabled">
                 <el-option v-for="item in dictList.children" :key="item.dictId"
                            :label="item.dictName" :value="item.dictId">
                 </el-option>
@@ -480,11 +482,15 @@
         cb(new Error('请输入合法的微信号'))
       }
       return {
+        cusDisabled:false,
+
         transferLoading:false,
         transferCustomerForm:{
           clueId:'',
-          empId:''
+          empId:'',
+          transferId:''
         },
+        dialogTransferId:'',
         transferCustomerDialog:false,
 
         clueTurnCustomerClickLoading:false,
@@ -505,6 +511,9 @@
           wechat:''
         },
         addCusAndConFormRules:{
+          cusName:[
+            {required:true,message:'请输入公司名称',trigger:'blur'}
+          ],
           contactsName:[
             {required:true,message:'请输入名称',trigger:'blur'}
           ],
@@ -596,6 +605,15 @@
       }
     },
     methods: {
+      transferCusChange(value) {
+        this.listForm.cusName = value
+        customerHttp.listByCusName(value).then(res => {
+          this.addCusAndConForm.abbreviation = res.data.abbreviation
+          this.addCusAndConForm.cusDictSource = res.data.cusDictSource
+          this.addCusAndConForm.cusRemark = res.data.cusRemark
+          this.cusDisabled = true
+        })
+      },
       invalidClueClick() {
         this.$confirm('请确认是否执行此操作','提示',{
           confirmButtonText:'确定',
@@ -631,7 +649,16 @@
         })
       },
       openTransferDialog() {
-        this.transferCustomerDialog = true
+        clueHttp.get(this.rowClueId).then(res => {
+          if (res.code === 80033) {
+            this.$message.error(res.message)
+            this.transferCustomerDialog = false
+          } else {
+            this.dialogTransferId = res.data.empId
+            this.transferCustomerDialog = true
+          }
+        })
+
       },
       transferCustomerClick() {
         this.$confirm('请再三考虑是否执行此操作','提示',{
@@ -640,6 +667,7 @@
           type:'warning'
         }).then(() => {
           this.transferCustomerForm.clueId = this.manipulateForm.clueId
+          this.transferCustomerForm.transferId = this.$store.state.empId
           this.transferLoading = true
           clueHttp.transferCustomer(this.transferCustomerForm).then(res => {
             if (res.code === 20000) {
@@ -748,6 +776,7 @@
         this.editClueTypeDialog = true
       },
       manipulateClueClick(clueId) {
+        this.rowClueId = clueId
         this.clueManipulateDialog = true
         clueHttp.getDetail(clueId).then(res => {
           this.manipulateForm = res.data

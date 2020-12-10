@@ -75,6 +75,10 @@ public class SzOrderServicelmpl implements SzOrderService {
         for (SzOrderDetails detail : details) {
             detail.setOrdId(oid);
             //第五步：调用详细的新增方法
+
+            /**
+             * 订单详情、发货详情的数量
+             */
             detailsMapper.addOrderANDOrderDet(detail);
             SzDeliverDetails  szDeliverDetails = new SzDeliverDetails();
             szDeliverDetails.setDdetNum(detail.getOdetBuynum());//发货数量

@@ -9,7 +9,7 @@
       <el-col :span="12" :offset="6">
         <el-card class="cardBG">
           <h1 style="font-family: 楷体;font-size: 40px;">{{activity.activityTitle}}</h1>
-          <h6>——记得名称校验</h6>
+          <!--<h6>——记得名称校验</h6>-->
           <hr>
           <h1 style="font-family: 华文彩云">{{activity.content}}</h1>
           <hr>
@@ -91,6 +91,7 @@
               this.$message.success("提交成功！！可继续浏览或退出")
               this.addButtonLoading = false
               this.$refs.clueFormRef.resetFields()
+              this.activityDisabled = true
             } else {
               this.$message({
                 message:'OH！NO！人数太多，请退出重试！！',

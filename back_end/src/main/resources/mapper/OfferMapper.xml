@@ -204,9 +204,9 @@
         o.remark,o.create_time,o.update_time,o.is_delete,o.contacts_id,o.sale_id,o.emp_id,con.contacts_name,
         con.contacts_phone,con.email,s.sale_name,s.sale_status,s.sale_type,s.discovery_time,e.emp_name,od.*,o.is_turn
         FROM offer o
-        INNER JOIN contacts con ON o.contacts_id = con.contacts_id
-        INNER JOIN offer_detail od ON od.offer_id = o.offer_id
-        INNER JOIN sale s ON o.sale_id = s.sale_id
+        LEFT JOIN contacts con ON o.contacts_id = con.contacts_id
+        LEFT JOIN offer_detail od ON od.offer_id = o.offer_id
+        LEFT JOIN sale s ON o.sale_id = s.sale_id
         INNER JOIN emp e ON o.emp_id = e.emp_id
         <where>
             <if test="offerTheme != null and offerTheme != ''">

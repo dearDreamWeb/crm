@@ -404,7 +404,7 @@
         viewOrderDetailDialog:false,
         viewOfferDetailDialog:false,
         fullscreenLoading:false,
-        saleId:'',
+        saleId:0,
         cusId:'',
         empId:'',
         saleForm:{
@@ -495,9 +495,11 @@
           this.turnOrderForm.ordTotalmoney = 0
           for (let i=0;i<res.data.offerDetailResp.length;i++) {
             this.turnOrderForm.ordTotalmoney = parseFloat(res.data.offerDetailResp[i].amountMoney)+parseFloat(this.turnOrderForm.ordTotalmoney)
+            this.turnOrderForm.szOrderDetails[i].odetBuynum = res.data.offerDetailResp[i].offerDetailCount
           }
           this.turnOrderForm.ordTotalmoney = this.turnOrderForm.ordTotalmoney.toFixed(2)
         })
+        console.log(this.turnOrderForm)
       },
 
       initSaleDetail() {

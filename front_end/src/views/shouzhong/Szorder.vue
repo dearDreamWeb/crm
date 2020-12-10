@@ -134,14 +134,11 @@
           <el-table :data="Detail" border>
             <el-table-column prop="odetId" label="详情编号"></el-table-column>
             <el-table-column prop="productId" label="产品编号" ></el-table-column>
-            <el-table-column prop="productName" label="1产品名称">
-<!--             <div  v-for="x in szorder.productReq">
-                {{x}}
-             </div>&ndash;&gt;
+            <!--<el-table-column prop="productName" label="1产品名称">
               <template slot-scope="scope">
-                {{scope.row.szOrderDetails[0].productName}}
-              </template>-->
-            </el-table-column>
+                {{productName}}
+              </template>
+            </el-table-column>-->
             <el-table-column prop="odetBuynum" label="数量">
               <template slot-scope="scope">
                 {{scope.row.odetBuynum}} 件
@@ -577,7 +574,9 @@
         oid:0,
         xiangqing:{
           customerResp:[]
-        }
+        },
+
+        productName:''
       }
     },
     methods: {

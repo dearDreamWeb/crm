@@ -45,6 +45,8 @@ public class SzOrder {
     private SzDeliver szDeliver;//11
     private List<ProductReq> productReq;//
 
+    private Integer ordProductNum;
+
     private String startDate;
     private String endDate;
     private Integer pageNum;

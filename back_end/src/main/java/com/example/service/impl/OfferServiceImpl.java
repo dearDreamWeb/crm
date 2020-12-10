@@ -73,6 +73,7 @@ public class OfferServiceImpl implements OfferService {
         }
 
         SaleDetailReq bySale = detailMapper.getBySale(offerReq.getSaleId());
+        bySale.setSaleId(offerReq.getSaleId());
         bySale.setSaleStage("商务谈判");
         bySale.setVersion(bySale.getVersion());
         bySale.setUpdateTime(DateUtils.getDate());
