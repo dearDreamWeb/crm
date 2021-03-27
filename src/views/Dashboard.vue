@@ -16,7 +16,7 @@
               <div>
                 <el-image
                   style="width: 100px; height: 100px"
-                  src="https://gradua.eblog.icu/wallhaven-ym99pl.png"
+                  src="http://gradua.eblog.icu/wallhaven-ym99pl.png"
                   fit="fill"></el-image>
               </div>
             </el-col>
@@ -144,7 +144,7 @@
         </el-dialog>
       </el-col>
     </el-row>
-    <el-row :gutter="20">
+    <!-- <el-row :gutter="20">
       <el-col :span="12">
         <el-card>
           对于线索的每一个跟进操作，都将操作记录下来
@@ -160,16 +160,16 @@
           线索剩余：待办和转订单未完成
         </el-card>
       </el-col>
-    </el-row>
-    <el-row>
+    </el-row> -->
+    <!-- <el-row>
       <el-col>
         <el-card>
           任务调度待解决<hr>
           10月15待完成任务：线索模块前后端增删改查
         </el-card>
       </el-col>
-    </el-row>
-    <el-row :gutter="20">
+    </el-row> -->
+    <!-- <el-row :gutter="20">
       <el-col :span="12">
         <el-card header="消息提醒思路">
           在vue加载dom完成后，用create函数请求后台的数据，接收到之后统计消息。然后用element的徽标标记。当用户点击之后调用后台查看消息
@@ -186,8 +186,8 @@
           删除线索只能由其所属员工删除
         </el-card>
       </el-col>
-    </el-row>
-    <el-row :gutter="20">
+    </el-row> -->
+    <!-- <el-row :gutter="20"> -->
       <!--<el-col :span="18">
         <el-card>
           <div slot="header">
@@ -199,7 +199,7 @@
           </el-row>
         </el-card>
       </el-col>-->
-      <el-col :span="6">
+      <!-- <el-col :span="6">
         <el-row>
           <el-col>
             <el-card>
@@ -208,17 +208,17 @@
               </div>
             </el-card>
           </el-col>
-        </el-row>
-
+        </el-row> -->
+<!-- 
         <el-row>
           <el-col>
             <el-card>
               （已完成）页面长时间未操作，清除session和vuex，方式采用前端解决<br>后续考虑走后端
             </el-card>
           </el-col>
-        </el-row>
+        </el-row> -->
 
-        <el-row>
+        <!-- <el-row>
           <el-col>
             <el-card header="实现任务调度的四种方式">
               Timer<br>
@@ -233,30 +233,30 @@
               活动页面给员工联系电话
             </el-card>
           </el-col>
-        </el-row>
+        </el-row> -->
 
-        <el-row>
+        <!-- <el-row>
           <el-col>
             <el-card>
               获客页面的表单提交验证，前台后台
             </el-card>
           </el-col>
-        </el-row>
-        <el-row>
+        </el-row> -->
+        <!-- <el-row>
           <el-col>
             <el-card>
               除了超级管理员账号之外，所有账号不能对敏感按钮做操作
             </el-card>
           </el-col>
-        </el-row>
-        <el-row>
+        </el-row> -->
+        <!-- <el-row>
           <el-col>
             <el-card>
               后期考虑接口文档：丝袜哥
             </el-card>
           </el-col>
-        </el-row>
-      </el-col>
+        </el-row> -->
+      <!-- </el-col>
       <el-col :span="18">
         <el-card header="防止用户多端登录解决方法">
           <p>两种解决方案：
@@ -284,22 +284,22 @@
         </el-card>
 
       </el-col>
-    </el-row>
+    </el-row> -->
 
 <!--    <area-select v-model="selected" :data="pca" @change="areaSelectChange"></area-select>-->
 <!--    <area-cascader v-model="selected2" :data="pca" @change="areaCascaderChange"></area-cascader>-->
 
 <!--    <area-select type='all' :level='2' v-model="selected" :data="pcaa" @change="areaSelectChange"></area-select>-->
-    <area-cascader type='text' v-model="selected2" :level='1' :data="pcaa" @change="areaCascaderChange"></area-cascader>
-    <hr>
+    <!-- <area-cascader type='text' v-model="selected2" :level='1' :data="pcaa" @change="areaCascaderChange"></area-cascader>
+    <hr> -->
     <!--<el-calendar v-model="value">
     </el-calendar>-->
-    <hr>
-    <el-select v-model="brand" @change="brandChange">
+    <!-- <hr> -->
+    <!-- <el-select v-model="brand" @change="brandChange">
       <el-option v-for="item in productBrandList" :key="item.label"
                  :label="item.value" :value="item.value">
       </el-option>
-    </el-select>
+    </el-select> -->
     <!--<el-calendar v-model="value">
       <template slot="dateCell" slot-scope="{date, data}">
         <el-row>
@@ -327,14 +327,14 @@
       </template>
     </el-calendar>-->
 
-    <div>
+    <!-- <div>
       <h3>wangEditor with vue</h3>
       <div id="demo1"></div>
       <el-button class="btn" @click="getEditorData">获取当前内容</el-button>
     </div>
     <div>
       <el-button @click="pushMessage" type="primary">BUTTON</el-button>
-    </div>
+    </div> -->
     <div>
       <div style="width:500px;height:500px" ref="chart"></div>
     </div>
@@ -433,7 +433,7 @@
       initCharts() {
         let myChart = this.$echarts.init(this.$refs.chart);
         myChart.setOption({
-          title:{text:'在vue中使用echarts'},
+          title:{text:'服装分类'},
           tooltip:{},
           xAxis:{
             data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
@@ -479,6 +479,7 @@
         this.addform.repairId =this.repairId;
         // this.addform.repairWxfy = this.sumMoney()
         // console.log("this.addform.repairWxfy",this.addform.repairWxfy)
+        console.log(this.addform)
         repairHttp.updatefuk(this.addform).then(res => {
           if (res.code === 20000) {
             this.$message.success(res.message)

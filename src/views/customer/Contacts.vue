@@ -135,7 +135,11 @@
             <el-table-column v-if="colData[5].isTrue" prop="qq" label="QQ"></el-table-column>
             <el-table-column v-if="colData[6].isTrue" prop="email" label="邮箱"></el-table-column>
             <el-table-column v-if="colData[7].isTrue" prop="contactsDictType" label="类型"></el-table-column>
-            <el-table-column v-if="colData[8].isTrue" prop="cusName" label="所属客户"></el-table-column>
+            <el-table-column v-if="colData[8].isTrue" prop="cusName" label="所属客户">
+              <template slot-scope="scope">
+                {{ scope.row.customerResp.cusName }}
+              </template>
+            </el-table-column>
             <el-table-column v-if="colData[9].isTrue" prop="remark" label="备注"></el-table-column>
           </el-table>
 
@@ -199,7 +203,8 @@
           <el-col :span="12">
             <el-form-item label="类型" prop="contactsDictType">
               <el-select v-model="addForm.contactsDictType" clearable placeholder="请选择">
-                <el-option></el-option>
+                  <el-option v-for="item in contactsDictTypeList.children" :key="item.dictId"
+                    :label="item.dictName" :value="item.dictId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>

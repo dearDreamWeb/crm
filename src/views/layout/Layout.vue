@@ -4,7 +4,7 @@
               style="transition: .5s;">
       <el-header class="logo">
         <img src="@/assets/logo.png">
-        <h1>Element</h1>
+        <h1>CRM系统</h1>
       </el-header>
       <el-menu router :default-active="$route.path" :collapse="isCollapse"
                active-text-color="#ffd04b" :unique-opened="true">
@@ -14,7 +14,7 @@
         </el-menu-item>
         <el-menu-item index="/dash_board">
           <i class="el-icon-s-home"></i>
-          <span slot="title">首页</span>
+          <span slot="title">数据统计</span>
         </el-menu-item>
         <el-submenu :index="index + ''" v-for="(item,index) in menuList"
                     :key="item.menuId">
