@@ -7,6 +7,10 @@ import com.example.service.AccessoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author: liuleimin
  * @date: 2020/11/6

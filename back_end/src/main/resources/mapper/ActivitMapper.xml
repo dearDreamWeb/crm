@@ -92,6 +92,12 @@
         WHERE a.activity_id = #{activityId}
     </select>
 
+    <select id="getActivityByTitle" resultMap="ActivityResult" parameterType="java.lang.String">
+        SELECT *
+        FROM activity
+        WHERE activity_title = #{activityTitle}
+    </select>
+
     <select id="listActivity" resultMap="ActivityResult">
         SELECT ac.*,ad.*
         FROM activity ac

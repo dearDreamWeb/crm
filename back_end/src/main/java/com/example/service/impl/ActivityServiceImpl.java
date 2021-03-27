@@ -3,10 +3,12 @@ package com.example.service.impl;
 import com.example.common.enums.ResultEnum;
 import com.example.common.exception.SysException;
 import com.example.entity.ResultVo;
+import com.example.entity.request.ActivityDetailReq;
 import com.example.entity.request.ActivityReq;
 import com.example.entity.response.ActivityDetailResp;
 import com.example.entity.response.ActivityResp;
 import com.example.entity.response.EmpResp;
+import com.example.model.mapper.ActivityDetailMapper;
 import com.example.model.mapper.ActivityMapper;
 import com.example.model.mapper.EmpMapper;
 import com.example.service.ActivityService;
@@ -37,6 +39,10 @@ public class ActivityServiceImpl implements ActivityService {
     @Autowired
     private EmpMapper empMapper;
 
+    @Autowired
+    private ActivityDetailMapper detailMapper;
+
+
     @Override
     public ResultVo addActivity(ActivityReq activityReq) {
         CheckUtils.validate(activityReq);
@@ -59,6 +65,12 @@ public class ActivityServiceImpl implements ActivityService {
                     ResultEnum.ACTIVITY_DATE_ERROR.getMessage());
         }
         int addActivity = activityMapper.addActivity(activityReq);
+        ActivityResp activityByTitle = activityMapper.getActivityByTitle(activityReq.getActivityTitle());
+        Integer empId = empMapper.getEmpIdByName(activityReq.getCreateBy());
+        ActivityDetailReq activityDetailReq = new ActivityDetailReq();
+        activityDetailReq.setActivityId(activityByTitle.getActivityId());
+        activityDetailReq.setEmpId(empId);
+        detailMapper.addOne(activityDetailReq);
         if (addActivity != 1) {
             throw new SysException(ResultEnum.ACTIVITY_ADD_FAIL.getCode(),
                     ResultEnum.ACTIVITY_ADD_FAIL.getMessage());

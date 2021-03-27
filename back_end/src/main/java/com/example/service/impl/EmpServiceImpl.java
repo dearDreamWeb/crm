@@ -18,6 +18,7 @@ import com.example.util.TreeUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,7 @@ import java.util.List;
  */
 @Service
 @Transactional(rollbackFor = Exception.class)
+@Slf4j
 public class EmpServiceImpl implements EmpService {
     @Autowired
     private EmpMapper empMapper;
@@ -148,8 +150,10 @@ public class EmpServiceImpl implements EmpService {
 
     @Override
     public ResultVo login(EmpReq empReq) {
+        log.warn("登录参数：" + empReq.toString());
         String empName = empReq.getEmpName();
         EmpResp empResp = empMapper.login(empName);
+        log.warn("查询结果：" + empResp);
         if (empResp == null) {
             throw new SysException(ResultEnum.USER_OR_PASSWORD_ERROR.getCode(),
                     ResultEnum.USER_OR_PASSWORD_ERROR.getMessage());
@@ -167,7 +171,7 @@ public class EmpServiceImpl implements EmpService {
         String passWordDb = empResp.getPassWord();
         String passWord = empReq.getPassWord();
         String passWordMd5 = DigestUtils.md5DigestAsHex(DigestUtils.md5DigestAsHex(passWord.getBytes()).getBytes());
-        if (!passWordDb.equals(passWordMd5)) {
+        if (!passWordMd5.equals(passWordDb)) {
             throw new SysException(ResultEnum.USER_OR_PASSWORD_ERROR.getCode(),
                     ResultEnum.USER_OR_PASSWORD_ERROR.getMessage());
         }

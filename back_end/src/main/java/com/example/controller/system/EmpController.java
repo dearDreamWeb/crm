@@ -23,6 +23,11 @@ public class EmpController {
     @Autowired
     private EmpService empService;
 
+    @PostMapping("/test")
+    public Object test(){
+        return "111";
+    }
+
     @SysLog("添加用户")
     @PostMapping("/add")
     @CheckPermissions("system:emp:add")

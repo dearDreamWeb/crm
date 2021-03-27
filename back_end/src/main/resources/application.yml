@@ -7,12 +7,38 @@ spring:
       file-size-threshold: 0
       max-file-size: 50MB
       max-request-size: 50MB
+    #配置druid数据源
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://101.201.233.233:3306/gradua_project?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/cxtest?useUnicode=true&characterEncoding=UTF-8&jdbcCompliantTruncation=false&autoReconnect=true&serverTimezone=GMT%2B8&allowMultiQueries=true&zeroDateTimeBehavior=CONVERT_TO_NULL
     username: root
-    password: "!Mysql2020"
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      #初始化大小
+      initialSize: 5
+      #最小值
+      minIdle: 5
+      #最大值
+      maxActive: 20
+      #最大等待时间，配置获取连接等待超时，时间单位都是毫秒ms
+      maxWait: 60000
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接
+      timeBetweenEvictionRunsMillis: 60000
+      #配置一个连接在池中最小生存的时间
+      minEvictableIdleTimeMillis: 300000
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，
+      #'wall'用于防火墙，SpringBoot中没有log4j，我改成了log4j2
+      #filters: stat,wall,log4j2
+      #最大PSCache连接
+      maxPoolPreparedStatementPerConnectionSize: 20
+      #useGlobalDataSourceStat: true
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      #connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
   mvc:
     static-path-pattern: /static/images/**
   resources:
@@ -27,7 +53,3 @@ qiniu:
   secretKey: YVsbx4ZeZ4VQINSgN6HFCzN-t7gXodq8-VRQyrsg
   bucket: pengjia
   path: www.eblog.icu
-
-logging:
-  level:
-    com.example.model.mapper : debug

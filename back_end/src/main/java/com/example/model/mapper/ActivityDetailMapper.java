@@ -16,6 +16,7 @@ import java.util.List;
 @Repository
 public interface ActivityDetailMapper {
     int addActivityDetail(ActivityDetailReq activityDetailReq);
+    int addOne(ActivityDetailReq activityDetailReq);
     int delActivityDetail(Integer activityDetailId);
     int editActivityDetail(ActivityDetailReq activityDetailReq);
     ActivityDetailResp getActivityDetail(Integer activityDetailId);

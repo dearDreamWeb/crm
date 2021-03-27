@@ -120,10 +120,10 @@
         WHERE contacts_id = #{contactsId}
     </select>
 
-    <select id="listContacts" resultMap="ContactsResult">
+    <select id="listContacts" resultMap="ContactsDetailResult">
         SELECT contacts_id,contacts_name,birthday,sex,wechat,
-            contacts_phone,qq,email,remark,contacts_dict_type,cus_id
-        FROM contacts
+        contacts_phone,qq,email,remark,contacts_dict_type,con.cus_id,cus.cus_name
+        FROM contacts con JOIN customer cus on con.cus_id = cus.cus_id
         <where>
             <if test="contactsName != null and contactsName != ''">
                 AND contacts_name LIKE CONCAT('%',#{contactsName},'%')
@@ -144,19 +144,19 @@
                 AND email LIKE CONCAT('%',#{email},'%')
             </if>
             <if test="cusId != null">
-                AND cus_id = #{cusId}
+                AND cus.cus_id = #{cusId}
             </if>
             <if test="contactsDictType != null and contactsDictType != ''">
                 AND contacts_dict_type = #{contactsDictType}
             </if>
-            AND is_delete = 0
+            AND con.is_delete = 0
         </where>
-        ORDER BY create_time DESC
+        ORDER BY con.create_time DESC
     </select>
 
     <insert id="addContactsAndCustomer" parameterType="com.example.entity.request.ContactsReq">
-        INSERT INTO contacts(contacts_name,contacts_phone,qq,wechat,remark,cus_id) VALUES
-        (#{contactsName},#{contactsPhone},#{qq},#{wechat},#{remark},#{cusId})
+        INSERT INTO contacts(contacts_name,contacts_phone,qq,wechat,remark,cus_id,contacts_dict_type) VALUES
+        (#{contactsName},#{contactsPhone},#{qq},#{wechat},#{remark},#{cusId},#{contactsDictType})
     </insert>
 
     <select id="getByCustomerId" resultMap="ContactsResult">

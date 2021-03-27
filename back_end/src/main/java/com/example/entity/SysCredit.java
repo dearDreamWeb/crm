@@ -9,7 +9,7 @@ import java.util.Objects;
  * @description:
  */
 @Entity
-@Table(name = "sys_credit", schema = "gradua_project", catalog = "")
+@Table(name = "sys_credit", schema = "cxtest")
 public class SysCredit {
     private Integer creditId;
     private String creditCode;

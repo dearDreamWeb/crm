@@ -33,4 +33,6 @@ public interface EmpMapper {
     List<EmpResp> listNotAuthActivity(Integer activityId);
     EmpResp getEmpByPersonal(Integer empId);
     EmpResp getdeptName(Integer empId);//查部门
+
+    Integer getEmpIdByName(String name);
 }

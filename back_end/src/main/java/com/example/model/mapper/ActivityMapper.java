@@ -18,6 +18,7 @@ public interface ActivityMapper {
     int delActivity(Integer activityId);
     int editActivity(ActivityReq activityReq);
     ActivityResp getActivity(Integer activityId);
+    ActivityResp getActivityByTitle(String activityTitle);
     List<ActivityResp> listActivity(ActivityReq activityReq);
     List<ActivityResp> listPage(ActivityReq activityReq);
     List<ActivityResp> listByEmp(Integer empId);

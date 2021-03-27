@@ -43,8 +43,8 @@
         <selectKey keyProperty="deptId" keyColumn="dept_id" resultType="Integer" order="AFTER">
             SELECT last_insert_id();
         </selectKey>
-        INSERT INTO dept(dept_name,dept_key) VALUES
-        (#{deptName},#{deptKey})
+        INSERT INTO dept(dept_name,dept_key,create_time,update_time) VALUES
+        (#{deptName},#{deptKey},now(),now())
     </insert>
 
     <update id="editDept" parameterType="com.example.entity.request.DeptReq">

@@ -251,6 +251,7 @@ public class CustomerServiceImpl implements CustomerService {
         contactsReq.setEmail(cusConReq.getEmail());
         contactsReq.setContactsName(cusConReq.getContactsName());
         contactsReq.setContactsPhone(cusConReq.getContactsPhone());
+        contactsReq.setContactsDictType("潜在");
         int addContacts = contactsMapper.addContacts(contactsReq);
         if (addContacts != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),

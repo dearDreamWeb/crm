@@ -56,6 +56,14 @@
         (#{activityId},#{empId},#{url},#{authDate})
     </insert>
 
+    <insert id="addOne" parameterType="com.example.entity.request.ActivityDetailReq">
+        <selectKey keyColumn="activity_detail_id" keyProperty="activityDetailId" resultType="Integer" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        INSERT INTO activity_detail(activity_id,emp_id)VALUES
+        (#{activityId},#{empId})
+    </insert>
+
     <delete id="delActivityDetail" parameterType="Integer">
         DELETE FROM activity_detail WHERE activity_detail_id = #{activityDetailId}
     </delete>

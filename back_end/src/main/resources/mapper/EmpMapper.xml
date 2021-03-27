@@ -70,8 +70,8 @@
         <selectKey keyColumn="emp_id" keyProperty="empId" resultType="Integer" order="AFTER">
             select last_insert_id();
         </selectKey>
-        INSERT INTO emp(emp_name,nick_name,email,sex,password,phone,emp_status,remark,token,head_image)
-        VALUES (#{empName},#{nickName},#{email},#{sex},#{passWord},#{phone},#{empStatus},#{remark},#{token},#{headImage})
+        INSERT INTO emp(emp_name,nick_name,email,sex,password,phone,emp_status,remark,token,head_image,create_time,update_time)
+        VALUES (#{empName},#{nickName},#{email},#{sex},#{passWord},#{phone},#{empStatus},#{remark},#{token},#{headImage},now(),now())
     </insert>
 
     <update id="editEmp" parameterType="com.example.entity.request.EmpReq">
@@ -198,8 +198,8 @@
         WHERE emp_name = #{empName}
     </select>
 
-    <update id="updateToken">
-        UPDATE emp SET token = #{arg1} WHERE emp_name = #{arg0}
+    <update id="updateToken" parameterType="java.lang.String">
+        UPDATE emp SET token = #{token} WHERE emp_name = #{empName}
     </update>
 
     <select id="checkEmp" resultType="int">
@@ -245,5 +245,9 @@
         INNER JOIN emp_dept ed ON e.emp_id = ed.emp_id
         INNER JOIN dept d ON d.dept_id = ed.dept_id
         WHERE e.emp_id = #{empId}
+    </select>
+
+    <select id="getEmpIdByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select emp_id from emp where emp_name = #{name}
     </select>
 </mapper>
