@@ -2,10 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57344c72-d809-4e6a-998c-4fb6d7acf607" name="Default Changelist" comment="yqq第一次">
-      <change beforePath="$PROJECT_DIR$/back_end/src/main/resources/mapper/DeliverMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/back_end/src/main/resources/mapper/DeliverMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front_end/src/views/shouzhong/SzDeliver.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front_end/src/views/shouzhong/SzDeliver.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front_end/src/views/shouzhong/SzReceivablePlan.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front_end/src/views/shouzhong/SzReceivablePlan.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front_end/src/views/shouzhong/Szorder.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front_end/src/views/shouzhong/Szorder.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/crm.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/crm.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back_end/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/back_end/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back_end/src/main/java/com/example/CrmBackEndApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/back_end/src/main/java/com/example/CrmBackEndApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back_end/src/main/java/com/example/controller/system/AccessoriesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/back_end/src/main/java/com/example/controller/system/AccessoriesController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back_end/src/main/java/com/example/entity/SysCredit.java" beforeDir="false" afterPath="$PROJECT_DIR$/back_end/src/main/java/com/example/entity/SysCredit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back_end/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/back_end/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_end/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front_end/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_end/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/front_end/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_end/src/network/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/front_end/src/network/request.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_end/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/front_end/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_end/src/views/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front_end/src/views/Login.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,6 +23,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="D:\apache-maven-3.6.3-bin\apache-maven-3.6.3" />
+        <option name="userSettingsFile" value="D:\apache-maven-3.6.3-bin\apache-maven-3.6.3\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="104" />
@@ -24,15 +41,15 @@
   <component name="ProjectId" id="1l4wEFH4SxgE19FRITWodWvm8FE" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="D:/yqqidea/crmgit/springCRM" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../yqqidea/crmgit/springCRM" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -42,8 +59,36 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15429688" />
+    <property name="project.structure.side.proportion" value="0.2150289" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.CrmBackEndApplication">
+    <configuration name="CrmBackEndApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.CrmBackEndApplication" />
+      <module name="crm" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="CrmApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="crm" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="crm.CrmApplication" />
@@ -51,7 +96,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.CrmBackEndApplication" />
+      </list>
+    </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -66,6 +117,10 @@
       <workItem from="1600822859323" duration="1288000" />
       <workItem from="1600927334409" duration="159000" />
       <workItem from="1606723647963" duration="129000" />
+      <workItem from="1614733465838" duration="137000" />
+      <workItem from="1614738425175" duration="448000" />
+      <workItem from="1614738884830" duration="269000" />
+      <workItem from="1616772483107" duration="2077000" />
     </task>
     <servers />
   </component>
@@ -73,13 +128,7 @@
     <option name="totallyTimeSpent" value="4932000" />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="375" y="191" key="com.intellij.ide.util.TipDialog" timestamp="1606869586904">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="375" y="191" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1606869586904" />
+    <option name="version" value="3" />
   </component>
   <component name="masterDetails">
     <states>

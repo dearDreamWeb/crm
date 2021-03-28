@@ -55,6 +55,7 @@
         this.$refs.loginFormRef.validate(async valid => {
           if (!valid) return
           this.fullscreenLoading = true
+		  console.log(this.loginForm)
           userHttp.login(this.loginForm).then(res => {
             console.log(res)
             if (res && res.code==20000) {

@@ -74,8 +74,8 @@
         <selectKey keyColumn="clue_id" keyProperty="clueId" resultType="Integer" order="AFTER">
             select last_insert_id();
         </selectKey>
-        INSERT INTO clue(clue_name,clue_phone,clue_status,clue_type,handle_result,handle_person,remark,activity_id,emp_id)
-        VALUES (#{clueName},#{cluePhone},#{clueStatus},#{clueType},#{handleResult},#{handlePerson},#{remark},#{activityId},#{empId})
+        INSERT INTO clue(clue_name,clue_phone,clue_status,clue_type,handle_result,handle_person,remark,activity_id,emp_id,create_time)
+        VALUES (#{clueName},#{cluePhone},#{clueStatus},#{clueType},#{handleResult},#{handlePerson},#{remark},#{activityId},#{empId},now())
     </insert>
 
     <update id="delClue" parameterType="Integer">

@@ -50,11 +50,12 @@ public class ClueServiceImpl implements ClueService {
         ClueFollowLogResp clueFollowLogResp = new ClueFollowLogResp();
         clueReq.setClueStatus(0);
         Integer activityId = clueReq.getActivityId();
+        Integer empId = empMapper.getEmpIdByName(clueReq.getHandlePerson());
         if (activityId == null) {
-            clueReq.setEmpId(0);
+            clueReq.setEmpId(empId);
             clueReq.setActivityId(0);
         }
-        ActivityResp activity = activityMapper.getActivity(activityId);
+        ActivityResp activity = activityMapper.getActivity(clueReq.getActivityId());
         int addClue = clueMapper.addClue(clueReq);
         if (addClue != 1) {
             throw new SysException(ResultEnum.DATA_ADD_FAIL.getCode(),
@@ -128,6 +129,9 @@ public class ClueServiceImpl implements ClueService {
                     ResultEnum.CLUE_NOT_BE_EDIT.getMessage());
         }
         Integer empId = empResp.getEmpId();
+        if (empResp.getEmpName().equals("admin")){
+            return ResultUtils.response(clue);
+        }
         if (empId != clue.getEmpId()) {
             throw new SysException(ResultEnum.CLUE_NOT_BE_EDIT.getCode(),
                     ResultEnum.CLUE_NOT_BE_EDIT.getMessage());

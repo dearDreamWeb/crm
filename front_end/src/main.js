@@ -18,7 +18,7 @@ import './assets/alibaba_icon/icon/iconfont.css'
 import 'element-ui/lib/theme-chalk/icon.css'
 import "@/common/font/myfont.css";
 import "@/common/font_cn/myfont.css";
-import echarts from 'echarts'
+import * as echarts from "echarts"
 
 import onlyNumber from '@/directive/el-input'; //自定义全局指令
 
