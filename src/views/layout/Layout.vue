@@ -51,7 +51,7 @@
           </el-dropdown>
         </div>
 <!--        <div class="float-right" style="width: 10px"></div>-->
-        <div class="float-right">
+        <!-- <div class="float-right">
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
               个人代办<i class="el-icon-caret-bottom el-icon--right"></i>
@@ -67,7 +67,7 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-        </div>
+        </div> -->
       </el-header>
       <el-main>
         <router-view></router-view>

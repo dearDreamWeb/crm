@@ -13,15 +13,15 @@
           </el-input>
         </el-col>
         <el-col :span="9">
-<!--          <el-button type="primary" icon="el-icon-plus" size="mini" @click="addDialog = true">添加线索</el-button>-->
+         <el-button type="primary" icon="el-icon-plus" size="mini" @click="addDialog = true">添加线索</el-button>
           <el-button type="primary" icon="el-icon-zoom-in" size="mini"
                      @click="advancedSearch = !advancedSearch">高级查询</el-button>
           <el-button type="primary" icon="el-icon-refresh"
                      size="mini" @click="resetForm"></el-button>
         </el-col>
         <el-col :span="9">
-          <!--<el-button type="warning" size="mini" icon="el-icon-edit"
-                     :disabled="buttonDisabled" @click="openEditDialog">修改</el-button>-->
+          <el-button type="warning" size="mini" icon="el-icon-edit"
+                     :disabled="buttonDisabled" @click="openEditDialog">修改</el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete"
                      :disabled="buttonDisabled" @click="delClue">删除</el-button>
           <el-button type="info" size="mini" icon="el-icon-view"

@@ -30,10 +30,10 @@ export const socketHttp = {
     window.onbeforeunload = this.onbeforeunload
   },
   setErrorMessage () {
-    ElementUI.Message({
-      message:'WebSocket连接发生错误',
-      type:'error'
-    })
+    // ElementUI.Message({
+    //   message:'WebSocket连接发生错误',
+    //   type:'error'
+    // })
     console.log('WebSocket连接发生错误')
   },
   setOnopenMessage () {
