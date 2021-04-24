@@ -8,14 +8,14 @@
           </el-input>
         </el-col>
         <el-col :span="10">
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">添加部门</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openAddDialog">添加权限</el-button>
           <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm"></el-button>
         </el-col>
         <el-col :span="8">
           <el-button type="warning" size="mini" icon="el-icon-edit"
-                     :disabled="buttonDisabled" @click="openEditDept">修改部门</el-button>
+                     :disabled="buttonDisabled" @click="openEditDept">修改权限</el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete"
-                     :disabled="buttonDisabled" @click="deleteDept">删除部门</el-button>
+                     :disabled="buttonDisabled" @click="deleteDept">删除权限</el-button>
           <el-button type="success" size="mini" icon="el-icon-tickets"
                      :disabled="buttonDisabled" @click="authClick">角色授权</el-button>
         </el-col>
@@ -25,7 +25,7 @@
                 :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle"
                 highlight-current-row @row-click="handleRowClick" v-loading="tableLoading">
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column prop="deptName" label="部门名称" sortable></el-table-column>
+        <el-table-column prop="deptName" label="权限名称" sortable></el-table-column>
         <el-table-column prop="deptKey" label="标识"></el-table-column>
         <el-table-column prop="createTime" label="创建时间">
           <template slot-scope="scope">
@@ -35,18 +35,18 @@
       </el-table>
     </el-card>
 
-    <el-dialog title="部门添加(重复添加已删除的记录...)" :visible.sync="addDialog" @close="addHandleClose">
+    <el-dialog title="权限添加(重复添加已删除的记录...)" :visible.sync="addDialog" @close="addHandleClose">
       <el-form :model="addForm" label-width="100px" ref="addFormRef"
                label-position="right" :rules="formRules">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="部门名称" prop="deptName">
-              <el-input v-model="addForm.deptName" size="mini" placeholder="请输入部门名称" clearable></el-input>
+            <el-form-item label="权限名称" prop="deptName">
+              <el-input v-model="addForm.deptName" size="mini" placeholder="请输入权限名称" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="部门标识" prop="deptKey">
-              <el-input v-model="addForm.deptKey" size="mini" placeholder="请输入部门标识" clearable></el-input>
+            <el-form-item label="权限标识" prop="deptKey">
+              <el-input v-model="addForm.deptKey" size="mini" placeholder="请输入权限标识" clearable></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -59,17 +59,17 @@
       </span>
     </el-dialog>
 
-    <el-dialog title="部门修改" :visible.sync="editDialog" @close="editHandleClose">
+    <el-dialog title="权限修改" :visible.sync="editDialog" @close="editHandleClose">
       <el-form :model="editForm" label-width="100px" :rules="formRules"
                label-position="right" ref="editFormRef">
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="部门名称" prop="deptName">
+            <el-form-item label="权限名称" prop="deptName">
               <el-input v-model="editForm.deptName" size="mini"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="部门标识" prop="deptKey">
+            <el-form-item label="权限标识" prop="deptKey">
               <el-input v-model="editForm.deptKey" size="mini"/>
             </el-form-item>
           </el-col>
@@ -113,10 +113,10 @@
         addDeptButtonLoading:false,
         formRules:{
           deptName:[
-            {required:true,message:'请输入部门名称',trigger:'blur'},
+            {required:true,message:'请输入权限名称',trigger:'blur'},
           ],
           deptKey:[
-            {required:true,message:'请输入部门标识',trigger:'blur'}
+            {required:true,message:'请输入权限标识',trigger:'blur'}
           ]
         },
         addForm: {
@@ -219,7 +219,7 @@
         })
       },
       deleteDept(deptId) {
-        this.$confirm('此操作将删除改部门，是否继续？','提示',{
+        this.$confirm('此操作将删除改权限，是否继续？','提示',{
           confirmButtonText:'确定',
           cancelButtonText:'取消',
           type:'warning'
