@@ -7,7 +7,7 @@
   <div>
     <el-card>
       <el-row :gutter="20">
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-row :gutter="10">
             <el-col :span="20">
               <el-input v-model="filterText" size="mini" clearable placeholder="请输入"></el-input>
@@ -21,10 +21,10 @@
             <el-tree :data="customerTreeData" :props="defaultProps" ref="tree"
                      @node-click="handleNodeClick" :filter-node-method="filterNode"></el-tree>
           </div>
-        </el-col>
-        <el-col :span="1">
+        </el-col> -->
+        <!-- <el-col :span="1">
           <el-divider direction="vertical"></el-divider>
-        </el-col>
+        </el-col> -->
         <el-col :span="17">
           <el-row :gutter="20">
             <el-col :span="7">

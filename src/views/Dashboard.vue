@@ -3,25 +3,15 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <el-card>
-          <el-row :gutter="20">
-            <el-col :span="10">
-              <div>
-                <div id="userChart" style="font-size: 30px">324</div>
-              </div>
-              <div>
-                <span>本周新客户</span>
-              </div>
-            </el-col>
-            <el-col :span="14">
-              <div>
-                <el-image
-                  style="width: 100px; height: 100px"
-                  src="http://gradua.eblog.icu/wallhaven-ym99pl.png"
-                  fit="fill"
-                ></el-image>
-              </div>
-            </el-col>
-          </el-row>
+          <div slot="header">
+            <span>本周新客户</span>
+          </div>
+          <div>
+            <div id="uvChart" style="font-size: 30px">24</div>
+          </div>
+          <div>
+            <span>日新增 3</span>
+          </div>
         </el-card>
       </el-col>
       <el-col :span="6">
@@ -30,10 +20,10 @@
             <span>本周新线索</span>
           </div>
           <div>
-            <div id="uvChart" style="font-size: 30px">5325</div>
+            <div id="uvChart" style="font-size: 30px">243</div>
           </div>
           <div>
-            <span>日新增 180</span>
+            <span>日新增 81</span>
           </div>
         </el-card>
       </el-col>
@@ -43,10 +33,10 @@
             <span>本周PV</span>
           </div>
           <div>
-            <div id="pvChart" style="font-size: 30px">96546</div>
+            <div id="pvChart" style="font-size: 30px">546</div>
           </div>
           <div>
-            <span>转化率 78%</span>
+            <span>转化率 46%</span>
           </div>
         </el-card>
       </el-col>
@@ -56,7 +46,7 @@
             <span>本周订单</span>
           </div>
           <div>
-            <div id="orderChart" style="font-size: 30px">¥ 645435</div>
+            <div id="orderChart" style="font-size: 30px">¥ 245435</div>
           </div>
           <div>
             <span>日新增 6</span>
@@ -492,17 +482,17 @@ export default {
     initCharts() {
       let myChart = this.$echarts.init(this.$refs.chart);
       myChart.setOption({
-        title: { text: "服装分类" },
+        title: { text: "服装分类销售柱状图" },
         tooltip: {},
         xAxis: {
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
+          data: ["男装", "女装", "儿童装", "学生装", "其他"],
         },
         yAxis: {},
         series: [
           {
             name: "销量",
             type: "bar",
-            data: [5, 20, 36, 10, 10, 20],
+            data: [1800, 2630, 1500, 2000, 2400],
           },
         ],
       });

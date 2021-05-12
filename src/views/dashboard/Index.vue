@@ -23,7 +23,7 @@
                 <div id="uvClue" style="font-size: 30px">{{newClueForm.data}}</div>
               </div>
               <div>
-                <span>日新增 180</span>
+                <span>日新增 7</span>
               </div>
             </el-col>
             <el-col :span="8" :offset="4">
@@ -126,7 +126,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="20">
+    <!-- <el-row :gutter="20">
       <el-col :span="8">
         <el-card>
           <div style="width: 100%;height: 300px" ref="chart_one"></div>
@@ -142,37 +142,7 @@
           <div style="width: 100%;height: 300px" ref="chart_three"></div>
         </el-card>
       </el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="16" v-if="$store.state.empName == 'admin'">
-        <el-card>
-          <div slot="header">
-            <span>报价审核</span>
-          </div>
-          <div>
-            <el-table :data="offerExamineList" style="width: 100%;margin-top: -10px;margin-bottom: 10px"
-                      :header-row-style="iHeaderRowStyle" :header-cell-style="iHeaderCellStyle">
-              <el-table-column label="主题" prop="offerTheme" width="130"></el-table-column>
-              <el-table-column label="单号" prop="offerNumbers"></el-table-column>
-              <el-table-column label="状态" prop="offerStatus" width="130">
-                <template slot-scope="scope">
-                  {{scope.row.offerStatus | offerStatusFormat}}
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" width="60" align="center">
-                <template slot-scope="scope">
-                  <el-button type="text" icon="el-icon-edit" size="mini"
-                             @click="handleExamine(scope.row.offerId)"></el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card></el-card>
-      </el-col>
-    </el-row>
+    </el-row> -->
 
     <el-dialog title="处理报价" :visible.sync="offerExamineDialog"
                @close="offerExamineDialogClose" width="70%">
@@ -413,7 +383,7 @@
         let myChart = this.$echarts.init(this.$refs.chart);
         myChart.setOption({
           title: {
-            text: '堆叠区域图'
+            text: '服装分类销售统计展示图'
           },
           tooltip: {
             trigger: 'axis',
@@ -425,7 +395,7 @@
             }
           },
           legend: {
-            data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+            data: ["男装", "女装", "儿童装", "学生装", "其他"]
           },
           toolbox: {
             feature: {
@@ -452,35 +422,35 @@
           ],
           series: [
             {
-              name: '邮件营销',
+              name: '男装',
               type: 'line',
               stack: '总量',
               areaStyle: {},
               data: [120, 132, 101, 134, 90, 230, 210]
             },
             {
-              name: '联盟广告',
+              name: '女装',
               type: 'line',
               stack: '总量',
               areaStyle: {},
               data: [220, 182, 191, 234, 290, 330, 310]
             },
             {
-              name: '视频广告',
+              name: '儿童装',
               type: 'line',
               stack: '总量',
               areaStyle: {},
               data: [150, 232, 201, 154, 190, 330, 410]
             },
             {
-              name: '直接访问',
+              name: '学生装',
               type: 'line',
               stack: '总量',
               areaStyle: {},
               data: [320, 332, 301, 334, 390, 330, 320]
             },
             {
-              name: '搜索引擎',
+              name: '其他',
               type: 'line',
               stack: '总量',
               label: {
@@ -625,10 +595,10 @@
     },
     created() {
       this.initOfferExamineList()
-      this.initNewClueForm()
       this.initNewCustomer()
       this.initPageView()
       this.initNewOrder()
+      this.$nextTick(()=>{this.initNewClueForm()})
     }
   }
 </script>

@@ -12,7 +12,7 @@ import iconPicker from 'e-icon-picker'
 import md5 from 'js-md5'
 import "@/style/app.scss"
 import 'vue-area-linkage/dist/index.css'
-import 'e-icon-picker/dist/index.css'
+// import 'e-icon-picker/dist/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 import './assets/alibaba_icon/icon/iconfont.css'
 import 'element-ui/lib/theme-chalk/icon.css'
